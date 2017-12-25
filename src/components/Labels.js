@@ -5,6 +5,7 @@ const renderLabels = (props) => {
     const labelProps = {
       x: props.xScale(parseFloat(item[props.xLabel])),
       y: props.yScale(parseFloat(item[props.yLabel])),
+      fill: '#aaaaaa',
       key: index
     }
     const label = props.header[props.settings['label']]

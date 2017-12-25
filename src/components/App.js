@@ -31,7 +31,8 @@ class App extends Component {
         const scatterPlotSettings = {
           'x-axis': numberIndices[0],
           'y-axis': numberIndices[1],
-          'label': -1
+          'label': -1,
+          'color': -1
         }
         this.setState({ data: new_data,
                         header: Object.keys(new_data[0]),
@@ -50,7 +51,7 @@ class App extends Component {
     return (
       <Grid>
         <PageHeader>Wikidata Visualization</PageHeader>
-        <Col md={4}>
+        <Col sm={4}>
           <Row>
             <Query
               onSubmit={this.getSPARQLResult}
@@ -66,7 +67,7 @@ class App extends Component {
             />
           </Row>
         </Col>
-        <Col md={8}>
+        <Col sm={8}>
             <Chart
               data={this.state.data}
               header={this.state.header}

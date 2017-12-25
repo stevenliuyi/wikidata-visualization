@@ -17,8 +17,8 @@ class Settings extends Component {
     return (
       <Form horizontal>
         <FormGroup>
-          <Col componentClass={ControlLabel} sm={4}>X-axis</Col>
-          <Col sm={8}><FormControl
+          <Col componentClass={ControlLabel} sm={3}>X-axis</Col>
+          <Col sm={9}><FormControl
             name="x-axis"
             componentClass="select"
             value={this.props.settings['x-axis']}
@@ -33,8 +33,8 @@ class Settings extends Component {
           </FormControl></Col>
         </FormGroup>
         <FormGroup>
-          <Col componentClass={ControlLabel} sm={4}>Y-axis</Col>
-          <Col sm={8}><FormControl
+          <Col componentClass={ControlLabel} sm={3}>Y-axis</Col>
+          <Col sm={9}><FormControl
             name="y-axis"
             componentClass="select"
             value={this.props.settings['y-axis']}
@@ -49,11 +49,28 @@ class Settings extends Component {
           </FormControl></Col>
         </FormGroup>
         <FormGroup>
-          <Col componentClass={ControlLabel} sm={4}>Show label</Col>
-          <Col sm={8}><FormControl
+          <Col componentClass={ControlLabel} sm={3}>Label</Col>
+          <Col sm={9}><FormControl
             name="label"
             componentClass="select"
             value={this.props.settings['label']}
+            onChange={this.onSettingsChange}
+          >
+            <option value="-1">none</option>
+            {
+              Array.isArray(this.props.header) &&
+              this.props.header.map((col, index) => {
+                return (<option value={index}>{col}</option>)
+              })
+            }
+          </FormControl></Col>
+        </FormGroup>
+        <FormGroup>
+          <Col componentClass={ControlLabel} sm={3}>Color</Col>
+          <Col sm={9}><FormControl
+            name="color"
+            componentClass="select"
+            value={this.props.settings['color']}
             onChange={this.onSettingsChange}
           >
             <option value="-1">none</option>
