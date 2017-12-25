@@ -32,7 +32,8 @@ class App extends Component {
           'x-axis': numberIndices[0],
           'y-axis': numberIndices[1],
           'label': -1,
-          'color': -1
+          'color': -1,
+          'radius': -1
         }
         this.setState({ data: new_data,
                         header: Object.keys(new_data[0]),

@@ -82,6 +82,23 @@ class Settings extends Component {
             }
           </FormControl></Col>
         </FormGroup>
+        <FormGroup>
+          <Col componentClass={ControlLabel} sm={3}>Radius</Col>
+          <Col sm={9}><FormControl
+            name="radius"
+            componentClass="select"
+            value={this.props.settings['radius']}
+            onChange={this.onSettingsChange}
+          >
+            <option value="-1">none</option>
+            {
+              Array.isArray(this.props.header) &&
+              this.props.header.map((col, index) => {
+                return (<option value={index}>{col}</option>)
+              })
+            }
+          </FormControl></Col>
+        </FormGroup>
       </Form>
     )
   }
