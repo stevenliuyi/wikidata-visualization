@@ -10,7 +10,6 @@ import DataTable from './DataTable';
 import Navs from './Navs';
 import * as WikidataAPI from '../utils/api';
 import { convertData, getNumberIndices } from '../utils/convertData';
-import serializeForm from 'form-serialize';
 
 class App extends Component {
   state = {
@@ -32,10 +31,9 @@ class App extends Component {
     if (selected < 2) this.setState({ chartName: chartNames[selected] })
   }
 
-  getSPARQLResult = (event) => {
+  getSPARQLResult = (code) => {
     this.setState({ status: "waiting" })
-    event.preventDefault()
-    const query = serializeForm(event.target)
+    const query = `query=${encodeURIComponent(code)}`
     WikidataAPI.fetchSPARQLResult(query)
       .then(res => res.results.bindings)
       .then(data => {

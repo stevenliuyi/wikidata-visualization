@@ -1,7 +1,20 @@
 import React, { Component } from 'react';
-import { FormGroup, FormControl, Button, HelpBlock } from 'react-bootstrap';
+import { FormGroup, Button, HelpBlock } from 'react-bootstrap';
+import CodeMirror from 'react-codemirror';
+import '../../node_modules/codemirror/lib/codemirror.css';
+import '../../node_modules/codemirror/mode/sparql/sparql';
 
 class Query extends Component {
+
+  state = {
+    code: ''
+  }
+
+  updateCode = (newCode) => {
+    this.setState({
+      code: newCode
+    })
+  }
 
   showStatus = () => {
     if (this.props.status === "waiting") {
@@ -12,19 +25,24 @@ class Query extends Component {
   }
 
   render() {
+    const codeOptions = {
+      lineNumbers: true,
+      tabSize: 2
+    }
+
     return (
-      <form onSubmit={ this.props.onSubmit }>
+      <form>
         <FormGroup>
-          <FormControl
-            componentClass="textarea"
+          <CodeMirror
             name="query"
-            placeholder="Enter a Wikidata SPARQL query here"
-            rows="12"
-          />
+            value={this.state.code}
+            onChange={this.updateCode}
+            defaultValue="# Enter a Wikidata SPARQL query here"
+            options={codeOptions} />
         </FormGroup>
         <Button
           bsStyle="primary"
-          type="submit"
+          onClick={  () => this.props.onSubmit(this.state.code) }
         >Submit Query</Button>
         <HelpBlock>{ this.showStatus() }</HelpBlock>
       </form>
