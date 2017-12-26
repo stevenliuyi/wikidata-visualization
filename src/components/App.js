@@ -6,6 +6,8 @@ import { PageHeader, Grid, Row, Col } from 'react-bootstrap';
 import Query from './Query';
 import Settings from './Settings';
 import Chart from './Chart';
+import DataTable from './DataTable';
+import Navs from './Navs';
 import * as WikidataAPI from '../utils/api';
 import { convertData, getNumberIndices } from '../utils/convertData';
 import serializeForm from 'form-serialize';
@@ -16,7 +18,18 @@ class App extends Component {
     header: [],
     numberIndices: [],
     status: "",
-    settings: {}
+    settings: {},
+    chart: 1.1,
+    chartName: 'Table'
+  }
+
+  handleChartSelect = (selected) => {
+    const chartNames = {
+      1.1: 'Table',
+      1.2: 'Scatter Chart'
+    }
+    this.setState({ chart: selected })
+    if (selected < 2) this.setState({ chartName: chartNames[selected] })
   }
 
   getSPARQLResult = (event) => {
@@ -52,29 +65,38 @@ class App extends Component {
     return (
       <Grid>
         <PageHeader>Wikidata Visualization</PageHeader>
-        <Col sm={4}>
-          <Row>
-            <Query
-              onSubmit={this.getSPARQLResult}
-              status={this.state.status}
-            />
-          </Row>
-          <Row>
-            <Settings
-              header={this.state.header}
-              numberIndices={this.state.numberIndices}
-              settings={this.state.settings}
-              onChange={this.setSettings}
-            />
-          </Row>
-        </Col>
-        <Col sm={8}>
-            <Chart
-              data={this.state.data}
-              header={this.state.header}
-              settings={this.state.settings}
-            />
-        </Col>
+        <Row>
+          <Col sm={4}>
+            <Row>
+              <Query
+                onSubmit={this.getSPARQLResult}
+                status={this.state.status}
+              />
+            </Row>
+            <Row>
+              <Settings
+                header={this.state.header}
+                numberIndices={this.state.numberIndices}
+                settings={this.state.settings}
+                onChange={this.setSettings}
+              />
+            </Row>
+          </Col>
+          <Col sm={8}>
+            <Navs chart={this.state.chartName} handleChartSelect={this.handleChartSelect} />
+            { this.state.chart === 1.1 &&
+              <DataTable data={this.state.data} header={this.state.header} />
+            }
+
+            { this.state.chart > 1.1 &&
+              <Chart
+                data={this.state.data}
+                header={this.state.header}
+                settings={this.state.settings}
+              />
+            }
+          </Col>
+        </Row>
       </Grid>
     );
   }

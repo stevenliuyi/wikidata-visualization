@@ -15,7 +15,7 @@ class Chart extends Component {
     const styles = {
       width: width,
       height: width * 0.6,
-      padding: 30,
+      padding: 40,
     }
 
     return (
