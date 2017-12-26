@@ -20,7 +20,11 @@ class Query extends Component {
     if (this.props.status === "waiting") {
       return "Waiting..."
     } else if (this.props.status === "done") {
-      return "Done!"
+      return `${this.props.numResults} results found!`
+    } else if (this.props.status === "error") {
+      return "Error encountered while querying!"
+    } else if (this.props.status === "empty") {
+      return "No result found!"
     }
   }
 

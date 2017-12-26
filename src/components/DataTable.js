@@ -8,16 +8,17 @@ class DataTable extends Component {
       <Table striped hover responsive>
         <thead><tr>
           { Array.isArray(this.props.header) &&
-            this.props.header.map(col => (<th>{col}</th>))
+            this.props.header.map((col, index) =>
+              (<th key={index}>{col}</th>))
           }
         </tr></thead>
         <tbody>
           { Array.isArray(this.props.data) &&
-            this.props.data.map(item => (
-              <tr>
+            this.props.data.map((item, index) => (
+              <tr key={index}>
                 {
-                  this.props.header.map(col => (
-                    <td>{ item[col] }</td>
+                  this.props.header.map((col, index) => (
+                    <td key={index}>{ item[col] }</td>
                   ))
                 }
               </tr>

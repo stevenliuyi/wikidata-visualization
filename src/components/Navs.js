@@ -6,7 +6,7 @@ class Navs extends Component {
   render() {
     return (
       <Nav bsStyle="tabs" activeKey={1} onSelect={this.props.handleChartSelect}>
-        <NavDropdown eventKey={1} title={this.props.chart}>
+        <NavDropdown eventKey={1} title={this.props.chart} id="chart-nav">
           <NavItem eventKey={1.1}>Table</NavItem>
           <NavItem eventKey={1.2}>Scatter Chart</NavItem>
         </NavDropdown>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Col } from 'react-bootstrap'
+import { Form, FormGroup, FormControl, ControlLabel, Col } from 'react-bootstrap'
 
 class Settings extends Component {
 
@@ -9,7 +9,7 @@ class Settings extends Component {
 
   onSettingsChange(event) {
     const settings = this.props.settings
-    settings[event.target.name] = parseInt(event.target.value)
+    settings[event.target.name] = parseInt(event.target.value, 10)
     this.props.onChange(settings)
   }
 
@@ -27,7 +27,7 @@ class Settings extends Component {
             {
               Array.isArray(this.props.header) &&
               this.props.numberIndices.map((index) => (
-                <option value={index}>{this.props.header[index]}</option>
+                <option value={index} key={index}>{this.props.header[index]}</option>
               ))
             }
           </FormControl></Col>
@@ -43,7 +43,7 @@ class Settings extends Component {
             {
               Array.isArray(this.props.header) &&
               this.props.numberIndices.map((index) => (
-                <option value={index}>{this.props.header[index]}</option>
+                <option value={index} key={index}>{this.props.header[index]}</option>
               ))
             }
           </FormControl></Col>
@@ -60,7 +60,7 @@ class Settings extends Component {
             {
               Array.isArray(this.props.header) &&
               this.props.header.map((col, index) => {
-                return (<option value={index}>{col}</option>)
+                return (<option value={index} key={index}>{col}</option>)
               })
             }
           </FormControl></Col>
@@ -77,7 +77,7 @@ class Settings extends Component {
             {
               Array.isArray(this.props.header) &&
               this.props.header.map((col, index) => {
-                return (<option value={index}>{col}</option>)
+                return (<option value={index} key={index}>{col}</option>)
               })
             }
           </FormControl></Col>
@@ -94,7 +94,7 @@ class Settings extends Component {
             {
               Array.isArray(this.props.header) &&
               this.props.header.map((col, index) => {
-                return (<option value={index}>{col}</option>)
+                return (<option value={index} key={index}>{col}</option>)
               })
             }
           </FormControl></Col>

@@ -17,6 +17,7 @@ class App extends Component {
     header: [],
     numberIndices: [],
     status: "",
+    numResults: 0,
     settings: {},
     chart: 1.1,
     chartName: 'Table'
@@ -35,8 +36,15 @@ class App extends Component {
     this.setState({ status: "waiting" })
     const query = `query=${encodeURIComponent(code)}`
     WikidataAPI.fetchSPARQLResult(query)
-      .then(res => res.results.bindings)
       .then(data => {
+        if (data === null) {
+          this.setState({ status: "error" })
+          return null
+        } else if (data.length === 0) {
+          this.setState({ status: "empty" })
+          return null
+        }
+
         const new_data = convertData(data)
         const numberIndices = getNumberIndices(Object.values(new_data[0]))
         const scatterPlotSettings = {
@@ -50,6 +58,7 @@ class App extends Component {
                         header: Object.keys(new_data[0]),
                         numberIndices: numberIndices,
                         status: "done",
+                        numResults: new_data.length,
                         settings: scatterPlotSettings
                       })
       })
@@ -69,6 +78,7 @@ class App extends Component {
               <Query
                 onSubmit={this.getSPARQLResult}
                 status={this.state.status}
+                numResults={this.state.numResults}
               />
             </Row>
             <Row>

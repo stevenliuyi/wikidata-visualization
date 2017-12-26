@@ -23,6 +23,7 @@ export function getNumberIndices(item) {
   let numeberIndices = []
   item.map((col, index) => {
     if (typeof(col) === 'number') numeberIndices.push(index)
+    return null
   })
 
   return numeberIndices
