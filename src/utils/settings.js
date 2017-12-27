@@ -56,7 +56,7 @@ export function getSettings(chart, sample_data) {
   let idx = 0
   let defaultSettings = chartSettings.map((setting, index) => {
     let defaultValue = -1
-    if (setting.type === 'number' && numberIndices.length > 1 && show[index]) {
+    if (setting.type === 'number' && numberIndices.length >= 1 && show[index]) {
       defaultValue = numberIndices[idx]
       if (idx < numberIndices.length-1) idx += 1
     } else if (show[index]) {

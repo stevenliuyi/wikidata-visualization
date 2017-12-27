@@ -7,7 +7,7 @@ class DataTable extends Component {
   render() {
     return (
       <div>
-        { Array.isArray(this.props.data) && this.props.data.length > 1 &&
+        { Array.isArray(this.props.data) && this.props.data.length >= 1 &&
           <ReactTable
             data={this.props.data}
             filterable
@@ -22,7 +22,7 @@ class DataTable extends Component {
                 true
             }}
             className='-striped -highlight'
-            pageSizeOptions={[10, 20, 50, 100, 200, 500, 1000, 2000, 5000]}
+            pageSizeOptions={[10, 20, 50, 100, 200, 500, 1000]}
           />
         }
       </div>

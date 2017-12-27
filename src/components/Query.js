@@ -50,7 +50,7 @@ class Query extends Component {
             <Button
               bsStyle="primary"
               onClick={  () => this.props.onSubmit(this.state.code) }
-            >Submit</Button> <span class='grey-text padding-5'>{ this.showStatus() }</span>
+            >Submit</Button> <span className='grey-text padding-5'>{ this.showStatus() }</span>
           </Col>
           <Col xsHidden sm={2} className='align-right'>
             <MdAspectRatio

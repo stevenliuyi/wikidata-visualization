@@ -1,7 +1,11 @@
 // convert the result from Wikidata to a simple json object
 
+const numberTypes = ['integer', 'decimal'].map(type => (
+  `http://www.w3.org/2001/XMLSchema#${type}`
+))
+
 function convertValue(value) {
-  if (value['datatype'] === 'http://www.w3.org/2001/XMLSchema#decimal') {
+  if (numberTypes.includes(value['datatype'])) {
     return parseFloat(value['value'])
   } else {
     return value['value']
