@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Measure from 'react-measure'
 import ScatterPlot from './ScatterPlot'
 import BubbleChart from './BubbleChart'
 
@@ -16,10 +17,6 @@ class Chart extends Component {
     }
   }
 
-  componentDidMount() {
-    this.setState({width: this.chart.offsetWidth})
-  }
-
   render() {
     const width = Math.max(this.state.width, 300)
     const styles = {
@@ -29,14 +26,23 @@ class Chart extends Component {
     }
 
     return (
-      <div ref={input => { this.chart = input }}>
-        { (this.state.show) && (this.props.chartId === 1.2) &&
-            <ScatterPlot {...this.props} {...styles} />
+      <Measure
+        bounds
+        onResize={(contentRect) => {
+          this.setState({ width: contentRect.bounds.width })
+        }}
+      >
+        {({ measureRef }) =>
+          <div ref={measureRef}>
+            { (this.state.show) && (this.props.chartId === 1.2) &&
+                <ScatterPlot {...this.props} {...styles} />
+            }
+            { (this.state.show) && (this.props.chartId === 1.3) &&
+                <BubbleChart {...this.props} {...styles} />
+            }
+          </div>
         }
-        { (this.state.show) && (this.props.chartId === 1.3) &&
-            <BubbleChart {...this.props} {...styles} />
-        }
-      </div>
+      </Measure>
     )
   }
 }

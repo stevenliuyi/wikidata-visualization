@@ -53,12 +53,12 @@ export function getSettings(chart, sample_data) {
   const numberIndices = getNumberIndices(Object.values(sample_data))
 
   // default settings
-  let index = 0
+  let idx = 0
   let defaultSettings = chartSettings.map((setting, index) => {
     let defaultValue = -1
     if (setting.type === 'number' && numberIndices.length > 1 && show[index]) {
-      defaultValue = numberIndices[index]
-      if (index < numberIndices.length-1) index += 1
+      defaultValue = numberIndices[idx]
+      if (idx < numberIndices.length-1) idx += 1
     } else if (show[index]) {
       defaultValue = 0
     }

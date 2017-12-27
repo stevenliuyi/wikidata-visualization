@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import DataCircles from './DataCircles';
-import Labels from './Labels'
 import { getColorScale } from '../utils/scales'
 import * as d3 from 'd3';
 import rd3 from 'react-d3-library'
