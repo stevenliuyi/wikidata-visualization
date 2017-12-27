@@ -27,7 +27,8 @@ class App extends Component {
     settings: {},
     settingsInfo: {},
     chart: 1.1,
-    chartName: 'Table'
+    chartName: 'Table',
+    editorFullScreen: false
   }
 
   handleChartSelect = (selected) => {
@@ -36,6 +37,14 @@ class App extends Component {
                     settings: defaultSettings,
                     settingsInfo: settingsInfo })
     if (selected < 2) this.setState({ chartName: chartNames[selected] })
+  }
+
+  changeEditorSize = () => {
+    if (!this.state.editorFullScreen) {
+      this.setState({ editorFullScreen: true }) 
+    } else {
+      this.setState({ editorFullScreen: false })
+    }
   }
 
   getSPARQLResult = (code) => {
@@ -73,41 +82,46 @@ class App extends Component {
       <Grid>
         <PageHeader>Wikidata Visualization</PageHeader>
         <Row>
-          <Col sm={4}>
-            <Row>
+          <Col sm={(this.state.editorFullScreen ? 12 : 4)}>
+            <Row className='padding-5'>
               <Query
                 onSubmit={this.getSPARQLResult}
+                onChangeEditorSize={this.changeEditorSize}
                 status={this.state.status}
                 numResults={this.state.numResults}
               />
             </Row>
-            <Row>
-              <Settings
-                header={this.state.header}
-                settings={this.state.settings}
-                onChange={this.setSettings}
-                info={this.state.settingsInfo}
-              />
-            </Row>
-          </Col>
-          <Col sm={8}>
-            <Navs
-              charts={chartNames}
-              currentChart={this.state.chartName}
-              handleChartSelect={this.handleChartSelect} />
-            { this.state.chart === 1.1 &&
-              <DataTable data={this.state.data} header={this.state.header} />
+            { !this.state.editorFullScreen && 
+              <Row className='padding-5'>
+                <Settings
+                  header={this.state.header}
+                  settings={this.state.settings}
+                  onChange={this.setSettings}
+                  info={this.state.settingsInfo}
+                />
+              </Row>
             }
+          </Col>
+          { !this.state.editorFullScreen &&
+            <Col sm={8}>
+              <Navs
+                charts={chartNames}
+                currentChart={this.state.chartName}
+                handleChartSelect={this.handleChartSelect} />
+              { this.state.chart === 1.1 &&
+                <DataTable data={this.state.data} header={this.state.header} />
+              }
 
-            { this.state.chart > 1.1 &&
-              <Chart
-                chartId={this.state.chart}
-                data={this.state.data}
-                header={this.state.header}
-                settings={this.state.settings}
-              />
-            }
-          </Col>
+              { this.state.chart > 1.1 &&
+                <Chart
+                  chartId={this.state.chart}
+                  data={this.state.data}
+                  header={this.state.header}
+                  settings={this.state.settings}
+                />
+              }
+            </Col>
+          }
         </Row>
       </Grid>
     );

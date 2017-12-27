@@ -49,7 +49,7 @@ export function getRadius(props) {
 
 export function getColorScale(props) {
   // single color by default
-  let colorScale = (v) => interpolateSpectral(0)
+  let colorScale = (v) => interpolateSpectral(0.8)
 
   if (props.settings['color'] !== -1) {
     const label = props.header[props.settings['color']]
@@ -77,4 +77,3 @@ export function getColors(props) {
   
   return colors
 }
-

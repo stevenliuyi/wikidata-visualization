@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { FormGroup, Button, HelpBlock } from 'react-bootstrap';
+import { FormGroup, Button, Row, Col } from 'react-bootstrap';
 import CodeMirror from 'react-codemirror';
 import '../../node_modules/codemirror/lib/codemirror.css';
 import '../../node_modules/codemirror/mode/sparql/sparql';
+import MdAspectRatio from 'react-icons/lib/md/aspect-ratio';
 
 class Query extends Component {
 
@@ -18,7 +19,7 @@ class Query extends Component {
 
   showStatus = () => {
     if (this.props.status === "waiting") {
-      return "Waiting..."
+      return "Querying..."
     } else if (this.props.status === "done") {
       return `${this.props.numResults} results found!`
     } else if (this.props.status === "error") {
@@ -44,11 +45,20 @@ class Query extends Component {
             defaultValue="# Enter a Wikidata SPARQL query here"
             options={codeOptions} />
         </FormGroup>
-        <Button
-          bsStyle="primary"
-          onClick={  () => this.props.onSubmit(this.state.code) }
-        >Submit Query</Button>
-        <HelpBlock>{ this.showStatus() }</HelpBlock>
+        <Row>
+          <Col xs={12} sm={10}>
+            <Button
+              bsStyle="primary"
+              onClick={  () => this.props.onSubmit(this.state.code) }
+            >Submit</Button> <span class='grey-text padding-5'>{ this.showStatus() }</span>
+          </Col>
+          <Col xsHidden sm={2} className='align-right'>
+            <MdAspectRatio
+              className='aspect-ratio-icon'
+              onClick={ this.props.onChangeEditorSize }
+              size={18} />
+          </Col>
+        </Row>
       </form>
     )
   }

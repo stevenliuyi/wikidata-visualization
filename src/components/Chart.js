@@ -18,7 +18,7 @@ class Chart extends Component {
   }
 
   render() {
-    const width = Math.max(this.state.width, 300)
+    const width = Math.max(this.state.width, 1)
     const styles = {
       width: width,
       height: width * 0.6,

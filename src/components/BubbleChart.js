@@ -60,9 +60,11 @@ const getD3Node = (props) => {
 } 
 
 class BubbleChart extends Component {
-  state = { d3: '' }
+  state = {
+    d3: ''
+  }
 
-  componentDidMount() {
+  componentWillMount() {
     this.setState({d3: getD3Node(this.props)})
   }
 

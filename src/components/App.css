@@ -30,3 +30,19 @@
 .ReactCodeMirror {
   border: 1px solid #ccc;
 }
+
+.align-right {
+  text-align: right;
+}
+
+.aspect-ratio-icon {
+  cursor: pointer;
+}
+
+.grey-text {
+  color: grey;
+}
+
+.padding-5 {
+  padding: 5px;
+}
