@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import ScatterPlot from './ScatterPlot'
+import BubbleChart from './BubbleChart'
 
 class Chart extends Component {
   state = {
     width: -1,
+    show: false
+  }
+
+  componentWillMount() {
+    if (Array.isArray(this.props.data) && this.props.data.length > 1) {
+      this.setState({ show: true })
+    } else {
+      this.setState({ show: false })
+    }
   }
 
   componentDidMount() {
@@ -20,9 +30,11 @@ class Chart extends Component {
 
     return (
       <div ref={input => { this.chart = input }}>
-        { Array.isArray(this.props.data) &&
-          this.props.data.length > 1 && 
-          <ScatterPlot {...this.props} {...styles} />
+        { (this.state.show) && (this.props.chartId === 1.2) &&
+            <ScatterPlot {...this.props} {...styles} />
+        }
+        { (this.state.show) && (this.props.chartId === 1.3) &&
+            <BubbleChart {...this.props} {...styles} />
         }
       </div>
     )

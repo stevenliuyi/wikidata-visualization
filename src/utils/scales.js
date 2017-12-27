@@ -20,38 +20,61 @@ export function getXYScales(props)  {
   return [{ xScale, yScale }, xLabel, yLabel]
 }
 
-export function getRadius(props) {
+export function getRadiusScale(props) {
   const minRadius = 3
   const maxRadius = 30
 
   // single radius by default
-  let radii = Array(props.data.length).fill(minRadius)
+  let radiusScale = (v) => minRadius
 
   if (props.settings['radius'] !== -1) {
     const label = props.header[props.settings['radius']]
     const minValue = d3.min(props.data, d => d[label])
     const maxValue = d3.max(props.data, d => d[label])
-    const radiusScale = d3.scaleLinear()
+    radiusScale = d3.scaleLinear()
       .domain([minValue, maxValue])
       .range([minRadius,maxRadius])
-    radii = props.data.map(item => radiusScale(item[label]))
   }
+
+  return radiusScale
+}
+
+export function getRadius(props) {
+  const label = props.header[props.settings['radius']]
+  const radiusScale = getRadiusScale(props)
+  const radii = props.data.map(item => radiusScale(item[label]))
 
   return radii
 }
 
-export function  getColors(props) {
+export function getColorScale(props) {
   // single color by default
-  let colors = Array(props.data.length).fill(interpolateSpectral(1))
+  let colorScale = (v) => interpolateSpectral(1)
 
   if (props.settings['color'] !== -1) {
-    const values = props.data.map(item => item[props.header[props.settings['color']]])
-    const unique_values = [...new Set(values)].sort()
-    // generate uniformly distributed points in [0, 1] and map to color scheme
-    const scheme = [...Array(unique_values.length).keys()]
-      .map( v => interpolateSpectral(v / (unique_values.length-1)) )
-    colors = values.map(value => scheme[unique_values.indexOf(value)])
+    const label = props.header[props.settings['color']]
+    // numeric values
+    if (typeof(props.data[0][label]) === 'number') {
+      const minValue = d3.min(props.data, d => d[label])
+      const maxValue = d3.max(props.data, d => d[label])
+      colorScale = (v) => interpolateSpectral((v-minValue)/(maxValue-minValue))
+    } else { // non-numeric values
+      const values = props.data.map(item => item[label])
+      const unique_values = [...new Set(values)].sort()
+      // generate uniformly distributed points in [0, 1] and map to color scheme
+      const scheme = [...Array(unique_values.length).keys()]
+        .map( v => interpolateSpectral(v / (unique_values.length-1)) )
+      colorScale = (v) => scheme[unique_values.indexOf(v)]
+    }
   }
+    return colorScale
+}
+
+export function getColors(props) {
+  const label = props.header[props.settings['color']]
+  const colorScale = getColorScale(props)
+  const colors = props.data.map(item => colorScale(item[label]))
+  
   return colors
 }
 
