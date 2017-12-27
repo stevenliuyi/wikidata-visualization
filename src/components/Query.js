@@ -4,11 +4,27 @@ import CodeMirror from 'react-codemirror';
 import '../../node_modules/codemirror/lib/codemirror.css';
 import '../../node_modules/codemirror/mode/sparql/sparql';
 import MdAspectRatio from 'react-icons/lib/md/aspect-ratio';
+import { readExample } from '../utils/examples'
 
 class Query extends Component {
 
   state = {
     code: ''
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.receiveExampleCode(nextProps.exampleIndex)
+  }
+  
+  receiveExampleCode = (index) => {
+    if (index >= 0) {
+      readExample(index)
+        .then( sparql => {
+          this.setState({ code: sparql })
+          // hack to fix CodeMirror's value update bug
+          this.cm.codeMirror.setValue(sparql)
+        })
+    }
   }
 
   updateCode = (newCode) => {
@@ -39,6 +55,7 @@ class Query extends Component {
       <form>
         <FormGroup>
           <CodeMirror
+            ref={el => this.cm = el} // hack to fix CodeMirror's value update bug
             name="query"
             value={this.state.code}
             onChange={this.updateCode}

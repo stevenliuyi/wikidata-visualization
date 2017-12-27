@@ -1,0 +1,18 @@
+# Country comparison of number of Nobel laureates per capita and GDP per capita
+
+SELECT
+?countryLabel
+# number of Nobel laureates per capita
+(COUNT(*) / AVG(?population) AS ?numOfLaureatesPerCapita)
+# GDP per capita
+(AVG(?GDPPerCapita) AS ?GDPPerCapita)
+WHERE {
+  ?person wdt:P31 wd:Q5 .
+  ?person wdt:P27 ?country .
+  ?person wdt:P166 ?nobelPrize .
+  ?nobelPrize wdt:P31 wd:Q7191 .
+  ?country wdt:P2132 ?GDPPerCapita .
+  ?country wdt:P1082 ?population .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
+}
+GROUP BY ?countryLabel

@@ -14,7 +14,7 @@ class Navs extends Component {
             })
           }
         </NavDropdown>
-        <NavItem eventKey={2}>About</NavItem>
+        <NavItem eventKey={2}>Examples</NavItem>
       </Nav>
     )
   }
