@@ -5,7 +5,10 @@ export const examples = [
 ]
 
 export const readExample = (index) => {
-  const filename = `/examples/${examples[index]['filename']}`
+  
+  const filename = (process.env.NODE_ENV === 'development')
+    ? `/examples/${examples[index]['filename']}`
+    : `/wikidata-visualization/examples/${examples[index]['filename']}`
   return fetch(filename).then(res => res.text())
 }
 
