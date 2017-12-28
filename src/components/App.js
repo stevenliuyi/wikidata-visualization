@@ -18,7 +18,9 @@ const chartNames = {
   1.2: 'Scatter Chart',
   1.3: 'Bubble Chart',
   1.4: 'Radial Tree',
-  1.5: 'Radial Cluster'
+  1.5: 'Radial Cluster',
+  1.6: 'Tree',
+  1.7: 'Cluster'
 }
 
 class App extends Component {

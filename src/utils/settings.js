@@ -55,6 +55,12 @@ const radialTreeDefaultShow = [true, true, false, false]
 const radialClusterSettings = [link_from, link_to, label, color]
 const radialClusterDefaultShow = [true, true, false, false]
 
+const treeSettings = [link_from, link_to, label, color]
+const treeDefaultShow = [true, true, false, false]
+
+const clusterSettings = [link_from, link_to, label, color]
+const clusterDefaultShow = [true, true, false, false]
+
 export function getSettings(chart, sample_data) {
 
   let chartSettings = null; let show = null
@@ -70,6 +76,12 @@ export function getSettings(chart, sample_data) {
   } else if (chart === 1.5) {
     chartSettings = radialClusterSettings
     show = radialClusterDefaultShow
+  } else if (chart === 1.6) {
+    chartSettings = treeSettings
+    show = treeDefaultShow
+  } else if (chart === 1.7) {
+    chartSettings = clusterSettings
+    show = clusterDefaultShow
   } else {
     return [{}, {}]
   }

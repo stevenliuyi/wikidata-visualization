@@ -67,6 +67,7 @@ export function getTreeRoot(props) {
   props.data.map((item, index) => {
     if (item[to]) {
       // do not add duplicates and make sure the child has its own row
+      // (perhaps same child with different parents could be added as two different nodes)
       if (!ids.includes(item[to]) && allFromIds.indexOf(item[to]) >= 0) { 
         relationships.push({'id':   item[to],
           'parent': item[from],

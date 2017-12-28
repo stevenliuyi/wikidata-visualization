@@ -3,6 +3,7 @@ import Measure from 'react-measure'
 import ScatterPlot from './ScatterPlot'
 import BubbleChart from './BubbleChart'
 import RadialTree from './RadialTree'
+import Tree from './Tree'
 
 class Chart extends Component {
   state = {
@@ -46,6 +47,12 @@ class Chart extends Component {
             }
             { (this.state.show) && (this.props.chartId === 1.5) &&
                 <RadialTree treeType='cluster' {...this.props} {...styles} />
+            }
+            { (this.state.show) && (this.props.chartId === 1.6) &&
+                <Tree treeType='tree' {...this.props} {...styles} />
+            }
+            { (this.state.show) && (this.props.chartId === 1.7) &&
+                <Tree treeType='cluster' {...this.props} {...styles} />
             }
           </div>
         }
