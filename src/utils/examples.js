@@ -3,7 +3,11 @@ export const examples = [
     filename: 'country-nobel-gdp.rq'
   },
   { title: 'Descendants of Genghis Khan',
-    filename: 'genghiskhan-descendants.rq'}
+    filename: 'genghiskhan-descendants.rq'
+  },
+  { title: 'Number of marriages between European countries',
+    filename: 'europe-marriages.rq'
+  }
 ]
 
 export const readExample = (index) => {
