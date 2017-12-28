@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { FormGroup, Button, Row, Col } from 'react-bootstrap';
-import CodeMirror from 'react-codemirror';
-import '../../node_modules/codemirror/lib/codemirror.css';
-import '../../node_modules/codemirror/mode/sparql/sparql';
-import MdAspectRatio from 'react-icons/lib/md/aspect-ratio';
+import React, { Component } from 'react'
+import { FormGroup, Button, Row, Col } from 'react-bootstrap'
+import CodeMirror from 'react-codemirror'
+import '../../node_modules/codemirror/lib/codemirror.css'
+import '../../node_modules/codemirror/mode/sparql/sparql'
+import MdAspectRatio from 'react-icons/lib/md/aspect-ratio'
 import { readExample } from '../utils/examples'
 
 class Query extends Component {
@@ -34,14 +34,14 @@ class Query extends Component {
   }
 
   showStatus = () => {
-    if (this.props.status === "waiting") {
-      return "Querying..."
-    } else if (this.props.status === "done") {
+    if (this.props.status === 'waiting') {
+      return 'Querying...'
+    } else if (this.props.status === 'done') {
       return `${this.props.numResults} results found!`
-    } else if (this.props.status === "error") {
-      return "Error encountered while querying!"
-    } else if (this.props.status === "empty") {
-      return "No result found!"
+    } else if (this.props.status === 'error') {
+      return 'Error encountered while querying!'
+    } else if (this.props.status === 'empty') {
+      return 'No result found!'
     }
   }
 

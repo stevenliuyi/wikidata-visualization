@@ -1,5 +1,5 @@
-import * as d3 from 'd3';
-import { interpolateSpectral } from 'd3-scale-chromatic';
+import * as d3 from 'd3'
+import { interpolateSpectral } from 'd3-scale-chromatic'
 
 export function getXYScales(props)  {
   const xLabel = props.header[props.settings['x-axis']]
@@ -67,7 +67,7 @@ export function getColorScale(props) {
       colorScale = (v) => scheme[unique_values.indexOf(v)]
     }
   }
-    return colorScale
+  return colorScale
 }
 
 export function getColors(props) {

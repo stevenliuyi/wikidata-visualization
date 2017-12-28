@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
-import { PageHeader, Grid, Row, Col } from 'react-bootstrap';
-import Query from './Query';
-import Settings from './Settings';
-import Chart from './Chart';
-import DataTable from './DataTable';
-import Navs from './Navs';
+import React, { Component } from 'react'
+import './App.css'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap-theme.css'
+import { PageHeader, Grid, Row, Col } from 'react-bootstrap'
+import Query from './Query'
+import Settings from './Settings'
+import Chart from './Chart'
+import DataTable from './DataTable'
+import Navs from './Navs'
 import Examples from './Examples'
-import * as WikidataAPI from '../utils/api';
-import { convertData } from '../utils/convertData';
-import { getSettings } from '../utils/settings';
+import * as WikidataAPI from '../utils/api'
+import { convertData } from '../utils/convertData'
+import { getSettings } from '../utils/settings'
 
 const chartNames = {
   1.1: 'Table',
@@ -25,7 +25,7 @@ class App extends Component {
   state = {
     data: [],
     header: [],
-    status: "",
+    status: '',
     numResults: 0,
     settings: {},
     settingsInfo: {},
@@ -39,8 +39,8 @@ class App extends Component {
     if (selected < 2) { // chart
       const [defaultSettings, settingsInfo] = getSettings(parseFloat(selected), this.state.data[0])
       this.setState({ chart: parseFloat(selected),
-                      settings: defaultSettings,
-                      settingsInfo: settingsInfo })
+        settings: defaultSettings,
+        settingsInfo: settingsInfo })
       this.setState({ chartName: chartNames[selected] })
     } else {
       this.setState({ chart: parseFloat(selected) })
@@ -61,17 +61,17 @@ class App extends Component {
 
   getSPARQLResult = (code) => {
     this.setState({
-      status: "waiting",
+      status: 'waiting',
       exampleIndex: -1
     })
     const query = `query=${encodeURIComponent(code)}`
     WikidataAPI.fetchSPARQLResult(query)
       .then(data => {
         if (data === null) {
-          this.setState({ status: "error" })
+          this.setState({ status: 'error' })
           return null
         } else if (data.length === 0) {
-          this.setState({ status: "empty" })
+          this.setState({ status: 'empty' })
           return null
         }
 
@@ -80,14 +80,14 @@ class App extends Component {
         const [defaultSettings, settingsInfo] = getSettings(new_chart, new_data[0])
 
         this.setState({ data: new_data,
-                        header: Object.keys(new_data[0]),
-                        status: "done",
-                        numResults: new_data.length,
-                        settings: defaultSettings,
-                        settingsInfo: settingsInfo,
-                        chart: new_chart,
-                        chartName: chartNames[new_chart]
-                      })
+          header: Object.keys(new_data[0]),
+          status: 'done',
+          numResults: new_data.length,
+          settings: defaultSettings,
+          settingsInfo: settingsInfo,
+          chart: new_chart,
+          chartName: chartNames[new_chart]
+        })
       })
   }
 
@@ -147,8 +147,8 @@ class App extends Component {
           }
         </Row>
       </Grid>
-    );
+    )
   }
 }
 
-export default App;
+export default App

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import * as d3 from 'd3';
+import React, { Component } from 'react'
+import * as d3 from 'd3'
 
 class Axis extends Component {
   componentDidMount() {
@@ -24,8 +24,8 @@ class Axis extends Component {
   render() {
     return (
       <g className="axis"
-         ref="axis"
-         transform={this.props.translate} />
+        ref="axis"
+        transform={this.props.translate} />
     )
   }
 }

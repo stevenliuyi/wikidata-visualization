@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import DataCircles from './DataCircles';
+import React, { Component } from 'react'
+import DataCircles from './DataCircles'
 import Labels from './Labels'
 import XYAxis from './XYAxis'
 import { getXYScales, getRadius, getColors } from '../utils/scales'

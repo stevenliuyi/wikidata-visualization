@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { Form, FormGroup, FormControl, ControlLabel, Col } from 'react-bootstrap'
 
 class Settings extends Component {

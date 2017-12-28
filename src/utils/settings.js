@@ -99,7 +99,7 @@ export function getSettings(chart, sample_data) {
   // for the settings component
   const settingsInfo =  chartSettings.map((setting, index) => {
     let info = { value: setting.value,
-                 title: setting.title }
+      title: setting.title }
     if (setting.type === 'all') {
       info['indices'] = [...Array(Object.keys(sample_data).length).keys()]
     } else if (setting.type === 'number')  {

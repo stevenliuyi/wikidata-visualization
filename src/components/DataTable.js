@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import ReactTable from 'react-table';
-import 'react-table/react-table.css';
+import React, { Component } from 'react'
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
 
 class DataTable extends Component {
 
@@ -15,7 +15,7 @@ class DataTable extends Component {
               return { Header: col, accessor: col }
             })}
             defaultPageSize={10}
-            defaultFilterMethod={(filter, row, column) => {
+            defaultFilterMethod={(filter, row) => {
               const id = filter.pivotId || filter.id
               return row[id] !== undefined ?
                 String(row[id]).toLowerCase().includes(filter.value.toLowerCase()) :

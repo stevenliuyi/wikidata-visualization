@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import Measure from 'react-measure'
 import ScatterPlot from './ScatterPlot'
 import BubbleChart from './BubbleChart'

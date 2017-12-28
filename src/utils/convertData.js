@@ -10,7 +10,7 @@ function convertValue(value) {
     return parseFloat(value['value']) // number
   } else if (value['value'].startsWith('http://www.wikidata.org/entity/')) {
     return value['value'].substr(31) // Wikidata item 
-  } {
+  } else {
     return value['value']
   }
 }
@@ -55,11 +55,11 @@ export function getTreeRoot(props) {
   const color = props.header[props.settings['color']] 
   
   // root
-  let relationships = [{"id": props.data[0][from],
-                        "parent": "",
-                        "label": label ? props.data[0][label] : "",
-                        "color": color ? props.data[0][color] : ""
-                       }]
+  let relationships = [{'id': props.data[0][from],
+    'parent': '',
+    'label': label ? props.data[0][label] : '',
+    'color': color ? props.data[0][color] : ''
+  }]
   let ids = [props.data[0][from]]
 
   const allFromIds = props.data.map(item => item[from])
@@ -68,21 +68,22 @@ export function getTreeRoot(props) {
     if (item[to]) {
       // do not add duplicates and make sure the child has its own row
       if (!ids.includes(item[to]) && allFromIds.indexOf(item[to]) >= 0) { 
-        relationships.push({"id":   item[to],
-                            "parent": item[from],
-                            "label":  label ? props.data[allFromIds.indexOf(item[to])][label] : "",
-                            "color":  color ? props.data[allFromIds.indexOf(item[to])][color] : ""
-                           })
+        relationships.push({'id':   item[to],
+          'parent': item[from],
+          'label':  label ? props.data[allFromIds.indexOf(item[to])][label] : '',
+          'color':  color ? props.data[allFromIds.indexOf(item[to])][color] : ''
+        })
         ids.push(item[to])
       }
     }
+    return null
   })
 
   try {
-    const root = d3.stratify()
+    const stratify = d3.stratify()
       .id(function(d) { return d['id'] })
       .parentId(function(d) { return d['parent'] })
-      (relationships)
+    const root = stratify(relationships)
     return root
   } catch(err) {
     console.log('Error encountered while generating the tree!')

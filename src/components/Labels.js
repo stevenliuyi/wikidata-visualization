@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 const renderLabels = (props) => {
   return (item, index) => {
@@ -13,9 +13,9 @@ const renderLabels = (props) => {
       <text {...labelProps}>
         { item[label] }
       </text>
-    );
-  };
-};
+    )
+  }
+}
 
 class Labels extends Component {
   render() {
