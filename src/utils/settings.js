@@ -1,5 +1,5 @@
 // chart settings
-import { getNumberIndices } from './convertData'
+import { getNumberIndices, getItemIndices } from './convertData'
 
 const x_axis = {
   value: 'x-axis',
@@ -31,11 +31,29 @@ const radius = {
   type: 'number'
 }
 
+const link_from = {
+  value: 'link-from',
+  title: 'Link from',
+  type: 'item'
+}
+
+const link_to = {
+  value: 'link-to',
+  title: 'Link to',
+  type: 'item'
+}
+
 const scatterPlotSettings = [x_axis, y_axis, label, color, radius]
 const scatterPlotDefaultShow = [true, true, false, false, false]
 
 const bubbleChartSettings = [radius, label, color]
 const bubbleChartDefaultShow = [true, true, false]
+
+const radialTreeSettings = [link_from, link_to, label, color]
+const radialTreeDefaultShow = [true, true, false, false]
+
+const radialClusterSettings = [link_from, link_to, label, color]
+const radialClusterDefaultShow = [true, true, false, false]
 
 export function getSettings(chart, sample_data) {
 
@@ -46,19 +64,29 @@ export function getSettings(chart, sample_data) {
   } else if (chart === 1.3) {
     chartSettings = bubbleChartSettings
     show = bubbleChartDefaultShow
+  } else if (chart === 1.4) {
+    chartSettings = radialTreeSettings
+    show = radialTreeDefaultShow
+  } else if (chart === 1.5) {
+    chartSettings = radialClusterSettings
+    show = radialClusterDefaultShow
   } else {
     return [{}, {}]
   }
 
   const numberIndices = getNumberIndices(Object.values(sample_data))
+  const itemIndices = getItemIndices(Object.values(sample_data))
 
   // default settings
   let idx = 0
   let defaultSettings = chartSettings.map((setting, index) => {
     let defaultValue = -1
-    if (setting.type === 'number' && numberIndices.length >= 1 && show[index]) {
+    if (setting.type === 'number' && numberIndices.length >= 1 && show[index]) { // number
       defaultValue = numberIndices[idx]
       if (idx < numberIndices.length-1) idx += 1
+    } else if (setting.type === 'item' && itemIndices.length >= 2 && show[index]) { // item
+      defaultValue = itemIndices[idx] 
+      if (idx < itemIndices.length-1) idx += 1
     } else if (show[index]) {
       defaultValue = 0
     }
@@ -74,8 +102,10 @@ export function getSettings(chart, sample_data) {
                  title: setting.title }
     if (setting.type === 'all') {
       info['indices'] = [...Array(Object.keys(sample_data).length).keys()]
-    } else  {
+    } else if (setting.type === 'number')  {
       info['indices'] = numberIndices
+    } else if (setting.type === 'item') {
+      info['indices'] = itemIndices
     }
     // hide the setting by default
     if (!show[index]) info['indices'] = [-1].concat(info['indices'])

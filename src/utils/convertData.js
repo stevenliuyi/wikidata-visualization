@@ -1,4 +1,5 @@
-// convert the result from Wikidata to a simple json object
+// convert the result from Wikidata to objects
+import * as d3 from 'd3'
 
 const numberTypes = ['integer', 'decimal'].map(type => (
   `http://www.w3.org/2001/XMLSchema#${type}`
@@ -6,8 +7,10 @@ const numberTypes = ['integer', 'decimal'].map(type => (
 
 function convertValue(value) {
   if (numberTypes.includes(value['datatype'])) {
-    return parseFloat(value['value'])
-  } else {
+    return parseFloat(value['value']) // number
+  } else if (value['value'].startsWith('http://www.wikidata.org/entity/')) {
+    return value['value'].substr(31) // Wikidata item 
+  } {
     return value['value']
   }
 }
@@ -31,4 +34,59 @@ export function getNumberIndices(item) {
   })
 
   return numeberIndices
+}
+
+// find indices of items
+export function getItemIndices(item) {
+  let itemIndices = []
+  item.map((col, index) => {
+    if (col.toString().match(/^Q\d+$/)) itemIndices.push(index)
+    return null
+  })
+
+  return itemIndices
+}
+
+// get tree relationships (child-parent pairs) from data
+export function getTreeRoot(props) {
+  const from = props.header[props.settings['link-from']]  
+  const to = props.header[props.settings['link-to']]  
+  const label = props.header[props.settings['label']] 
+  const color = props.header[props.settings['color']] 
+  
+  // root
+  let relationships = [{"id": props.data[0][from],
+                        "parent": "",
+                        "label": label ? props.data[0][label] : "",
+                        "color": color ? props.data[0][color] : ""
+                       }]
+  let ids = [props.data[0][from]]
+
+  const allFromIds = props.data.map(item => item[from])
+
+  props.data.map((item, index) => {
+    if (item[to]) {
+      // do not add duplicates and make sure the child has its own row
+      if (!ids.includes(item[to]) && allFromIds.indexOf(item[to]) >= 0) { 
+        relationships.push({"id":   item[to],
+                            "parent": item[from],
+                            "label":  label ? props.data[allFromIds.indexOf(item[to])][label] : "",
+                            "color":  color ? props.data[allFromIds.indexOf(item[to])][color] : ""
+                           })
+        ids.push(item[to])
+      }
+    }
+  })
+
+  try {
+    const root = d3.stratify()
+      .id(function(d) { return d['id'] })
+      .parentId(function(d) { return d['parent'] })
+      (relationships)
+    return root
+  } catch(err) {
+    console.log('Error encountered while generating the tree!')
+    console.log(err)
+  }
+  return null
 }

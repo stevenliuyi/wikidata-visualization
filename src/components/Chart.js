@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Measure from 'react-measure'
 import ScatterPlot from './ScatterPlot'
 import BubbleChart from './BubbleChart'
+import RadialTree from './RadialTree'
 
 class Chart extends Component {
   state = {
@@ -39,6 +40,12 @@ class Chart extends Component {
             }
             { (this.state.show) && (this.props.chartId === 1.3) &&
                 <BubbleChart {...this.props} {...styles} />
+            }
+            { (this.state.show) && (this.props.chartId === 1.4) &&
+                <RadialTree treeType='tree' {...this.props} {...styles} />
+            }
+            { (this.state.show) && (this.props.chartId === 1.5) &&
+                <RadialTree treeType='cluster' {...this.props} {...styles} />
             }
           </div>
         }

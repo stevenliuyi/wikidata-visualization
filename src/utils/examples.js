@@ -1,7 +1,9 @@
 export const examples = [
   { title: 'Country comparison - number of Nobel laureates per capita and GDP per capita',
     filename: 'country-nobel-gdp.rq'
-  }
+  },
+  { title: 'Descendants of Genghis Khan',
+    filename: 'genghiskhan-descendants.rq'}
 ]
 
 export const readExample = (index) => {

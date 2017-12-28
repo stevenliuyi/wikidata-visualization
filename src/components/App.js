@@ -16,7 +16,9 @@ import { getSettings } from '../utils/settings';
 const chartNames = {
   1.1: 'Table',
   1.2: 'Scatter Chart',
-  1.3: 'Bubble Chart'
+  1.3: 'Bubble Chart',
+  1.4: 'Radial Tree',
+  1.5: 'Radial Cluster'
 }
 
 class App extends Component {
