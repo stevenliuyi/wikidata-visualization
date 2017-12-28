@@ -1,0 +1,19 @@
+# Descendants of Genghis Khan
+
+SELECT ?person ?personLabel ?genderLabel ?child ?childLabel ?CBDB
+WHERE
+{
+  SERVICE gas:service {
+    gas:program gas:gasClass "com.bigdata.rdf.graph.analytics.SSSP" ;
+                gas:in wd:Q720 ;
+                gas:traversalDirection "Forward" ;
+                gas:out ?person ;
+                gas:out1 ?depth ;
+                gas:maxIterations 4 ;
+                gas:linkType wdt:P40 .
+  }
+  OPTIONAL { ?person wdt:P40 ?child . }
+  OPTIONAL { ?person wdt:P21 ?gender . }
+  OPTIONAL { ?person wdt:P497 ?CBDB . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "zh,en" }
+}
