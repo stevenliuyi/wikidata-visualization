@@ -10,11 +10,12 @@
     "react": "^16.2.0",
     "react-bootstrap": "^0.31.5",
     "react-codemirror": "^1.0.0",
-    "react-d3-library": "^1.1.8",
     "react-dom": "^16.2.0",
+    "react-faux-dom": "^4.1.0",
     "react-icons": "^2.2.7",
     "react-measure": "^2.0.2",
     "react-scripts": "1.0.17",
+    "react-svg-pan-zoom": "^2.14.1",
     "react-table": "^6.7.6"
   },
   "scripts": {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { getColorScale } from '../utils/scales'
 import * as d3 from 'd3'
-import rd3 from 'react-d3-library'
-const RD3Component = rd3.Component
+import ReactFauxDOM from 'react-faux-dom'
+import SVGPanZoom from './SVGPanZoom'
 
 // bubble chart d3 references
 // https://bl.ocks.org/mbostock/4063269
@@ -14,16 +14,12 @@ const getD3Node = (props) => {
     .size([props.width, props.height])
     .padding(5)
   
-  var d3node = document.createElement('div')
+  var d3node = new ReactFauxDOM.Element('svg')
 
   var svg = d3.select(d3node)
-    .append('svg')
     .attr('width', props.width)
     .attr('height', props.height)
     .attr('class', 'bubble')
-    .attr('font-family', 'sans-serif')
-    .attr('font-size', '10')
-    .attr('text-anchor', 'middle')
   
   var data = props.data.map((d, index) => { d.id = index; return d })
   
@@ -55,26 +51,19 @@ const getD3Node = (props) => {
     .attr('x', 0)
     .attr('y', 0)
     .text(function(d){ return d.data[props.header[props.settings['label']]] })
+    .style('font-family', 'sans-serif')
+    .style('font-size', '10')
+    .style('text-anchor', 'middle')
 
-  return d3node
+  return d3node.toReact()
 } 
 
 class BubbleChart extends Component {
-  state = {
-    d3: ''
-  }
-
-  componentWillMount() {
-    this.setState({d3: getD3Node(this.props)})
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({d3: getD3Node(nextProps)})
-  }
 
   render() {
+    const d3node = getD3Node(this.props)
     return (
-      <div><RD3Component data={this.state.d3} /></div>
+      <SVGPanZoom d3node={d3node} width={this.props.width} height={this.props.height} /> 
     )
   }
 }

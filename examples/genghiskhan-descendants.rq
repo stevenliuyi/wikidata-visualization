@@ -1,6 +1,6 @@
 # Descendants of Genghis Khan
 
-SELECT ?personItem ?personName ?gender ?childItem ?childName ?CBDB
+SELECT ?personItem ?personName ?gender ?childItem ?childName ?CBDB ?depth
 WHERE
 {
   SERVICE gas:service {
@@ -20,3 +20,4 @@ WHERE
                            ?genderItem rdfs:label ?gender .
                            ?childItem rdfs:label ?childName }
 }
+ORDER BY ?depth

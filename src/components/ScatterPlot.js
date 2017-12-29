@@ -3,6 +3,7 @@ import DataCircles from './DataCircles'
 import Labels from './Labels'
 import XYAxis from './XYAxis'
 import { getXYScales, getRadius, getColors } from '../utils/scales'
+import SVGPanZoom from './SVGPanZoom'
 
 class ScatterPlot extends Component {
   render() {
@@ -10,7 +11,7 @@ class ScatterPlot extends Component {
     const radii = getRadius(this.props)
     const colors = getColors(this.props)
 
-    return (
+    const d3node = (
       <svg width={this.props.width} height={this.props.height}>
         <DataCircles
           xLabel={xLabel}
@@ -24,6 +25,10 @@ class ScatterPlot extends Component {
         }
         <XYAxis {...this.props} {...scales} />
       </svg>
+    )
+
+    return (
+      <SVGPanZoom d3node={d3node} width={this.props.width} height={this.props.height} /> 
     )
   }
 }

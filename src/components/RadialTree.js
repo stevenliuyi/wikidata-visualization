@@ -1,27 +1,25 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
-import rd3 from 'react-d3-library'
 import { getTreeRoot } from '../utils/convertData'
 import { getColorScale } from '../utils/scales'
-
-const RD3Component = rd3.Component
+import ReactFauxDOM from 'react-faux-dom'
+import SVGPanZoom from './SVGPanZoom'
 
 // radial tree d3 reference: https://bl.ocks.org/mbostock/4063550
 const getD3Node = (props) => {
 
   var colorScale = getColorScale(props)
-  
-  var d3node = document.createElement('div')
+
+  const d3node = new ReactFauxDOM.Element('svg')
 
   var svg = d3.select(d3node)
-    .append('svg')
     .attr('width', props.width)
     .attr('height', props.height)
     .append('g')
     .attr('transform', 'translate(' + (props.width/2) + ',' + (props.height/2) + ')')
     .attr('font-family', 'sans-serif')
     .attr('font-size', '10')
-  
+
   var radius = Math.min(props.width, props.height) / 2 * 0.8 
 
   var radialCluster = d3.cluster()
@@ -49,7 +47,7 @@ const getD3Node = (props) => {
   if (root) {
     root = (props.treeType === 'cluster') ? radialCluster(root) : radialTree(root)
   } else { // null returned, error encountered while generating tree
-    return d3node
+    return d3node.toReact()
   }
   
   // define link between nodes
@@ -89,25 +87,15 @@ const getD3Node = (props) => {
     })
     .text(function (d) { return d.data.label })
 
-  return d3node
+  return d3node.toReact()
 } 
 
 class RadialTree extends Component {
-  state = {
-    d3: ''
-  }
-
-  componentWillMount() {
-    this.setState({d3: getD3Node(this.props)})
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({d3: getD3Node(nextProps)})
-  }
 
   render() {
+    const d3node = getD3Node(this.props)
     return (
-      <div><RD3Component data={this.state.d3} /></div>
+      <SVGPanZoom d3node={d3node} width={this.props.width} height={this.props.height} /> 
     )
   }
 }
