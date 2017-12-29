@@ -1,7 +1,9 @@
 // convert the result from Wikidata to objects
 import * as d3 from 'd3'
+import { getColorScaleFromValues } from './scales'
 
-const numberTypes = ['integer', 'decimal'].map(type => (
+const numbers = ['double', 'float', 'decimal', 'integer', 'long', 'int', 'short', 'nonNegativeInteger', 'positiveInteger', 'unsignedLong', 'unsignedInt', 'unsignedShort', 'nonPositiveInteger', 'negativeInteger']
+const numberTypes = numbers.map(type => (
   `http://www.w3.org/2001/XMLSchema#${type}`
 ))
 
@@ -91,4 +93,33 @@ export function getTreeRoot(props) {
     console.log(err)
   }
   return null
+}
+
+// get matrix for chord diagram
+export function getMatrix(props) {
+  const from = props.header[props.settings['link-from']]  
+  const to = props.header[props.settings['link-to']]  
+  const relation = props.header[props.settings['relation']] 
+  const label = props.header[props.settings['label']] 
+
+  const items = [...new Set(props.data.map(item => item[from])
+    .concat(props.data.map(item => item[to])))].sort()
+  // create empty matrix
+  let matrix = items.map(item => items.map(item => 0))
+
+  const labels = Array(items.length).fill('')
+
+  // fill data into the matrix
+  props.data.map(item => {
+    const fromIndex = items.indexOf(item[from])
+    const toIndex = items.indexOf(item[to])
+    matrix[fromIndex][toIndex] = item[relation]
+    if (label) labels[fromIndex] = item[label]
+    return null
+  })
+
+  const colorScale = getColorScaleFromValues(items)
+  const colors = items.map(item => colorScale(item))
+
+  return [matrix, colors, labels]
 }

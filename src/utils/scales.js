@@ -47,6 +47,14 @@ export function getRadius(props) {
   return radii
 }
 
+export function getColorScaleFromValues(values) {
+  // generate uniformly distributed points in [0, 1] and map to color scheme
+  const scheme = [...Array(values.length).keys()]
+    .map( v => interpolateSpectral(v / (values.length-1)) )
+  const colorScale = (v) => scheme[values.indexOf(v)]
+  return colorScale
+}
+
 export function getColorScale(props) {
   // single color by default
   let colorScale = (v) => interpolateSpectral(0.8)
@@ -61,10 +69,7 @@ export function getColorScale(props) {
     } else { // non-numeric values
       const values = props.data.map(item => item[label])
       const unique_values = [...new Set(values)].sort()
-      // generate uniformly distributed points in [0, 1] and map to color scheme
-      const scheme = [...Array(unique_values.length).keys()]
-        .map( v => interpolateSpectral(v / (unique_values.length-1)) )
-      colorScale = (v) => scheme[unique_values.indexOf(v)]
+      colorScale = getColorScaleFromValues(unique_values)
     }
   }
   return colorScale

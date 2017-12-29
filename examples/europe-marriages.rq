@@ -1,6 +1,6 @@
 # Number of marriages between European countries
 
-SELECT ?country ?spouseCountry
+SELECT ?countryItem ?country ?spouseCountryItem ?spouseCountry
        (COUNT(*) AS ?numOfMarriages)
 WHERE
 {
@@ -15,5 +15,5 @@ WHERE
                            ?countryItem rdfs:label ?country .
                            ?spouseCountryItem rdfs:label ?spouseCountry . }
 }
-GROUP BY ?country ?spouseCountry
+GROUP BY ?countryItem ?country ?spouseCountryItem ?spouseCountry
 ORDER BY DESC(?numOfMarriages)

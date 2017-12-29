@@ -4,6 +4,7 @@ import ScatterPlot from './ScatterPlot'
 import BubbleChart from './BubbleChart'
 import RadialTree from './RadialTree'
 import Tree from './Tree'
+import ChordDiagram from './ChordDiagram'
 
 class Chart extends Component {
   state = {
@@ -53,6 +54,9 @@ class Chart extends Component {
             }
             { (this.state.show) && (this.props.chartId === 1.7) &&
                 <Tree treeType='cluster' {...this.props} {...styles} />
+            }
+            { (this.state.show) && (this.props.chartId === 1.8) &&
+                <ChordDiagram {...this.props} {...styles} />
             }
           </div>
         }

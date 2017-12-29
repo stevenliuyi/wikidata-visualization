@@ -20,7 +20,8 @@ const chartNames = {
   1.4: 'Radial Tree',
   1.5: 'Radial Cluster',
   1.6: 'Tree',
-  1.7: 'Cluster'
+  1.7: 'Cluster',
+  1.8: 'Chord Diagram'
 }
 
 class App extends Component {

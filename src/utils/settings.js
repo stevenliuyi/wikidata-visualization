@@ -43,6 +43,12 @@ const link_to = {
   type: 'item'
 }
 
+const relation = {
+  value: 'relation',
+  title: 'Relation',
+  type: 'number'
+}
+
 const scatterPlotSettings = [x_axis, y_axis, label, color, radius]
 const scatterPlotDefaultShow = [true, true, false, false, false]
 
@@ -60,6 +66,9 @@ const treeDefaultShow = [true, true, false, false]
 
 const clusterSettings = [link_from, link_to, label, color]
 const clusterDefaultShow = [true, true, false, false]
+
+const chordDiagramSettings = [link_from, link_to, relation, label]
+const chordDiagramDefaultShow = [true, true, true, false]
 
 export function getSettings(chart, sample_data) {
 
@@ -82,6 +91,9 @@ export function getSettings(chart, sample_data) {
   } else if (chart === 1.7) {
     chartSettings = clusterSettings
     show = clusterDefaultShow
+  } else if (chart === 1.8) {
+    chartSettings = chordDiagramSettings
+    show = chordDiagramDefaultShow
   } else {
     return [{}, {}]
   }
@@ -90,15 +102,16 @@ export function getSettings(chart, sample_data) {
   const itemIndices = getItemIndices(Object.values(sample_data))
 
   // default settings
-  let idx = 0
+  let numIdx = 0,
+    itemIdx = 0
   let defaultSettings = chartSettings.map((setting, index) => {
     let defaultValue = -1
     if (setting.type === 'number' && numberIndices.length >= 1 && show[index]) { // number
-      defaultValue = numberIndices[idx]
-      if (idx < numberIndices.length-1) idx += 1
+      defaultValue = numberIndices[numIdx]
+      if (numIdx < numberIndices.length-1) numIdx += 1
     } else if (setting.type === 'item' && itemIndices.length >= 2 && show[index]) { // item
-      defaultValue = itemIndices[idx] 
-      if (idx < itemIndices.length-1) idx += 1
+      defaultValue = itemIndices[itemIdx] 
+      if (itemIdx < itemIndices.length-1) itemIdx += 1
     } else if (show[index]) {
       defaultValue = 0
     }
