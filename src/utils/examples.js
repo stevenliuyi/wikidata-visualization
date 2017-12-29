@@ -11,6 +11,10 @@ export const examples = [
   {
     title: 'Stars with Bayer designations',
     filename: 'bayer-stars.rq'
+  },
+  {
+    title: 'Academy Award-winning families',
+    filename: 'academy-award-family.rq'
   }
 ]
 

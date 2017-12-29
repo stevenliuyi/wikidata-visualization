@@ -1,0 +1,22 @@
+# Academy Award-winning families
+
+SELECT DISTINCT ?personItem ?personName ?personGender ?relativeType ?relativeItem
+       ?relativeName ?relativeGender
+WHERE {
+  VALUES ?relativeProp { wdt:P22 wdt:P25 wdt:P26 wdt:P40 wdt:P3373 } # direct relatives
+  hint:Query hint:optimizer "None" .
+  ?personAwardItem wdt:P31? wd:Q19020 . # Academy Award
+  ?personItem wdt:P166 ?personAwardItem .
+  ?personItem ?relativeProp ?relativeItem .
+  ?relativeItem wdt:P166 ?relativeAwardItem .
+  ?relativeAwardItem wdt:P31? wd:Q19020 .
+  OPTIONAL { ?personItem wdt:P21 ?personGenderItem . }
+  OPTIONAL { ?relativeItem wdt:P21 ?relativeGenderItem . }
+  ?relativeTypeWd wikibase:directClaim ?relativeProp .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en" .
+                           ?personItem rdfs:label ?personName .
+                           ?relativeItem rdfs:label ?relativeName .
+                           ?personGenderItem rdfs:label ?personGender .
+                           ?relativeGenderItem rdfs:label ?relativeGender .
+                           ?relativeTypeWd rdfs:label ?relativeType . }
+}
