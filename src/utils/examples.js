@@ -7,6 +7,10 @@ export const examples = [
   },
   { title: 'Number of marriages between European countries',
     filename: 'europe-marriages.rq'
+  },
+  {
+    title: 'Stars with Bayer designations',
+    filename: 'bayer-stars.rq'
   }
 ]
 

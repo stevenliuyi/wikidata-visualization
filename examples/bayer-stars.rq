@@ -1,0 +1,21 @@
+# Stars with Bayer designations
+
+SELECT ?star ?bayerDesignation ?constellation ?absMagnitude ?appMagnitude ?mass ?radius
+WHERE
+{
+  ?starItem wdt:P31 wd:Q523 . # star
+  ?starItem p:P528 [ps:P528 ?bayerDesignation ;
+                    pq:P972 wd:Q105616 ] .
+  OPTIONAL { ?starItem wdt:P59 ?constellationItem . }
+  OPTIONAL { ?starItem wdt:P1457 ?absMagnitude . }
+  OPTIONAL { ?starItem wdt:P1215 ?appMagnitude . }
+  OPTIONAL { ?starItem p:P2067/psv:P2067 ?massNode .
+             ?massNode wikibase:quantityAmount ?mass ;
+                       wikibase:quantityUnit wd:Q180892 . } # solar mass
+  OPTIONAL { ?starItem p:P2120/psv:P2120 ?radiusNode .
+             ?radiusNode wikibase:quantityAmount ?radius ;
+                         wikibase:quantityUnit wd:Q48440 . } # solar radius
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en" .
+                           ?starItem rdfs:label ?star .
+                           ?constellationItem rdfs:label ?constellation . }
+}

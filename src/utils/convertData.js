@@ -113,7 +113,7 @@ export function getMatrix(props) {
   props.data.map(item => {
     const fromIndex = items.indexOf(item[from])
     const toIndex = items.indexOf(item[to])
-    matrix[fromIndex][toIndex] = item[relation]
+    matrix[fromIndex][toIndex] += item[relation]
     if (label) labels[fromIndex] = item[label]
     return null
   })
