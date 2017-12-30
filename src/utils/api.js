@@ -4,6 +4,3 @@ export const fetchSPARQLResult = (sparql) =>
     .then(res => {
       return (res.status === 400) ? null : res.json()
     })
-    .then(res => {
-      return (res === null) ? res : res.results.bindings
-    })

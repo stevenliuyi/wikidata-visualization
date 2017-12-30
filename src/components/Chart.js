@@ -38,28 +38,28 @@ class Chart extends Component {
       >
         {({ measureRef }) =>
           <div ref={measureRef}>
-            { (this.state.show) && (this.props.chartId === 1.2) &&
+            { (this.state.show) && (this.props.chartId === 1.02) &&
                 <ScatterPlot {...this.props} {...styles} />
             }
-            { (this.state.show) && (this.props.chartId === 1.3) &&
+            { (this.state.show) && (this.props.chartId === 1.03) &&
                 <BubbleChart {...this.props} {...styles} />
             }
-            { (this.state.show) && (this.props.chartId === 1.4) &&
+            { (this.state.show) && (this.props.chartId === 1.04) &&
                 <RadialTree treeType='tree' {...this.props} {...styles} />
             }
-            { (this.state.show) && (this.props.chartId === 1.5) &&
+            { (this.state.show) && (this.props.chartId === 1.05) &&
                 <RadialTree treeType='cluster' {...this.props} {...styles} />
             }
-            { (this.state.show) && (this.props.chartId === 1.6) &&
+            { (this.state.show) && (this.props.chartId === 1.06) &&
                 <Tree treeType='tree' {...this.props} {...styles} />
             }
-            { (this.state.show) && (this.props.chartId === 1.7) &&
+            { (this.state.show) && (this.props.chartId === 1.07) &&
                 <Tree treeType='cluster' {...this.props} {...styles} />
             }
-            { (this.state.show) && (this.props.chartId === 1.8) &&
+            { (this.state.show) && (this.props.chartId === 1.08) &&
                 <ChordDiagram {...this.props} {...styles} />
             }
-            { (this.state.show) && (this.props.chartId === 1.9) &&
+            { (this.state.show) && (this.props.chartId === 1.09) &&
                 <Map {...this.props} {...styles} />
             }
           </div>

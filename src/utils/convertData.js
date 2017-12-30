@@ -7,58 +7,38 @@ const numberTypes = numbers.map(type => (
   `http://www.w3.org/2001/XMLSchema#${type}`
 ))
 
+// retunr converted value and data type associated with this value
 function convertValue(value) {
   if (numberTypes.includes(value['datatype'])) {
-    return parseFloat(value['value']) // number
+    return [parseFloat(value['value']), 'number'] // number
   } else if (value['value'].startsWith('http://www.wikidata.org/entity/')) {
-    return value['value'].substr(31) // Wikidata item 
+    return [value['value'].substr(31), 'item'] // Wikidata item 
   } else if (value['datatype'] === 'http://www.opengis.net/ont/geosparql#wktLiteral') {
-    return value['value'].slice(6,-1).split(' ').join(', ') // coordinate
+    return [value['value'].slice(6,-1).split(' ').join(', '), 'coordinate'] // coordinate
   } else {
-    return value['value']
+    return [value['value'], 'string']
   }
 }
 
-export function convertData(data) {
-  return data.map(item => {
+export function convertData(header, data) {
+  // will store data types into this array
+  let data_types = Array(header.length).fill('')
+
+  const new_data = data.map(item => {
     let simplified_item = Object.keys(item).reduce((prev, current) => {
-      prev[current] = convertValue(item[current])
+      [prev[current], data_types[header.indexOf(current)]] = convertValue(item[current])
       return prev
     }, {})
     return simplified_item
   })
+
+  return [new_data, data_types]
 }
 
-// find indices of numeric fields
-export function getNumberIndices(item) {
-  let numeberIndices = []
-  item.map((col, index) => {
-    if (typeof(col) === 'number') numeberIndices.push(index)
-    return null
-  })
-
-  return numeberIndices
-}
-
-// find indices of items
-export function getItemIndices(item) {
-  let itemIndices = []
-  item.map((col, index) => {
-    if (col.toString().match(/^Q\d+$/)) itemIndices.push(index)
-    return null
-  })
-
-  return itemIndices
-}
-
-// find indices of coordinates
-export function getCoordinateIndices(item) {
-  let coordIndices = []
-  item.map((col, index) => {
-    if (col.toString().match(/^[-]?\d+\.\d+,\s[-]?\d+\.\d+$/)) coordIndices.push(index)
-    return null
-  })
-  return coordIndices
+// find indices of a given data type
+export function getDataTypeIndices(dataTypes, currentDataType) {
+  return dataTypes.map((type, i) => type === currentDataType ? i : '')
+    .filter(String)
 }
 
 // get tree relationships (child-parent pairs) from data

@@ -19,6 +19,10 @@ export const examples = [
   {
     title: 'Number of National Historical and Cultural Sites in each province of China',
     filename: 'china-province-sites.rq'
+  },
+  {
+    title: 'Phylogenetic tree of human mtDNA haplogroups',
+    filename: 'mtdna-haplogroup-tree.rq'
   }
 ]
 

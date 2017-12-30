@@ -1,5 +1,5 @@
 // chart settings
-import { getNumberIndices, getItemIndices, getCoordinateIndices } from './convertData'
+import { getDataTypeIndices } from './convertData'
 
 const x_axis = {
   value: 'x-axis',
@@ -55,64 +55,107 @@ const coordinate = {
   type: 'coordinate'
 }
 
-const scatterPlotSettings = [x_axis, y_axis, label, color, radius]
-const scatterPlotDefaultShow = [true, true, false, false, false]
-
-const bubbleChartSettings = [radius, label, color]
-const bubbleChartDefaultShow = [true, true, false]
-
-const radialTreeSettings = [link_from, link_to, label, color]
-const radialTreeDefaultShow = [true, true, false, false]
-
-const radialClusterSettings = [link_from, link_to, label, color]
-const radialClusterDefaultShow = [true, true, false, false]
-
-const treeSettings = [link_from, link_to, label, color]
-const treeDefaultShow = [true, true, false, false]
-
-const clusterSettings = [link_from, link_to, label, color]
-const clusterDefaultShow = [true, true, false, false]
-
-const chordDiagramSettings = [link_from, link_to, relation, label]
-const chordDiagramDefaultShow = [true, true, true, false]
-
-const mapSettings = [coordinate, color, radius, label]
-const mapDefaultShow = [true, false, false, false] 
-
-export function getSettings(chart, sample_data) {
-
-  let chartSettings = null; let show = null
-  if (chart === 1.2) {
-    chartSettings = scatterPlotSettings
-    show = scatterPlotDefaultShow
-  } else if (chart === 1.3) {
-    chartSettings = bubbleChartSettings
-    show = bubbleChartDefaultShow
-  } else if (chart === 1.4) {
-    chartSettings = radialTreeSettings
-    show = radialTreeDefaultShow
-  } else if (chart === 1.5) {
-    chartSettings = radialClusterSettings
-    show = radialClusterDefaultShow
-  } else if (chart === 1.6) {
-    chartSettings = treeSettings
-    show = treeDefaultShow
-  } else if (chart === 1.7) {
-    chartSettings = clusterSettings
-    show = clusterDefaultShow
-  } else if (chart === 1.8) {
-    chartSettings = chordDiagramSettings
-    show = chordDiagramDefaultShow
-  } else if (chart === 1.9) {
-    chartSettings = mapSettings
-    show =mapDefaultShow
-  } else {
-    return [{}, {}]
+// chart classes
+export const chartClasses = [
+  {
+    chartClass: 'basic',
+    name: 'Basic Charts'
+  },
+  {
+    chartClass: 'tree',
+    name: 'Trees & Clusters'
+  },
+  {
+    chartClass: 'map',
+    name: 'Maps'
+  },
+  {
+    chartClass: 'more',
+    name: 'More'
   }
+]
 
-  const numberIndices = getNumberIndices(Object.values(sample_data))
-  const itemIndices = getItemIndices(Object.values(sample_data))
-  const coordinateIndices = getCoordinateIndices(Object.values(sample_data))
+// information object of all chart types
+export const charts = [
+  { 
+    id: 1.01,
+    name: 'Table'
+  },
+  {
+    id: 1.02,
+    name: 'Scatter Chart',
+    chartClass: 'basic',
+    settings: [x_axis, y_axis, label, color, radius],
+    defaultShow: [true, true, false, false, false]
+  },
+  {
+    id: 1.03,
+    name: 'Bubble Chart',
+    chartClass: 'basic',
+    settings: [radius, label, color],
+    defaultShow: [true, true, false]
+  },
+  {
+    id: 1.04,
+    name: 'Radial Tree',
+    chartClass: 'tree',
+    settings: [link_from, link_to, label, color],
+    defaultShow: [true, true, false, false]
+  },
+  {
+    id: 1.05,
+    name: 'Radial Cluster',
+    chartClass: 'tree',
+    settings: [link_from, link_to, label, color],
+    defaultShow: [true, true, false, false]
+  },
+  {
+    id: 1.06,
+    name: 'Tree',
+    chartClass: 'tree',
+    settings: [link_from, link_to, label, color],
+    defaultShow: [true, true, false, false]
+  },
+  {
+    id: 1.07,
+    name: 'Cluster',
+    chartClass: 'tree',
+    settings: [link_from, link_to, label, color],
+    defaultShow: [true, true, false, false]
+  },
+  {
+    id: 1.08,
+    name: 'Chord Diagram',
+    chartClass: 'more',
+    settings: [link_from, link_to, relation, label],
+    defaultShow: [true, true, true, false]
+  },
+  {
+    id: 1.09,
+    name: 'Map',
+    chartClass: 'map',
+    settings: [coordinate, color, radius, label],
+    defaultShow: [true, false, false, false] 
+  }
+]
+
+export const getChartNames = () => {
+  let chartNames = {}
+  charts.map(chart => {
+    chartNames[chart.id] = chart.name
+    return null
+  })
+  return chartNames
+}
+
+export function getSettings(chartId, header, data, dataTypes) {
+  const chartIndex = charts.map(chart => chart.id).indexOf(chartId)
+  const chartSettings = (chartIndex > 0) ? charts[chartIndex].settings : []
+  const show = (chartIndex > 0) ? charts[chartIndex].defaultShow : []
+
+  const numberIndices = getDataTypeIndices(dataTypes, 'number')
+  const itemIndices = getDataTypeIndices(dataTypes, 'item')
+  const coordinateIndices = getDataTypeIndices(dataTypes, 'coordinate')
 
   // default settings
   let numIdx = 0,
@@ -143,7 +186,7 @@ export function getSettings(chart, sample_data) {
     let info = { value: setting.value,
       title: setting.title }
     if (setting.type === 'all') {
-      info['indices'] = [...Array(Object.keys(sample_data).length).keys()]
+      info['indices'] = [...Array(header.length).keys()]
     } else if (setting.type === 'number')  {
       info['indices'] = numberIndices
     } else if (setting.type === 'item') {
