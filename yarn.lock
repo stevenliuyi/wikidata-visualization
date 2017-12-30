@@ -1815,7 +1815,21 @@ d3-format@1, d3-format@1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.2.1.tgz#4e19ecdb081a341dafaf5f555ee956bcfdbf167f"
 
-d3-geo@1.9.1:
+d3-geo-projection@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/d3-geo-projection/-/d3-geo-projection-1.2.2.tgz#ef0e6cdcfa0df236d0e23f2ca7750462ca331f72"
+  dependencies:
+    commander "2"
+    d3-array "1"
+    d3-geo "^1.1.0"
+
+d3-geo@1.6.3:
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/d3-geo/-/d3-geo-1.6.3.tgz#21683a43a061eaba21a7f254b51d5937eb640756"
+  dependencies:
+    d3-array "1"
+
+d3-geo@1.9.1, d3-geo@^1.1.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/d3-geo/-/d3-geo-1.9.1.tgz#157e3b0f917379d0f73bebfff3be537f49fa7356"
   dependencies:
@@ -5624,6 +5638,14 @@ react-scripts@1.0.17:
   optionalDependencies:
     fsevents "1.1.2"
 
+react-simple-maps@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/react-simple-maps/-/react-simple-maps-0.10.1.tgz#4d884ac24a55c327a86076113f3890e61c92906a"
+  dependencies:
+    d3-geo "1.6.3"
+    d3-geo-projection "1.2.2"
+    topojson-client "2.1.0"
+
 react-svg-pan-zoom@^2.14.1:
   version "2.14.1"
   resolved "https://registry.yarnpkg.com/react-svg-pan-zoom/-/react-svg-pan-zoom-2.14.1.tgz#d9a8200c57ab64b1a0b44404f817331f25d52b30"
@@ -6529,6 +6551,12 @@ to-arraybuffer@^1.0.0:
 to-fast-properties@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-1.0.3.tgz#b83571fa4d8c25b82e231b06e3a3055de4ca1a47"
+
+topojson-client@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/topojson-client/-/topojson-client-2.1.0.tgz#ff9f7bf38991185e0b4284c2b06ae834f0eac6c8"
+  dependencies:
+    commander "2"
 
 toposort@^1.0.0:
   version "1.0.6"

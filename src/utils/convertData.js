@@ -12,6 +12,8 @@ function convertValue(value) {
     return parseFloat(value['value']) // number
   } else if (value['value'].startsWith('http://www.wikidata.org/entity/')) {
     return value['value'].substr(31) // Wikidata item 
+  } else if (value['datatype'] === 'http://www.opengis.net/ont/geosparql#wktLiteral') {
+    return value['value'].slice(6,-1).split(' ').join(', ') // coordinate
   } else {
     return value['value']
   }
@@ -47,6 +49,16 @@ export function getItemIndices(item) {
   })
 
   return itemIndices
+}
+
+// find indices of coordinates
+export function getCoordinateIndices(item) {
+  let coordIndices = []
+  item.map((col, index) => {
+    if (col.toString().match(/^[-]?\d+\.\d+,\s[-]?\d+\.\d+$/)) coordIndices.push(index)
+    return null
+  })
+  return coordIndices
 }
 
 // get tree relationships (child-parent pairs) from data

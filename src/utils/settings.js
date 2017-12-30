@@ -1,5 +1,5 @@
 // chart settings
-import { getNumberIndices, getItemIndices } from './convertData'
+import { getNumberIndices, getItemIndices, getCoordinateIndices } from './convertData'
 
 const x_axis = {
   value: 'x-axis',
@@ -49,6 +49,12 @@ const relation = {
   type: 'number'
 }
 
+const coordinate = {
+  value: 'coordinate',
+  title: 'Coordinate',
+  type: 'coordinate'
+}
+
 const scatterPlotSettings = [x_axis, y_axis, label, color, radius]
 const scatterPlotDefaultShow = [true, true, false, false, false]
 
@@ -69,6 +75,9 @@ const clusterDefaultShow = [true, true, false, false]
 
 const chordDiagramSettings = [link_from, link_to, relation, label]
 const chordDiagramDefaultShow = [true, true, true, false]
+
+const mapSettings = [coordinate, color, radius, label]
+const mapDefaultShow = [true, false, false, false] 
 
 export function getSettings(chart, sample_data) {
 
@@ -94,16 +103,21 @@ export function getSettings(chart, sample_data) {
   } else if (chart === 1.8) {
     chartSettings = chordDiagramSettings
     show = chordDiagramDefaultShow
+  } else if (chart === 1.9) {
+    chartSettings = mapSettings
+    show =mapDefaultShow
   } else {
     return [{}, {}]
   }
 
   const numberIndices = getNumberIndices(Object.values(sample_data))
   const itemIndices = getItemIndices(Object.values(sample_data))
+  const coordinateIndices = getCoordinateIndices(Object.values(sample_data))
 
   // default settings
   let numIdx = 0,
-    itemIdx = 0
+    itemIdx = 0,
+    coordIdx = 0
   let defaultSettings = chartSettings.map((setting, index) => {
     let defaultValue = -1
     if (setting.type === 'number' && numberIndices.length >= 1 && show[index]) { // number
@@ -112,6 +126,9 @@ export function getSettings(chart, sample_data) {
     } else if (setting.type === 'item' && itemIndices.length >= 2 && show[index]) { // item
       defaultValue = itemIndices[itemIdx] 
       if (itemIdx < itemIndices.length-1) itemIdx += 1
+    } else if (setting.type === 'coordinate' && coordinateIndices.length >= 1 && show[index]) { // coordinate
+      defaultValue = coordinateIndices[coordIdx] 
+      if (coordIdx < coordinateIndices.length-1) coordIdx += 1
     } else if (show[index]) {
       defaultValue = 0
     }
@@ -131,6 +148,8 @@ export function getSettings(chart, sample_data) {
       info['indices'] = numberIndices
     } else if (setting.type === 'item') {
       info['indices'] = itemIndices
+    } else if (setting.type === 'coordinate') {
+      info['indices'] = coordinateIndices
     }
     // hide the setting by default
     if (!show[index]) info['indices'] = [-1].concat(info['indices'])

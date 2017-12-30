@@ -15,6 +15,10 @@ export const examples = [
   {
     title: 'Academy Award-winning families',
     filename: 'academy-award-family.rq'
+  },
+  {
+    title: 'Number of National Historical and Cultural Sites in each province of China',
+    filename: 'china-province-sites.rq'
   }
 ]
 

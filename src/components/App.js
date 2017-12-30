@@ -21,7 +21,8 @@ const chartNames = {
   1.5: 'Radial Cluster',
   1.6: 'Tree',
   1.7: 'Cluster',
-  1.8: 'Chord Diagram'
+  1.8: 'Chord Diagram',
+  1.9: 'Map'
 }
 
 class App extends Component {

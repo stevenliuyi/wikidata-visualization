@@ -20,10 +20,7 @@ export function getXYScales(props)  {
   return [{ xScale, yScale }, xLabel, yLabel]
 }
 
-export function getRadiusScale(props) {
-  const minRadius = 3
-  const maxRadius = 30
-
+export function getRadiusScale(props, minRadius = 3, maxRadius = 30) {
   // single radius by default
   let radiusScale = (v) => minRadius
 
@@ -39,9 +36,9 @@ export function getRadiusScale(props) {
   return radiusScale
 }
 
-export function getRadius(props) {
+export function getRadius(props, minRadius = 3, maxRadius = 30) {
   const label = props.header[props.settings['radius']]
-  const radiusScale = getRadiusScale(props)
+  const radiusScale = getRadiusScale(props, minRadius, maxRadius)
   const radii = props.data.map(item => radiusScale(item[label]))
 
   return radii
