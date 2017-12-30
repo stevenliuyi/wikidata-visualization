@@ -5,13 +5,15 @@ SELECT ?countryName
        (COUNT(*) / AVG(?population) AS ?numOfLaureatesPerCapita)
        # GDP per capita
        (AVG(?GDPPerCapita) AS ?GDPPerCapita)
+       ?countryCoord
 WHERE {
   ?personItem wdt:P31 wd:Q5 ; # human
               wdt:P166/wdt:P31 wd:Q7191 ; # Nobel Prize
               wdt:P27 ?countryItem .
   ?countryItem wdt:P2132 ?GDPPerCapita ;
                wdt:P1082 ?population .
+  OPTIONAL { ?countryItem wdt:P625 ?countryCoord . }
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en" .
                            ?countryItem rdfs:label ?countryName }
 }
-GROUP BY ?countryName
+GROUP BY ?countryName ?countryCoord
