@@ -63,7 +63,7 @@ export const chartClasses = [
   },
   {
     chartClass: 'tree',
-    name: 'Trees & Clusters'
+    name: 'Trees'
   },
   {
     chartClass: 'map',

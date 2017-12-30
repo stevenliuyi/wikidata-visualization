@@ -29,6 +29,7 @@
 
 .ReactCodeMirror {
   border: 1px solid #ccc;
+  margin-top: -5px;
 }
 
 .align-right {

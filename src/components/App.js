@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-theme.css'
-import { Grid, Row, Col, Navbar, Nav, NavItem } from 'react-bootstrap'
+import { Grid, Row, Col } from 'react-bootstrap'
 import Query from './Query'
 import Settings from './Settings'
 import Chart from './Chart'
 import DataTable from './DataTable'
 import Navs from './Navs'
 import Examples from './Examples'
+import TopNavBar from './TopNavBar'
 import * as WikidataAPI from '../utils/api'
 import { convertData } from '../utils/convertData'
 import { getChartNames, getSettings } from '../utils/settings'
@@ -35,7 +36,11 @@ class App extends Component {
   }
 
   handleChartSelect = (selected) => {
-    if (selected < 2) { // chart
+    if (selected === 1) { // chart in the top navbar is selected
+      if (this.state.chart >= 2) {
+        this.setState({ chart: 1.01, chartName: 'Table' })
+      }
+    } else if (selected < 2) { // chart
       const [defaultSettings, settingsInfo] = getSettings(parseFloat(selected),
         this.state.header,
         this.state.data,
@@ -106,13 +111,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navbar>
-          <Navbar.Header><Navbar.Brand>Wikidata Visualization</Navbar.Brand></Navbar.Header>
-          <Nav>
-            <NavItem eventKey={1} onSelect={() => this.handleChartSelect(1)}>Charts</NavItem>
-            <NavItem eventKey={2} onSelect={() => this.handleChartSelect(2)}>Query Examples</NavItem>
-          </Nav>
-        </Navbar>
+        <TopNavBar handleChartSelect={this.handleChartSelect} />
         <Grid>
           <Row>
             <Col sm={(this.state.editorFullScreen ? 12 : 4)}>
