@@ -12,7 +12,7 @@ import Examples from './Examples'
 import TopNavBar from './TopNavBar'
 import * as WikidataAPI from '../utils/api'
 import { convertData } from '../utils/convertData'
-import { getChartNames, getSettings } from '../utils/settings'
+import { getChartNames, getSettings, moreSettings } from '../utils/settings'
 
 class App extends Component {
   state = {
@@ -28,7 +28,8 @@ class App extends Component {
     editorFullScreen: false,
     exampleIndex: -1,
     chartNames: {},
-    rowSelections: []
+    rowSelections: [],
+    moreSettings: {}
   }
 
   componentDidMount() {
@@ -65,6 +66,15 @@ class App extends Component {
 
   handleExampleSelect = (index) => {
     this.setState({ exampleIndex: index })
+  }
+
+  handleMoreSettingsChange = (new_setting) => {
+    this.setState(prevState => ({
+      moreSettings: {
+        ...prevState.moreSettings,
+        ...new_setting
+      }
+    }))
   }
 
   updateRowSelections = (selection) => {
@@ -105,7 +115,8 @@ class App extends Component {
           settingsInfo: settingsInfo,
           chart: new_chart,
           chartName: this.state.chartNames[new_chart],
-          rowSelections: [...Array(new_data.length).keys()]
+          rowSelections: [...Array(new_data.length).keys()],
+          moreSettings: moreSettings
         })
       })
   }
@@ -135,8 +146,11 @@ class App extends Component {
                   <Settings
                     header={this.state.header}
                     settings={this.state.settings}
-                    onChange={this.setSettings}
                     info={this.state.settingsInfo}
+                    moreSettings={this.state.moreSettings}
+                    chart={this.state.chart}
+                    onChange={this.setSettings}
+                    onMoreSettingsChange={this.handleMoreSettingsChange}
                   />
                 </Row>
               }
@@ -165,6 +179,7 @@ class App extends Component {
                     rowSelections={this.state.rowSelections}
                     header={this.state.header}
                     settings={this.state.settings}
+                    moreSettings={this.state.moreSettings}
                   />
                 }
 

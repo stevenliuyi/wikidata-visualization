@@ -18,7 +18,7 @@ const getD3Node = (props) => {
     .append('g')
     .attr('transform', 'translate(40,0)')
     .attr('font-family', 'sans-serif')
-    .attr('font-size', '10')
+    .attr('font-size', props.moreSettings.fontSize)
   
   var cluster = d3.cluster()
     .size([props.height, props.width-160])

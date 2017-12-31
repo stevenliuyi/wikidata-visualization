@@ -60,7 +60,7 @@ const getD3Node = (props) => {
       return (d.startAngle+d.endAngle)/2 > Math.PI ? 'end' : null
     })
     .style('font-family', 'sans-serif')
-    .style('font-size', '10')
+    .style('font-size', props.moreSettings.fontSize)
   
   g.append('g')
     .attr('class', 'ribbons')

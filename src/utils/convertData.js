@@ -112,7 +112,7 @@ export function getMatrix(props) {
     if (label) labels[fromIndex] = item[label]
   })
 
-  const colorScale = getColorScaleFromValues(items)
+  const colorScale = getColorScaleFromValues(items, props.moreSettings.color)
   const colors = items.map(item => colorScale(item))
 
   return [matrix, colors, labels]

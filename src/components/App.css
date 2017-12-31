@@ -56,3 +56,35 @@
 .chart-navs {
   padding-bottom: 10px;
 }
+
+/* overwrite boostrap-slider default width */
+.slider.slider-horizontal {
+  width: 100% !important;
+}
+
+.color-palette {
+  float: left;
+  padding: 0;
+  margin: 0;
+  clear: left;
+  width: 100%;
+}
+
+.color-palette div {
+  float: left;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  height: 20px;
+  width: 10%;
+  margin-top: 4px;
+}
+
+/* overwrite Bootstrap styles */
+.panel-heading > .panel-title {
+  font-size: 12px;
+}
+
+.control-label {
+  font-size: 12px;
+}

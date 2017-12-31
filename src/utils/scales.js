@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import { interpolateSpectral } from 'd3-scale-chromatic'
+import * as d3color from 'd3-scale-chromatic'
 
 export function getXYScales(props)  {
   const xLabel = props.header[props.settings['x-axis']]
@@ -21,6 +21,7 @@ export function getXYScales(props)  {
 }
 
 export function getRadiusScale(props, minRadius = 3, maxRadius = 30) {
+  [minRadius, maxRadius] = props.moreSettings.radius
   // single radius by default
   let radiusScale = (v) => minRadius
 
@@ -46,17 +47,79 @@ export function getRadius(props, minRadius = 3, maxRadius = 30) {
   return radii
 }
 
-export function getColorScaleFromValues(values) {
+
+export const colorSchemeNames = [
+  'Brown / White / Blue-Green',
+  'Purple / White / Green',
+  'Pink / White / Yellow-Green',
+  'Purple / White / Orange',
+  'Red / White / Blue',
+  'Red / White / Grey',
+  'Red / Yellow / Blue',
+  'Red / Yellow / Green',
+  'Spectral',
+  'Blues',
+  'Greens',
+  'Greys',
+  'Oranges',
+  'Purples',
+  'Reds',
+  'White / Blue / Green',
+  'White / Blue / Purple',
+  'White / Green / Blue',
+  'White / Orange / Red',
+  'White / Purple / Blue / Green',
+  'White / Purple / Blue',
+  'White / Purple / Red',
+  'White / Red / Purple',
+  'White / Yellow / Green / Blue',
+  'White / Yellow / Green',
+  'White / Yellow / Orange / Brown',
+  'White / Yellow / Orange / Red'
+]
+
+const colorSchemes = {
+  'Brown / White / Blue-Green': d3color.interpolateBrBG,
+  'Purple / White / Green': d3color.interpolatePRGn,
+  'Pink / White / Yellow-Green': d3color.interpolatePiYG,
+  'Purple / White / Orange': d3color.interpolatePuOr,
+  'Red / White / Blue': d3color.interpolateRdBu,
+  'Red / White / Grey': d3color.interpolateRdGy,
+  'Red / Yellow / Blue': d3color.interpolateRdYlBu,
+  'Red / Yellow / Green': d3color.interpolateRdYlGn,
+  'Spectral': d3color.interpolateSpectral,
+  'Blues': d3color.interpolateBlues,
+  'Greens': d3color.interpolateGreens,
+  'Greys': d3color.interpolateGreys,
+  'Oranges': d3color.interpolateOranges,
+  'Purples': d3color.interpolatePurples,
+  'Reds': d3color.interpolateReds,
+  'White / Blue / Green': d3color.interpolateBuGn,
+  'White / Blue / Purple': d3color.interpolateBuPu,
+  'White / Green / Blue': d3color.interpolateGnBu,
+  'White / Orange / Red': d3color.interpolateOrRd,
+  'White / Purple / Blue / Green': d3color.interpolatePuBuGn,
+  'White / Purple / Blue': d3color.interpolatePuBu,
+  'White / Purple / Red': d3color.interpolatePuRd,
+  'White / Red / Purple': d3color.interpolateRdPu,
+  'White / Yellow / Green / Blue': d3color.interpolateYlGnBu,
+  'White / Yellow / Green': d3color.interpolateYlGn,
+  'White / Yellow / Orange / Brown': d3color.interpolateYlOrBr,
+  'White / Yellow / Orange / Red': d3color.interpolateYlOrRd
+}
+
+export function getColorScaleFromValues(values, schemeName = 'Spectral') {
   // generate uniformly distributed points in [0, 1] and map to color scheme
   const scheme = [...Array(values.length).keys()]
-    .map( v => interpolateSpectral(v / (values.length-1)) )
+    .map( v => colorSchemes[schemeName](v / (values.length-1)) )
   const colorScale = (v) => scheme[values.indexOf(v)]
   return colorScale
 }
 
 export function getColorScale(props) {
   // single color by default
-  let colorScale = (v) => interpolateSpectral(0.8)
+  let colorScale = (v) => colorSchemes[schemeName](0.8)
+  const schemeName = props.moreSettings.color
 
   if (props.settings['color'] !== -1) {
     const label = props.header[props.settings['color']]
@@ -65,11 +128,11 @@ export function getColorScale(props) {
     if (typeof(props.data[0][label]) === 'number') {
       const minValue = d3.min(selectedData, d => d[label])
       const maxValue = d3.max(selectedData, d => d[label])
-      colorScale = (v) => interpolateSpectral((v-minValue)/(maxValue-minValue))
+      colorScale = (v) => colorSchemes[schemeName]((v-minValue)/(maxValue-minValue))
     } else { // non-numeric values
       const values = selectedData.map(item => item[label])
       const unique_values = [...new Set(values)].sort()
-      colorScale = getColorScaleFromValues(unique_values)
+      colorScale = getColorScaleFromValues(unique_values, schemeName)
     }
   }
   return colorScale

@@ -36,7 +36,7 @@ class Map extends Component {
   }
 
   render() {
-    const radii = getRadius(this.props, 6, 60)
+    const radii = getRadius(this.props)
     const colors = getColors(this.props)
 
     return (
@@ -106,7 +106,7 @@ class Map extends Component {
                           fontFamily: 'sans-serif',
                           fill: 'black',
                           opacity: '0,7',
-                          fontSize: '16px'
+                          fontSize: this.props.moreSettings.fontSize
                         }}>
                         { item[this.props.header[this.props.settings['label']]] }
                       </text>

@@ -5,7 +5,8 @@ const renderLabels = (props) => {
     const labelProps = {
       x: props.xScale(parseFloat(item[props.xLabel])),
       y: props.yScale(parseFloat(item[props.yLabel])),
-      opacity: 0.5,
+      opacity: 0.7,
+      fontSize: props.moreSettings.fontSize,
       key: index
     }
     const label = props.header[props.settings['label']]

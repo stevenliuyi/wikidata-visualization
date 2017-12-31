@@ -53,7 +53,7 @@ const getD3Node = (props) => {
     .attr('y', 0)
     .text(function(d){ return d.data[props.header[props.settings['label']]] })
     .style('font-family', 'sans-serif')
-    .style('font-size', '10')
+    .style('font-size', props.moreSettings.fontSize)
     .style('text-anchor', 'middle')
 
   return d3node.toReact()

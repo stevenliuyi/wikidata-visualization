@@ -55,6 +55,18 @@ const coordinate = {
   type: 'coordinate'
 }
 
+export const moreSettings = {
+  fontSize: 10,
+  radius: [5, 40],
+  color: 'Spectral'
+}
+
+export const moreSettingTitles = {
+  fontSize: 'Font size',
+  radius: 'Radius',
+  color: 'Colors'
+}
+
 // chart classes
 export const chartClasses = [
   {
@@ -86,56 +98,64 @@ export const charts = [
     name: 'Scatter Chart',
     chartClass: 'basic',
     settings: [x_axis, y_axis, label, color, radius],
-    defaultShow: [true, true, false, false, false]
+    defaultShow: [true, true, false, false, false],
+    moreSettings: ['fontSize', 'radius', 'color']
   },
   {
     id: 1.03,
     name: 'Bubble Chart',
     chartClass: 'basic',
     settings: [radius, label, color],
-    defaultShow: [true, true, false]
+    defaultShow: [true, true, false],
+    moreSettings: ['fontSize', 'color']
   },
   {
     id: 1.04,
     name: 'Radial Tree',
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
-    defaultShow: [true, true, false, false]
+    defaultShow: [true, true, false, false],
+    moreSettings: ['fontSize', 'color']
   },
   {
     id: 1.05,
     name: 'Radial Cluster',
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
-    defaultShow: [true, true, false, false]
+    defaultShow: [true, true, false, false],
+    moreSettings: ['fontSize', 'color']
   },
   {
     id: 1.06,
     name: 'Tree',
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
-    defaultShow: [true, true, false, false]
+    defaultShow: [true, true, false, false],
+    moreSettings: ['fontSize', 'color']
   },
   {
     id: 1.07,
     name: 'Cluster',
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
-    defaultShow: [true, true, false, false]
+    defaultShow: [true, true, false, false],
+    moreSettings: ['fontSize', 'color']
   },
   {
     id: 1.08,
     name: 'Chord Diagram',
     chartClass: 'more',
     settings: [link_from, link_to, relation, label],
-    defaultShow: [true, true, true, false]
+    defaultShow: [true, true, true, false],
+    moreSettings: ['fontSize', 'color']
   },
   {
     id: 1.09,
     name: 'Map',
     chartClass: 'map',
     settings: [coordinate, color, radius, label],
-    defaultShow: [true, false, false, false] 
+    defaultShow: [true, false, false, false],
+    moreSettings: ['fontSize', 'radius', 'color']
   }
 ]
 
