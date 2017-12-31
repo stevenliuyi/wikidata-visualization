@@ -39,6 +39,10 @@ class Map extends Component {
     const radii = getRadius(this.props)
     const colors = getColors(this.props)
 
+    const json_filename = (process.env.NODE_ENV === 'development')
+      ? '/maps/world-50m.json'
+      : '/wikidata-visualization/maps/world-50m.json'
+
     return (
       <div style={wrapperStyles}>
         <ComposableMap
@@ -53,7 +57,7 @@ class Map extends Component {
           }}
         >
           <ZoomableGroup center={this.state.center} zoom={this.state.zoom}>
-            <Geographies geography="/maps/world-50m.json">
+            <Geographies geography={json_filename}>
               {(geographies, projection) =>
                 geographies.map((geography, i) =>
                   geography.id !== 'ATA' && (
