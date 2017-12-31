@@ -22,7 +22,8 @@ class Labels extends Component {
     return (
       <g>
         {
-          this.props.data.map(renderLabels(this.props))
+          this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
+            .map(renderLabels(this.props))
         }
       </g>
     )

@@ -16,7 +16,7 @@ const getD3Node = (props) => {
     .attr('height', props.height)
 
   var outerRadius = Math.min(props.width, props.height) * 0.5 - 40,
-    innerRadius = outerRadius - 30
+    innerRadius = outerRadius * 0.8
 
   // make sure the radius is positive
   if (innerRadius <= 0) return d3node.toReact()

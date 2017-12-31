@@ -59,7 +59,7 @@ const coordinate = {
 export const chartClasses = [
   {
     chartClass: 'basic',
-    name: 'Basic Charts'
+    name: 'Basic'
   },
   {
     chartClass: 'tree',
@@ -141,9 +141,8 @@ export const charts = [
 
 export const getChartNames = () => {
   let chartNames = {}
-  charts.map(chart => {
+  charts.forEach(chart => {
     chartNames[chart.id] = chart.name
-    return null
   })
   return chartNames
 }

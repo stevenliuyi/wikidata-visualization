@@ -21,7 +21,8 @@ const getD3Node = (props) => {
     .attr('height', props.height)
     .attr('class', 'bubble')
   
-  var data = props.data.map((d, index) => { d.id = index; return d })
+  var data = props.data.filter((item, i) => props.rowSelections.includes(i))
+    .map((d, index) => { d.id = index; return d })
   
   //bubbles needs very specific format, convert data to this.
   var nodes = d3.hierarchy({children:data})

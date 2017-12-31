@@ -25,7 +25,11 @@ class Navs extends Component {
         <NavItem eventKey={charts[0].id}  key={charts[0].id}>{icons[0]} {charts[0].name}</NavItem>
         { chartClasses.map((chartClass, index) => {
           return (
-            <NavDropdown eventKey={index} title={<span>{icons[index+1]} {chartClass.name}</span>}>
+            <NavDropdown
+              eventKey={index}
+              key={index}
+              id={index}
+              title={<span>{icons[index+1]} {chartClass.name}</span>}>
               {
                 charts.filter(chart => chart.chartClass === chartClass.chartClass).map(chart => {
                   return (

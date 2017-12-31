@@ -49,29 +49,30 @@ export function getTreeRoot(props) {
   const color = props.header[props.settings['color']] 
   
   // root
-  let relationships = [{'id': props.data[0][from],
+  let relationships = [{'id': props.data[props.rowSelections[0]][from],
     'parent': '',
-    'label': label ? props.data[0][label] : '',
-    'color': color ? props.data[0][color] : ''
+    'label': label ? props.data[props.rowSelections[0]][label] : '',
+    'color': color ? props.data[props.rowSelections[0]][color] : ''
   }]
-  let ids = [props.data[0][from]]
+  let ids = [props.data[props.rowSelections[0]][from]]
 
-  const allFromIds = props.data.map(item => item[from])
+  const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
 
-  props.data.map((item, index) => {
+  const allFromIds = selectedData.map(item => item[from])
+
+  selectedData.forEach((item, index) => {
     if (item[to]) {
       // do not add duplicates and make sure the child has its own row
       // (perhaps same child with different parents could be added as two different nodes)
       if (!ids.includes(item[to]) && allFromIds.indexOf(item[to]) >= 0) { 
         relationships.push({'id':   item[to],
           'parent': item[from],
-          'label':  label ? props.data[allFromIds.indexOf(item[to])][label] : '',
-          'color':  color ? props.data[allFromIds.indexOf(item[to])][color] : ''
+          'label':  label ? selectedData[allFromIds.indexOf(item[to])][label] : '',
+          'color':  color ? selectedData[allFromIds.indexOf(item[to])][color] : ''
         })
         ids.push(item[to])
       }
     }
-    return null
   })
 
   try {
@@ -94,20 +95,21 @@ export function getMatrix(props) {
   const relation = props.header[props.settings['relation']] 
   const label = props.header[props.settings['label']] 
 
-  const items = [...new Set(props.data.map(item => item[from])
-    .concat(props.data.map(item => item[to])))].sort()
+  const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
+
+  const items = [...new Set(selectedData.map(item => item[from])
+    .concat(selectedData.map(item => item[to])))].sort()
   // create empty matrix
   let matrix = items.map(item => items.map(item => 0))
 
   const labels = Array(items.length).fill('')
 
   // fill data into the matrix
-  props.data.map(item => {
+  selectedData.forEach(item => {
     const fromIndex = items.indexOf(item[from])
     const toIndex = items.indexOf(item[to])
     matrix[fromIndex][toIndex] += item[relation]
     if (label) labels[fromIndex] = item[label]
-    return null
   })
 
   const colorScale = getColorScaleFromValues(items)

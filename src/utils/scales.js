@@ -26,8 +26,9 @@ export function getRadiusScale(props, minRadius = 3, maxRadius = 30) {
 
   if (props.settings['radius'] !== -1) {
     const label = props.header[props.settings['radius']]
-    const minValue = d3.min(props.data, d => d[label])
-    const maxValue = d3.max(props.data, d => d[label])
+    const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
+    const minValue = d3.min(selectedData, d => d[label])
+    const maxValue = d3.max(selectedData, d => d[label])
     radiusScale = d3.scaleLinear()
       .domain([minValue, maxValue])
       .range([minRadius,maxRadius])
@@ -39,7 +40,8 @@ export function getRadiusScale(props, minRadius = 3, maxRadius = 30) {
 export function getRadius(props, minRadius = 3, maxRadius = 30) {
   const label = props.header[props.settings['radius']]
   const radiusScale = getRadiusScale(props, minRadius, maxRadius)
-  const radii = props.data.map(item => radiusScale(item[label]))
+  const radii = props.data.filter((item, i) => props.rowSelections.includes(i))
+    .map(item => radiusScale(item[label]))
 
   return radii
 }
@@ -58,13 +60,14 @@ export function getColorScale(props) {
 
   if (props.settings['color'] !== -1) {
     const label = props.header[props.settings['color']]
+    const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
     // numeric values
     if (typeof(props.data[0][label]) === 'number') {
-      const minValue = d3.min(props.data, d => d[label])
-      const maxValue = d3.max(props.data, d => d[label])
+      const minValue = d3.min(selectedData, d => d[label])
+      const maxValue = d3.max(selectedData, d => d[label])
       colorScale = (v) => interpolateSpectral((v-minValue)/(maxValue-minValue))
     } else { // non-numeric values
-      const values = props.data.map(item => item[label])
+      const values = selectedData.map(item => item[label])
       const unique_values = [...new Set(values)].sort()
       colorScale = getColorScaleFromValues(unique_values)
     }
@@ -75,7 +78,8 @@ export function getColorScale(props) {
 export function getColors(props) {
   const label = props.header[props.settings['color']]
   const colorScale = getColorScale(props)
-  const colors = props.data.map(item => colorScale(item[label]))
+  const colors = props.data.filter((item, i) => props.rowSelections.includes(i))
+    .map(item => colorScale(item[label]))
   
   return colors
 }

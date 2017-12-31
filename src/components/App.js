@@ -27,7 +27,8 @@ class App extends Component {
     chartName: 'Table',
     editorFullScreen: false,
     exampleIndex: -1,
-    chartNames: {}
+    chartNames: {},
+    rowSelections: []
   }
 
   componentDidMount() {
@@ -66,6 +67,10 @@ class App extends Component {
     this.setState({ exampleIndex: index })
   }
 
+  updateRowSelections = (selection) => {
+    this.setState({ rowSelections: selection.sort() })
+  }
+
   getSPARQLResult = (code) => {
     this.setState({
       status: 'waiting',
@@ -99,7 +104,8 @@ class App extends Component {
           settings: defaultSettings,
           settingsInfo: settingsInfo,
           chart: new_chart,
-          chartName: this.state.chartNames[new_chart]
+          chartName: this.state.chartNames[new_chart],
+          rowSelections: [...Array(new_data.length).keys()]
         })
       })
   }
@@ -146,13 +152,17 @@ class App extends Component {
                   <DataTable
                     data={this.state.data}
                     header={this.state.header}
-                    dataTypes={this.state.dataTypes} />
+                    dataTypes={this.state.dataTypes}
+                    selection={this.state.rowSelections}
+                    updateSelection={this.updateRowSelections}
+                  />
                 }
 
                 { this.state.chart > 1.01 && this.state.chart < 2 &&
                   <Chart
                     chartId={this.state.chart}
                     data={this.state.data}
+                    rowSelections={this.state.rowSelections}
                     header={this.state.header}
                     settings={this.state.settings}
                   />

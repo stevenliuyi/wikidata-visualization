@@ -86,31 +86,32 @@ class Map extends Component {
             </Geographies>
             <Markers>
               {
-                this.props.data.map((item, i) => (
-                  <Marker key={i} marker={{ coordinates:
+                this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
+                  .map((item, i) => (
+                    <Marker key={i} marker={{ coordinates:
                       item[this.props.header[this.props.settings['coordinate']]].split(', ').map(parseFloat) }}>
-                    <circle
-                      cx={0}
-                      cy={0}
-                      r={radii[i]}
-                      fill={colors[i]}
-                      opacity={0.8}
-                      stroke="white"
-                      strokeWidth="1.5"
-                    />
-                    <text
-                      textAnchor='middle'
-                      y={-5}
-                      style={{
-                        fontFamily: 'sans-serif',
-                        fill: 'black',
-                        opacity: '0,7',
-                        fontSize: '16px'
-                      }}>
-                      { item[this.props.header[this.props.settings['label']]] }
-                    </text>
-                  </Marker>
-                ))
+                      <circle
+                        cx={0}
+                        cy={0}
+                        r={radii[i]}
+                        fill={colors[i]}
+                        opacity={0.8}
+                        stroke="white"
+                        strokeWidth="1.5"
+                      />
+                      <text
+                        textAnchor='middle'
+                        y={-5}
+                        style={{
+                          fontFamily: 'sans-serif',
+                          fill: 'black',
+                          opacity: '0,7',
+                          fontSize: '16px'
+                        }}>
+                        { item[this.props.header[this.props.settings['label']]] }
+                      </text>
+                    </Marker>
+                  ))
               }
             </Markers>
           </ZoomableGroup>

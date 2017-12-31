@@ -19,7 +19,8 @@ class DataCircles extends Component {
     return (
       <g>
         {
-          this.props.data.map(renderCircles(this.props))
+          this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
+            .map(renderCircles(this.props))
         }
       </g>
     )
