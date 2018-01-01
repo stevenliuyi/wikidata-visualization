@@ -9,6 +9,7 @@ import {
 } from 'react-simple-maps'
 import { Button, ButtonGroup } from 'react-bootstrap'
 import { getRadius, getColors } from '../utils/scales'
+import { mapSettings } from '../utils/maps'
 
 const wrapperStyles = {
   width: '100%',
@@ -19,12 +20,18 @@ const wrapperStyles = {
 class Map extends Component {
   state = {
     center: [0, 20],
-    zoom: 1,
+    zoom: 1
   }
 
   componentWillMount() {
     this.handleZoomIn = this.handleZoomIn.bind(this)
     this.handleZoomOut = this.handleZoomOut.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ center: mapSettings[nextProps.moreSettings.map].center })
+    this.setState({ center: [100,90]})
+    this.setState({ center: mapSettings[nextProps.moreSettings.map].center })
   }
 
   handleZoomIn() {
@@ -36,18 +43,21 @@ class Map extends Component {
   }
 
   render() {
+
     const radii = getRadius(this.props)
     const colors = getColors(this.props)
 
     const json_filename = (process.env.NODE_ENV === 'development')
-      ? '/maps/world-50m.json'
-      : '/wikidata-visualization/maps/world-50m.json'
+      ? `/maps/${mapSettings[this.props.moreSettings.map].filename}`
+      : `/wikidata-visualization/maps/${mapSettings[this.props.moreSettings.map].filename}`
 
     return (
       <div style={wrapperStyles}>
         <ComposableMap
+          projection={this.props.moreSettings.projection}
           projectionConfig={{
-            scale: 205,
+            scale: mapSettings[this.props.moreSettings.map].scale,
+            rotation: mapSettings[this.props.moreSettings.map].rotation
           }}
           width={980}
           height={551}

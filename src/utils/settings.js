@@ -58,13 +58,17 @@ const coordinate = {
 export const moreSettings = {
   fontSize: 10,
   radius: [5, 40],
-  color: 'Spectral'
+  color: 'Spectral',
+  map: 'World',
+  projection: 'mercator'
 }
 
 export const moreSettingTitles = {
   fontSize: 'Font size',
   radius: 'Radius',
-  color: 'Colors'
+  color: 'Colors',
+  map: 'Region',
+  projection: 'Map projection'
 }
 
 // chart classes
@@ -155,7 +159,7 @@ export const charts = [
     chartClass: 'map',
     settings: [coordinate, color, radius, label],
     defaultShow: [true, false, false, false],
-    moreSettings: ['fontSize', 'radius', 'color']
+    moreSettings: ['map', 'fontSize', 'radius', 'color'] // SVG rendering issue for map projection
   }
 ]
 

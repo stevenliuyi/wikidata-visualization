@@ -4,6 +4,7 @@ import { charts, moreSettingTitles } from '../utils/settings'
 import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
 import ReactBootstrapSlider from 'react-bootstrap-slider'
 import { colorSchemeNames, getColorScaleFromValues } from '../utils/scales'
+import { mapSettings, mapProjections } from '../utils/maps'
 
 class Settings extends Component {
 
@@ -75,6 +76,38 @@ class Settings extends Component {
             }
           </div>
         </div>
+      )
+    } else if ( setting === 'map') {
+      return (
+        <FormControl
+          componentClass="select"
+          value={this.props.moreSettings.map}
+          onChange={(e)=>this.props.onMoreSettingsChange({map: e.target.value})}
+        >
+          {
+            Object.keys(mapSettings).map(region => (
+              <option value={region} key={region}>
+                { region }
+              </option>
+            ))
+          }
+        </FormControl>
+      )
+    } else if ( setting === 'projection') {
+      return (
+        <FormControl
+          componentClass="select"
+          value={this.props.moreSettings.projection}
+          onChange={(e)=>this.props.onMoreSettingsChange({projection: e.target.value})}
+        >
+          {
+            mapProjections.map(proj => (
+              <option value={proj.projection} key={proj.projection}>
+                { proj.title }
+              </option>
+            ))
+          }
+        </FormControl>
       )
     } else {
       return null
