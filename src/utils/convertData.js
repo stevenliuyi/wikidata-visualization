@@ -117,3 +117,41 @@ export function getMatrix(props) {
 
   return [matrix, colors, labels]
 }
+
+export function getGraph(props) {
+  const from = props.header[props.settings['link-from']]  
+  const to = props.header[props.settings['link-to']]  
+  const label_from = props.header[props.settings['label_from']] 
+  const label_to = props.header[props.settings['label_to']] 
+  const edge_label = props.header[props.settings['edge_label']] 
+  const color = props.header[props.settings['color']]
+  
+  const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
+
+  // nodes
+  const items = [...new Set(selectedData.map(item => item[from])
+    .concat(selectedData.map(item => item[to])))]
+  const nodes = items.map(q => ({ id: q }))
+
+  // add labels to nodes
+  if (label_from || label_to || color) {
+    selectedData.forEach(item => {
+      const toIndex = items.indexOf(item[to])
+      const fromIndex = items.indexOf(item[from])
+      nodes[toIndex]['label'] = (item[label_to]) ? item[label_to] : ''
+      nodes[fromIndex]['label'] = (item[label_from]) ? item[label_from] : ''
+      nodes[fromIndex]['color'] = (item[color]) ? item[color] : null
+    })
+  }
+
+  // links
+  const links = selectedData.filter( item => item[from] && item[to] ) // make sure both nodes exist
+    .map(item => ({
+      source: item[from],
+      target: item[to],
+      edgeLabel: item[edge_label]
+    }))
+
+  return { nodes, links }
+
+}

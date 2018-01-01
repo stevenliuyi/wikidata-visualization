@@ -28,14 +28,20 @@ class Settings extends Component {
   }
 
   getMoreSetting(setting) {
-    if (setting === 'fontSize') {
+    if (setting === 'fontSize' || setting === 'edgeFontSize') {
       return (
         <ReactBootstrapSlider
-          value={this.props.moreSettings.fontSize}
-          slideStop={(e)=>this.props.onMoreSettingsChange({fontSize: e.target.value})}
+          value={(setting === 'fontSize')
+            ? this.props.moreSettings.fontSize
+            : this.props.moreSettings.edgeFontSize }
+          slideStop={(e)=>{
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onMoreSettingsChange(newSetting)
+          }}
           step={1}
-          min={6}
-          max={36} />
+          min={4}
+          max={48} />
       )
     } else if (setting === 'radius') {
       return (
@@ -108,6 +114,15 @@ class Settings extends Component {
             ))
           }
         </FormControl>
+      )
+    } else if (setting === 'strength') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings.strength}
+          slideStop={(e)=>this.props.onMoreSettingsChange({strength: e.target.value})}
+          step={5}
+          min={-300}
+          max={0} />
       )
     } else {
       return null

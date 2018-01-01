@@ -55,12 +55,32 @@ const coordinate = {
   type: 'coordinate'
 }
 
+const label_from = {
+  value: 'label_from',
+  title: 'Labels',
+  type: 'all'
+}
+
+const label_to = {
+  value: 'label_to',
+  title: '',
+  type: 'all'
+}
+
+const edge_label = {
+  value: 'edge_label',
+  title: 'Edge Label',
+  type: 'all'
+}
+
 export const moreSettings = {
   fontSize: 10,
   radius: [5, 40],
   color: 'Spectral',
   map: 'World',
-  projection: 'mercator'
+  projection: 'mercator',
+  edgeFontSize: 8,
+  strength: -30
 }
 
 export const moreSettingTitles = {
@@ -68,7 +88,9 @@ export const moreSettingTitles = {
   radius: 'Radius',
   color: 'Colors',
   map: 'Region',
-  projection: 'Map projection'
+  projection: 'Map projection',
+  edgeFontSize: 'Edge font size',
+  strength: 'Strength'
 }
 
 // chart classes
@@ -160,6 +182,14 @@ export const charts = [
     settings: [coordinate, color, radius, label],
     defaultShow: [true, false, false, false],
     moreSettings: ['map', 'fontSize', 'radius', 'color'] // SVG rendering issue for map projection
+  },
+  {
+    id: 1.10,
+    name: 'Force-directed Graph',
+    chartClass: 'basic',
+    settings: [link_from, link_to, label_from, label_to, edge_label, color],
+    defaultShow: [true, true, false, false, false, false],
+    moreSettings: ['strength', 'fontSize', 'edgeFontSize', 'color']
   }
 ]
 

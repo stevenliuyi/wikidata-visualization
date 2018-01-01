@@ -23,6 +23,10 @@ export const examples = [
   {
     title: 'Phylogenetic tree of human mtDNA haplogroups',
     filename: 'mtdna-haplogroup-tree.rq'
+  },
+  {
+    title: 'Richard Feynman\'s Erdos number',
+    filename: 'feynman-erdos-number.rq'
   }
 ]
 
