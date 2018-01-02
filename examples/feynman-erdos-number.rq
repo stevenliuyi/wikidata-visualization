@@ -1,0 +1,32 @@
+# Richard Feynman's Erdos number
+
+SELECT
+(MIN(?authorItem) AS ?authorItem)
+(MAX(?authorName) AS ?authorName)
+(MIN(?coAuthorItem) AS ?coAuthorItem)
+(MAX(?coAuthorName) AS ?coAuthorName)
+?paperItem ?paperTitle
+?erdosNumber
+{
+  SERVICE gas:service {
+     gas:program gas:gasClass "com.bigdata.rdf.graph.analytics.BFS" ;
+                 gas:in wd:Q173746 ; # Paul Erdos
+                 gas:target wd:Q39246 ; # Richard Feynman
+                 gas:out ?out ;
+                 gas:out1 ?depth ;
+                 gas:out2 ?predecessor ;
+                 gas:linkType wdt:P50 ; # author
+                 gas:traversalDirection "Undirected" .
+  }
+  BIND ( IF(?depth/2 = xsd:integer(?depth/2), ?predecessor, ?out) AS ?paperItem ) .
+  BIND ( IF(?depth/2 = xsd:integer(?depth/2), ?out, "") AS ?authorItem ) .
+  BIND ( IF(?depth/2 = xsd:integer(?depth/2), "", ?predecessor) AS ?coAuthorItem ) .
+  BIND ( xsd:integer((?depth+1)/2) AS ?erdosNumber ) .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en" .
+                           ?paperItem rdfs:label ?paperTitle .
+                           ?authorItem rdfs:label ?authorName .
+                           ?coAuthorItem rdfs:label ?coAuthorName . }
+}
+GROUP BY ?paperItem ?paperTitle ?erdosNumber
+HAVING (?erdosNumber > 0)
+ORDER BY DESC(?erdosNumber)

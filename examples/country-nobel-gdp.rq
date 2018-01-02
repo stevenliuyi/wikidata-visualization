@@ -1,6 +1,6 @@
 # Country comparison of number of Nobel laureates per capita and GDP per capita
 
-SELECT ?countryName
+SELECT ?countryItem ?countryName
        # number of Nobel laureates per capita
        (COUNT(*) / AVG(?population) AS ?numOfLaureatesPerCapita)
        # GDP per capita
@@ -16,4 +16,4 @@ WHERE {
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en" .
                            ?countryItem rdfs:label ?countryName }
 }
-GROUP BY ?countryName ?countryCoord
+GROUP BY ?countryItem ?countryName ?countryCoord
