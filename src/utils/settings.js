@@ -73,6 +73,18 @@ const edge_label = {
   type: 'all'
 }
 
+const area = {
+  value: 'area',
+  title: 'Region area',
+  type: 'number'
+}
+
+const region = {
+  value: 'region',
+  title: 'Region item',
+  type: 'item'
+}
+
 export const moreSettings = {
   fontSize: 10,
   radius: [5, 40],
@@ -177,7 +189,7 @@ export const charts = [
   },
   {
     id: 1.09,
-    name: 'Map',
+    name: 'Basic Map',
     chartClass: 'map',
     settings: [coordinate, color, radius, label],
     defaultShow: [true, false, false, false],
@@ -190,6 +202,14 @@ export const charts = [
     settings: [link_from, link_to, label_from, label_to, edge_label, color],
     defaultShow: [true, true, false, false, false, false],
     moreSettings: ['strength', 'fontSize', 'edgeFontSize', 'color']
+  },
+  {
+    id: 1.11,
+    name: 'Cartogram',
+    chartClass: 'map',
+    settings: [region, area, color],
+    defaultShow: [true, false, false],
+    moreSettings: ['color']
   }
 ]
 

@@ -7,6 +7,7 @@ import Tree from './Tree'
 import ChordDiagram from './ChordDiagram'
 import Map from './Map'
 import Graph from './Graph'
+import CartogramMap from './CartogramMap'
 
 class Chart extends Component {
   state = {
@@ -63,8 +64,11 @@ class Chart extends Component {
             { (this.state.show) && (this.props.chartId === 1.09) &&
                 <Map {...this.props} {...styles} />
             }
-            { (this.props.chartId === 1.10) &&
+            { (this.state.show) && (this.props.chartId === 1.10) &&
                 <Graph {...this.props} {...styles} />
+            }
+            { (this.state.show) && (this.props.chartId === 1.11) &&
+                <CartogramMap {...this.props} {...styles} />
             }
           </div>
         }
