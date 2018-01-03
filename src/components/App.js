@@ -58,9 +58,9 @@ class App extends Component {
 
   changeEditorSize = () => {
     if (!this.state.editorFullScreen) {
-      this.setState({ editorFullScreen: true }) 
+      this.setState({ editorFullScreen: true, exampleIndex: -1 }) 
     } else {
-      this.setState({ editorFullScreen: false })
+      this.setState({ editorFullScreen: false, examleIndex: -1 })
     }
   }
 

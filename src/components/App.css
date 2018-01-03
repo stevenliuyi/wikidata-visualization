@@ -27,8 +27,8 @@
   to { transform: rotate(360deg); }
 }
 
-.ReactCodeMirror {
-  border: 1px solid #ccc;
+.ace_editor {
+  border: 1px solid #ddd;
   margin-top: -5px;
 }
 

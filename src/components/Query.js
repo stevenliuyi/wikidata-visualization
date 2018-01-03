@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { FormGroup, Button, Row, Col } from 'react-bootstrap'
-import CodeMirror from 'react-codemirror'
-import '../../node_modules/codemirror/lib/codemirror.css'
-import '../../node_modules/codemirror/mode/sparql/sparql'
 import MdAspectRatio from 'react-icons/lib/md/aspect-ratio'
 import { readExample } from '../utils/examples'
+import AceEditor from 'react-ace'
+import 'brace/mode/sparql'
+import 'brace/theme/tomorrow'
+import 'brace/ext/language_tools'
+import Resizable from 're-resizable'
 
 class Query extends Component {
 
@@ -21,8 +23,6 @@ class Query extends Component {
       readExample(index)
         .then( sparql => {
           this.setState({ code: sparql })
-          // hack to fix CodeMirror's value update bug
-          this.cm.codeMirror.setValue(sparql)
         })
     }
   }
@@ -45,22 +45,37 @@ class Query extends Component {
     }
   }
 
+  onEditorResize = () => {
+    this.refs.aceEditor.editor.resize() 
+  }
+
   render() {
-    const codeOptions = {
-      lineNumbers: true,
-      tabSize: 2
-    }
 
     return (
       <form>
         <FormGroup>
-          <CodeMirror
-            ref={el => this.cm = el} // hack to fix CodeMirror's value update bug
-            name="query"
-            value={this.state.code}
-            onChange={this.updateCode}
-            defaultValue="# Enter a Wikidata SPARQL query here"
-            options={codeOptions} />
+          <Resizable
+            defaultSize={{width:'100%', height:300}}
+            minHeight='50'
+            onResize={this.onEditorResize}
+            enable={{top:false,right:false,bottom:true,left:false,topRight:false,bottomRight:false,bottomLeft:false,topLeft:false}}
+            >
+            <AceEditor
+              ref='aceEditor'
+              mode='sparql'
+              theme='tomorrow'
+              height='100%'
+              width='100%'
+              value={this.state.code}
+              fontSize={14}
+              showPrintMargin={false}
+              tabSize={2}
+              onChange={this.updateCode}
+              onBeforeLoad={() => this.updateCode('# Enter a Wikidata SPARQL query here')}
+              enableBasicAutocompletion={true}
+              enableLiveAutocompletion={true}
+            />
+          </Resizable>
         </FormGroup>
         <Row>
           <Col xs={12} sm={10}>
