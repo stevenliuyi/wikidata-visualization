@@ -13,6 +13,7 @@ import TopNavBar from './TopNavBar'
 import * as WikidataAPI from '../utils/api'
 import { convertData } from '../utils/convertData'
 import { getChartNames, getSettings, moreSettings } from '../utils/settings'
+import Measure from 'react-measure'
 
 class App extends Component {
   state = {
@@ -26,6 +27,7 @@ class App extends Component {
     chart: 1.01,
     chartName: 'Table',
     editorFullScreen: false,
+    editorWidth: null,
     exampleIndex: -1,
     chartNames: {},
     rowSelections: [],
@@ -133,13 +135,23 @@ class App extends Component {
           <Row>
             <Col sm={(this.state.editorFullScreen ? 12 : 4)}>
               <Row className='padding-5'>
-                <Query
-                  onSubmit={this.getSPARQLResult}
-                  onChangeEditorSize={this.changeEditorSize}
-                  status={this.state.status}
-                  numResults={this.state.numResults}
-                  exampleIndex={this.state.exampleIndex}
-                />
+                <Measure
+                  bounds
+                  onResize={(contentRect) => this.setState({ editorWidth: contentRect.bounds.width })}
+                >
+                  {({ measureRef}) =>
+                    <div ref={measureRef}>
+                      <Query
+                        onSubmit={this.getSPARQLResult}
+                        onChangeEditorSize={this.changeEditorSize}
+                        status={this.state.status}
+                        numResults={this.state.numResults}
+                        exampleIndex={this.state.exampleIndex}
+                        width={this.state.editorWidth}
+                      />
+                    </div>
+                  }
+                </Measure>
               </Row>
               { !this.state.editorFullScreen && 
                 <Row className='padding-5'>

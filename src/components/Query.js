@@ -16,7 +16,12 @@ class Query extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.onEditorResize()
+    // udpate width
+    if (nextProps.width !== this.props.width) {
+      this.resizable.setState({ width: nextProps.width }, () => {
+        this.onEditorResize()
+      })
+    }
     this.receiveExampleCode(nextProps.exampleIndex)
   }
   
@@ -67,7 +72,7 @@ class Query extends Component {
   }
 
   onEditorResize = () => {
-    this.refs.aceEditor.editor.resize() 
+    if (this.refs.aceEditor != null) this.refs.aceEditor.editor.resize() 
   }
 
   render() {
@@ -76,6 +81,7 @@ class Query extends Component {
       <form>
         <FormGroup>
           <Resizable
+            ref={ c=> { this.resizable = c }}
             defaultSize={{width:'100%', height:300}}
             minHeight='50'
             onResize={this.onEditorResize}
