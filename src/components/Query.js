@@ -7,6 +7,7 @@ import 'brace/mode/sparql'
 import 'brace/theme/tomorrow'
 import 'brace/ext/language_tools'
 import Resizable from 're-resizable'
+import { keywords, snippets } from '../utils/sparql'
 
 class Query extends Component {
 
@@ -15,9 +16,29 @@ class Query extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    this.onEditorResize()
     this.receiveExampleCode(nextProps.exampleIndex)
   }
   
+  myCompleter = {
+    getCompletions: function(editor, session, pos, prefix, callback) {
+      callback(null, keywords.map((word) => {
+        return {
+          caption: word,
+          value: word,
+          meta: 'keyword'
+        }
+      }))
+      callback(null, Object.keys(snippets).map((title) => {
+        return {
+          caption: title,
+          value: snippets[title],
+          meta: 'snippets'
+        }
+      }))
+    }
+  }
+
   receiveExampleCode = (index) => {
     if (index >= 0) {
       readExample(index)
@@ -59,7 +80,7 @@ class Query extends Component {
             minHeight='50'
             onResize={this.onEditorResize}
             enable={{top:false,right:false,bottom:true,left:false,topRight:false,bottomRight:false,bottomLeft:false,topLeft:false}}
-            >
+          >
             <AceEditor
               ref='aceEditor'
               mode='sparql'
@@ -72,7 +93,7 @@ class Query extends Component {
               tabSize={2}
               onChange={this.updateCode}
               onBeforeLoad={() => this.updateCode('# Enter a Wikidata SPARQL query here')}
-              enableBasicAutocompletion={true}
+              enableBasicAutocompletion={[this.myCompleter]}
               enableLiveAutocompletion={true}
             />
           </Resizable>

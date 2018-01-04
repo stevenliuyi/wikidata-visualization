@@ -94,7 +94,7 @@ class CartogramMap extends Component {
           .valFormatter(() => '')
           .iterations(1)
 
-          return null
+        return null
       }
 
       const areas = props.data.map(item => item[props.header[props.settings.area]])
