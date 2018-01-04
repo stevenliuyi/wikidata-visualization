@@ -1,6 +1,6 @@
 # Number of National Historical and Cultural Sites in each province of China
 
-SELECT ?province (COUNT(*) AS ?numOfSites) ?provinceCoord WHERE {
+SELECT ?provinceItem ?province (COUNT(*) AS ?numOfSites) ?provinceCoord WHERE {
   hint:Query hint:optimizer "None" .
   ?siteItem wdt:P1435 wd:Q1188574 ; # Chinese National Historical and Cultural Site
                 wdt:P131+ ?provinceItem .
@@ -9,5 +9,5 @@ SELECT ?province (COUNT(*) AS ?numOfSites) ?provinceCoord WHERE {
   SERVICE wikibase:label { bd:serviceParam wikibase:language "zh" .
                            ?provinceItem rdfs:label ?province . }
 }
-GROUP BY ?province ?provinceCoord
+GROUP BY ?provinceItem ?province ?provinceCoord
 ORDER BY DESC(?numOfSites)
