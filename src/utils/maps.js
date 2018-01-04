@@ -1,6 +1,7 @@
 /* sources of toposon files 
 https://github.com/zcreativelabs/react-simple-maps
 https://github.com/deldersveld/topojson
+https://github.com/CodeWritingCow/CodeWritingCow.com
 https://github.com/jgoodall/us-maps
 https://github.com/zarkzork/russia-topojson
 https://github.com/g0v/twgeojson
@@ -14,6 +15,7 @@ https://github.com/ginseng666/GeoJSON-TopoJSON-Austria
 https://github.com/n4cr/iran-geojson
 https://github.com/GusGA/venezuela-jsonmaps
 https://github.com/jhjanicki/Ukraine
+https://github.com/dedunu/sri-lanka-cartogram
 https://gist.github.com/atwj/b2350b7083c001a74505647a61e89c0e
 https://gist.github.com/saifulazfar/76053d7a7d420a3a0bc0fb5849006309
 https://gist.github.com/rkini/0debc65592d85da286425948ed07df1f
@@ -51,7 +53,8 @@ export const mapSettings = {
   'Egypt': { center: [31, 27], scale: 2000, rotation: [0,0,0], filename: 'egypt.json' },
   'Finland': { center: [25, 65], scale: 1000, rotation: [0,0,0], filename: 'finland-regions.json' },
   'France': { center: [2, 46], scale: 1800, rotation: [0,0,0], filename: 'fr-departments.json' },
-  'Germany': { center: [10, 51], scale: 2000, rotation: [0,0,0], filename: 'germany-regions.json' },
+  'Germany (States)': { center: [10, 51], scale: 2000, rotation: [0,0,0], filename: 'deu-adm1.json' },
+  'Germany (Regions)': { center: [10, 51], scale: 2000, rotation: [0,0,0], filename: 'germany-regions.json' },
   'Greece': { center: [23, 39], scale: 2800, rotation: [0,0,0], filename: 'greece.json' },
   'Hong Kong': { center: [114.1, 22.4], scale: 40000, rotation: [0,0,0], filename: 'hkg-adm.json' },
   'India (Districts)': { center: [80, 22], scale: 1000, rotation: [0,0,0], filename: 'india-districts.json' },
@@ -94,6 +97,7 @@ export const mapSettings = {
   'South Korea (Provinces)': { center: [128, 36], scale: 4000, rotation: [0,0,0], filename: 'skorea-provinces.json' },
   'Spain (Autonomies)': { center: [-5, 40], scale: 2000, rotation: [0,0,0], filename: 'spain-comunidad-with-canary-islands.json' }, 
   'Spain (Provinces)': { center: [-5, 40], scale: 2000, rotation: [0,0,0], filename: 'spain-province-with-canary-islands.json' },
+  'Sri Lanka': { center: [81, 8], scale: 6000, rotation: [0,0,0], filename: 'sri-lanka.json' },
   'Sweden (Counties)': { center: [19, 63], scale: 800, rotation: [0,0,0], filename: 'sweden-counties.json' },
   'Sweden (Municipalities)': { center: [19, 63], scale: 800, rotation: [0,0,0], filename: 'sweden-municipalities.json' },
   'Switzerland': { center: [8, 47], scale: 6000, rotation: [0,0,0], filename: 'switzerland.json' },
