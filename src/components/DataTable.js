@@ -38,7 +38,8 @@ class DataTable extends Component {
     // seperate coordinates into two columns
     const tidified = this.props.data.map((item, i) => {
       item['_id'] = i // add id for Select Table
-      coordIndices.forEach(index => {
+      coordIndices.filter(index => item[this.props.header[index]] != null)
+        .forEach(index => {
         const [coordX, coordY] = item[this.props.header[index]].split(', ').map(parseFloat)
         item[`${this.props.header[index]} (Lon)`] = coordX
         item[`${this.props.header[index]} (Lat)`] = coordY
