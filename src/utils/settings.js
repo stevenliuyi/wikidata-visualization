@@ -90,9 +90,11 @@ export const moreSettings = {
   radius: [5, 40],
   color: 'Spectral',
   map: 'World',
+  map2: 'World',
   projection: 'mercator',
   edgeFontSize: 8,
-  strength: -30
+  strength: -30,
+  iterations: 20
 }
 
 export const moreSettingTitles = {
@@ -100,9 +102,11 @@ export const moreSettingTitles = {
   radius: 'Radius',
   color: 'Colors',
   map: 'Region',
+  map2: 'Region',
   projection: 'Map projection',
   edgeFontSize: 'Edge font size',
-  strength: 'Strength'
+  strength: 'Strength',
+  iterations: 'Iterations'
 }
 
 // chart classes
@@ -209,7 +213,7 @@ export const charts = [
     chartClass: 'map',
     settings: [region, area, color],
     defaultShow: [true, false, false],
-    moreSettings: ['color']
+    moreSettings: ['map2', 'iterations', 'color']
   }
 ]
 

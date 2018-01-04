@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import * as d3 from 'd3'
 import { getColors } from '../utils/scales'
 import { geoMercator } from 'd3-geo'
-import { countryNames } from '../utils/mapNames'
+import { map2Settings } from '../utils/maps2'
 import Cartogram from 'cartogram-chart/dist/cartogram-chart.min.js'
 
-const getTopoJsonFileName = () => (
+const getTopoJsonFileName = (props) => (
   (process.env.NODE_ENV === 'development')
-    ? '/maps/world-110m.json'
-    : '/wikidata-visualization/maps/world-110m.json'
+    ? `/maps/${map2Settings[props.moreSettings.map2].filename}`
+    : `/wikidata-visualization/maps/${map2Settings[props.moreSettings.map2].filename}`
 )
 
 class CartogramMap extends Component {
@@ -22,27 +22,38 @@ class CartogramMap extends Component {
 
     d3.selectAll('.cartogram-tooltip').html('')
 
-    d3.json(getTopoJsonFileName(), (error, map) => {
+    d3.json(getTopoJsonFileName(this.props), (error, map) => {
       if (error) throw error
 
-      map.objects.countries.geometries.splice(
-        map.objects.countries.geometries.findIndex(d=>d.properties.ISO_A2 === 'AQ'),
-        1
-      )
+      if (this.props.moreSettings.map2 === 'World') {
+        map.objects.countries.geometries.splice(
+          map.objects.countries.geometries.findIndex(d=>d.properties.ISO_A2 === 'AQ'),
+          1
+        )
+      }
 
+      const settings = map2Settings[this.props.moreSettings.map2]
       const myCartogram = Cartogram()
+
+      map.objects[settings.objectname].geometries.forEach( geo => {
+        geo.properties['label'] = geo.properties[settings.namekey]
+        geo.properties['value'] = 1
+        geo.properties['color'] = '#ECEFF1'
+      })
 
       myCartogram
         .width(this.props.width)
         .height(this.props.height)
         .topoJson(map)
+        .topoObjectName(settings.objectname)
         .projection(geoMercator()
-          .scale((this.props.width-5)/(2*Math.PI))
-          .translate([this.props.width/2, this.props.height/1.6]))
-        .color(() => '#999')
-        .label(({ properties }) => properties.NAME)
+          .scale((this.props.width-5)/(2*Math.PI)*settings.scale)
+          .translate([this.props.width*settings.translate[0], this.props.height*settings.translate[1]]))
+        .value(({ properties }) => properties.value)
+        .color(({ properties }) => properties.color)
+        .label(({ properties }) => properties.label)
         .valFormatter(() => '')
-        .iterations(0)(document.getElementById('chart'))
+        .iterations(1)(document.getElementById('chart'))
      
       this.setState({ chart: myCartogram })
 
@@ -61,40 +72,62 @@ class CartogramMap extends Component {
 
   // update cartogram
   updateD3Node = (props) => {
-    if (props.settings.area === -1) return null
-
-    d3.json(getTopoJsonFileName(), (error, map) => {
+    d3.json(getTopoJsonFileName(props), (error, map) => {
       if (error) throw error
     
+      const settings = map2Settings[props.moreSettings.map2]
+      if (props.settings.area === -1) {
+        map.objects[settings.objectname].geometries.forEach( geo => {
+          geo.properties['label'] = geo.properties[settings.namekey]
+          geo.properties['value'] = 1
+          geo.properties['color'] = '#ECEFF1'
+        })
+
+        this.state.chart
+          .width(props.width)
+          .height(props.height)
+          .topoJson(map)
+          .topoObjectName(settings.objectname)
+          .projection(geoMercator()
+            .scale((props.width-5)/(2*Math.PI)*settings.scale)
+            .translate([props.width*settings.translate[0], this.props.height*settings.translate[1]]))
+          .valFormatter(() => '')
+          .iterations(1)
+
+          return null
+      }
+
       const areas = props.data.map(item => item[props.header[props.settings.area]])
       const items = props.data.map(item => item[props.header[props.settings.region]])
       const colors = getColors(props)
 
+
       let new_geometries = []
-      map.objects.countries.geometries.forEach( geo => {
-        if (items.includes(countryNames[geo.properties.ISO_A3])) new_geometries.push(geo)
+      map.objects[settings.objectname].geometries.forEach( geo => {
+        if (items.includes(settings.names[geo.properties[settings.namekey]])) {
+          const regionItem = settings.names[geo.properties[settings.namekey]]
+          const regionIndex = items.indexOf(regionItem)
+
+          geo.properties['value'] = areas[regionIndex]
+          geo.properties['color'] = colors[regionIndex]
+          geo.properties['label'] = geo.properties[settings.namekey]
+
+          new_geometries.push(geo)
+        } 
       })
 
-      map.objects.countries.geometries = new_geometries
+      map.objects[settings.objectname].geometries = new_geometries 
 
       this.state.chart
         .width(props.width)
         .height(props.height)
         .topoJson(map)
+        .topoObjectName(settings.objectname)
         .projection(geoMercator()
-          .scale((props.width-5)/(2*Math.PI))
-          .translate([props.width/2, props.height/1.6]))
-        .value(({ properties }) => {
-          const countryItem = countryNames[properties.ISO_A3]
-          const countryIndex = items.indexOf(countryItem)
-          return areas[countryIndex]
-        })
-        .color(({ properties }) => {
-          const countryItem = countryNames[properties.ISO_A3]
-          const countryIndex = items.indexOf(countryItem)
-          return colors[countryIndex]
-        })
-        .iterations(20)
+          .scale((props.width-5)/(2*Math.PI)*settings.scale)
+          .translate([props.width*settings.translate[0], props.height*settings.translate[1]]))
+        .valFormatter(d3.format('.3e'))
+        .iterations(props.moreSettings.iterations)
 
     })
   }

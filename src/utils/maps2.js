@@ -1,4 +1,4 @@
-export const countryNames = {
+const countryNames = {
   'BLR': 'Q184',
   'CHE': 'Q39',
   'CHN': 'Q148',
@@ -255,3 +255,97 @@ export const countryNames = {
   'BLM': 'Q25362',
   'YUG': 'Q83286'
 }
+
+const ChinaNames = {
+  'Anhui': 'Q40956',
+  'Beijing': 'Q956',
+  'Chongqing': 'Q11725',
+  'Fujian': 'Q41705',
+  'Gansu': 'Q42392',
+  'Guangdong': 'Q15175',
+  'Guangxi': 'Q15176',
+  'Guizhou': 'Q47097',
+  'Hainan': 'Q42200',
+  'Hebei': 'Q21208',
+  'Heilongjiang': 'Q19206',
+  'Henan': 'Q43684',
+  'Hubei': 'Q46862',
+  'Hunan': 'Q45761',
+  'Jiangsu': 'Q16963',
+  'Jiangxi': 'Q57052',
+  'Jilin': 'Q45208',
+  'Liaoning': 'Q43934',
+  'Nei Mongol': 'Q41079',
+  'Ningxia Hui': 'Q57448',
+  'Qinghai': 'Q45833',
+  'Shaanxi': 'Q47974',
+  'Shandong': 'Q43407',
+  'Shanghai': 'Q8686',
+  'Shanxi': 'Q46913',
+  'Sichuan': 'Q19770',
+  'Tianjin': 'Q11736',
+  'Xinjiang Uygur': 'Q34800',
+  'Xizang': 'Q17269',
+  'Yunnan': 'Q43194',
+  'Zhejiang': 'Q16967'
+}
+
+const USNames = {
+  'CA': 'Q99',
+  'AL': 'Q173',
+  'ME': 'Q724',
+  'NH': 'Q759',
+  'MA': 'Q771',
+  'CT': 'Q779',
+  'HI': 'Q782',
+  'AK': 'Q797',
+  'FL': 'Q812',
+  'AZ': 'Q816',
+  'OR': 'Q824',
+  'UT': 'Q829',
+  'MI': 'Q1166',
+  'IL': 'Q1204',
+  'ND': 'Q1207',
+  'SD': 'Q1211',
+  'MT': 'Q1212',
+  'WY': 'Q1214',
+  'ID': 'Q1221',
+  'NV': 'Q1227',
+  'CO': 'Q1261',
+  'VA': 'Q1370',
+  'WV': 'Q1371',
+  'NY': 'Q1384',
+  'RI': 'Q1387',
+  'MD': 'Q1391',
+  'DE': 'Q1393',
+  'OH': 'Q1397',
+  'PA': 'Q1400',
+  'NJ': 'Q1408',
+  'IN': 'Q1415',
+  'GA': 'Q1428',
+  'TX': 'Q1439',
+  'NC': 'Q1454',
+  'SC': 'Q1456',
+  'MS': 'Q1494',
+  'TN': 'Q1509',
+  'NM': 'Q1522',
+  'MN': 'Q1527',
+  'WI': 'Q1537',
+  'IA': 'Q1546',
+  'NE': 'Q1553',
+  'KS': 'Q1558',
+  'MO': 'Q1581',
+  'LA': 'Q1588',
+  'KY': 'Q1603',
+  'AR': 'Q1612',
+  'OK': 'Q1649',
+  'VT': 'Q16551'
+}
+
+
+export const map2Settings = {
+  'World': { names: countryNames, namekey: 'ISO_A3', objectname: 'countries', filename: 'world-110m.json', scale: 1, translate: [0.5,0.63] },
+  'China (Mainland)' : { names: ChinaNames, namekey: 'NAME_1', objectname: 'CHN_adm1', filename: 'china-provinces.json', scale: 4, translate: [-0.65,1.25] },
+  'United States': { names: USNames, namekey: 'STUSPS10', objectname: 'state', filename: 'us-states.json', scale: 4, translate: [1.7,1.2] }
+}
+

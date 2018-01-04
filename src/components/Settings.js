@@ -5,6 +5,7 @@ import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
 import ReactBootstrapSlider from 'react-bootstrap-slider'
 import { colorSchemeNames, getColorScaleFromValues } from '../utils/scales'
 import { mapSettings, mapProjections } from '../utils/maps'
+import { map2Settings } from '../utils/maps2'
 
 class Settings extends Component {
 
@@ -31,9 +32,7 @@ class Settings extends Component {
     if (setting === 'fontSize' || setting === 'edgeFontSize') {
       return (
         <ReactBootstrapSlider
-          value={(setting === 'fontSize')
-            ? this.props.moreSettings.fontSize
-            : this.props.moreSettings.edgeFontSize }
+          value={this.props.moreSettings[setting]}
           slideStop={(e)=>{
             const newSetting = {}
             newSetting[setting] = e.target.value
@@ -83,15 +82,19 @@ class Settings extends Component {
           </div>
         </div>
       )
-    } else if ( setting === 'map') {
+    } else if ( setting === 'map' || setting === 'map2') {
       return (
         <FormControl
           componentClass="select"
-          value={this.props.moreSettings.map}
-          onChange={(e)=>this.props.onMoreSettingsChange({map: e.target.value})}
+          value={this.props.moreSettings[setting]}
+          onChange={(e)=>{
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onMoreSettingsChange(newSetting)
+          }}
         >
           {
-            Object.keys(mapSettings).map(region => (
+            Object.keys(((setting === 'map') ? mapSettings : map2Settings)).map(region => (
               <option value={region} key={region}>
                 { region }
               </option>
@@ -123,6 +126,15 @@ class Settings extends Component {
           step={5}
           min={-300}
           max={0} />
+      )
+    } else if (setting === 'iterations') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings.iterations}
+          slideStop={(e)=>this.props.onMoreSettingsChange({iterations: e.target.value})}
+          step={1}
+          min={1}
+          max={150} />
       )
     } else {
       return null
