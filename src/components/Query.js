@@ -68,6 +68,8 @@ class Query extends Component {
       return 'Error encountered while querying!'
     } else if (this.props.status === 'empty') {
       return 'No result found!'
+    } else if (this.props.status === 'timeout') {
+      return 'Query timeout!'
     }
   }
 

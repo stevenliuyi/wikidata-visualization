@@ -89,10 +89,17 @@ class App extends Component {
       exampleIndex: -1
     })
     const query = `query=${encodeURIComponent(code)}`
-    WikidataAPI.fetchSPARQLResult(query)
+    Promise.race([
+      WikidataAPI.fetchSPARQLResult(query),
+      new Promise((resolve, _) =>
+        setTimeout(() => resolve('timeout'), 60000))
+    ])
       .then(data => {
         if (data === null) {
           this.setState({ status: 'error' })
+          return null
+        } else if (data === 'timeout') {
+          this.setState({ status: 'timeout' })
           return null
         } else if (data.results.bindings.length === 0) {
           // empty result received
