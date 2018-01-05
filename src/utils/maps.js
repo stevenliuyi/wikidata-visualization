@@ -16,6 +16,7 @@ https://github.com/n4cr/iran-geojson
 https://github.com/GusGA/venezuela-jsonmaps
 https://github.com/jhjanicki/Ukraine
 https://github.com/dedunu/sri-lanka-cartogram
+https://github.com/laem/regions-topojson
 https://gist.github.com/atwj/b2350b7083c001a74505647a61e89c0e
 https://gist.github.com/saifulazfar/76053d7a7d420a3a0bc0fb5849006309
 https://gist.github.com/rkini/0debc65592d85da286425948ed07df1f
@@ -52,7 +53,8 @@ export const mapSettings = {
   'Denmark (Municipalities)': { center: [10, 56], scale: 4000, rotation: [0,0,0], filename: 'denmark-municipalities.json' },
   'Egypt': { center: [31, 27], scale: 2000, rotation: [0,0,0], filename: 'egypt.json' },
   'Finland': { center: [25, 65], scale: 1000, rotation: [0,0,0], filename: 'finland-regions.json' },
-  'France': { center: [2, 46], scale: 1800, rotation: [0,0,0], filename: 'fr-departments.json' },
+  'France (Departments)': { center: [2, 46], scale: 1800, rotation: [0,0,0], filename: 'fr-departments.json' },
+  'France (Regions)': { center: [2, 46], scale: 1800, rotation: [0,0,0], filename: 'fr-regions.json' },
   'Germany (States)': { center: [10, 51], scale: 2000, rotation: [0,0,0], filename: 'deu-adm1.json' },
   'Germany (Regions)': { center: [10, 51], scale: 2000, rotation: [0,0,0], filename: 'germany-regions.json' },
   'Greece': { center: [23, 39], scale: 2800, rotation: [0,0,0], filename: 'greece.json' },
@@ -68,6 +70,7 @@ export const mapSettings = {
   'Italy (Regions)': { center: [13, 42], scale: 1600, rotation: [0,0,0], filename: 'italy-regions.json' },
   'Japan (Prefectures)': { center: [140, 38], scale: 1800, rotation: [0,0,0], filename: 'jp-prefectures.json' },
   'Japan (Towns)': { center: [140, 38], scale: 1800, rotation: [0,0,0], filename: 'jp-towns.json' },
+  'Lebanon': { center: [36, 34], scale: 12000, rotation: [0,0,0], filename: 'lebanon.json' },
   'Liberia (Counties)': { center: [-9.5, 6.5], scale: 5000, rotation: [0,0,0], filename: 'liberia-counties.json' },
   'Liberia (Districts)': { center: [-9.5, 6.5], scale: 5000, rotation: [0,0,0], filename: 'liberia-districts.json' },
   'Malaysia (Districts)': { center: [110, 5], scale: 2000, rotation: [0,0,0], filename: 'malaysia-districts.json' },

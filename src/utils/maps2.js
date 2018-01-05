@@ -466,11 +466,43 @@ const JapanNames = {
   'JP.ON': 'Q766445'
 }
 
+const FranceNames = {
+  'FR-A': 'Q1142',
+  'FR-B': 'Q1179',
+  'FR-C': 'Q1152',
+  'FR-D': 'Q1173',
+  'FR-E': 'Q12130',
+  'FR-F': 'Q13947',
+  'FR-G': 'Q14103',
+  'FR-H': 'Q14112',
+  'FR-I': 'Q16394',
+  'FR-J': 'Q13917',
+  'FR-K': 'Q17005',
+  'FR-L': 'Q1190',
+  'FR-M': 'Q1137',
+  'FR-N': 'Q16393',
+  'FR-O': 'Q16987',
+  'FR-P': 'Q16954',
+  'FR-Q': 'Q16961',
+  'FR-R': 'Q16994',
+  'FR-S': 'Q13950',
+  'FR-T': 'Q17009',
+  'FR-U': 'Q15104',
+  'FR-V': 'Q463',
+  'FR-GP': 'Q17012',
+  'FR-GF': 'Q3769',
+  'FR-MQ': 'Q17054',
+  'FR-YT': 'Q17063',
+  'FR-RE': 'Q17070'
+}
+
 export const map2Settings = {
   'World': { names: countryNames, namekey: 'ISO_A3', objectname: 'countries', filename: 'world-110m.json', scale: 1, translate: [0.5,0.63] },
   'Canada': { names: CanadaNames, namekey: 'NAME', objectname: 'collection', filename: 'canada.json', scale: 3, translate: [1.35,1.6] },
   'China (Mainland)' : { names: ChinaNames, namekey: 'NAME_1', objectname: 'CHN_adm1', filename: 'china-provinces.json', scale: 4, translate: [-0.65,1.25] },
+  'France': { names: FranceNames, namekey: 'ISO3166-2', objectname: 'FR', filename: 'fr-regions.json', scale: 14, translate: [0.4,3.9] },
   'Germany': { names: GermanyNames, namekey: 'HASC_1', objectname: 'DEU_adm1', filename: 'deu-adm1.json', scale: 16, translate: [0.1,4.9] },
+  'India': { names: IndiaNames, namekey: 'HASC_1', objectname: 'india_states', filename: 'india-states.json', scale: 6, translate: [-0.8,1.2] },
   'Japan': { names: JapanNames, namekey: 'HASC_1', objectname: 'JPN_adm1', filename: 'jp-prefectures.json', scale: 12, translate: [-4,2.8] },
   'United States': { names: USNames, namekey: 'STUSPS10', objectname: 'state', filename: 'us-states.json', scale: 4, translate: [1.7,1.2] }
 }

@@ -243,7 +243,7 @@ export function getSettings(chartId, header, data, dataTypes) {
     if (setting.type === 'number' && numberIndices.length >= 1 && show[index]) { // number
       defaultValue = numberIndices[numIdx]
       if (numIdx < numberIndices.length-1) numIdx += 1
-    } else if (setting.type === 'item' && itemIndices.length >= 2 && show[index]) { // item
+    } else if (setting.type === 'item' && itemIndices.length >= 1 && show[index]) { // item
       defaultValue = itemIndices[itemIdx] 
       if (itemIdx < itemIndices.length-1) itemIdx += 1
     } else if (setting.type === 'coordinate' && coordinateIndices.length >= 1 && show[index]) { // coordinate
