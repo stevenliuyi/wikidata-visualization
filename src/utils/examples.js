@@ -27,6 +27,10 @@ export const examples = [
   {
     title: 'Richard Feynman\'s Erdos number',
     filename: 'feynman-erdos-number.rq'
+  },
+  {
+    title: '20th-century earthquakes',
+    filename: 'earthquakes.rq'
   }
 ]
 
