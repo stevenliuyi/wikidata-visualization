@@ -42,7 +42,7 @@ export function getRadius(props, minRadius = 3, maxRadius = 30) {
   const label = props.header[props.settings['radius']]
   const radiusScale = getRadiusScale(props, minRadius, maxRadius)
   const radii = props.data.filter((item, i) => props.rowSelections.includes(i))
-    .map(item => radiusScale(item[label]))
+    .map(item => radiusScale(item[label]).toString())
 
   return radii
 }
@@ -141,8 +141,9 @@ export function getColorScale(props) {
 export function getColors(props) {
   const label = props.header[props.settings['color']]
   const colorScale = getColorScale(props)
+  // change the color of unkown values (default is black)
   const colors = props.data.filter((item, i) => props.rowSelections.includes(i))
-    .map(item => colorScale(item[label]))
-  
+    .map(item => (item[label] != null || props.settings['color'] === -1) ? colorScale(item[label]) : '#ddd')
+
   return colors
 }

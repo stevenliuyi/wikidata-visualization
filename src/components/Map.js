@@ -101,6 +101,7 @@ class Map extends Component {
             <Markers>
               {
                 this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
+                  .filter(item => item[this.props.header[this.props.settings['coordinate']]] != null)
                   .map((item, i) => (
                     <Marker key={i} marker={{ coordinates:
                       item[this.props.header[this.props.settings['coordinate']]].split(', ').map(parseFloat) }}>
