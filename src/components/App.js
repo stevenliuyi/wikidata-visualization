@@ -129,31 +129,32 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <TopNavBar handleChartSelect={this.handleChartSelect} />
-        <Grid>
-          <Row>
-            <Col sm={(this.state.editorFullScreen ? 12 : 4)}>
-              <Row className='padding-5'>
-                <Measure
-                  bounds
-                  onResize={(contentRect) => this.setState({ editorWidth: contentRect.bounds.width })}
-                >
-                  {({ measureRef}) =>
-                    <div ref={measureRef}>
-                      <Query
-                        onSubmit={this.getSPARQLResult}
-                        onChangeEditorSize={this.changeEditorSize}
-                        status={this.state.status}
-                        numResults={this.state.numResults}
-                        exampleIndex={this.state.exampleIndex}
-                        width={this.state.editorWidth}
-                      />
-                    </div>
-                  }
-                </Measure>
-              </Row>
-              { !this.state.editorFullScreen && 
+      <div className='site'>
+        <div className='site-content'>
+          <TopNavBar handleChartSelect={this.handleChartSelect} />
+          <Grid>
+            <Row>
+              <Col sm={(this.state.editorFullScreen ? 12 : 4)}>
+                <Row className='padding-5'>
+                  <Measure
+                    bounds
+                    onResize={(contentRect) => this.setState({ editorWidth: contentRect.bounds.width })}
+                  >
+                    {({ measureRef}) =>
+                      <div ref={measureRef}>
+                        <Query
+                          onSubmit={this.getSPARQLResult}
+                          onChangeEditorSize={this.changeEditorSize}
+                          status={this.state.status}
+                          numResults={this.state.numResults}
+                          exampleIndex={this.state.exampleIndex}
+                          width={this.state.editorWidth}
+                        />
+                      </div>
+                    }
+                  </Measure>
+                </Row>
+                { !this.state.editorFullScreen && 
                 <Row className='padding-5'>
                   <Settings
                     header={this.state.header}
@@ -165,9 +166,9 @@ class App extends Component {
                     onMoreSettingsChange={this.handleMoreSettingsChange}
                   />
                 </Row>
-              }
-            </Col>
-            { !this.state.editorFullScreen &&
+                }
+              </Col>
+              { !this.state.editorFullScreen &&
               <Col sm={8}>
                 { this.state.chart < 2 &&
                   <Navs
@@ -199,9 +200,11 @@ class App extends Component {
                   <Examples onSelect={this.handleExampleSelect} />
                 }
               </Col>
-            }
-          </Row>
-        </Grid>
+              }
+            </Row>
+          </Grid>
+        </div>
+        <footer className='footer text-muted'>Steven Liu&nbsp;&nbsp;2018</footer>
       </div>
     )
   }

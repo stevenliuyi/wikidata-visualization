@@ -40,10 +40,10 @@ class DataTable extends Component {
       item['_id'] = i // add id for Select Table
       coordIndices.filter(index => item[this.props.header[index]] != null)
         .forEach(index => {
-        const [coordX, coordY] = item[this.props.header[index]].split(', ').map(parseFloat)
-        item[`${this.props.header[index]} (Lon)`] = coordX
-        item[`${this.props.header[index]} (Lat)`] = coordY
-      })
+          const [coordX, coordY] = item[this.props.header[index]].split(', ').map(parseFloat)
+          item[`${this.props.header[index]} (Lon)`] = coordX
+          item[`${this.props.header[index]} (Lat)`] = coordY
+        })
       return item
     })
     // get new header
