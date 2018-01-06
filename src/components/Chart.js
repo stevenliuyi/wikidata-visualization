@@ -8,6 +8,7 @@ import ChordDiagram from './ChordDiagram'
 import Map from './Map'
 import Graph from './Graph'
 import CartogramMap from './CartogramMap'
+import ChoroplethMap from './ChoroplethMap'
 
 class Chart extends Component {
   state = {
@@ -69,6 +70,9 @@ class Chart extends Component {
             }
             { (this.state.show) && (this.props.chartId === 1.11) &&
                 <CartogramMap {...this.props} {...styles} />
+            }
+            { (this.state.show) && (this.props.chartId === 1.13) &&
+                <ChoroplethMap {...this.props} {...styles} />
             }
           </div>
         }

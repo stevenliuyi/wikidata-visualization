@@ -228,7 +228,15 @@ export const charts = [
     settings: [image, label],
     defaultShow: [true, false],
     moreSettings: []
-  }
+  },
+  {
+    id: 1.13,
+    name: 'Choropleth',
+    chartClass: 'map',
+    settings: [region, color],
+    defaultShow: [true, false],
+    moreSettings: ['map2', 'fontSize', 'color']
+  },
 ]
 
 export const getChartNames = () => {
