@@ -1,0 +1,18 @@
+# Impressionist and post-impressionist paintings in the Metropolitan Museum of Art
+
+SELECT DISTINCT ?paintingItem ?paintingName ?image ?artistItem ?artistName ?year ?accessionNumber WHERE {
+  VALUES ?movementItem { wd:Q40415 wd:Q166713 } . # impressionism and post-impressionism
+  ?paintingItem wdt:P31 wd:Q3305213 ; # painting
+            wdt:P195 wd:Q160236 ; # MET collection
+            wdt:P170 ?artistItem .
+  { ?paintingItem wdt:P135+ ?movementItem }
+  UNION { ?artistItem wdt:P135+ ?movementItem } .
+  OPTIONAL { ?paintingItem wdt:P18 ?image . }
+  OPTIONAL { ?paintingItem p:P217 [ ps:P217 ?accessionNumber ;
+                                    pq:P195 wd:Q160236 ] }
+  OPTIONAL { ?paintingItem wdt:P571 ?date .
+             BIND(YEAR(?date) AS ?year) . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                           ?paintingItem rdfs:label ?paintingName .
+                           ?artistItem rdfs:label ?artistName }
+}

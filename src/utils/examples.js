@@ -31,7 +31,9 @@ export const examples = [
   {
     title: '20th-century earthquakes',
     filename: 'earthquakes.rq'
-  }
+  },
+  { title: 'Impressionist and post-impressionist paintings in the Metropolitan Museum of Art',
+    filename: 'met-impressionist.rq'}
 ]
 
 export const readExample = (index) => {

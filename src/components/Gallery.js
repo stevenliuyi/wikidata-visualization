@@ -44,14 +44,15 @@ class ImageGallery extends Component {
 
   handleImagesLoaded(info) {
     const imgInfo = (info != null) ? info : this.state.imgInfo
-    const photos = imgInfo.map((img, i) => {
+    let photos = []
+    imgInfo.forEach((img, i) => {
       const imgElement = document.getElementById(`img${i}`)
-      return {
+      if (imgElement.width > 0) photos.push({
         src: img.src,
         width: imgElement.width,
         height: imgElement.height,
         caption:img.caption
-      }
+      })
     })
     this.setState({ photos })
   }
