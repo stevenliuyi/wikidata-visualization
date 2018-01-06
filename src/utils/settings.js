@@ -75,14 +75,20 @@ const edge_label = {
 
 const area = {
   value: 'area',
-  title: 'Region area',
+  title: 'Area',
   type: 'number'
 }
 
 const region = {
   value: 'region',
-  title: 'Region item',
+  title: 'Region items',
   type: 'item'
+}
+
+const image = {
+  value: 'image',
+  title: 'Image',
+  type: 'image'
 }
 
 export const moreSettings = {
@@ -214,6 +220,14 @@ export const charts = [
     settings: [region, area, color],
     defaultShow: [true, false, false],
     moreSettings: ['map2', 'iterations', 'color']
+  },
+  {
+    id: 1.12,
+    name: 'Gallery',
+    chartClass: 'more',
+    settings: [image, label],
+    defaultShow: [true, false],
+    moreSettings: []
   }
 ]
 
@@ -233,11 +247,13 @@ export function getSettings(chartId, header, data, dataTypes) {
   const numberIndices = getDataTypeIndices(dataTypes, 'number')
   const itemIndices = getDataTypeIndices(dataTypes, 'item')
   const coordinateIndices = getDataTypeIndices(dataTypes, 'coordinate')
+  const imageIndices = getDataTypeIndices(dataTypes, 'image')
 
   // default settings
   let numIdx = 0,
     itemIdx = 0,
-    coordIdx = 0
+    coordIdx = 0,
+    imageIdx = 0
   let defaultSettings = chartSettings.map((setting, index) => {
     let defaultValue = -1
     if (setting.type === 'number' && numberIndices.length >= 1 && show[index]) { // number
@@ -249,6 +265,9 @@ export function getSettings(chartId, header, data, dataTypes) {
     } else if (setting.type === 'coordinate' && coordinateIndices.length >= 1 && show[index]) { // coordinate
       defaultValue = coordinateIndices[coordIdx] 
       if (coordIdx < coordinateIndices.length-1) coordIdx += 1
+    } else if (setting.type === 'image' && imageIndices.length >= 1 && show[index]) { // coordinate
+      defaultValue = imageIndices[coordIdx] 
+      if (imageIdx < imageIndices.length-1) imageIdx += 1
     } else if (show[index]) {
       defaultValue = 0
     }
@@ -270,6 +289,8 @@ export function getSettings(chartId, header, data, dataTypes) {
       info['indices'] = itemIndices
     } else if (setting.type === 'coordinate') {
       info['indices'] = coordinateIndices
+    } else if (setting.type === 'image') {
+      info['indices'] = imageIndices
     }
     // hide the setting by default
     if (!show[index]) info['indices'] = [-1].concat(info['indices'])

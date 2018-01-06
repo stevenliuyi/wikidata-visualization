@@ -15,6 +15,8 @@ function convertValue(value) {
     return [value['value'].substr(31), 'item'] // Wikidata item 
   } else if (value['datatype'] === 'http://www.opengis.net/ont/geosparql#wktLiteral') {
     return [value['value'].slice(6,-1).split(' ').join(', '), 'coordinate'] // coordinate
+  } else if (value['value'].startsWith('http://commons.wikimedia.org/wiki/Special:FilePath')) {
+    return [value['value'], 'image']
   } else {
     return [value['value'], 'string']
   }

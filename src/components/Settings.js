@@ -177,7 +177,7 @@ class Settings extends Component {
                 </Form>
               </Panel>
         }
-        { Array.isArray(chartMoreSettings) &&
+        { Array.isArray(chartMoreSettings) && chartMoreSettings.length > 0 &&
             <Panel header='More options' eventKey='2' key='2'>
               <Form horizontal>
                 { // more options

@@ -14,6 +14,7 @@ import * as WikidataAPI from '../utils/api'
 import { convertData } from '../utils/convertData'
 import { getChartNames, getSettings, moreSettings } from '../utils/settings'
 import Measure from 'react-measure'
+import ImageGallery from './Gallery'
 
 class App extends Component {
   state = {
@@ -192,7 +193,7 @@ class App extends Component {
                   />
                 }
 
-                { this.state.chart > 1.01 && this.state.chart < 2 &&
+                { this.state.chart > 1.01 && this.state.chart < 2 && this.state.chart !== 1.12 &&
                   <Chart
                     chartId={this.state.chart}
                     data={this.state.data}
@@ -200,6 +201,15 @@ class App extends Component {
                     header={this.state.header}
                     settings={this.state.settings}
                     moreSettings={this.state.moreSettings}
+                  />
+                }
+                {
+                  this.state.chart === 1.12 &&
+                  <ImageGallery
+                    data={this.state.data}
+                    rowSelections={this.state.rowSelections}
+                    header={this.state.header}
+                    settings={this.state.settings}
                   />
                 }
 

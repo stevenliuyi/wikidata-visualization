@@ -28,6 +28,8 @@ class DataTable extends Component {
     const dataType = this.props.dataTypes[this.props.header.indexOf(col)]
     if (dataType === 'item') {
       return (<a target='_blank' href={`https://www.wikidata.org/wiki/${row.value}`}>{row.value}</a>)
+    } else if (dataType === 'image' && row.value != null) {
+      return (<a target='_blank' href={row.value}><img src={row.value} width={48} alt='' /></a>)
     } else {
       return row.value
     }
