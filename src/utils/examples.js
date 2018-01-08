@@ -33,7 +33,14 @@ export const examples = [
     filename: 'earthquakes.rq'
   },
   { title: 'Impressionist and post-impressionist paintings in the Metropolitan Museum of Art',
-    filename: 'met-impressionist.rq'}
+    filename: 'met-impressionist.rq'
+  },
+  { title: 'Posthumous marriages',
+    filename: 'posthumous-marriages.rq'
+  },
+  { title: 'People died in coups in Chinese history',
+    filename: 'china-coup-death.rq'
+  }
 ]
 
 export const readExample = (index) => {

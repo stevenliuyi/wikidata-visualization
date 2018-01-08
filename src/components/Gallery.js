@@ -47,10 +47,10 @@ class ImageGallery extends Component {
     let photos = []
     imgInfo.forEach((img, i) => {
       const imgElement = document.getElementById(`img${i}`)
-      if (imgElement.width > 0) photos.push({
+      if (imgElement.naturalWidth > 0) photos.push({
         src: img.src,
-        width: imgElement.width,
-        height: imgElement.height,
+        width: imgElement.naturalWidth,
+        height: imgElement.naturalHeight,
         caption:img.caption
       })
     })
