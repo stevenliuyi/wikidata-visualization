@@ -1,0 +1,15 @@
+# People died in coups in Chinese history
+
+SELECT DISTINCT ?personItem ?personName ?coupName ?yearOfDeath WHERE {
+  ?personItem wdt:P31 wd:Q5 ;
+          p:P1196 [ pq:P805 ?coupItem ] .
+  ?coupItem wdt:P31 wd:Q45382 ; # Coup d'état
+            wdt:P17 ?countryItem .
+  { ?countryItem wdt:P31 wd:Q12857432 } # Chinese dynasty
+  UNION { ?countryItem wdt:P2596 wd:Q29520 } .
+  OPTIONAL { ?personItem wdt:P570 ?dateOfDeath } .
+  BIND( YEAR(?dateOfDeath) AS ?yearOfDeath ) .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "zh".
+                           ?personItem rdfs:label ?personName .
+                           ?coupItem rdfs:label ?coupName }
+}
