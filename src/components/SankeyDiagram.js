@@ -4,14 +4,23 @@ import { getGraph } from '../utils/convertData'
 import { getColorScale } from '../utils/scales'
 import SVGPanZoom from './SVGPanZoom'
 import { d3Sankey } from '../utils/sankey'
+import toposort from 'toposort'
 
 // Sankey diagram d3 reference: https://bl.ocks.org/ebendennis/07c361ea822d99872adffea9c7ccf19b
 const updateD3Node = (props) => {
 
   var graph = getGraph(props, true)
-
+  
   // remove self-pointing links
   graph.links = graph.links.filter(link => (link.source !== link.target))
+
+  // perform topological sorting to determine if the graph is a DAG
+  try {
+    toposort(graph.links.map(link => ([link.source, link.target])))
+  } catch(error) {
+    console.log('The graph is not acyclic, cannot generate Sankey diagram!')
+    return null
+  }
 
   var colorScale = getColorScale(props, graph.nodes)
 

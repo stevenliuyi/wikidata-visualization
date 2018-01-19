@@ -25,7 +25,8 @@
     "react-scripts": "1.0.17",
     "react-simple-maps": "^0.10.1",
     "react-svg-pan-zoom": "^2.14.1",
-    "react-table": "^6.7.6"
+    "react-table": "^6.7.6",
+    "toposort": "^1.0.6"
   },
   "scripts": {
     "predeploy": "yarn run build",
