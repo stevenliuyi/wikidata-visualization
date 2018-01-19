@@ -120,13 +120,17 @@ export function getMatrix(props) {
   return [matrix, colors, labels]
 }
 
-export function getGraph(props) {
+export function getGraph(props, link_index = false) {
+  // link_index: use index or Qid for sources/targets 
   const from = props.header[props.settings['link-from']]  
   const to = props.header[props.settings['link-to']]  
   const label_from = props.header[props.settings['label_from']] 
   const label_to = props.header[props.settings['label_to']] 
   const edge_label = props.header[props.settings['edge_label']] 
   const color = props.header[props.settings['color']]
+  const relation = props.header[props.settings['relation']]
+  const color_from = props.header[props.settings['color_from']]
+  const color_to = props.header[props.settings['color_to']]
   
   const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
 
@@ -136,22 +140,26 @@ export function getGraph(props) {
   const nodes = items.map(q => ({ id: q }))
 
   // add labels to nodes
-  if (label_from || label_to || color) {
+  if (label_from || label_to || color || color_from || color_to ) {
     selectedData.forEach(item => {
       const toIndex = items.indexOf(item[to])
       const fromIndex = items.indexOf(item[from])
       nodes[toIndex]['label'] = (item[label_to]) ? item[label_to] : ''
       nodes[fromIndex]['label'] = (item[label_from]) ? item[label_from] : ''
       nodes[fromIndex]['color'] = (item[color]) ? item[color] : null
+      nodes[toIndex]['color'] = (item[color_to]) ? item[color_to] : null
+      nodes[fromIndex]['color'] = (item[color_from]) ? item[color_from] : null
     })
   }
 
   // links
   const links = selectedData.filter( item => item[from] && item[to] ) // make sure both nodes exist
-    .map(item => ({
-      source: item[from],
-      target: item[to],
-      edgeLabel: item[edge_label]
+    .map((item, idx) => ({
+      index: idx,
+      source: (link_index) ? items.findIndex(element => (element === item[from])) : item[from],
+      target: (link_index) ? items.findIndex(element => (element === item[to])) : item[to],
+      edgeLabel: item[edge_label],
+      value: (relation != null) ? item[relation] : 1
     }))
 
   return { nodes, links }

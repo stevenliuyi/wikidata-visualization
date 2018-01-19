@@ -136,6 +136,24 @@ class Settings extends Component {
           min={1}
           max={150} />
       )
+    } else if (setting === 'nodeWidth') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings.nodeWidth}
+          slideStop={(e)=>this.props.onMoreSettingsChange({nodeWidth: e.target.value})}
+          step={1}
+          min={1}
+          max={50} />
+      )
+    } else if (setting === 'nodePadding') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings.nodePadding}
+          slideStop={(e)=>this.props.onMoreSettingsChange({nodePadding: e.target.value})}
+          step={1}
+          min={1}
+          max={50} />
+      )
     } else {
       return null
     }

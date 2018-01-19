@@ -67,6 +67,18 @@ const label_to = {
   type: 'all'
 }
 
+const color_from = {
+  value: 'color_from',
+  title: 'Colors',
+  type: 'all'
+}
+
+const color_to = {
+  value: 'color_to',
+  title: '',
+  type: 'all'
+}
+
 const edge_label = {
   value: 'edge_label',
   title: 'Edge Label',
@@ -100,7 +112,9 @@ export const moreSettings = {
   projection: 'mercator',
   edgeFontSize: 8,
   strength: -30,
-  iterations: 20
+  iterations: 20,
+  nodeWidth: 16,
+  nodePadding: 20
 }
 
 export const moreSettingTitles = {
@@ -112,7 +126,9 @@ export const moreSettingTitles = {
   projection: 'Map projection',
   edgeFontSize: 'Edge font size',
   strength: 'Strength',
-  iterations: 'Iterations'
+  iterations: 'Iterations',
+  nodeWidth: 'Node width',
+  nodePadding: 'Node padding'
 }
 
 // chart classes
@@ -236,6 +252,14 @@ export const charts = [
     settings: [region, color],
     defaultShow: [true, false],
     moreSettings: ['map2', 'fontSize', 'color']
+  },
+  {
+    id: 1.14,
+    name: 'Sankey Diagram',
+    chartClass: 'more',
+    settings: [link_from, link_to, relation, label_from, label_to, edge_label, color_from, color_to],
+    defaultShow: [true, true, false, false, false, false],
+    moreSettings: ['fontSize', 'color', 'nodeWidth', 'nodePadding']
   },
 ]
 

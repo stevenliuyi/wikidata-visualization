@@ -116,23 +116,33 @@ export function getColorScaleFromValues(values, schemeName = 'Spectral') {
   return colorScale
 }
 
-export function getColorScale(props) {
+export function getColorScale(props, nodes = null) {
   // single color by default
   let colorScale = (v) => colorSchemes[schemeName](0.8)
   const schemeName = props.moreSettings.color
 
-  if (props.settings['color'] !== -1) {
+  // when nodes from a graph are present, values are extracted from node['color'] instead of the original data
+  if ((props.settings['color'] !== -1 && nodes == null) || (nodes != null && nodes[0]['color'] != null)) {
     const label = props.header[props.settings['color']]
-    const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
+    const selectedData = (nodes == null)
+      ? props.data.filter((item, i) => props.rowSelections.includes(i))
+      : nodes
+
     // numeric values
-    if (typeof(props.data[0][label]) === 'number') {
-      const minValue = d3.min(selectedData, d => d[label])
-      const maxValue = d3.max(selectedData, d => d[label])
-      colorScale = (v) => colorSchemes[schemeName]((v-minValue)/(maxValue-minValue))
+    if ((typeof(props.data[0][label]) === 'number' && nodes == null) || (typeof(nodes[0]['color']) === 'number' && nodes != null)) {
+      const minValue = d3.min(selectedData, d => (nodes == null) ? d[label] : d['color'])
+      const maxValue = d3.max(selectedData, d => (nodes == null) ? d[label] : d['color'])
+      colorScale = (minValue !== maxValue)
+        ? (v) => colorSchemes[schemeName]((v-minValue)/(maxValue-minValue))
+        : (v) => colorSchemes[schemeName](0.8)
     } else { // non-numeric values
-      const values = selectedData.map(item => item[label])
+      const values = (nodes == null)
+        ? selectedData.map(item => item[label])
+        : selectedData.map(item => item['color'])
       const unique_values = [...new Set(values)].sort()
-      colorScale = getColorScaleFromValues(unique_values, schemeName)
+      colorScale = (unique_values.length !== 1)
+        ? getColorScaleFromValues(unique_values, schemeName)
+        : (v) => colorSchemes[schemeName](0.8) // only one unique value
     }
   }
   return colorScale
