@@ -10,6 +10,7 @@ import Graph from './Graph'
 import CartogramMap from './CartogramMap'
 import ChoroplethMap from './ChoroplethMap'
 import SankeyDiagram from './SankeyDiagram'
+import Heatmap from './Heatmap'
 
 class Chart extends Component {
   state = {
@@ -77,6 +78,9 @@ class Chart extends Component {
             }
             { (this.state.show) && (this.props.chartId === 1.14) &&
                 <SankeyDiagram {...this.props} {...styles} />
+            }
+            { (this.state.show) && (this.props.chartId === 1.15) &&
+                <Heatmap {...this.props} {...styles} />
             }
           </div>
         }

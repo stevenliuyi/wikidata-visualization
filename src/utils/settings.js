@@ -114,7 +114,9 @@ export const moreSettings = {
   strength: -30,
   iterations: 20,
   nodeWidth: 16,
-  nodePadding: 20
+  nodePadding: 20,
+  sortRow: '',
+  sortColumn: ''
 }
 
 export const moreSettingTitles = {
@@ -128,7 +130,9 @@ export const moreSettingTitles = {
   strength: 'Strength',
   iterations: 'Iterations',
   nodeWidth: 'Node width',
-  nodePadding: 'Node padding'
+  nodePadding: 'Node padding',
+  sortRow: 'Sort row by',
+  sortColumn: 'Sort column by'
 }
 
 // chart classes
@@ -261,6 +265,14 @@ export const charts = [
     defaultShow: [true, true, false, false, false, false],
     moreSettings: ['fontSize', 'color', 'nodeWidth', 'nodePadding']
   },
+  {
+    id: 1.15,
+    name: 'Heatmap',
+    chartClass: 'more',
+    settings: [link_from, link_to, color, label_from, label_to],
+    defaultShow: [true, true, true, false, false],
+    moreSettings: ['sortRow', 'sortColumn', 'fontSize', 'color']
+  }
 ]
 
 export const getChartNames = () => {

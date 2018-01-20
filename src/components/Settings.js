@@ -28,7 +28,7 @@ class Settings extends Component {
     this.props.onChange(settings)
   }
 
-  getMoreSetting(setting) {
+  getMoreSetting(setting, header) {
     if (setting === 'fontSize' || setting === 'edgeFontSize') {
       return (
         <ReactBootstrapSlider
@@ -154,6 +154,25 @@ class Settings extends Component {
           min={1}
           max={50} />
       )
+    } else if ( setting === 'sortRow' || setting === 'sortColumn' ) {
+      return (
+        <FormControl
+          componentClass="select"
+          value={this.props.moreSettings[setting]}
+          onChange={(e)=>{
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onMoreSettingsChange(newSetting)
+          }}
+        >
+          <option value='none' key='none'>none</option>
+          {
+            header.map(h => (
+              <option value={h} key={h}>{ h }</option>
+            ))
+          }
+        </FormControl>
+      )
     } else {
       return null
     }
@@ -203,7 +222,7 @@ class Settings extends Component {
                     <FormGroup key={moreSetting}>
                       <Col componentClass={ControlLabel} sm={3}>{moreSettingTitles[moreSetting]}</Col>
                       <Col sm={9}>
-                        { this.getMoreSetting(moreSetting) }
+                        { this.getMoreSetting(moreSetting, this.props.header) }
                       </Col>
                     </FormGroup>
                   ))

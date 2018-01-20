@@ -1,13 +1,13 @@
 // convert the result from Wikidata to objects
 import * as d3 from 'd3'
-import { getColorScaleFromValues } from './scales'
+import { getColorScaleFromValues, getColors } from './scales'
 
 const numbers = ['double', 'float', 'decimal', 'integer', 'long', 'int', 'short', 'nonNegativeInteger', 'positiveInteger', 'unsignedLong', 'unsignedInt', 'unsignedShort', 'nonPositiveInteger', 'negativeInteger']
 const numberTypes = numbers.map(type => (
   `http://www.w3.org/2001/XMLSchema#${type}`
 ))
 
-// retunr converted value and data type associated with this value
+// return converted value and data type associated with this value
 function convertValue(value) {
   if (numberTypes.includes(value['datatype'])) {
     return [parseFloat(value['value']), 'number'] // number
@@ -90,7 +90,7 @@ export function getTreeRoot(props) {
   return null
 }
 
-// get matrix for chord diagram
+// get matrix (rows and columns are the same) for chord diagram
 export function getMatrix(props) {
   const from = props.header[props.settings['link-from']]  
   const to = props.header[props.settings['link-to']]  
@@ -118,6 +118,75 @@ export function getMatrix(props) {
   const colors = items.map(item => colorScale(item))
 
   return [matrix, colors, labels]
+}
+
+// get matrix (rows and columns are not the same in general) for heat map
+export function getMatrix2(props) {
+  const from = props.header[props.settings['link-from']]  
+  const to = props.header[props.settings['link-to']]  
+  const label_from = props.header[props.settings['label_from']] 
+  const label_to = props.header[props.settings['label_to']] 
+  const sort_row = props.moreSettings.sortRow
+  const sort_col = props.moreSettings.sortColumn
+
+  const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
+
+  const colors = getColors(props)
+
+  const maxItem = (a, b) => {
+    if (typeof(a) === 'number' || typeof(b) === 'number') {
+      return (a > b) ? a : b
+    } else {
+      return (a != null) ? a : b
+    }
+  }
+
+  let row_items = [...new Set(selectedData.map(item => item[from]))]
+  let col_items = [...new Set(selectedData.map(item => item[to]))]
+
+  // sort row and column
+  let row_valToBeSorted = row_items.map(row_item => null)
+  let col_valToBeSorted = col_items.map(col_item => null)
+
+  selectedData.forEach((item, i) => {
+    const rowIndex = row_items.indexOf(item[from])
+    const colIndex = col_items.indexOf(item[to])
+    row_valToBeSorted[rowIndex] = maxItem(row_valToBeSorted[rowIndex], item[sort_row])
+    col_valToBeSorted[colIndex] = maxItem(col_valToBeSorted[colIndex], item[sort_col])
+  })
+
+  const row_indices = [...row_items.keys()].sort((a, b) => {
+    return (row_valToBeSorted[a] < row_valToBeSorted[b]) ? -1 : 1
+  })
+  const col_indices = [...col_items.keys()].sort((a, b) => {
+    return (col_valToBeSorted[a] < col_valToBeSorted[b]) ? -1 : 1
+  })
+
+  row_items = row_indices.map(i => row_items[i])
+  col_items = col_indices.map(i => col_items[i])
+  
+  // initialize labels
+  let row_labels = row_items.map(row_item => '')
+  let col_labels = col_items.map(col_item => '')
+
+  // initialize matrix
+  let matrix = row_items.map((row_item, i) => col_items.map(col_item => ({
+    color: 'white',
+    row: i
+  })))
+
+  selectedData.forEach((item, i) => {
+    const rowIndex = row_items.indexOf(item[from])
+    const colIndex = col_items.indexOf(item[to])
+    matrix[rowIndex][colIndex] = {
+      color: colors[i],
+      row: rowIndex
+    }
+    row_labels[rowIndex] = item[label_from]
+    col_labels[colIndex] = item[label_to]
+  })
+  
+  return [matrix, row_labels, col_labels]
 }
 
 export function getGraph(props, link_index = false) {
