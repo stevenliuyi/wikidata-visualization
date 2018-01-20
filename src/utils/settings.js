@@ -277,7 +277,7 @@ export const charts = [
   },
   {
     id: 1.16,
-    name: 'OpenStreetMap',
+    name: 'Map',
     chartClass: 'map',
     settings: [coordinate],
     defaultShow: [true],
