@@ -182,6 +182,8 @@ class Settings extends Component {
     const chartId = charts.map(chart => chart.id).indexOf(this.props.chart)
     const chartMoreSettings = (chartId >= 0) ? charts[chartId].moreSettings : null
 
+    if (this.props.chart >= 2 || this.props.header.length === 0) return null 
+
     return (
       <PanelGroup activeKey={this.state.panelKey} onSelect={this.handleSelect} accordion>
         {
