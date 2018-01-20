@@ -6,6 +6,7 @@ import ReactBootstrapSlider from 'react-bootstrap-slider'
 import { colorSchemeNames, getColorScaleFromValues } from '../utils/scales'
 import { mapSettings, mapProjections } from '../utils/maps'
 import { map2Settings } from '../utils/maps2'
+import { baseMapSettings } from '../utils/basemap'
 
 class Settings extends Component {
 
@@ -169,6 +170,24 @@ class Settings extends Component {
           {
             header.map(h => (
               <option value={h} key={h}>{ h }</option>
+            ))
+          }
+        </FormControl>
+      )
+    } else if ( setting === 'baseMap' ) {
+      return (
+        <FormControl
+          componentClass="select"
+          value={this.props.moreSettings[setting]}
+          onChange={(e)=>{
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onMoreSettingsChange(newSetting)
+          }}
+        >
+          {
+            Object.keys(baseMapSettings).map(map => (
+              <option value={map} key={map}>{ map }</option>
             ))
           }
         </FormControl>

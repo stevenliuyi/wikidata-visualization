@@ -116,7 +116,8 @@ export const moreSettings = {
   nodeWidth: 16,
   nodePadding: 20,
   sortRow: '',
-  sortColumn: ''
+  sortColumn: '',
+  baseMap: 'OpenStreetMap'
 }
 
 export const moreSettingTitles = {
@@ -132,7 +133,8 @@ export const moreSettingTitles = {
   nodeWidth: 'Node width',
   nodePadding: 'Node padding',
   sortRow: 'Sort row by',
-  sortColumn: 'Sort column by'
+  sortColumn: 'Sort column by',
+  baseMap: 'Basemap'
 }
 
 // chart classes
@@ -272,6 +274,14 @@ export const charts = [
     settings: [link_from, link_to, color, label_from, label_to],
     defaultShow: [true, true, true, false, false],
     moreSettings: ['sortRow', 'sortColumn', 'fontSize', 'color']
+  },
+  {
+    id: 1.16,
+    name: 'OpenStreetMap',
+    chartClass: 'map',
+    settings: [coordinate],
+    defaultShow: [true],
+    moreSettings: ['baseMap']
   }
 ]
 
