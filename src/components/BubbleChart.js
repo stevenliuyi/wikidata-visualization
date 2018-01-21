@@ -37,18 +37,18 @@ const getD3Node = (props) => {
   
   //create the bubbles
   bubbles.append('circle')
-    .attr('id', function(d){ return d.data['id'] })
+    .attr('id', function(d){ return 'circle' + d.data['id'] })
     .attr('r', function(d){ return d.r })
     .style('fill', function(d) { return colorScale(d.data[props.header[props.settings['color']]]) })
   
   bubbles.append('clipPath')
-    .attr('id', function(d) { return 'clip-' + d.data['id'] })
+    .attr('id', function(d) { return 'clip-circle' + d.data['id'] })
     .append('use')
-    .attr('xlink:href', function(d) { return '#' + d.data['id'] })
+    .attr('xlink:href', function(d) { return '#circle' + d.data['id'] })
 
   //format the text for each bubble
   bubbles.append('text')
-    .attr('clip-path', function(d) { return 'url(#clip-' + d.data['id'] + ')'})
+    .attr('clip-path', function(d) { return 'url(#clip-circle' + d.data['id'] + ')'})
     .attr('x', 0)
     .attr('y', 0)
     .text(function(d){ return d.data[props.header[props.settings['label']]] })
