@@ -117,7 +117,9 @@ export const moreSettings = {
   nodePadding: 20,
   sortRow: '',
   sortColumn: '',
-  baseMap: 'OpenStreetMap'
+  baseMap: 'OpenStreetMap',
+  showCircles: true,
+  showMarkers: false
 }
 
 export const moreSettingTitles = {
@@ -134,7 +136,9 @@ export const moreSettingTitles = {
   nodePadding: 'Node padding',
   sortRow: 'Sort row by',
   sortColumn: 'Sort column by',
-  baseMap: 'Basemap'
+  baseMap: 'Basemap',
+  showCircles: 'Circles',
+  showMarkers: 'Markers'
 }
 
 // chart classes
@@ -279,9 +283,9 @@ export const charts = [
     id: 1.16,
     name: 'Map',
     chartClass: 'map',
-    settings: [coordinate],
-    defaultShow: [true],
-    moreSettings: ['baseMap']
+    settings: [coordinate, color, radius],
+    defaultShow: [true, false, false],
+    moreSettings: ['baseMap', 'showCircles', 'showMarkers', 'radius', 'color']
   }
 ]
 

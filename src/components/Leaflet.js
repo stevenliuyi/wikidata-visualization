@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import {
   Map,
   Marker,
+  CircleMarker,
   FeatureGroup
 } from 'react-leaflet'
 import Leaflet, { latLngBounds } from 'leaflet'
 import Basemap from './Basemap'
+import { getRadius, getColors } from '../utils/scales'
 import 'leaflet/dist/leaflet.css'
 
 Leaflet.Icon.Default.imagePath =
@@ -35,20 +37,47 @@ class LeafletMap extends Component {
       bounds.extend([90,180]).extend([-90,-180])
     }
 
+    const radii = getRadius(this.props)
+    const colors = getColors(this.props)
+
     return (
       <div>
         <Map
           style={{height: 350}}
           bounds={bounds}>
           <Basemap basemap={this.props.moreSettings.baseMap} />
-          <FeatureGroup>
-            {
-              coordData.map((coord, i) => 
-                <Marker key={i} position={coord}>
-                </Marker>
-              )
-            }
-          </FeatureGroup>
+          {
+            this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
+              .map((item, i) => {
+                if (item[this.props.header[this.props.settings['coordinate']]] != null) {
+                  const coord = item[this.props.header[this.props.settings['coordinate']]]
+                    .split(', ').map(parseFloat).reverse()
+                  
+                  return (
+                    <FeatureGroup key={i}>
+                      { this.props.moreSettings.showMarkers && (
+                        <Marker position={coord}>
+                        </Marker>
+                        )
+                      }
+                      { this.props.moreSettings.showCircles && (
+                        <CircleMarker
+                          center={coord}
+                          color='white'
+                          weight={1}
+                          fill={true}
+                          fillColor={colors[i]}
+                          fillOpacity={0.7}
+                          radius={parseFloat(radii[i])}>
+                        </CircleMarker>
+                        )
+                      }
+                    </FeatureGroup>
+                  )
+              }
+              return null
+            })
+          }
         </Map>
       </div>
     )

@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { PanelGroup, Panel, Form, FormGroup, FormControl, ControlLabel, Col } from 'react-bootstrap'
 import { charts, moreSettingTitles } from '../utils/settings'
-import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
 import ReactBootstrapSlider from 'react-bootstrap-slider'
+import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
+import Toggle from 'react-bootstrap-toggle'
+import 'react-bootstrap-toggle/dist/bootstrap2-toggle.css'
 import { colorSchemeNames, getColorScaleFromValues } from '../utils/scales'
 import { mapSettings, mapProjections } from '../utils/maps'
 import { map2Settings } from '../utils/maps2'
@@ -191,6 +193,25 @@ class Settings extends Component {
             ))
           }
         </FormControl>
+      )
+    } else if (setting === 'showCircles' || setting === 'showMarkers') {
+      return (
+        <Toggle
+          active={this.props.moreSettings[setting]}
+          on='Show'
+          off='Hide'
+          size='sm'
+          height={30}
+          width='100%'
+          onstyle='default'
+          offstyle='default'
+          handlestyle='primary'
+          onClick={(state)=>{
+            const newSetting = {}
+            newSetting[setting] = state
+            this.props.onMoreSettingsChange(newSetting)
+          }}
+        />
       )
     } else {
       return null

@@ -101,32 +101,36 @@ class Map extends Component {
             <Markers>
               {
                 this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
-                  .filter(item => item[this.props.header[this.props.settings['coordinate']]] != null)
-                  .map((item, i) => (
-                    <Marker key={i} marker={{ coordinates:
-                      item[this.props.header[this.props.settings['coordinate']]].split(', ').map(parseFloat) }}>
-                      <circle
-                        cx={0}
-                        cy={0}
-                        r={radii[i]}
-                        fill={colors[i]}
-                        opacity={0.8}
-                        stroke="white"
-                        strokeWidth="1.5"
-                      />
-                      <text
-                        textAnchor='middle'
-                        y={-5}
-                        style={{
-                          fontFamily: 'sans-serif',
-                          fill: 'black',
-                          opacity: '0,7',
-                          fontSize: this.props.moreSettings.fontSize
-                        }}>
-                        { item[this.props.header[this.props.settings['label']]] }
-                      </text>
-                    </Marker>
-                  ))
+                  .map((item, i) => {
+                    if (item[this.props.header[this.props.settings['coordinate']]] != null) {
+                      return (
+                        <Marker key={i} marker={{ coordinates:
+                          item[this.props.header[this.props.settings['coordinate']]].split(', ').map(parseFloat) }}>
+                          <circle
+                            cx={0}
+                            cy={0}
+                            r={radii[i]}
+                            fill={colors[i]}
+                            opacity={0.8}
+                            stroke="white"
+                            strokeWidth="1.5"
+                          />
+                          <text
+                            textAnchor='middle'
+                            y={-5}
+                            style={{
+                              fontFamily: 'sans-serif',
+                              fill: 'black',
+                              opacity: '0,7',
+                              fontSize: this.props.moreSettings.fontSize
+                            }}>
+                            { item[this.props.header[this.props.settings['label']]] }
+                          </text>
+                        </Marker>
+                      )
+                    }
+                    return null
+                  })
               }
             </Markers>
           </ZoomableGroup>
