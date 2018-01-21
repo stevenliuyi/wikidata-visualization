@@ -43,8 +43,10 @@ const getD3Node = (props) => {
   
   bubbles.append('clipPath')
     .attr('id', function(d) { return 'clip-circle' + d.data['id'] })
-    .append('use')
-    .attr('xlink:href', function(d) { return '#circle' + d.data['id'] })
+    .append('circle') // workaround fix for display bug in Safari: use the actual circle instead of 'use' element
+    .attr('r', function(d){ return d.r })
+    //.append('use')
+    //.attr('xlink:href', function(d) { return '#circle' + d.data['id'] })
 
   //format the text for each bubble
   bubbles.append('text')
