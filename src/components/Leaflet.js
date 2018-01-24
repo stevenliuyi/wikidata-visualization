@@ -53,27 +53,29 @@ class LeafletMap extends Component {
                   const coord = item[this.props.header[this.props.settings['coordinate']]]
                     .split(', ').map(parseFloat).reverse()
                   
-                  return (
-                    <FeatureGroup key={i}>
-                      { this.props.moreSettings.showMarkers && (
-                        <Marker position={coord}>
-                        </Marker>
-                        )
-                      }
-                      { this.props.moreSettings.showCircles && (
-                        <CircleMarker
-                          center={coord}
-                          color='white'
-                          weight={1}
-                          fill={true}
-                          fillColor={colors[i]}
-                          fillOpacity={0.7}
-                          radius={parseFloat(radii[i])}>
-                        </CircleMarker>
-                        )
-                      }
-                    </FeatureGroup>
+                  if (coord.length === 2) {
+                    return (
+                      <FeatureGroup key={i}>
+                        { this.props.moreSettings.showMarkers && (
+                          <Marker position={coord}>
+                          </Marker>
+                          )
+                        }
+                        { this.props.moreSettings.showCircles && (
+                          <CircleMarker
+                            center={coord}
+                            color='white'
+                            weight={1}
+                            fill={true}
+                            fillColor={colors[i]}
+                            fillOpacity={0.7}
+                            radius={parseFloat(radii[i])}>
+                          </CircleMarker>
+                          )
+                        }
+                      </FeatureGroup>
                   )
+                }
               }
               return null
             })
