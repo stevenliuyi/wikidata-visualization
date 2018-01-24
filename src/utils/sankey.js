@@ -1,5 +1,7 @@
+/* eslint no-loop-func: 0 no-unused-vars: 0 */
 import * as d3 from 'd3'
 
+// Sankey diagram d3 reference: https://bl.ocks.org/ebendennis/07c361ea822d99872adffea9c7ccf19b
 export var d3Sankey = function() {
   var sankey = {},
     nodeWidth = 24,
