@@ -12,6 +12,9 @@ const updateD3Node = (props) => {
   var colorScale = getColorScale(props)
   var graph = getGraph(props)
 
+  d3.selectAll('.d3ToolTip').remove()
+  var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
+
   var svg = d3.select('#chart')
 
   svg = svg.select('g')
@@ -89,13 +92,23 @@ const updateD3Node = (props) => {
       .on('drag', dragged)
       .on('end', dragended)
     )
+    .on('mousemove', function(d) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(d.tooltipHTML)
+    })
+    .on('mouseout', function(d) {
+      tooltip.style('display', 'none')
+    })
   
   node.append('circle')
     .attr('r', 4)
     .style('fill', function(d) { return colorScale(d.color) })
 
-  node.append('title')
-    .text(function(d) { return d.label })
+  //node.append('title')
+  //  .text(function(d) { return d.label })
   
   node.append('text')
     .attr('dy', -3)

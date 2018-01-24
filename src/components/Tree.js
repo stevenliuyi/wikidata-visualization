@@ -10,6 +10,9 @@ const getD3Node = (props) => {
 
   var colorScale = getColorScale(props)
   
+  d3.selectAll('.d3ToolTip').remove()
+  var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
+
   var d3node = new ReactFauxDOM.Element('svg')
 
   var svg = d3.select(d3node)
@@ -64,6 +67,16 @@ const getD3Node = (props) => {
   node.append('circle')
     .attr('r', 4)
     .style('fill', function(d) { return colorScale(d.data.color) })
+    .on('mousemove', function(d) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(d.data.tooltipHTML)
+    })
+    .on('mouseout', function(d) {
+      tooltip.style('display', 'none')
+    })
 
   // add labels
   node.append('text')
@@ -71,6 +84,16 @@ const getD3Node = (props) => {
     .attr('x', function(d) { return d.children ? -8 : -8 })
     .attr('text-anchor', function(d) { return d.children ? 'end' : 'start' })
     .text(function (d) { return d.data.label })
+    .on('mousemove', function(d) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(d.data.tooltipHTML)
+    })
+    .on('mouseout', function(d) {
+      tooltip.style('display', 'none')
+    })
 
   return d3node.toReact()
 } 

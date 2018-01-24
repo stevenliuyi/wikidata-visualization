@@ -7,9 +7,12 @@ import SVGPanZoom from './SVGPanZoom'
 // chord diagram d3 reference: https://bl.ocks.org/mbostock/4062006
 const getD3Node = (props) => {
 
+  d3.selectAll('.d3ToolTip').remove()
+  var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
+
   var d3node = new ReactFauxDOM.Element('svg')
   
-  var [matrix, colors, labels] = getMatrix(props)
+  var [matrix, colors, labels, tooltipHTMLs] = getMatrix(props)
 
   var svg = d3.select(d3node)
     .attr('width', props.width)
@@ -46,6 +49,16 @@ const getD3Node = (props) => {
     .style('fill', function(d) { return colors[d.index] })
     .style('stroke', function(d) { return d3.rgb(colors[d.index]).darker() })
     .attr('d', arc)
+    .on('mousemove', function(d) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(tooltipHTMLs[d.index])
+    })
+    .on('mouseout', function(d) {
+      tooltip.style('display', 'none')
+    })
 
   group.append('g')
     .attr('transform', function(d) {
@@ -55,12 +68,22 @@ const getD3Node = (props) => {
     .attr('transform', function(d) {
       return (d.startAngle+d.endAngle)/2 > Math.PI ? 'rotate(180) translate(-12)' : null
     })
-    .text(function(d) { return labels[d.index] })
+   .text(function(d) { return labels[d.index] })
     .style('text-anchor', function(d) {
       return (d.startAngle+d.endAngle)/2 > Math.PI ? 'end' : null
     })
     .style('font-family', 'sans-serif')
     .style('font-size', props.moreSettings.fontSize)
+    .on('mousemove', function(d) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(tooltipHTMLs[d.index])
+    })
+    .on('mouseout', function(d) {
+      tooltip.style('display', 'none')
+    })
   
   g.append('g')
     .attr('class', 'ribbons')

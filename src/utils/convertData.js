@@ -67,10 +67,12 @@ export function getTreeRoot(props) {
       // do not add duplicates and make sure the child has its own row
       // (perhaps same child with different parents could be added as two different nodes)
       if (!ids.includes(item[to]) && allFromIds.indexOf(item[to]) >= 0) { 
-        relationships.push({'id':   item[to],
-          'parent': item[from],
-          'label':  label ? selectedData[allFromIds.indexOf(item[to])][label] : '',
-          'color':  color ? selectedData[allFromIds.indexOf(item[to])][color] : ''
+        relationships.push({
+          'id':          item[to],
+          'parent':      item[from],
+          'label':       label ? selectedData[allFromIds.indexOf(item[to])][label] : '',
+          'color':       color ? selectedData[allFromIds.indexOf(item[to])][color] : '',
+          'tooltipHTML': getSingleTooltipHTML(item, props.header)
         })
         ids.push(item[to])
       }
@@ -105,6 +107,7 @@ export function getMatrix(props) {
   let matrix = items.map(item => items.map(item => 0))
 
   const labels = Array(items.length).fill('')
+  const tooltipHTMLs = Array(items.length).fill('')
 
   // fill data into the matrix
   selectedData.forEach(item => {
@@ -112,12 +115,13 @@ export function getMatrix(props) {
     const toIndex = items.indexOf(item[to])
     matrix[fromIndex][toIndex] += item[relation]
     if (label) labels[fromIndex] = item[label]
+    tooltipHTMLs[fromIndex] = getSingleTooltipHTML(item, props.header)
   })
 
   const colorScale = getColorScaleFromValues(items, props.moreSettings.color)
   const colors = items.map(item => colorScale(item))
 
-  return [matrix, colors, labels]
+  return [matrix, colors, labels, tooltipHTMLs]
 }
 
 // get matrix (rows and columns are not the same in general) for heat map
@@ -180,7 +184,8 @@ export function getMatrix2(props) {
     const colIndex = col_items.indexOf(item[to])
     matrix[rowIndex][colIndex] = {
       color: colors[i],
-      row: rowIndex
+      row: rowIndex,
+      tooltipHTML: getSingleTooltipHTML(item, props.header)
     }
     row_labels[rowIndex] = item[label_from]
     col_labels[colIndex] = item[label_to]
@@ -209,17 +214,17 @@ export function getGraph(props, link_index = false) {
   const nodes = items.map(q => ({ id: q }))
 
   // add labels to nodes
-  if (label_from || label_to || color || color_from || color_to ) {
-    selectedData.forEach(item => {
-      const toIndex = items.indexOf(item[to])
-      const fromIndex = items.indexOf(item[from])
-      nodes[toIndex]['label'] = (item[label_to]) ? item[label_to] : ''
-      nodes[fromIndex]['label'] = (item[label_from]) ? item[label_from] : ''
-      nodes[fromIndex]['color'] = (item[color]) ? item[color] : null
-      nodes[toIndex]['color'] = (item[color_to]) ? item[color_to] : null
-      nodes[fromIndex]['color'] = (item[color_from]) ? item[color_from] : null
-    })
-  }
+  selectedData.forEach(item => {
+    const toIndex = items.indexOf(item[to])
+    const fromIndex = items.indexOf(item[from])
+    nodes[toIndex]['label'] = (item[label_to]) ? item[label_to] : ''
+    nodes[fromIndex]['label'] = (item[label_from]) ? item[label_from] : ''
+    nodes[fromIndex]['color'] = (item[color]) ? item[color] : null
+    nodes[toIndex]['color'] = (item[color_to]) ? item[color_to] : null
+    nodes[fromIndex]['color'] = (item[color_from]) ? item[color_from] : null
+    nodes[toIndex]['tooltipHTML'] = getSingleTooltipHTML(item, props.header)
+    nodes[fromIndex]['tooltipHTML'] = getSingleTooltipHTML(item, props.header)
+  })
 
   // links
   const links = selectedData.filter( item => item[from] && item[to] ) // make sure both nodes exist
@@ -233,4 +238,21 @@ export function getGraph(props, link_index = false) {
 
   return { nodes, links }
 
+}
+
+
+export function getSingleTooltipHTML(item, header) {
+  return header.map(header => `<span><b>${header}:</b> ${item[header]}</span>`)
+      .join('<br />')
+}
+
+export function getTooltipHTML(props) {
+
+  const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
+
+  const html = selectedData.map(item => (
+    getSingleTooltipHTML(item, props.header)
+  ))
+
+  return html
 }

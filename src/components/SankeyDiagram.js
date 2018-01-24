@@ -8,8 +8,10 @@ import toposort from 'toposort'
 
 // Sankey diagram d3 reference: https://bl.ocks.org/ebendennis/07c361ea822d99872adffea9c7ccf19b
 const updateD3Node = (props) => {
-
   var graph = getGraph(props, true)
+
+  d3.selectAll('.d3ToolTip').remove()
+  var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
   
   // remove self-pointing links
   graph.links = graph.links.filter(link => (link.source !== link.target))
@@ -75,6 +77,16 @@ const updateD3Node = (props) => {
       .subject(function(d) { return d })
       .on('start', function() { this.parentNode.appendChild(this) })
       .on('drag', dragmove))
+    .on('mousemove', function(d) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(d.tooltipHTML)
+    })
+    .on('mouseout', function(d) {
+      tooltip.style('display', 'none')
+    })
 
   // add the rectangles for the nodes
   node.append('rect')

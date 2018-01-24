@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { getColorScale } from '../utils/scales'
+import { getTooltipHTML } from '../utils/convertData'
 import * as d3 from 'd3'
 import ReactFauxDOM from 'react-faux-dom'
 import SVGPanZoom from './SVGPanZoom'
@@ -8,7 +9,8 @@ import SVGPanZoom from './SVGPanZoom'
 // https://bl.ocks.org/mbostock/4063269
 // https://jrue.github.io/coding/2014/exercises/basicbubblepackchart/
 const getD3Node = (props) => {
-  var colorScale =getColorScale(props)
+  var colorScale = getColorScale(props)
+  var tooltipHTML = getTooltipHTML(props)
   
   var bubble = d3.pack()
     .size([props.width, props.height])
@@ -20,6 +22,9 @@ const getD3Node = (props) => {
     .attr('width', props.width)
     .attr('height', props.height)
     .attr('class', 'bubble')
+
+  d3.selectAll('.d3ToolTip').remove()
+  var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
   
   var data = props.data.filter((item, i) => props.rowSelections.includes(i))
     .map((d, index) => { d.id = index; return d })
@@ -40,6 +45,16 @@ const getD3Node = (props) => {
     .attr('id', function(d){ return 'circle' + d.data['id'] })
     .attr('r', function(d){ return d.r })
     .style('fill', function(d) { return colorScale(d.data[props.header[props.settings['color']]]) })
+    .on('mousemove', function(d,i) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(tooltipHTML[i])
+    })
+    .on('mouseout', function(d) {
+      tooltip.style('display', 'none')
+    })
   
   bubbles.append('clipPath')
     .attr('id', function(d) { return 'clip-circle' + d.data['id'] })
@@ -57,6 +72,16 @@ const getD3Node = (props) => {
     .style('font-family', 'sans-serif')
     .style('font-size', props.moreSettings.fontSize)
     .style('text-anchor', 'middle')
+    .on('mousemove', function(d,i) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(tooltipHTML[i])
+    })
+    .on('mouseout', function(d) {
+      tooltip.style('display', 'none')
+    })
 
   return d3node.toReact()
 } 

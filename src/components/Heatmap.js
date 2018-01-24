@@ -9,6 +9,9 @@ import SVGPanZoom from './SVGPanZoom'
 // https://bost.ocks.org/mike/miserables/
 const getD3Node = (props) => {
 
+  d3.selectAll('.d3ToolTip').remove()
+  var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
+
   var d3node = new ReactFauxDOM.Element('svg')
   
   var [matrix, row_labels, col_labels] = getMatrix2(props)
@@ -72,6 +75,14 @@ const getD3Node = (props) => {
       .style('fill', function(d,i) { return d.color })
       .on('mouseover', mouseover)
       .on('mouseout', mouseout)
+      .on('mousemove', function(d) {
+        tooltip
+          .style('left', d3.event.pageX + 10 + 'px')
+          .style('top', d3.event.pageY + 10 + 'px')
+          .style('display', 'inline-block')
+          .html(d.tooltipHTML)
+      })
+  
   }
 
   function mouseover(p,j) {
@@ -90,6 +101,7 @@ const getD3Node = (props) => {
     d3.selectAll('text')
       .style('font-weight','normal')
       .style('fill', 'black')
+    tooltip.style('display', 'none')
   }
   
   return d3node.toReact()
