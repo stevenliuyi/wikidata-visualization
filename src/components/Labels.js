@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 const renderLabels = (props) => {
   return (item, index) => {
     const labelProps = {
+      className: 'circleLabel',
       x: props.xScale(parseFloat(item[props.xLabel])),
       y: props.yScale(parseFloat(item[props.yLabel])),
       opacity: 0.7,

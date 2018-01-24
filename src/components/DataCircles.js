@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 const renderCircles = (props) => {
   return (item, index) => {
     const circleProps = {
+      className: 'circle',
       cx: props.xScale(parseFloat(item[props.xLabel])),
       cy: props.yScale(parseFloat(item[props.yLabel])),
       r: props.radii[index],

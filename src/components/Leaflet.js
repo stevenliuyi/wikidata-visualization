@@ -3,11 +3,13 @@ import {
   Map,
   Marker,
   CircleMarker,
+  Tooltip,
   FeatureGroup
 } from 'react-leaflet'
 import Leaflet, { latLngBounds } from 'leaflet'
 import Basemap from './Basemap'
 import { getRadius, getColors } from '../utils/scales'
+import { getTooltipHTML } from '../utils/convertData'
 import 'leaflet/dist/leaflet.css'
 
 Leaflet.Icon.Default.imagePath =
@@ -39,6 +41,7 @@ class LeafletMap extends Component {
 
     const radii = getRadius(this.props)
     const colors = getColors(this.props)
+    const tooltipHTMLs = getTooltipHTML(this.props)
 
     return (
       <div>
@@ -58,6 +61,9 @@ class LeafletMap extends Component {
                       <FeatureGroup key={i}>
                         { this.props.moreSettings.showMarkers && (
                           <Marker position={coord}>
+                            <Tooltip>
+                              <div dangerouslySetInnerHTML={{ __html: tooltipHTMLs[i] }} />
+                            </Tooltip>
                           </Marker>
                           )
                         }
@@ -70,6 +76,9 @@ class LeafletMap extends Component {
                             fillColor={colors[i]}
                             fillOpacity={0.7}
                             radius={parseFloat(radii[i])}>
+                            <Tooltip>
+                              <div dangerouslySetInnerHTML={{ __html: tooltipHTMLs[i] }} />
+                            </Tooltip>
                           </CircleMarker>
                           )
                         }
