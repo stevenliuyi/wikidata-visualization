@@ -4,6 +4,7 @@ import 'react-table/react-table.css'
 import checkboxHOC from 'react-table/lib/hoc/selectTable'
 import { Well } from 'react-bootstrap'
 import { getDataTypeIndices } from '../utils/convertData'
+import { getURL } from '../utils/commons'
 
 const CheckboxTable = checkboxHOC(ReactTable)
 
@@ -29,7 +30,7 @@ class DataTable extends Component {
     if (dataType === 'item') {
       return (<a target='_blank' href={`https://www.wikidata.org/wiki/${row.value}`}>{row.value}</a>)
     } else if (dataType === 'image' && row.value != null) {
-      return (<a target='_blank' href={row.value}><img src={row.value} width={48} alt='' /></a>)
+      return (<a target='_blank' href={row.value}><img src={getURL(row.value, '50px')} width={48} alt='' /></a>)
     } else {
       return row.value
     }

@@ -3,11 +3,13 @@ import Gallery from 'react-photo-gallery'
 import Lightbox from 'react-images'
 import OnImagesLoaded from 'react-on-images-loaded'
 import Measure from 'react-measure'
+import { getURL } from '../utils/commons'
 
 class ImageGallery extends Component {
   state = {
     currentImage: 0,
     photos: [],
+    lightbox_photos: [],
     imgInfo: [],
     width: -1
   }
@@ -44,17 +46,22 @@ class ImageGallery extends Component {
 
   handleImagesLoaded(info) {
     const imgInfo = (info != null) ? info : this.state.imgInfo
-    let photos = []
+    let photos = [],
+        lightbox_photos = []
     imgInfo.forEach((img, i) => {
       const imgElement = document.getElementById(`img${i}`)
       if (imgElement.naturalWidth > 0) photos.push({
-        src: img.src,
+        src: getURL(img.src, '320px'),
         width: imgElement.naturalWidth,
         height: imgElement.naturalHeight,
         caption:img.caption
       })
+      if (imgElement.naturalWidth > 0) lightbox_photos.push({
+        src: img.src,
+        caption:img.caption
+      })
     })
-    this.setState({ photos })
+    this.setState({ photos, lightbox_photos })
   }
 
   openLightbox(event, obj) {
@@ -92,7 +99,7 @@ class ImageGallery extends Component {
         >
           {
             this.state.imgInfo.map((img, i) => (
-              <img id={`img${i}`} src={img.src} alt='' style={{display: 'none'}} />
+              <img id={`img${i}`} src={getURL(img.src,'50px')} alt='' style={{display: 'none'}} />
             ))
           }      
         </OnImagesLoaded>
@@ -118,7 +125,7 @@ class ImageGallery extends Component {
             }
           }
         </Measure>
-        <Lightbox images={this.state.photos}
+        <Lightbox images={this.state.lightbox_photos}
           onClose={this.closeLightbox}
           onClickPrev={this.gotoPrevious}
           onClickNext={this.gotoNext}
