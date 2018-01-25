@@ -101,6 +101,11 @@ class Query extends Component {
               tabSize={2}
               onChange={this.updateCode}
               onBeforeLoad={() => this.updateCode('# Enter a Wikidata SPARQL query here')}
+              onLoad={(_editor) => {
+                // Remove warning message on console:
+                // Automatically scrolling cursor into view after selection change this will be disabled in the next version set editor.$blockScrolling = Infinity to disable this message
+                _editor.$blockScrolling = Infinity
+              }}
               enableBasicAutocompletion={[this.myCompleter]}
               enableLiveAutocompletion={true}
             />
