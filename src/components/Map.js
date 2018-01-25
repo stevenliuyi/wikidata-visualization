@@ -44,16 +44,16 @@ class Map extends Component {
     var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
 
     d3.selectAll('.rsm-marker')
-    .on('mousemove', function(d,i) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(tooltipHTMLs[i])
-    })
-    .on('mouseout', function(d) {
-      tooltip.style('display', 'none')
-    })
+      .on('mousemove', function(d,i) {
+        tooltip
+          .style('left', d3.event.pageX + 10 + 'px')
+          .style('top', d3.event.pageY + 10 + 'px')
+          .style('display', 'inline-block')
+          .html(tooltipHTMLs[i])
+      })
+      .on('mouseout', function(d) {
+        tooltip.style('display', 'none')
+      })
 
   }
 

@@ -65,7 +65,7 @@ class LeafletMap extends Component {
                               <div dangerouslySetInnerHTML={{ __html: tooltipHTMLs[i] }} />
                             </Tooltip>
                           </Marker>
-                          )
+                        )
                         }
                         { this.props.moreSettings.showCircles && (
                           <CircleMarker
@@ -80,14 +80,14 @@ class LeafletMap extends Component {
                               <div dangerouslySetInnerHTML={{ __html: tooltipHTMLs[i] }} />
                             </Tooltip>
                           </CircleMarker>
-                          )
+                        )
                         }
                       </FeatureGroup>
-                  )
+                    )
+                  }
                 }
-              }
-              return null
-            })
+                return null
+              })
           }
         </Map>
       </div>

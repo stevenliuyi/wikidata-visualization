@@ -26,9 +26,7 @@ class ScatterPlot extends Component {
           colors={colors}
           {...this.props}
           {...scales} />
-        { this.props.settings['label'] !== -1 &&
-          <Labels xLabel={xLabel} yLabel={yLabel} {...this.props} {...scales} />
-        }
+        <Labels xLabel={xLabel} yLabel={yLabel} {...this.props} {...scales} />
         <XYAxis {...this.props} {...scales} />
       </svg>
     )

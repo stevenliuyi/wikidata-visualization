@@ -68,7 +68,7 @@ const getD3Node = (props) => {
     .attr('transform', function(d) {
       return (d.startAngle+d.endAngle)/2 > Math.PI ? 'rotate(180) translate(-12)' : null
     })
-   .text(function(d) { return labels[d.index] })
+    .text(function(d) { return labels[d.index] })
     .style('text-anchor', function(d) {
       return (d.startAngle+d.endAngle)/2 > Math.PI ? 'end' : null
     })

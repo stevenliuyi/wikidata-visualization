@@ -243,7 +243,7 @@ export function getGraph(props, link_index = false) {
 
 export function getSingleTooltipHTML(item, header) {
   return header.map(header => `<span><b>${header}:</b> ${item[header]}</span>`)
-      .join('<br />')
+    .join('<br />')
 }
 
 export function getTooltipHTML(props) {

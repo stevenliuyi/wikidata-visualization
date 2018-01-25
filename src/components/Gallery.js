@@ -47,7 +47,7 @@ class ImageGallery extends Component {
   handleImagesLoaded(info) {
     const imgInfo = (info != null) ? info : this.state.imgInfo
     let photos = [],
-        lightbox_photos = []
+      lightbox_photos = []
     imgInfo.forEach((img, i) => {
       const imgElement = document.getElementById(`img${i}`)
       if (imgElement.naturalWidth > 0) photos.push({
