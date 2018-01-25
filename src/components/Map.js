@@ -10,6 +10,8 @@ import {
 import { Button, ButtonGroup } from 'react-bootstrap'
 import { getRadius, getColors } from '../utils/scales'
 import { mapSettings } from '../utils/maps'
+import * as d3 from 'd3'
+import { getTooltipHTML } from '../utils/convertData'
 
 const wrapperStyles = {
   width: '100%',
@@ -32,6 +34,27 @@ class Map extends Component {
     this.setState({ center: mapSettings[nextProps.moreSettings.map].center })
     this.setState({ center: [100,90]})
     this.setState({ center: mapSettings[nextProps.moreSettings.map].center })
+  }
+
+  componentDidMount() {
+
+    const tooltipHTMLs = getTooltipHTML(this.props)
+
+    d3.selectAll('.d3ToolTip').remove()
+    var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
+
+    d3.selectAll('.rsm-marker')
+    .on('mousemove', function(d,i) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(tooltipHTMLs[i])
+    })
+    .on('mouseout', function(d) {
+      tooltip.style('display', 'none')
+    })
+
   }
 
   handleZoomIn() {
