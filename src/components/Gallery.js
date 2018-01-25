@@ -4,6 +4,9 @@ import Lightbox from 'react-images'
 import OnImagesLoaded from 'react-on-images-loaded'
 import Measure from 'react-measure'
 import { getURL } from '../utils/commons'
+import { getSingleTooltipHTML } from '../utils/convertData'
+import Image from './Image'
+import * as d3 from 'd3'
 
 class ImageGallery extends Component {
   state = {
@@ -31,12 +34,18 @@ class ImageGallery extends Component {
   }
 
   getSources(props) {
+
+    d3.selectAll('.d3ToolTip').remove()
+    var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
+
     const imageLabel = props.header[props.settings.image]
     const imgInfo = props.data.filter((item, i) => props.rowSelections.includes(i))
       .filter(item => item[imageLabel] != null)
       .map(item => ({
         src: item[imageLabel],
-        caption: item[props.header[props.settings.label]]
+        caption: item[props.header[props.settings.label]],
+        tooltip: tooltip,
+        tooltipHTML: getSingleTooltipHTML(item, props.header)
       }))
       .slice(0, 100) // only load the first 100 images
     this.setState({ imgInfo })
@@ -54,7 +63,9 @@ class ImageGallery extends Component {
         src: getURL(img.src, '320px'),
         width: imgElement.naturalWidth,
         height: imgElement.naturalHeight,
-        caption:img.caption
+        caption:img.caption,
+        tooltip: img.tooltip,
+        tooltiphtml: img.tooltipHTML
       })
       if (imgElement.naturalWidth > 0) lightbox_photos.push({
         src: img.src,
@@ -99,7 +110,7 @@ class ImageGallery extends Component {
         >
           {
             this.state.imgInfo.map((img, i) => (
-              <img id={`img${i}`} src={getURL(img.src,'50px')} alt='' style={{display: 'none'}} />
+              <img id={`img${i}`} key={`img${i}`} src={getURL(img.src,'10px')} alt='' style={{display: 'none'}} />
             ))
           }      
         </OnImagesLoaded>
@@ -121,7 +132,16 @@ class ImageGallery extends Component {
               if (this.state.width >= 768) {
                 columns = 4
               }
-              return <div ref={measureRef}><Gallery photos={this.state.photos} columns={columns} onClick={this.openLightbox} /></div>
+              return (
+                <div ref={measureRef}>
+                  <Gallery
+                    photos={this.state.photos}
+                    columns={columns}
+                    onClick={this.openLightbox}
+                    ImageComponent={Image}
+                  />
+                </div>
+              )
             }
           }
         </Measure>
