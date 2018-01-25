@@ -1,0 +1,17 @@
+# Most common family names in Japan
+
+SELECT DISTINCT
+?familyNameItem ?familyName ?kanaName  ?romanName
+(COUNT(*) AS ?count)
+WHERE
+{
+  ?personItem wdt:P31 wd:Q5 ; # human
+          wdt:P27 wd:Q17 ; # Japan
+          wdt:P734 ?familyNameItem .
+  OPTIONAL { ?familyNameItem wdt:P1814 ?kanaName . }
+  OPTIONAL { ?familyNameItem p:P1814/pq:P2125 ?romanName . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "ja".
+                           ?familyNameItem rdfs:label ?familyName . }
+}
+GROUP BY ?familyNameItem ?familyName ?kanaName ?romanName
+ORDER BY DESC(?count)

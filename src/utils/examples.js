@@ -32,14 +32,33 @@ export const examples = [
     title: '20th-century earthquakes',
     filename: 'earthquakes.rq'
   },
-  { title: 'Impressionist and post-impressionist paintings in the Metropolitan Museum of Art',
+  {
+    title: 'Impressionist and post-impressionist paintings in the Metropolitan Museum of Art',
     filename: 'met-impressionist.rq'
   },
-  { title: 'Posthumous marriages',
+  {
+    title: 'Posthumous marriages',
     filename: 'posthumous-marriages.rq'
   },
-  { title: 'People died in coups in Chinese history',
+  {
+    title: 'People died in coups in Chinese history',
     filename: 'china-coup-death.rq'
+  },
+  {
+    title: 'A Song of Ice and Fire character relationships',
+    filename: 'asoiaf-characters.rq'
+  },
+  {
+    title: 'Most common family names in Japan',
+    filename: 'japanese-names.rq'
+  },
+  {
+    title: 'Giant pandas',
+    filename: 'giant-pandas.rq'
+  },
+  {
+    title: 'Party and State Leaders of China',
+    filename: 'china-leaders.rq'
   }
 ]
 

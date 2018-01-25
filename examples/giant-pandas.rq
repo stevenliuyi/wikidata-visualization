@@ -1,0 +1,26 @@
+# Giant pandas
+
+SELECT
+?pandaItem ?englishName ?chineseName ?image ?gender ?studNumber
+?fatherItem ?fatherName ?motherItem ?motherName ?dateOfBirth ?dateOfDeath
+WHERE
+{
+  ?pandaItem wdt:P31 wd:Q33602 . # giant panda
+  OPTIONAL { ?pandaItem wdt:P21 [ rdfs:label ?gender ] .
+             FILTER ( LANG(?gender) = 'en' ) . }
+  OPTIONAL { ?pandaItem wdt:P18 ?image . }
+  OPTIONAL { ?pandaItem p:P528 [ ps:P528 ?studNumber ;
+                                 pq:P972 wd:Q46596139 ] . } # International Studbook for Giant Panda
+  OPTIONAL { ?pandaItem rdfs:label ?englishName .
+             FILTER( LANG(?englishName) = 'en' ) . }
+  OPTIONAL { ?pandaItem rdfs:label ?chineseName .
+             FILTER( LANG(?chineseName) = 'zh' ) . }
+  OPTIONAL { ?pandaItem wdt:P22 ?fatherItem .
+             ?fatherItem rdfs:label ?fatherName .
+             FILTER ( LANG(?fatherName) = 'en' ) . }
+  OPTIONAL { ?pandaItem wdt:P22 ?motherItem .
+             ?motherItem rdfs:label ?motherName .
+             FILTER ( LANG(?motherName) = 'en' ) . }   
+  OPTIONAL { ?pandaItem wdt:P569 ?dateOfBirth . }
+  OPTIONAL { ?pandaItem wdt:P570 ?dateOfDeath . }
+}
