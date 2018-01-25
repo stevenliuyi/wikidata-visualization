@@ -4,6 +4,7 @@ import { getTooltipHTML } from '../utils/convertData'
 import * as d3 from 'd3'
 import ReactFauxDOM from 'react-faux-dom'
 import SVGPanZoom from './SVGPanZoom'
+import chroma from 'chroma-js'
 
 // bubble chart d3 references
 // https://bl.ocks.org/mbostock/4063269
@@ -39,12 +40,22 @@ const getD3Node = (props) => {
     .enter().append('g')
     .attr('class','node')
     .attr('transform', function(d) {return `translate(${d.x},${d.y})`})
+    .on('mouseover', function(d) {
+      d3.select(`#circle${d.data.id}`)
+        .attr('fill', function() {
+          return chroma(colorScale(d.data[props.header[props.settings['color']]])).brighten(0.6)
+        })
+    })
+    .on('mouseout', function(d) {
+      d3.select(`#circle${d.data.id}`)
+        .attr('fill', function() { return colorScale(d.data[props.header[props.settings['color']]]) })
+    })
   
   //create the bubbles
   bubbles.append('circle')
     .attr('id', function(d){ return 'circle' + d.data['id'] })
     .attr('r', function(d){ return d.r })
-    .style('fill', function(d) { return colorScale(d.data[props.header[props.settings['color']]]) })
+    .attr('fill', function(d) { return colorScale(d.data[props.header[props.settings['color']]]) })
     .on('mousemove', function(d,i) {
       tooltip
         .style('left', d3.event.pageX + 10 + 'px')
