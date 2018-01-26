@@ -4,6 +4,7 @@ import { getTreeRoot } from '../utils/convertData'
 import { getColorScale } from '../utils/scales'
 import ReactFauxDOM from 'react-faux-dom'
 import SVGPanZoom from './SVGPanZoom'
+import chroma from 'chroma-js'
 
 // radial tree d3 reference: https://bl.ocks.org/mbostock/4063550
 const getD3Node = (props) => {
@@ -74,11 +75,24 @@ const getD3Node = (props) => {
     .attr('transform', function(d) {
       return 'translate(' + radialPoint(d.x, d.y) + ')'
     })
+    .on('mouseover', function(d,i) {
+      d3.select('#circle'+i)
+        .attr('fill', chroma(colorScale(d.data.color)).brighten(0.6))
+      d3.select('#text'+i)
+        .attr('font-weight', 'bold')
+    })
+    .on('mouseout', function(d,i) {
+      d3.select('#circle'+i)
+        .attr('fill', colorScale(d.data.color))
+      d3.select('#text'+i)
+        .attr('font-weight', 'normal')
+    })
 
   // add circles
   node.append('circle')
+    .attr('id', function(d,i) { return 'circle' + i })
     .attr('r', 4)
-    .style('fill', function(d) { return colorScale(d.data.color) })
+    .attr('fill', function(d) { return colorScale(d.data.color) })
     .on('mousemove', function(d) {
       tooltip
         .style('left', d3.event.pageX + 10 + 'px')
@@ -92,6 +106,7 @@ const getD3Node = (props) => {
 
   // add labels
   node.append('text')
+    .attr('id', function(d,i) { return 'text' + i })
     .attr('dy', '0.3em')
     .attr('x', function(d) { return (d.x < Math.PI) === (!d.children) ? 6 : -6 })
     .attr('text-anchor', function(d) { return (d.x < Math.PI) === (!d.children) ? 'start' : 'end' })

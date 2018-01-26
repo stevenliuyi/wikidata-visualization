@@ -42,13 +42,15 @@ const getD3Node = (props) => {
     .attr('transform', function(d) {return `translate(${d.x},${d.y})`})
     .on('mouseover', function(d) {
       d3.select(`#circle${d.data.id}`)
-        .attr('fill', function() {
-          return chroma(colorScale(d.data[props.header[props.settings['color']]])).brighten(0.6)
-        })
+        .attr('fill', chroma(colorScale(d.data[props.header[props.settings['color']]])).brighten(0.6))
+      d3.select(`#text${d.data.id}`)
+        .attr('font-weight', 'bold')
     })
     .on('mouseout', function(d) {
       d3.select(`#circle${d.data.id}`)
         .attr('fill', function() { return colorScale(d.data[props.header[props.settings['color']]]) })
+      d3.select(`#text${d.data.id}`)
+        .attr('font-weight', 'normal')
     })
   
   //create the bubbles
@@ -76,6 +78,7 @@ const getD3Node = (props) => {
 
   //format the text for each bubble
   bubbles.append('text')
+    .attr('id', function(d){ return 'text' + d.data['id'] })
     .attr('clip-path', function(d) { return 'url(#clip-circle' + d.data['id'] + ')'})
     .attr('x', 0)
     .attr('y', 0)

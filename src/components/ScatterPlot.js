@@ -6,6 +6,7 @@ import { getXYScales, getRadius, getColors } from '../utils/scales'
 import { getTooltipHTML } from '../utils/convertData'
 import SVGPanZoom from './SVGPanZoom'
 import * as d3 from 'd3'
+import chroma from 'chroma-js'
 
 class ScatterPlot extends Component {
   render() {
@@ -33,6 +34,12 @@ class ScatterPlot extends Component {
 
     // add tooltips
     d3.selectAll('.circle')
+      .on('mouseover', function(d,i) {
+        d3.select('#circle'+i)
+          .attr('fill', chroma(colors[i]).brighten(0.6))
+        d3.select('#text'+i)
+          .attr('font-weight', 'bold')
+      })
       .on('mousemove', function(d,i) {
         tooltip
           .style('left', d3.event.pageX + 10 + 'px')
@@ -40,11 +47,21 @@ class ScatterPlot extends Component {
           .style('display', 'inline-block')
           .html(tooltipHTMLs[i])
       })
-      .on('mouseout', function(d) {
+      .on('mouseout', function(d,i) {
         tooltip.style('display', 'none')
+        d3.select('#circle'+i)
+          .attr('fill', colors[i])
+        d3.select('#text'+i)
+          .attr('font-weight', 'normal')
       })
 
     d3.selectAll('.circleLabel')
+      .on('mouseover', function(d,i) {
+        d3.select('#circle'+i)
+          .attr('fill', chroma(colors[i]).brighten(0.6))
+        d3.select('#text'+i)
+          .attr('font-weight', 'bold')
+      })
       .on('mousemove', function(d,i) {
         tooltip
           .style('left', d3.event.pageX + 10 + 'px')
@@ -52,8 +69,12 @@ class ScatterPlot extends Component {
           .style('display', 'inline-block')
           .html(tooltipHTMLs[i])
       })
-      .on('mouseout', function(d) {
+      .on('mouseout', function(d,i) {
         tooltip.style('display', 'none')
+        d3.select('#circle'+i)
+          .attr('fill', colors[i])
+        d3.select('#text'+i)
+          .attr('font-weight', 'normal')
       })
 
     return (

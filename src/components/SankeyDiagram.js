@@ -5,6 +5,7 @@ import { getColorScale } from '../utils/scales'
 import SVGPanZoom from './SVGPanZoom'
 import { d3Sankey } from '../utils/sankey'
 import toposort from 'toposort'
+import chroma from 'chroma-js'
 
 // Sankey diagram d3 reference: https://bl.ocks.org/ebendennis/07c361ea822d99872adffea9c7ccf19b
 const updateD3Node = (props) => {
@@ -77,6 +78,12 @@ const updateD3Node = (props) => {
       .subject(function(d) { return d })
       .on('start', function() { this.parentNode.appendChild(this) })
       .on('drag', dragmove))
+    .on('mouseover', function(d,i) {
+      d3.select('#rect' + i)
+        .attr('fill', chroma(colorScale(d.color)).brighten(0.6))
+      d3.select('#text' + i)
+        .attr('font-weight', 'bold')
+    })
     .on('mousemove', function(d) {
       tooltip
         .style('left', d3.event.pageX + 10 + 'px')
@@ -84,21 +91,27 @@ const updateD3Node = (props) => {
         .style('display', 'inline-block')
         .html(d.tooltipHTML)
     })
-    .on('mouseout', function(d) {
+    .on('mouseout', function(d,i) {
       tooltip.style('display', 'none')
+      d3.select('#rect' + i)
+        .attr('fill', colorScale(d.color))
+      d3.select('#text' + i)
+        .attr('font-weight', 'normal')
     })
 
   // add the rectangles for the nodes
   node.append('rect')
+    .attr('id', function(d,i) { return 'rect' + i })
     .attr('height', function(d) { return d.dy })
     .attr('width', sankey.nodeWidth())
-    .style('fill', function(d) { return colorScale(d.color) })
+    .attr('fill', function(d) { return colorScale(d.color) })
     .style('stroke', 'white')
     .append('title')
     .text(function(d) { return d.label })
 
   // add in the title for the nodes
   node.append('text')
+    .attr('text', function(d,i) { return 'text' + i })
     .attr('x', -6)
     .attr('y', function(d) { return d.dy / 2 })
     .attr('dy', '.35em')

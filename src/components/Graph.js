@@ -3,6 +3,7 @@ import * as d3 from 'd3'
 import { getGraph } from '../utils/convertData'
 import { getColorScale } from '../utils/scales'
 import SVGPanZoom from './SVGPanZoom'
+import chroma from 'chroma-js'
 
 // force-directed graph d3 references:
 // https://bl.ocks.org/mbostock/4062045
@@ -92,6 +93,12 @@ const updateD3Node = (props) => {
       .on('drag', dragged)
       .on('end', dragended)
     )
+    .on('mouseover', function(d,i) {
+      d3.select('#circle'+i)
+        .attr('fill', chroma(colorScale(d.color)).brighten(0.6))
+      d3.select('#text'+i)
+        .attr('font-weight', 'bold')
+    })
     .on('mousemove', function(d) {
       tooltip
         .style('left', d3.event.pageX + 10 + 'px')
@@ -99,18 +106,24 @@ const updateD3Node = (props) => {
         .style('display', 'inline-block')
         .html(d.tooltipHTML)
     })
-    .on('mouseout', function(d) {
+    .on('mouseout', function(d,i) {
       tooltip.style('display', 'none')
+      d3.select('#circle'+i)
+        .attr('fill', colorScale(d.color))
+      d3.select('#text'+i)
+        .attr('font-weight', 'normal')
     })
   
   node.append('circle')
+    .attr('id', function(d,i) { return 'circle' + i })
     .attr('r', 4)
-    .style('fill', function(d) { return colorScale(d.color) })
+    .attr('fill', function(d) { return colorScale(d.color) })
 
   //node.append('title')
   //  .text(function(d) { return d.label })
   
   node.append('text')
+    .attr('id', function(d,i) { return 'text' + i })
     .attr('dy', -3)
     .attr('font-size', props.moreSettings.fontSize)
     .attr('opacity', 0.7)

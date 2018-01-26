@@ -3,6 +3,7 @@ import * as d3 from 'd3'
 import { getMatrix } from '../utils/convertData'
 import ReactFauxDOM from 'react-faux-dom'
 import SVGPanZoom from './SVGPanZoom'
+import chroma from 'chroma-js'
 
 // chord diagram d3 reference: https://bl.ocks.org/mbostock/4062006
 const getD3Node = (props) => {
@@ -44,9 +45,21 @@ const getD3Node = (props) => {
     .selectAll('g')
     .data(function(chords) { return chords.groups })
     .enter().append('g')
-  
+    .on('mouseover', function(d) {
+      d3.select('#arc'+d.index)
+        .attr('fill', chroma(colors[d.index]).brighten(0.6))
+      d3.select('#text'+d.index)
+        .attr('font-weight', 'bold')
+    })
+    .on('mouseout', function(d) {
+      d3.select('#arc'+d.index).attr('fill', colors[d.index])
+      d3.select('#text'+d.index)
+        .attr('font-weight', 'normal')
+    })
+
   group.append('path')
-    .style('fill', function(d) { return colors[d.index] })
+    .attr('id', function(d) { return 'arc' + d.index })
+    .attr('fill', function(d) { return colors[d.index] })
     .style('stroke', function(d) { return d3.rgb(colors[d.index]).darker() })
     .attr('d', arc)
     .on('mousemove', function(d) {
@@ -56,7 +69,7 @@ const getD3Node = (props) => {
         .style('display', 'inline-block')
         .html(tooltipHTMLs[d.index])
     })
-    .on('mouseout', function(d) {
+    .on('mouseout', function(d,i) {
       tooltip.style('display', 'none')
     })
 
@@ -64,6 +77,7 @@ const getD3Node = (props) => {
     .attr('transform', function(d) {
       return 'rotate(' + ((d.startAngle+d.endAngle)/2 * 180 / Math.PI - 90) + ') translate(' + outerRadius + ',0)' })
     .append('text')
+    .attr('id', function(d) { return 'text' + d.index })
     .attr('x', 6)
     .attr('transform', function(d) {
       return (d.startAngle+d.endAngle)/2 > Math.PI ? 'rotate(180) translate(-12)' : null
@@ -91,8 +105,33 @@ const getD3Node = (props) => {
     .data(function(chords) { return chords })
     .enter().append('path')
     .attr('d', ribbon)
-    .style('fill', function(d) { return colors[d.target.index] })
+    .attr('id', function(d,i) { return 'ribbon' + i })
+    .attr('fill', function(d) { return colors[d.target.index] })
     .style('stroke', function(d) { return d3.rgb(colors[d.target.index]).darker() })
+    .on('mouseover', function(d,i) {
+      d3.select('#ribbon' + i)
+        .attr('fill', chroma(colors[d.target.index]).brighten(0.6))
+      d3.select('#arc' + d.target.index)
+        .attr('fill', chroma(colors[d.target.index]).brighten(0.6))
+      d3.select('#text' + d.target.index)
+        .attr('font-weight', 'bold')
+      d3.select('#arc' + d.source.index)
+        .attr('fill', chroma(colors[d.source.index]).brighten(0.6))
+      d3.select('#text' + d.source.index)
+        .attr('font-weight', 'bold')
+    })
+    .on('mouseout', function(d,i) {
+      d3.select('#ribbon' + i)
+        .attr('fill', colors[d.target.index])
+      d3.select('#arc' + d.target.index)
+        .attr('fill', colors[d.target.index])
+      d3.select('#text' + d.target.index)
+        .attr('font-weight', 'normal')
+      d3.select('#arc' + d.source.index)
+        .attr('fill', colors[d.source.index])
+      d3.select('#text' + d.source.index)
+        .attr('font-weight', 'normal')
+    })
   
   return d3node.toReact()
 

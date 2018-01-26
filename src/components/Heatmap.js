@@ -3,6 +3,7 @@ import * as d3 from 'd3'
 import { getMatrix2 } from '../utils/convertData'
 import ReactFauxDOM from 'react-faux-dom'
 import SVGPanZoom from './SVGPanZoom'
+import chroma from 'chroma-js'
 
 // heat matrix d3 references:
 // https://moleleo.github.io/D3V4NetworkDataVisualizations/
@@ -68,11 +69,12 @@ const getD3Node = (props) => {
     d3.select(this).selectAll('.cellAM')
       .data(row)
       .enter().append('rect')
+      .attr('id', function(d,i) { return 'rect'+i })
       .attr('class', 'cellAM')
       .attr('x', function(d,i) { return x(i) })
       .attr('width', x.bandwidth())
       .attr('height', x.bandwidth())
-      .style('fill', function(d,i) { return d.color })
+      .attr('fill', function(d,i) { return d.color })
       .on('mouseover', mouseover)
       .on('mouseout', mouseout)
       .on('mousemove', function(d) {
@@ -95,12 +97,21 @@ const getD3Node = (props) => {
       .filter(function(d,i) {return i === j })
       .style('font-weight','bold')
       .style('fill', '#337ab7')
+
+    d3.selectAll('#rect'+j)
+      .filter(function(d,i) { return i === p.row })
+      .attr('fill', chroma(p.color).brighten(0.6))
   }
 
-  function mouseout() {
+  function mouseout(p,j) {
     d3.selectAll('text')
       .style('font-weight','normal')
       .style('fill', 'black')
+
+    d3.selectAll('#rect'+j)
+      .filter(function(d,i) { return i === p.row })
+      .attr('fill', p.color)
+
     tooltip.style('display', 'none')
   }
   
