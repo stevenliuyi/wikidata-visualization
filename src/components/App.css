@@ -143,3 +143,19 @@
 .d3ToolTip span {
   font-size: 12px;
 }
+
+.sm-badge {
+  font-size: 10px !important;
+  vertical-align: text-top ;
+}
+
+.sm-badge .label {
+  font-weight: normal;
+}
+
+.sm-badge a:link,
+.sm-badge a:visited,
+.sm-badge a:hover,
+.sm-badge a:active {
+  color: #fff;
+}

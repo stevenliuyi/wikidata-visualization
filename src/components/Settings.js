@@ -203,7 +203,7 @@ class Settings extends Component {
           }
         </FormControl>
       )
-    } else if (setting === 'showCircles' || setting === 'showMarkers') {
+    } else if (setting === 'showCircles' || setting === 'showMarkers' || setting === 'reasonator') {
       return (
         <Toggle
           active={this.props.moreSettings[setting]}

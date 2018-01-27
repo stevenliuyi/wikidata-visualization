@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import checkboxHOC from 'react-table/lib/hoc/selectTable'
-import { Well } from 'react-bootstrap'
+import { Well, Label } from 'react-bootstrap'
 import { getDataTypeIndices } from '../utils/convertData'
 import { getURL } from '../utils/commons'
 
@@ -28,7 +28,17 @@ class DataTable extends Component {
   convertDataToCell = (row, col) => {
     const dataType = this.props.dataTypes[this.props.header.indexOf(col)]
     if (dataType === 'item') {
-      return (<a target='_blank' href={`https://www.wikidata.org/wiki/${row.value}`}>{row.value}</a>)
+      return (
+      <div>
+        <a target='_blank' href={`https://www.wikidata.org/wiki/${row.value}`}>{row.value}</a>
+        { (this.props.moreSettings.reasonator) && (
+          <span className='sm-badge pull-right'>{' '}
+            <Label><a title='View with Reasonator' target='_blank' href={`https://tools.wmflabs.org/reasonator/test/?q=${row.value}`}>R</a></Label>{' '}
+            <Label><a title='View with SQID' target='_blank' href={`https://tools.wmflabs.org/sqid#view?id=${row.value}`}>S</a></Label>
+          </span>
+          )
+        }
+      </div>)
     } else if (dataType === 'image' && row.value != null) {
       return (<a target='_blank' href={row.value}><img src={getURL(row.value, '50px')} width={48} alt='' /></a>)
     } else {
