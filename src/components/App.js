@@ -190,6 +190,7 @@ class App extends Component {
                     dataTypes={this.state.dataTypes}
                     selection={this.state.rowSelections}
                     updateSelection={this.updateRowSelections}
+                    moreSettings={this.state.moreSettings}
                   />
                 }
 

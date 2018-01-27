@@ -133,6 +133,36 @@ class DataTable extends Component {
     this.setState({ selectAll })
     this.props.updateSelection(newSelection)
   }
+  
+  defaultFilterMethod = (filter, row) => {
+    const id = filter.pivotId || filter.id
+    const value = this.props.moreSettings.ignoreCase
+      ? String(row[id]).toLowerCase()
+      : String(row[id])
+    const filterValue = this.props.moreSettings.ignoreCase
+      ? filter.value.toLowerCase()
+      : filter.value
+    return row[id] !== undefined
+      ? value.includes(filterValue)
+      : true
+  }
+
+  regexFilterMethod = (filter, row) => {
+    const id = filter.pivotId || filter.id
+    try {
+      const re = this.props.moreSettings.ignoreCase
+        ? new RegExp(filter.value, 'i')
+        : new RegExp(filter.value)
+
+      return row[id] !== undefined
+        ? (String(row[id]).match(re) != null)
+        : true
+    }
+    catch(e) {
+      // invaild RegExp encountered, use default method instead
+      return this.defaultFilterMethod(filter, row)
+    }
+  }
 
   render() {
     const [data, header] = this.tidyData()
@@ -160,12 +190,9 @@ class DataTable extends Component {
               }
             })}
             defaultPageSize={10}
-            defaultFilterMethod={(filter, row) => {
-              const id = filter.pivotId || filter.id
-              return row[id] !== undefined ?
-                String(row[id]).toLowerCase().includes(filter.value.toLowerCase()) :
-                true
-            }}
+            defaultFilterMethod={this.props.moreSettings.regex
+              ? this.regexFilterMethod
+              : this.defaultFilterMethod}
             className='-striped -highlight'
             pageSizeOptions={[10, 20, 50, 100, 200, 500, 1000]}
             {...checkboxProps}

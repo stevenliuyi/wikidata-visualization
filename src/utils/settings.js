@@ -119,7 +119,9 @@ export const moreSettings = {
   sortColumn: '',
   baseMap: 'OpenStreetMap',
   showCircles: true,
-  showMarkers: false
+  showMarkers: false,
+  ignoreCase: true,
+  regex: false
 }
 
 export const moreSettingTitles = {
@@ -138,7 +140,9 @@ export const moreSettingTitles = {
   sortColumn: 'Sort column by',
   baseMap: 'Basemap',
   showCircles: 'Circles',
-  showMarkers: 'Markers'
+  showMarkers: 'Markers',
+  ignoreCase: 'Ignore case',
+  regex: 'Regex filtering'
 }
 
 // chart classes
@@ -165,7 +169,8 @@ export const chartClasses = [
 export const charts = [
   { 
     id: 1.01,
-    name: 'Table'
+    name: 'Table',
+    moreSettings: ['ignoreCase', 'regex']
   },
   {
     id: 1.02,

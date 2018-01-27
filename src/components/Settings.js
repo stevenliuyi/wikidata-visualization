@@ -21,6 +21,15 @@ class Settings extends Component {
     this.handleSelect = this.handleSelect.bind(this)
   }
 
+  componentWillReceiveProps(nextProps) {
+    // set active panel
+    if (nextProps.chart === 1.01) { // Data Table
+      this.setState({ panelKey: '2' })
+    } else {
+      this.setState({ panelKey: '1' })
+    }
+  }
+
   handleSelect(panelKey) {
     this.setState({ panelKey })
   }
@@ -213,6 +222,25 @@ class Settings extends Component {
           }}
         />
       )
+    } else if (setting === 'ignoreCase' || setting === 'regex') {
+      return (
+        <Toggle
+          active={this.props.moreSettings[setting]}
+          on='On'
+          off='Off'
+          size='sm'
+          height={30}
+          width='100%'
+          onstyle='default'
+          offstyle='default'
+          handlestyle='primary'
+          onClick={(state)=>{
+            const newSetting = {}
+            newSetting[setting] = state
+            this.props.onMoreSettingsChange(newSetting)
+          }}
+        />
+      )
     } else {
       return null
     }
@@ -223,6 +251,8 @@ class Settings extends Component {
     const chartMoreSettings = (chartId >= 0) ? charts[chartId].moreSettings : null
 
     if (this.props.chart >= 2 || this.props.header.length === 0) return null 
+
+    const moreSettingsHeader = (this.props.chart !== 1.01) ? 'More options' : 'Options'
 
     return (
       <PanelGroup activeKey={this.state.panelKey} onSelect={this.handleSelect} accordion>
@@ -257,7 +287,7 @@ class Settings extends Component {
               </Panel>
         }
         { Array.isArray(chartMoreSettings) && chartMoreSettings.length > 0 &&
-            <Panel header='More options' eventKey='2' key='2'>
+            <Panel header={moreSettingsHeader} eventKey='2' key='2'>
               <Form horizontal>
                 { // more options
                   chartMoreSettings.map(moreSetting => (
