@@ -23,10 +23,12 @@ class Settings extends Component {
 
   componentWillReceiveProps(nextProps) {
     // set active panel
-    if (nextProps.chart === 1.01) { // Data Table
-      this.setState({ panelKey: '2' })
-    } else {
-      this.setState({ panelKey: '1' })
+    if (nextProps.chart !== this.props.chart) {
+      if (nextProps.chart === 1.01) { // Data Table
+        this.setState({ panelKey: '2' })
+      } else {
+        this.setState({ panelKey: '1' })
+      }
     }
   }
 
