@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://stevenliuyi.github.io/wikidata-visualization",
   "dependencies": {
+    "bluebird": "^3.5.1",
     "blueimp-md5": "^2.10.0",
     "bootstrap": "^3.3.7",
     "cartogram-chart": "^1.0.4",

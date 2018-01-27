@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { FormGroup, Button, Row, Col } from 'react-bootstrap'
+import { FormGroup, Button, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import MdAspectRatio from 'react-icons/lib/md/aspect-ratio'
+import FaClose from 'react-icons/lib/fa/close'
 import { readExample } from '../utils/examples'
 import AceEditor from 'react-ace'
 import 'brace/mode/sparql'
@@ -70,6 +71,8 @@ class Query extends Component {
       return 'No result found!'
     } else if (this.props.status === 'timeout') {
       return 'Query timeout!'
+    } else if (this.props.status === 'cancelled') {
+      return 'Query is cancelled!'
     }
   }
 
@@ -115,8 +118,21 @@ class Query extends Component {
           <Col xs={12} sm={10}>
             <Button
               bsStyle="primary"
-              onClick={  () => this.props.onSubmit(this.state.code) }
-            >Submit</Button> <span className='grey-text padding-5'>{ this.showStatus() }</span>
+              onClick={ () => this.props.onSubmit(this.state.code) }
+            >Submit</Button>{' '}
+            <span className='grey-text padding-5'>{ this.showStatus() }</span>
+            {
+              this.props.status === 'waiting' &&
+                (
+                  <OverlayTrigger placement='bottom' overlay={
+                    <Tooltip id='cancel-tooltip'>cancel this query</Tooltip>
+                  }>
+                    <FaClose
+                      className='cancel-icon'
+                      onClick={ () => this.props.onCancel() } />
+                  </OverlayTrigger>
+                )
+            }
           </Col>
           <Col xsHidden sm={2} className='align-right'>
             <MdAspectRatio

@@ -15,6 +15,7 @@ import { convertData } from '../utils/convertData'
 import { getChartNames, getSettings, moreSettings } from '../utils/settings'
 import Measure from 'react-measure'
 import ImageGallery from './Gallery'
+import Promise from 'bluebird'
 
 class App extends Component {
   state = {
@@ -32,12 +33,17 @@ class App extends Component {
     exampleIndex: -1,
     chartNames: {},
     rowSelections: [],
-    moreSettings: {}
+    moreSettings: {},
+    timingPromise: null
   }
 
   componentDidMount() {
     const chartNames = getChartNames()
     this.setState({ chartNames })
+
+    Promise.config({
+      cancellation: true // enable Promise cancellation
+    })
   }
 
   handleChartSelect = (selected) => {
@@ -90,10 +96,15 @@ class App extends Component {
       exampleIndex: -1
     })
     const query = `query=${encodeURIComponent(code)}`
+    const timingPromise = new Promise((resolve, _, onCancel) => {
+        const timer = setTimeout(() => resolve('timeout'), 60000)
+        onCancel(() => clearTimeout(timer))
+    })
+    this.setState({ timingPromise })
+
     Promise.race([
       WikidataAPI.fetchSPARQLResult(query),
-      new Promise((resolve, _) =>
-        setTimeout(() => resolve('timeout'), 60000))
+      timingPromise
     ])
       .then(data => {
         if (data === null) {
@@ -129,6 +140,12 @@ class App extends Component {
           moreSettings: moreSettings
         })
       })
+      .finally(() => {
+        if (timingPromise.isCancelled()) {
+          this.setState({ status: 'cancelled' })
+          return null
+        }
+      })
   }
 
   setSettings = (settings) => {
@@ -153,6 +170,7 @@ class App extends Component {
                         <Query
                           onSubmit={this.getSPARQLResult}
                           onChangeEditorSize={this.changeEditorSize}
+                          onCancel={() => this.state.timingPromise.cancel()}
                           status={this.state.status}
                           numResults={this.state.numResults}
                           exampleIndex={this.state.exampleIndex}

@@ -40,6 +40,10 @@
   cursor: pointer;
 }
 
+.cancel-icon {
+  cursor: pointer; 
+}
+
 .grey-text {
   color: grey;
 }
