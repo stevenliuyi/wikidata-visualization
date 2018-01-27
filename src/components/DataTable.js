@@ -164,15 +164,14 @@ class DataTable extends Component {
   
   defaultFilterMethod = (filter, row) => {
     const id = filter.pivotId || filter.id
-    const value = this.props.moreSettings.ignoreCase
+    let value = this.props.moreSettings.ignoreCase
       ? String(row[id]).toLowerCase()
       : String(row[id])
+    if (row[id] == null) value = ''
     const filterValue = this.props.moreSettings.ignoreCase
       ? filter.value.toLowerCase()
       : filter.value
-    return row[id] !== undefined
-      ? value.includes(filterValue)
-      : true
+    return value.includes(filterValue)
   }
 
   regexFilterMethod = (filter, row) => {
@@ -182,9 +181,8 @@ class DataTable extends Component {
         ? new RegExp(filter.value, 'i')
         : new RegExp(filter.value)
 
-      return row[id] !== undefined
-        ? (String(row[id]).match(re) != null)
-        : true
+      const value = (row[id] != null) ? String(row[id]) : ''
+      return (value.match(re) != null)
     }
     catch(e) {
       // invaild RegExp encountered, use default method instead
@@ -196,9 +194,7 @@ class DataTable extends Component {
     const id = filter.pivotId || filter.id
     const [fromValue, toValue] = filter.value.split('to').map(parseFloat)
 
-    return row[id] !== undefined
-      ? (parseFloat(row[id]) >= fromValue) && (parseFloat(row[id]) <= toValue)
-      : true
+    return (parseFloat(row[id]) >= fromValue) && (parseFloat(row[id]) <= toValue)
   }
 
   getRangeString = (value, colIndex, from=true) => {
