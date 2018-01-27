@@ -20,7 +20,7 @@ class Chart extends Component {
   }
 
   componentWillMount() {
-    if (Array.isArray(this.props.data) && this.props.data.length > 1) {
+    if (Array.isArray(this.props.data) && this.props.data.length > 1 && this.props.rowSelections.length > 0) {
       this.setState({ show: true })
     } else {
       this.setState({ show: false })
