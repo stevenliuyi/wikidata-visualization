@@ -222,7 +222,7 @@ class Settings extends Component {
           }}
         />
       )
-    } else if (setting === 'ignoreCase' || setting === 'regex') {
+    } else if (setting === 'ignoreCase' || setting === 'regex' || setting === 'numericRangeFilter') {
       return (
         <Toggle
           active={this.props.moreSettings[setting]}

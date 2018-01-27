@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import checkboxHOC from 'react-table/lib/hoc/selectTable'
-import { Well, Label } from 'react-bootstrap'
+import { Well, Label, OverlayTrigger, Tooltip, Col, Row } from 'react-bootstrap'
 import { getDataTypeIndices } from '../utils/convertData'
 import { getURL } from '../utils/commons'
 
@@ -14,7 +14,17 @@ class DataTable extends Component {
     selectAll: true,
     table: CheckboxTable,
     isCheckboxTable: true,
+    numericRangeFilter: false,
+    filtered: []
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.moreSettings.numericRangeFilter !== this.state.numericRangeFilter) {
+      this.setState({ numericRangeFilter: nextProps.moreSettings.numericRangeFilter })
+      // reset filter values
+      this.setState({ filtered: [] })
+    }
+  }  
 
   toggleTable = () => {
     if (this.state.isCheckboxTable) {
@@ -33,8 +43,16 @@ class DataTable extends Component {
         <a target='_blank' href={`https://www.wikidata.org/wiki/${row.value}`}>{row.value}</a>
         { (this.props.moreSettings.reasonator) && (
           <span className='sm-badge pull-right'>{' '}
-            <Label><a title='View with Reasonator' target='_blank' href={`https://tools.wmflabs.org/reasonator/test/?q=${row.value}`}>R</a></Label>{' '}
-            <Label><a title='View with SQID' target='_blank' href={`https://tools.wmflabs.org/sqid#view?id=${row.value}`}>S</a></Label>
+            <OverlayTrigger placement='bottom' overlay={
+              <Tooltip id='tooltip-reasonator'>View with Reasonator</Tooltip>
+            }>
+              <Label><a target='_blank' href={`https://tools.wmflabs.org/reasonator/test/?q=${row.value}`}>R</a></Label>
+            </OverlayTrigger>{' '}
+            <OverlayTrigger placement='bottom' overlay={
+              <Tooltip id='tooltip-sqid'>View with SQID</Tooltip>
+            }>
+              <Label><a target='_blank' href={`https://tools.wmflabs.org/sqid#view?id=${row.value}`}>S</a></Label>
+            </OverlayTrigger>
           </span>
           )
         }
@@ -174,6 +192,70 @@ class DataTable extends Component {
     }
   }
 
+  rangeFilterMethod = (filter, row) => {
+    const id = filter.pivotId || filter.id
+    const [fromValue, toValue] = filter.value.split('to').map(parseFloat)
+
+    return row[id] !== undefined
+      ? (parseFloat(row[id]) >= fromValue) && (parseFloat(row[id]) <= toValue)
+      : true
+  }
+
+  getRangeString = (value, colIndex, from=true) => {
+    let fromValue = (from)
+      ? parseFloat(value)
+      : parseFloat(document.getElementById(`col${colIndex}-from`).value)
+    if (isNaN(fromValue)) fromValue = -Infinity
+
+    let toValue = (from)
+      ? parseFloat(document.getElementById(`col${colIndex}-to`).value)
+      : parseFloat(value)
+    if (isNaN(toValue)) toValue = Infinity
+
+    return `${fromValue}to${toValue}`
+  }
+
+  getFilterMethod = (col) => {
+    const colIndex = this.props.header.indexOf(col)
+    const dataType = this.props.dataTypes[colIndex]
+    if (dataType !== 'number' || this.props.moreSettings.numericRangeFilter === false) {
+      return undefined // default filter method
+    } else {
+      return this.rangeFilterMethod
+    }
+  }
+
+  filterComponent = (col) => {
+    const colIndex = this.props.header.indexOf(col)
+    const dataType = this.props.dataTypes[colIndex]
+    if (dataType !== 'number' || this.props.moreSettings.numericRangeFilter === false) {
+      return undefined // default filter component
+    } else {
+      let component = ({ filter, onChange }) => (
+        <Row>
+          <Col sm={5} className='no-padding-right'>
+            <input
+              id={`col${colIndex}-from`}
+              type='text'
+              onChange={event=>onChange(this.getRangeString(event.target.value, colIndex, true))}
+              style={{width: '100%'}}
+            />
+          </Col>
+          <Col sm={2} className='no-padding'>to</Col>
+          <Col sm={5} className='no-padding-left'>
+            <input
+              id={`col${colIndex}-to`}
+              type='text'
+              onChange={event=>onChange(this.getRangeString(event.target.value, colIndex, false))}
+              style={{width: '100%'}}
+            />
+          </Col>
+        </Row>
+      )
+      return component
+    }
+  }
+
   render() {
     const [data, header] = this.tidyData()
 
@@ -192,11 +274,14 @@ class DataTable extends Component {
             ref={(r)=>this.checkboxTable=r}
             data={data}
             filterable
+            filtered={this.state.filtered}
             columns={ header.map( col => {
               return {
                 Header: col,
                 accessor: col,
                 Cell: row => this.convertDataToCell(row, col),
+                filterMethod: this.getFilterMethod(col),
+                Filter: this.filterComponent(col)
               }
             })}
             defaultPageSize={10}
@@ -205,6 +290,7 @@ class DataTable extends Component {
               : this.defaultFilterMethod}
             className='-striped -highlight'
             pageSizeOptions={[10, 20, 50, 100, 200, 500, 1000]}
+            onFilteredChange={filtered => this.setState({ filtered })}
             {...checkboxProps}
           />
         }

@@ -122,7 +122,8 @@ export const moreSettings = {
   showMarkers: false,
   ignoreCase: true,
   regex: false,
-  reasonator: false
+  reasonator: false,
+  numericRangeFilter: false
 }
 
 export const moreSettingTitles = {
@@ -143,8 +144,9 @@ export const moreSettingTitles = {
   showCircles: 'Circles',
   showMarkers: 'Markers',
   ignoreCase: 'Ignore case',
-  regex: 'Regex filtering',
-  reasonator: 'External links'
+  regex: 'Regex filter',
+  reasonator: 'External links',
+  numericRangeFilter: 'Numeric range filter'
 }
 
 // chart classes
@@ -172,7 +174,7 @@ export const charts = [
   { 
     id: 1.01,
     name: 'Table',
-    moreSettings: ['ignoreCase', 'regex', 'reasonator']
+    moreSettings: ['ignoreCase', 'regex', 'numericRangeFilter', 'reasonator']
   },
   {
     id: 1.02,
