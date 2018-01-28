@@ -1,0 +1,178 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.ace_editor {
+  border: 1px solid #ddd;
+  margin-top: -5px;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.clickable-icon {
+  cursor: pointer;
+}
+
+.grey-text {
+  color: grey;
+}
+
+.padding-5 {
+  padding: 5px;
+}
+
+.no-padding {
+  padding: 0px !important;
+}
+
+.no-padding-left {
+  padding-left: 0px !important;
+}
+
+.no-padding-right {
+  padding-right: 0px !important;
+}
+
+.no-data-text {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.chart-navs {
+  padding-bottom: 10px;
+}
+
+/* overwrite boostrap-slider default width */
+.slider.slider-horizontal {
+  width: 100% !important;
+}
+
+.color-palette {
+  float: left;
+  padding: 0;
+  margin: 0;
+  clear: left;
+  width: 100%;
+}
+
+.color-palette div {
+  float: left;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  height: 20px;
+  width: 10%;
+  margin-top: 4px;
+}
+
+/* overwrite Bootstrap styles */
+.panel-heading > .panel-title {
+  font-size: 12px;
+}
+
+.control-label {
+  font-size: 12px;
+}
+
+.site {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.site-content {
+  flex: 1;
+  width: 100%;
+  padding-bottom: 15px;
+}
+
+.site-content:after {
+  content: 'nothing';
+  display: block;
+  margin-top: 30px;
+  height: 0;
+  visibility: hidden;
+}
+
+.footer {
+  background-color: #f6f6f6;
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 20px;
+}
+
+.d3ToolTip {
+  pointer-events: none;
+  position: absolute;
+  display: none;
+  min-width: 50px;
+  height: auto;
+  background: none repeat scroll 0 0 #ffffff;
+  padding: 8px;
+  border-radius: 4px;
+  text-align: left;
+  line-height: 1.3;
+  box-shadow: 0px 3px 9px rgba(0, 0, 0, .15);
+  opacity: 0.9;
+}
+.d3ToolTip:after {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  margin-left: -12px;
+}  
+
+.d3ToolTip span {
+  font-size: 12px;
+}
+
+.sm-badge {
+  font-size: 10px !important;
+  vertical-align: text-top ;
+}
+
+.sm-badge .label {
+  font-weight: normal;
+}
+
+.sm-badge a:link,
+.sm-badge a:visited,
+.sm-badge a:hover,
+.sm-badge a:active {
+  color: #fff;
+}
+
+.zoom-button {
+  transform: translate(0, -50px);
+  display: block !important;
+}
