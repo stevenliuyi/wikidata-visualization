@@ -40,6 +40,7 @@
   "scripts": {
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build",
+    "deploy-travis": "gh-pages -d build -b gh-pages -r https://$GITHUB_TOKEN@github.com/stevenliuyi/wikidata-visualization.git",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

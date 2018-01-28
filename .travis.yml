@@ -2,17 +2,15 @@ language: node_js
 node_js:
   - "node"
 
+branches:
+  except:
+    - gh-pages
+
 script:
   - yarn run build
 
-deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  keep-history: true
-  committer-from-gh: true
-  on:
-    branch: master
+after_success:
+  - test $TRAVIS_BRANCH = "master" && yarn run deploy-travis
 
 notifications:
   email: false
