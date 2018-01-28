@@ -127,7 +127,7 @@ class ChoroplethMap extends Component {
             </Geographies>
           </ZoomableGroup>
         </ComposableMap>
-        <ButtonGroup>
+        <ButtonGroup className='zoom-button'>
           <Button onClick={this.handleZoomOut}>-</Button>
           <Button onClick={this.handleZoomIn}>+</Button>
         </ButtonGroup>

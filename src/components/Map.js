@@ -174,7 +174,7 @@ class Map extends Component {
             </Markers>
           </ZoomableGroup>
         </ComposableMap>
-        <ButtonGroup>
+        <ButtonGroup className='zoom-button'>
           <Button onClick={this.handleZoomOut}>-</Button>
           <Button onClick={this.handleZoomIn}>+</Button>
         </ButtonGroup>

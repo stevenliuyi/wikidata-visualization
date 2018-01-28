@@ -171,3 +171,8 @@
 .sm-badge a:active {
   color: #fff;
 }
+
+.zoom-button {
+  transform: translate(0, -50px);
+  display: block !important;
+}
