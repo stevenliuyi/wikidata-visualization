@@ -252,6 +252,24 @@ class DataTable extends Component {
     }
   }
 
+  itemSortMethod = (a, b, desc) => {
+    const aValue = parseInt(a.substr(1), 10)
+    const bValue = parseInt(b.substr(1), 10)
+    if (aValue > bValue) return 1
+    if (aValue < bValue) return -1
+    return 0
+  }
+
+  getSortMethod = (col) => {
+    const colIndex = this.props.header.indexOf(col)
+    const dataType = this.props.dataTypes[colIndex]
+    if (dataType !== 'item') {
+      return undefined // default sort method
+    } else {
+      return this.itemSortMethod
+    }
+  }
+
   render() {
     const [data, header] = this.tidyData()
 
@@ -277,7 +295,8 @@ class DataTable extends Component {
                 accessor: col,
                 Cell: row => this.convertDataToCell(row, col),
                 filterMethod: this.getFilterMethod(col),
-                Filter: this.filterComponent(col)
+                Filter: this.filterComponent(col),
+                sortMethod: this.getSortMethod(col)
               }
             })}
             defaultPageSize={10}
