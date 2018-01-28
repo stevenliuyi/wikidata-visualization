@@ -33,9 +33,7 @@ class Tools extends Component {
   }
 
   getImageURL = () => {
-    const gh = new GitHub({
-      token: '0024f3c618a766e600e317ea5d759d9806761083' 
-    })
+    const gh = new GitHub()
     let gist = gh.getGist()
     let data = {
       public: true,
@@ -50,7 +48,7 @@ class Tools extends Component {
       const createdGist = data
       const gistUrl = createdGist.html_url
       const hash = gistUrl.match(/[^/]+$/)[0]
-      const rawGitUrl = `https://gistcdn.githack.com/wikidata-visualization/${hash}/raw/${filename}`
+      const rawGitUrl = `https://gistcdn.githack.com/anonymous/${hash}/raw/${filename}`
       this.setState({
         gistUrl,
         rawGitUrl
