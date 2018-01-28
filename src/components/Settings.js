@@ -266,8 +266,8 @@ class Settings extends Component {
                     this.props.info.map( (setting, index) => {
                       return (
                         <FormGroup key={index}>
-                          <Col componentClass={ControlLabel} sm={3}>{setting.title}</Col>
-                          <Col sm={9}><FormControl
+                          <Col componentClass={ControlLabel} sm={4}>{setting.title}</Col>
+                          <Col sm={8}><FormControl
                             name={setting.value}
                             componentClass="select"
                             value={this.props.settings[setting.value]}
@@ -294,8 +294,8 @@ class Settings extends Component {
                 { // more options
                   chartMoreSettings.map(moreSetting => (
                     <FormGroup key={moreSetting}>
-                      <Col componentClass={ControlLabel} sm={3}>{moreSettingTitles[moreSetting]}</Col>
-                      <Col sm={9}>
+                      <Col componentClass={ControlLabel} sm={4}>{moreSettingTitles[moreSetting]}</Col>
+                      <Col sm={8}>
                         { this.getMoreSetting(moreSetting, this.props.header) }
                       </Col>
                     </FormGroup>
