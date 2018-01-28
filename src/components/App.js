@@ -97,8 +97,8 @@ class App extends Component {
     })
     const query = `query=${encodeURIComponent(code)}`
     const timingPromise = new Promise((resolve, _, onCancel) => {
-        const timer = setTimeout(() => resolve('timeout'), 60000)
-        onCancel(() => clearTimeout(timer))
+      const timer = setTimeout(() => resolve('timeout'), 60000)
+      onCancel(() => clearTimeout(timer))
     })
     this.setState({ timingPromise })
 

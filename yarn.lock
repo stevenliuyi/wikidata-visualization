@@ -6275,6 +6275,10 @@ sane@~1.6.0:
     walker "~1.0.5"
     watch "~0.10.0"
 
+save-svg-as-png@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/save-svg-as-png/-/save-svg-as-png-1.2.0.tgz#b09a5e8bea5ba57ccd8d269ef92c00d894cf6b1c"
+
 sax@^1.2.1, sax@~1.2.1:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"

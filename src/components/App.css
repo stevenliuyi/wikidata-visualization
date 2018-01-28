@@ -36,12 +36,8 @@
   text-align: right;
 }
 
-.aspect-ratio-icon {
+.clickable-icon {
   cursor: pointer;
-}
-
-.cancel-icon {
-  cursor: pointer; 
 }
 
 .grey-text {

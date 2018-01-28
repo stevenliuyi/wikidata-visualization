@@ -128,7 +128,7 @@ class Query extends Component {
                     <Tooltip id='cancel-tooltip'>cancel this query</Tooltip>
                   }>
                     <FaClose
-                      className='cancel-icon'
+                      className='clickable-icon'
                       onClick={ () => this.props.onCancel() } />
                   </OverlayTrigger>
                 )
@@ -136,7 +136,7 @@ class Query extends Component {
           </Col>
           <Col xsHidden sm={2} className='align-right'>
             <MdAspectRatio
-              className='aspect-ratio-icon'
+              className='clickable-icon'
               onClick={ this.props.onChangeEditorSize }
               size={18} />
           </Col>

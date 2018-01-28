@@ -39,24 +39,24 @@ class DataTable extends Component {
     const dataType = this.props.dataTypes[this.props.header.indexOf(col)]
     if (dataType === 'item') {
       return (
-      <div>
-        <a target='_blank' href={`https://www.wikidata.org/wiki/${row.value}`}>{row.value}</a>
-        { (this.props.moreSettings.reasonator) && (
-          <span className='sm-badge pull-right'>{' '}
-            <OverlayTrigger placement='bottom' overlay={
-              <Tooltip id='tooltip-reasonator'>View with Reasonator</Tooltip>
-            }>
-              <Label><a target='_blank' href={`https://tools.wmflabs.org/reasonator/test/?q=${row.value}`}>R</a></Label>
-            </OverlayTrigger>{' '}
-            <OverlayTrigger placement='bottom' overlay={
-              <Tooltip id='tooltip-sqid'>View with SQID</Tooltip>
-            }>
-              <Label><a target='_blank' href={`https://tools.wmflabs.org/sqid#view?id=${row.value}`}>S</a></Label>
-            </OverlayTrigger>
-          </span>
+        <div>
+          <a target='_blank' href={`https://www.wikidata.org/wiki/${row.value}`}>{row.value}</a>
+          { (this.props.moreSettings.reasonator) && (
+            <span className='sm-badge pull-right'>{' '}
+              <OverlayTrigger placement='bottom' overlay={
+                <Tooltip id='tooltip-reasonator'>View with Reasonator</Tooltip>
+              }>
+                <Label><a target='_blank' href={`https://tools.wmflabs.org/reasonator/test/?q=${row.value}`}>R</a></Label>
+              </OverlayTrigger>{' '}
+              <OverlayTrigger placement='bottom' overlay={
+                <Tooltip id='tooltip-sqid'>View with SQID</Tooltip>
+              }>
+                <Label><a target='_blank' href={`https://tools.wmflabs.org/sqid#view?id=${row.value}`}>S</a></Label>
+              </OverlayTrigger>
+            </span>
           )
-        }
-      </div>)
+          }
+        </div>)
     } else if (dataType === 'image' && row.value != null) {
       return (<a target='_blank' href={row.value}><img src={getURL(row.value, '50px')} width={48} alt='' /></a>)
     } else {

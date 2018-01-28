@@ -53,7 +53,7 @@ class Map extends Component {
         d3.select('#circle'+i)
           .attr('fill', chroma(colors[i]).brighten(0.6))
         d3.select('#text'+i)
-        .attr('font-weight', 'bold') 
+          .attr('font-weight', 'bold') 
       })
       .on('mousemove', function(d,i) {
         tooltip
@@ -67,7 +67,7 @@ class Map extends Component {
         d3.select('#circle'+i)
           .attr('fill', colors[i])
         d3.select('#text'+i)
-        .attr('font-weight', 'normal') 
+          .attr('font-weight', 'normal') 
       })
 
   }
