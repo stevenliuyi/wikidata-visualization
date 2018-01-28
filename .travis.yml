@@ -10,6 +10,8 @@ script:
   - yarn run build
 
 after_success:
+  - git config user.name "stevenliuyi"
+  - git config user.email "stevenliuyi@gmail.com"
   - test $TRAVIS_BRANCH = "master" && yarn run deploy-travis
 
 notifications:
