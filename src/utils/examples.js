@@ -59,6 +59,10 @@ export const examples = [
   {
     title: 'Party and State Leaders of China',
     filename: 'china-leaders.rq'
+  },
+  {
+    title: 'Tennis Career Grand Slam',
+    filename: 'tennis-grand-slam.rq'
   }
 ]
 
