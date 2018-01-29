@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 const renderCircles = (props) => {
   return (item, index) => {
+    if (item[props.xLabel] == null || item[props.yLabel] == null) return null
     const circleProps = {
       id: `circle${index}`,
       className: 'circle',

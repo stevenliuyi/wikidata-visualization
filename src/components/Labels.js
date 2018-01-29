@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 const renderLabels = (props) => {
   return (item, index) => {
+    if (item[props.xLabel] == null || item[props.yLabel] == null) return null
     const labelProps = {
       id: `text${index}`,
       className: 'circleLabel',

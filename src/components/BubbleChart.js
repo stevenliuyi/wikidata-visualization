@@ -29,6 +29,7 @@ const getD3Node = (props) => {
   
   var data = props.data.filter((item, i) => props.rowSelections.includes(i))
     .map((d, index) => { d.id = index; return d })
+  data = data.filter((d) => (d[props.header[props.settings['radius']]] != null))
   
   //bubbles needs very specific format, convert data to this.
   var nodes = d3.hierarchy({children:data})
@@ -58,12 +59,12 @@ const getD3Node = (props) => {
     .attr('id', function(d){ return 'circle' + d.data['id'] })
     .attr('r', function(d){ return d.r })
     .attr('fill', function(d) { return colorScale(d.data[props.header[props.settings['color']]]) })
-    .on('mousemove', function(d,i) {
+    .on('mousemove', function(d) {
       tooltip
         .style('left', d3.event.pageX + 10 + 'px')
         .style('top', d3.event.pageY + 10 + 'px')
         .style('display', 'inline-block')
-        .html(tooltipHTML[i])
+        .html(tooltipHTML[d.data.id])
     })
     .on('mouseout', function(d) {
       tooltip.style('display', 'none')
@@ -86,12 +87,12 @@ const getD3Node = (props) => {
     .style('font-family', 'sans-serif')
     .style('font-size', props.moreSettings.fontSize)
     .style('text-anchor', 'middle')
-    .on('mousemove', function(d,i) {
+    .on('mousemove', function(d) {
       tooltip
         .style('left', d3.event.pageX + 10 + 'px')
         .style('top', d3.event.pageY + 10 + 'px')
         .style('display', 'inline-block')
-        .html(tooltipHTML[i])
+        .html(tooltipHTML[d.data.id])
     })
     .on('mouseout', function(d) {
       tooltip.style('display', 'none')

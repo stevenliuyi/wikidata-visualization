@@ -18,6 +18,9 @@ class ScatterPlot extends Component {
     d3.selectAll('.d3ToolTip').remove()
     var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
 
+    let selectedData = this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
+    selectedData.forEach((item,i) => { item['id'] = i})
+
     const d3node = (
       <svg width={this.props.width} height={this.props.height}>
         <DataCircles
@@ -34,46 +37,47 @@ class ScatterPlot extends Component {
 
     // add tooltips
     d3.selectAll('.circle')
-      .on('mouseover', function(d,i) {
-        d3.select('#circle'+i)
-          .attr('fill', chroma(colors[i]).brighten(0.6))
-        d3.select('#text'+i)
+      .data(selectedData)
+      .on('mouseover', function(d) {
+        d3.select('#circle'+d.id)
+          .attr('fill', chroma(colors[d.id]).brighten(0.6))
+        d3.select('#text'+d.id)
           .attr('font-weight', 'bold')
       })
-      .on('mousemove', function(d,i) {
+      .on('mousemove', function(d) {
         tooltip
           .style('left', d3.event.pageX + 10 + 'px')
           .style('top', d3.event.pageY + 10 + 'px')
           .style('display', 'inline-block')
-          .html(tooltipHTMLs[i])
+          .html(tooltipHTMLs[d.id])
       })
-      .on('mouseout', function(d,i) {
+      .on('mouseout', function(d) {
         tooltip.style('display', 'none')
-        d3.select('#circle'+i)
-          .attr('fill', colors[i])
-        d3.select('#text'+i)
+        d3.select('#circle'+d.id)
+          .attr('fill', colors[d.id])
+        d3.select('#text'+d.id)
           .attr('font-weight', 'normal')
       })
 
     d3.selectAll('.circleLabel')
-      .on('mouseover', function(d,i) {
-        d3.select('#circle'+i)
-          .attr('fill', chroma(colors[i]).brighten(0.6))
-        d3.select('#text'+i)
+      .on('mouseover', function(d) {
+        d3.select('#circle'+d.id)
+          .attr('fill', chroma(colors[d.id]).brighten(0.6))
+        d3.select('#text'+d.id)
           .attr('font-weight', 'bold')
       })
-      .on('mousemove', function(d,i) {
+      .on('mousemove', function(d) {
         tooltip
           .style('left', d3.event.pageX + 10 + 'px')
           .style('top', d3.event.pageY + 10 + 'px')
           .style('display', 'inline-block')
-          .html(tooltipHTMLs[i])
+          .html(tooltipHTMLs[d.id])
       })
-      .on('mouseout', function(d,i) {
+      .on('mouseout', function(d) {
         tooltip.style('display', 'none')
-        d3.select('#circle'+i)
-          .attr('fill', colors[i])
-        d3.select('#text'+i)
+        d3.select('#circle'+d.id)
+          .attr('fill', colors[d.id])
+        d3.select('#text'+d.id)
           .attr('font-weight', 'normal')
       })
 
