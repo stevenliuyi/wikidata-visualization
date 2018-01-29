@@ -13,6 +13,8 @@ import { mapSettings } from '../utils/maps'
 import * as d3 from 'd3'
 import { getTooltipHTML } from '../utils/convertData'
 import chroma from 'chroma-js'
+import FaPlus from 'react-icons/lib/fa/plus'
+import FaMinus from 'react-icons/lib/fa/minus'
 
 const wrapperStyles = {
   width: '100%',
@@ -175,8 +177,8 @@ class Map extends Component {
           </ZoomableGroup>
         </ComposableMap>
         <ButtonGroup className='zoom-button'>
-          <Button onClick={this.handleZoomOut}>-</Button>
-          <Button onClick={this.handleZoomIn}>+</Button>
+          <Button onClick={this.handleZoomOut}><FaMinus size={12} /></Button>
+          <Button onClick={this.handleZoomIn}><FaPlus size={12} /></Button>
         </ButtonGroup>
       </div>
     )

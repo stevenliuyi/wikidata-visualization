@@ -173,6 +173,6 @@
 }
 
 .zoom-button {
-  transform: translate(0, -50px);
+  transform: translate(20px, -50px);
   display: block !important;
 }
