@@ -21,7 +21,6 @@ WHERE {
                    wdt:P1346 ?playerItem ;
                    wdt:P31 ?formatItem .
         ?grandSlamItem wdt:P361 wd:Q102113 . # Grand Slam of tennis
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . }
       }
     }
     GROUP BY ?playerItem ?formatItem
