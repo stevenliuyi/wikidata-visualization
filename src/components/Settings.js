@@ -243,6 +243,32 @@ class Settings extends Component {
           }}
         />
       )
+    } else if ( setting === 'delimiter') {
+      return (
+        <FormControl
+          componentClass="select"
+          value={this.props.moreSettings['delimiter']}
+          onChange={(e)=>this.props.onMoreSettingsChange({delimiter: e.target.value})}
+        >
+           <option value='[NONE]' key='none'>none</option>
+           <option value=' ' key='space'>space</option>
+           <option value=',' key='comma'>,</option>
+           <option value=';' key='semi-colon'>;</option>
+           <option value='.' key='dot'>.</option>
+        </FormControl>
+      )
+    } else if (setting === 'case') {
+      return (
+        <FormControl
+          componentClass="select"
+          value={this.props.moreSettings['case']}
+          onChange={(e)=>this.props.onMoreSettingsChange({case: e.target.value})}
+        >
+           <option value='default' key='default'>default</option>
+           <option value='lower case' key='lower case'>lower case</option>
+           <option value='upper case' key='upper case'>upper case</option>
+        </FormControl>
+      )
     } else {
       return null
     }

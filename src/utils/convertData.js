@@ -267,7 +267,12 @@ export function getWordCloudData(props) {
     
   let texts = ''
   selectedData.forEach(item => {
-    if (item[textLabel] != null) texts += `${delimiter}${String(item[textLabel])}`
+    if (item[textLabel] != null) {
+      let string = String([item[textLabel]])
+      if (props.moreSettings.case === 'lower case') string = string.toLowerCase()
+      if (props.moreSettings.case === 'upper case') string = string.toUpperCase()
+      texts += `${delimiter}${string}`
+    }
   })
 
   // remove extra spaces 
