@@ -2,17 +2,18 @@ language: node_js
 node_js:
   - "node"
 
-branches:
-  except:
-    - gh-pages
-
 script:
   - yarn run build
 
-after_success:
-  - git config user.name "stevenliuyi"
-  - git config user.email "stevenliuyi@gmail.com"
-  - test $TRAVIS_BRANCH = "master" && yarn run deploy-travis
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  local-dir: build
+  committer-from-gh: true
+  on:
+    branch: master
 
 notifications:
   email: false
