@@ -129,7 +129,8 @@ export const moreSettings = {
   ignoreCase: true,
   regex: false,
   reasonator: false,
-  numericRangeFilter: false
+  numericRangeFilter: false,
+  delimiter: ' '
 }
 
 export const moreSettingTitles = {
@@ -152,7 +153,8 @@ export const moreSettingTitles = {
   ignoreCase: 'Ignore case',
   regex: 'Regex filter',
   reasonator: 'External links',
-  numericRangeFilter: 'Numeric range filter'
+  numericRangeFilter: 'Numeric range filter',
+  delimiter: 'Delimiter'
 }
 
 // chart classes
@@ -308,7 +310,7 @@ export const charts = [
     chartClass: 'more',
     settings: [texts],
     defaultShow: [true],
-    moreSettings: ['color']
+    moreSettings: ['delimiter', 'color']
   }
 ]
 

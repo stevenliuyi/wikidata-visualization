@@ -263,17 +263,19 @@ export function getWordCloudData(props) {
   
   const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
   const textLabel = props.header[props.settings['texts']]  
+  const delimiter = props.moreSettings.delimiter
     
   let texts = ''
   selectedData.forEach(item => {
-    if (item[textLabel] != null) texts += ` ${String(item[textLabel])}`
+    if (item[textLabel] != null) texts += `${delimiter}${String(item[textLabel])}`
   })
 
   // remove extra spaces 
   texts = texts.replace(/\s+/g, ' ')  
   
   // split by space 
-  texts = texts.split(' ')
+  texts = texts.split(delimiter)
+  texts = texts.slice(1)
 
   // count word occurences
   let data = {}
