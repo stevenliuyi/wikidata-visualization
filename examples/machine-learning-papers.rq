@@ -1,0 +1,24 @@
+# Most cited machine learning papers
+
+SELECT
+?paperItem ?title ?firstAuthor ?year
+(COUNT(?citationItem) AS ?numOfCitations)
+WHERE {
+   ?paperItem wdt:P31 wd:Q13442814 ;
+              wdt:P921 wd:Q2539 ; # machine learning
+              wdt:P2860 ?citationItem .
+  OPTIONAL { ?paperItem wdt:P1476 ?title . }
+  OPTIONAL { ?paperItem wdt:P577 ?publicationDate . 
+             BIND (YEAR(?publicationDate) AS ?year) . }
+  OPTIONAL { ?paperItem p:P2093 [ ps:P2093 ?firstAuthorString;
+                                  pq:P1545 "1" ] . }
+  OPTIONAL { ?paperItem p:P50 [ ps:P50 [ rdfs:label ?firstAuthorLabel ] ;
+                                pq:P1545 "1" ] .
+             FILTER (LANG(?firstAuthorLabel) = 'en') . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                           ?firstAuthorItem rdfs:label ?firstAuthorLabel . }
+  BIND (IF(BOUND(?firstAuthorString), ?firstAuthorString, ?firstAuthorLabel) AS ?firstAuthor) .
+}
+GROUP BY ?paperItem ?title ?firstAuthor ?year
+ORDER BY DESC(?numOfCitations)
+LIMIT 50

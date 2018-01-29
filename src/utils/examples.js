@@ -63,6 +63,10 @@ export const examples = [
   {
     title: 'Tennis Career Grand Slam',
     filename: 'tennis-grand-slam.rq'
+  },
+  {
+    title: 'Most cited machine learning papers',
+    filename: 'machine-learning-papers.rq'
   }
 ]
 
