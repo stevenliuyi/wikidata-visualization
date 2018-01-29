@@ -269,6 +269,26 @@ class Settings extends Component {
            <option value='upper case' key='upper case'>upper case</option>
         </FormControl>
       )
+    } else if (setting === 'sizeScale') {
+      return (
+        <FormControl
+          componentClass="select"
+          value={this.props.moreSettings['sizeScale']}
+          onChange={(e)=>this.props.onMoreSettingsChange({sizeScale: e.target.value})}
+        >
+           <option value='linear' key='linear'>linear</option>
+           <option value='log' key='log'>log</option>
+        </FormControl>
+      )
+    } else if (setting === 'fontSizes') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings.fontSizes}
+          slideStop={(e)=>this.props.onMoreSettingsChange({fontSizes: e.target.value})}
+          step={1}
+          min={1}
+          max={128} />
+      )
     } else {
       return null
     }

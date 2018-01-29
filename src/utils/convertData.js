@@ -259,7 +259,7 @@ export function getTooltipHTML(props) {
 
 export function getWordCloudData(props) {
 
-  const maxFontSize = 40, minFontSize = 10
+  const [minFontSize, maxFontSize] = props.moreSettings.fontSizes
   
   const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
   const textLabel = props.header[props.settings['texts']]  
@@ -293,10 +293,15 @@ export function getWordCloudData(props) {
   const maxCount = Math.max(...Object.values(data))
 
   // calculate font sizes
-  const calcFontSize = (count) => (
+  let calcFontSize = (count) => ( // log scale
     (Math.log(count)-Math.log(minCount))/(Math.log(maxCount)-Math.log(minCount)) *
       (maxFontSize - minFontSize) + minFontSize
   )
+  if (props.moreSettings.sizeScale === 'linear') {
+    calcFontSize = (count) => ( // linear scale
+      (count-minCount)/(maxCount-minCount) * (maxFontSize-minFontSize) + minFontSize  
+    )
+  }
 
   data = Object.keys(data).map(word => ({
     text: word,

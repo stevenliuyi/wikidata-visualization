@@ -131,7 +131,9 @@ export const moreSettings = {
   reasonator: false,
   numericRangeFilter: false,
   delimiter: ' ',
-  case: 'default'
+  case: 'default',
+  sizeScale: 'linear',
+  fontSizes: [10, 40]
 }
 
 export const moreSettingTitles = {
@@ -156,7 +158,9 @@ export const moreSettingTitles = {
   reasonator: 'External links',
   numericRangeFilter: 'Numeric range filter',
   delimiter: 'Delimiter',
-  case: 'Case'
+  case: 'Case',
+  sizeScale: 'Size scale',
+  fontSizes: 'Font Sizes'
 }
 
 // chart classes
@@ -312,7 +316,7 @@ export const charts = [
     chartClass: 'more',
     settings: [texts],
     defaultShow: [true],
-    moreSettings: ['delimiter', 'case', 'color']
+    moreSettings: ['delimiter', 'case', 'fontSizes', 'sizeScale', 'color']
   }
 ]
 
