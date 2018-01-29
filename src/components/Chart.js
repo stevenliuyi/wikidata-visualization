@@ -13,6 +13,7 @@ import SankeyDiagram from './SankeyDiagram'
 import Heatmap from './Heatmap'
 import LeafletMap from './Leaflet'
 import Tools from './Tools'
+import Cloud from './Cloud'
 
 class Chart extends Component {
   state = {
@@ -87,6 +88,9 @@ class Chart extends Component {
               }
               { (this.state.show) && (this.props.chartId === 1.16) &&
                   <LeafletMap {...this.props} {...styles} />
+              }
+              { (this.state.show) && (this.props.chartId === 1.17) &&
+                  <Cloud {...this.props} {...styles} />
               }
             </div>
           }

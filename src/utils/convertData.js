@@ -1,6 +1,6 @@
 // convert the result from Wikidata to objects
 import * as d3 from 'd3'
-import { getColorScaleFromValues, getColors } from './scales'
+import { getColorScaleFromValues, getColors, colorSchemes } from './scales'
 
 const numbers = ['double', 'float', 'decimal', 'integer', 'long', 'int', 'short', 'nonNegativeInteger', 'positiveInteger', 'unsignedLong', 'unsignedInt', 'unsignedShort', 'nonPositiveInteger', 'negativeInteger']
 const numberTypes = numbers.map(type => (
@@ -255,4 +255,49 @@ export function getTooltipHTML(props) {
   ))
 
   return html
+}
+
+export function getWordCloudData(props) {
+
+  const maxFontSize = 40, minFontSize = 10
+  
+  const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
+  const textLabel = props.header[props.settings['texts']]  
+    
+  let texts = ''
+  selectedData.forEach(item => {
+    if (item[textLabel] != null) texts += ` ${String(item[textLabel])}`
+  })
+
+  // remove extra spaces 
+  texts = texts.replace(/\s+/g, ' ')  
+  
+  // split by space 
+  texts = texts.split(' ')
+
+  // count word occurences
+  let data = {}
+  texts.forEach((word, i) => {
+    if (!data[word]) data[word] = 0
+    ++data[word]
+  }) 
+
+  const minCount = Math.min(...Object.values(data))
+  const maxCount = Math.max(...Object.values(data))
+
+  // calculate font sizes
+  const calcFontSize = (count) => (
+    (Math.log(count)-Math.log(minCount))/(Math.log(maxCount)-Math.log(minCount)) *
+      (maxFontSize - minFontSize) + minFontSize
+  )
+
+  data = Object.keys(data).map(word => ({
+    text: word,
+    count: data[word],
+    fontSize: calcFontSize(data[word])
+  }))
+  
+  const colors = data.map(word=>colorSchemes[props.moreSettings.color](Math.random()))
+
+  return [data, colors]
 }

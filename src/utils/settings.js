@@ -103,6 +103,12 @@ const image = {
   type: 'image'
 }
 
+const texts = {
+  value: 'texts',
+  title: 'Texts',
+  type: 'all'
+}
+
 export const moreSettings = {
   fontSize: 10,
   radius: [5, 40],
@@ -295,6 +301,14 @@ export const charts = [
     settings: [coordinate, color, radius],
     defaultShow: [true, false, false],
     moreSettings: ['baseMap', 'showCircles', 'showMarkers', 'radius', 'color']
+  },
+  {
+    id: 1.17,
+    name: 'Word Cloud',
+    chartClass: 'more',
+    settings: [texts],
+    defaultShow: [true],
+    moreSettings: ['color']
   }
 ]
 

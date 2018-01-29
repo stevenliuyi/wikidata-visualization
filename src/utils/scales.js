@@ -78,7 +78,7 @@ export const colorSchemeNames = [
   'White / Yellow / Orange / Red'
 ]
 
-const colorSchemes = {
+export const colorSchemes = {
   'Brown / White / Blue-Green': d3color.interpolateBrBG,
   'Purple / White / Green': d3color.interpolatePRGn,
   'Pink / White / Yellow-Green': d3color.interpolatePiYG,
