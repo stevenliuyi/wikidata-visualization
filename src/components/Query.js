@@ -28,6 +28,9 @@ class Query extends Component {
   
   myCompleter = {
     getCompletions: function(editor, session, pos, prefix, callback) {
+      // disable the Return key as suggestion comfirmation key
+      editor.completer.keyboardHandler.commandKeyBinding.return = null
+
       callback(null, keywords.map((word) => {
         return {
           caption: word,
@@ -42,7 +45,7 @@ class Query extends Component {
           meta: 'snippets'
         }
       }))
-    }
+    },
   }
 
   receiveExampleCode = (index) => {
