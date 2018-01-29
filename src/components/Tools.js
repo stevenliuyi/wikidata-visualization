@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import MdFileDownload from 'react-icons/lib/md/file-download'
 import MdInsertLink from 'react-icons/lib/md/insert-link'
+import MdContentCopy from 'react-icons/lib/md/content-copy'
 import * as d3 from 'd3'
 import saveSvgAsPng from 'save-svg-as-png'
 import { Modal, Button, Form, FormGroup, FormControl, InputGroup, Col, ControlLabel, DropdownButton, MenuItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
@@ -20,7 +21,8 @@ class Tools extends Component {
     filename: '',
     gistUrl: '',
     rawGitUrl: '',
-    tinyUrl: ''
+    tinyUrl: '',
+    copyMessage: 'copy'
   }
 
   getSvgNode = () => {
@@ -176,9 +178,20 @@ class Tools extends Component {
                       style={{ cursor: 'default' }}
                     />
                     <InputGroup.Button>
-                      <CopyToClipboard text={this.state.gistUrl}>
-                        <Button>Copy</Button>
-                      </CopyToClipboard>
+                      <OverlayTrigger
+                        placement='bottom'
+                        onExited={()=>this.setState({ copyMessage: 'copy' })}
+                        overlay={<Tooltip id='copy-url'>{this.state.copyMessage}</Tooltip>}
+                      >
+                        <CopyToClipboard text={this.state.gistUrl}>
+                          <Button
+                            onClick={()=>this.setState({ copyMessage: 'copied' })}
+                            onMouseOver={()=>this.setState({ showTooltip: true })}
+                          >
+                            <MdContentCopy size={16} />
+                          </Button>
+                        </CopyToClipboard>
+                      </OverlayTrigger>
                     </InputGroup.Button>
                   </InputGroup></Col>
                 </FormGroup>
@@ -192,9 +205,20 @@ class Tools extends Component {
                       style={{ cursor: 'default' }}
                     />
                     <InputGroup.Button>
-                      <CopyToClipboard text={this.state.rawGitUrl}>
-                        <Button>Copy</Button>
-                      </CopyToClipboard>
+                      <OverlayTrigger
+                        placement='bottom'
+                        onExited={()=>this.setState({ copyMessage: 'copy' })}
+                        overlay={<Tooltip id='copy-url'>{this.state.copyMessage}</Tooltip>}
+                      >
+                        <CopyToClipboard text={this.state.rawGitUrl}>
+                          <Button
+                            onClick={()=>this.setState({ copyMessage: 'copied' })}
+                            onMouseOver={()=>this.setState({ showTooltip: true })}
+                          >
+                            <MdContentCopy size={16} />
+                          </Button>
+                        </CopyToClipboard>
+                      </OverlayTrigger>
                     </InputGroup.Button>
                   </InputGroup></Col>
                 </FormGroup>
@@ -208,9 +232,20 @@ class Tools extends Component {
                       style={{ cursor: 'default' }}
                     />
                     <InputGroup.Button>
-                      <CopyToClipboard text={this.state.tinyUrl}>
-                        <Button>Copy</Button>
-                      </CopyToClipboard>
+                      <OverlayTrigger
+                        placement='bottom'
+                        onExited={()=>this.setState({ copyMessage: 'copy' })}
+                        overlay={<Tooltip id='copy-url'>{this.state.copyMessage}</Tooltip>}
+                      >
+                        <CopyToClipboard text={this.state.tinyUrl}>
+                          <Button
+                            onClick={()=>this.setState({ copyMessage: 'copied' })}
+                            onMouseOver={()=>this.setState({ showTooltip: true })}
+                          >
+                            <MdContentCopy size={16} />
+                          </Button>
+                        </CopyToClipboard>
+                      </OverlayTrigger>
                     </InputGroup.Button>
                   </InputGroup></Col>
                 </FormGroup>
