@@ -32,6 +32,13 @@ class Tools extends Component {
     return svgNode
   }
 
+  getStringFromNode = (node) => {
+    let svgString = node.outerHTML
+    // fix Safari NS namespace prefix issue
+    svgString = svgString.replace(/NS\d+:href/gi, 'xlink:href')
+    return svgString
+  }
+
   getImageURL = () => {
     const gh = new GitHub()
     let gist = gh.getGist()
@@ -41,7 +48,7 @@ class Tools extends Component {
     }
     const filename = `${this.state.filename}.svg`
     data.files[filename] = {
-      content: this.getSvgNode().outerHTML
+      content: this.getStringFromNode(this.getSvgNode())
     }
 
     gist.create(data).then(({data}) => {
@@ -59,7 +66,10 @@ class Tools extends Component {
   }
 
   saveSVG = () => {
-    const svgBlob = new Blob([this.getSvgNode().outerHTML], {type:'image/svg+xml;charset=utf-8'})
+    const svgBlob = new Blob(
+      [this.getStringFromNode(this.getSvgNode())],
+      {type:'image/svg+xml;charset=utf-8'}
+    )
     const svgUrl = URL.createObjectURL(svgBlob)
 
     const link = document.createElement('a')
