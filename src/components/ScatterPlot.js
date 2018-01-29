@@ -19,7 +19,8 @@ class ScatterPlot extends Component {
     var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
 
     let selectedData = this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
-    selectedData.forEach((item,i) => { item['id'] = i})
+      .map((item,i) => ({ id: i, ...item})) // add ids
+      .filter((item) => (item[xLabel] != null) && (item[yLabel] != null)) // remove undefined values
 
     const d3node = (
       <svg width={this.props.width} height={this.props.height}>
@@ -60,6 +61,7 @@ class ScatterPlot extends Component {
       })
 
     d3.selectAll('.circleLabel')
+      .data(selectedData)
       .on('mouseover', function(d) {
         d3.select('#circle'+d.id)
           .attr('fill', chroma(colors[d.id]).brighten(0.6))
