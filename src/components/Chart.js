@@ -14,6 +14,8 @@ import Heatmap from './Heatmap'
 import LeafletMap from './Leaflet'
 import Tools from './Tools'
 import Cloud from './Cloud'
+import Border from './Border'
+import { charts } from '../utils/settings'
 
 class Chart extends Component {
   state = {
@@ -43,6 +45,8 @@ class Chart extends Component {
       padding: 40
     }
 
+    const chartIndex = charts.map(chart => chart.id).indexOf(this.props.chartId)
+
     return (
       <div>
         <Measure
@@ -60,6 +64,8 @@ class Chart extends Component {
         >
           {({ measureRef }) =>
             <div ref={measureRef}>
+              { this.props.canvasSettings.border && charts[chartIndex].canvasSettings.includes('border') &&
+                <Border {...styles} /> }
               { (this.state.show) && (this.props.chartId === 1.02) &&
                   <ScatterPlot {...this.props} {...styles} />
               }

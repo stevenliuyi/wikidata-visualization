@@ -5,7 +5,6 @@ import { getColorScale } from '../utils/scales'
 import ReactFauxDOM from 'react-faux-dom'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
-import { drawBorder } from '../utils/draw'
 
 // radial tree d3 reference: https://bl.ocks.org/mbostock/4063550
 const getD3Node = (props) => {
@@ -24,9 +23,6 @@ const getD3Node = (props) => {
     .attr('transform', 'translate(' + (props.width/2) + ',' + (props.height/2) + ')')
     .attr('font-family', 'sans-serif')
     .attr('font-size', props.moreSettings.fontSize)
-
-  if (props.canvasSettings.border)
-    drawBorder(svg, props.width, props.height, -props.width/2, -props.height/2)
 
   var radius = Math.min(props.width, props.height) / 2 * 0.8 
 

@@ -6,7 +6,6 @@ import SVGPanZoom from './SVGPanZoom'
 import { d3Sankey } from '../utils/sankey'
 import toposort from 'toposort'
 import chroma from 'chroma-js'
-import { drawBorder } from '../utils/draw'
 
 // Sankey diagram d3 reference: https://bl.ocks.org/ebendennis/07c361ea822d99872adffea9c7ccf19b
 const updateD3Node = (props) => {
@@ -37,8 +36,6 @@ const updateD3Node = (props) => {
     .attr('width', props.width)
     .attr('height', props.height)
     .append('g')
-
-  if (props.canvasSettings.border) drawBorder(svg, props.width, props.height)
 
   // Set the sankey diagram properties
   var sankey = d3Sankey()

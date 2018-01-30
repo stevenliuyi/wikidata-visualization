@@ -274,7 +274,7 @@ export const charts = [
     settings: [coordinate, color, radius, label],
     defaultShow: [true, false, false, false],
     moreSettings: ['map', 'fontSize', 'radius', 'color'], // SVG rendering issue for map projection
-    canvasSettings: ['height']
+    canvasSettings: ['height', 'border']
   },
   {
     id: 1.10,
@@ -292,7 +292,7 @@ export const charts = [
     settings: [region, area, color],
     defaultShow: [true, false, false],
     moreSettings: ['map2', 'iterations', 'color'],
-    canvasSettings: []
+    canvasSettings: ['border']
   },
   {
     id: 1.12,
@@ -310,7 +310,7 @@ export const charts = [
     settings: [region, color],
     defaultShow: [true, false],
     moreSettings: ['map2', 'fontSize', 'color'],
-    canvasSettings: ['height']
+    canvasSettings: ['height', 'border']
   },
   {
     id: 1.14,
@@ -346,7 +346,7 @@ export const charts = [
     settings: [texts],
     defaultShow: [true],
     moreSettings: ['delimiter', 'case', 'fontSizes', 'sizeScale', 'color'],
-    canvasSettings: ['auto', 'width', 'height']
+    canvasSettings: ['auto', 'width', 'height', 'border']
   }
 ]
 

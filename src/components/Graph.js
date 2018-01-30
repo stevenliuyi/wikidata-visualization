@@ -4,7 +4,6 @@ import { getGraph } from '../utils/convertData'
 import { getColorScale } from '../utils/scales'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
-import { drawBorder } from '../utils/draw'
 
 // force-directed graph d3 references:
 // https://bl.ocks.org/mbostock/4062045
@@ -24,8 +23,6 @@ const updateD3Node = (props) => {
   svg = svg.append('g')
     .attr('width', props.width)
     .attr('height', props.height)
-
-  if (props.canvasSettings.border) drawBorder(svg, props.width, props.height)
 
   svg.append('defs').append('marker')
     .attr('id', 'arrowhead')

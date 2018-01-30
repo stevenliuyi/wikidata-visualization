@@ -5,7 +5,6 @@ import { getColorScale } from '../utils/scales'
 import ReactFauxDOM from 'react-faux-dom'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
-import { drawBorder } from '../utils/draw'
 
 // tree d3 reference: https://bl.ocks.org/mbostock/4339184
 const getD3Node = (props) => {
@@ -25,9 +24,6 @@ const getD3Node = (props) => {
     .attr('font-family', 'sans-serif')
     .attr('font-size', props.moreSettings.fontSize)
 
-  if (props.canvasSettings.border)
-    drawBorder(svg, props.width, props.height, -40, 0)
-  
   var cluster = d3.cluster()
     .size([props.height, props.width-160])
 

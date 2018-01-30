@@ -24,17 +24,6 @@ class ScatterPlot extends Component {
 
     const d3node = (
       <svg width={this.props.width} height={this.props.height}>
-        { this.props.canvasSettings.border &&
-          <rect
-            x={0}
-            y={0}
-            width={this.props.width}
-            height={this.props.height}
-            fill='none'
-            stroke='#ddd'
-            strokeWidth = '2'
-          />
-        }
         <DataCircles
           xLabel={xLabel}
           yLabel={yLabel}
