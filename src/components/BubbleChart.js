@@ -5,6 +5,7 @@ import * as d3 from 'd3'
 import ReactFauxDOM from 'react-faux-dom'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
+import { drawBorder } from '../utils/draw'
 
 // bubble chart d3 references
 // https://bl.ocks.org/mbostock/4063269
@@ -23,6 +24,8 @@ const getD3Node = (props) => {
     .attr('width', props.width)
     .attr('height', props.height)
     .attr('class', 'bubble')
+
+  if (props.canvasSettings.border) drawBorder(svg, props.width, props.height)
 
   d3.selectAll('.d3ToolTip').remove()
   var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
@@ -105,6 +108,7 @@ class BubbleChart extends Component {
 
   render() {
     const d3node = getD3Node(this.props)
+
     return (
       <SVGPanZoom d3node={d3node} width={this.props.width} height={this.props.height} /> 
     )

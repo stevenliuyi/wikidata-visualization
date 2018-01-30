@@ -163,6 +163,20 @@ export const moreSettingTitles = {
   fontSizes: 'Font Sizes'
 }
 
+export const canvasSettings = {
+  auto: true,
+  width: 500,
+  height: -1,
+  border: false
+}
+
+export const canvasSettingTitles = {
+  auto: 'Auto width',
+  width: 'Width',
+  height: 'Height',
+  border: 'Border'
+}
+
 // chart classes
 export const chartClasses = [
   {
@@ -196,7 +210,8 @@ export const charts = [
     chartClass: 'basic',
     settings: [x_axis, y_axis, label, color, radius],
     defaultShow: [true, true, false, false, false],
-    moreSettings: ['fontSize', 'radius', 'color']
+    moreSettings: ['fontSize', 'radius', 'color'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.03,
@@ -204,7 +219,8 @@ export const charts = [
     chartClass: 'basic',
     settings: [radius, label, color],
     defaultShow: [true, true, false],
-    moreSettings: ['fontSize', 'color']
+    moreSettings: ['fontSize', 'color'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.04,
@@ -212,7 +228,8 @@ export const charts = [
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color']
+    moreSettings: ['fontSize', 'color'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.05,
@@ -220,7 +237,8 @@ export const charts = [
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color']
+    moreSettings: ['fontSize', 'color'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.06,
@@ -228,7 +246,8 @@ export const charts = [
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color']
+    moreSettings: ['fontSize', 'color'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.07,
@@ -236,7 +255,8 @@ export const charts = [
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color']
+    moreSettings: ['fontSize', 'color'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.08,
@@ -244,7 +264,8 @@ export const charts = [
     chartClass: 'more',
     settings: [link_from, link_to, relation, label],
     defaultShow: [true, true, true, false],
-    moreSettings: ['fontSize', 'color']
+    moreSettings: ['fontSize', 'color'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.09,
@@ -252,7 +273,8 @@ export const charts = [
     chartClass: 'map',
     settings: [coordinate, color, radius, label],
     defaultShow: [true, false, false, false],
-    moreSettings: ['map', 'fontSize', 'radius', 'color'] // SVG rendering issue for map projection
+    moreSettings: ['map', 'fontSize', 'radius', 'color'], // SVG rendering issue for map projection
+    canvasSettings: ['height']
   },
   {
     id: 1.10,
@@ -260,7 +282,8 @@ export const charts = [
     chartClass: 'basic',
     settings: [link_from, link_to, label_from, label_to, edge_label, color],
     defaultShow: [true, true, false, false, false, false],
-    moreSettings: ['strength', 'fontSize', 'edgeFontSize', 'color']
+    moreSettings: ['strength', 'fontSize', 'edgeFontSize', 'color'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.11,
@@ -268,7 +291,8 @@ export const charts = [
     chartClass: 'map',
     settings: [region, area, color],
     defaultShow: [true, false, false],
-    moreSettings: ['map2', 'iterations', 'color']
+    moreSettings: ['map2', 'iterations', 'color'],
+    canvasSettings: []
   },
   {
     id: 1.12,
@@ -276,7 +300,8 @@ export const charts = [
     chartClass: 'more',
     settings: [image, label],
     defaultShow: [true, false],
-    moreSettings: []
+    moreSettings: [],
+    canvasSettings: []
   },
   {
     id: 1.13,
@@ -284,7 +309,8 @@ export const charts = [
     chartClass: 'map',
     settings: [region, color],
     defaultShow: [true, false],
-    moreSettings: ['map2', 'fontSize', 'color']
+    moreSettings: ['map2', 'fontSize', 'color'],
+    canvasSettings: ['height']
   },
   {
     id: 1.14,
@@ -292,7 +318,8 @@ export const charts = [
     chartClass: 'more',
     settings: [link_from, link_to, relation, label_from, label_to, edge_label, color_from, color_to],
     defaultShow: [true, true, false, false, false, false],
-    moreSettings: ['fontSize', 'color', 'nodeWidth', 'nodePadding']
+    moreSettings: ['fontSize', 'color', 'nodeWidth', 'nodePadding'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.15,
@@ -300,7 +327,8 @@ export const charts = [
     chartClass: 'more',
     settings: [link_from, link_to, color, label_from, label_to],
     defaultShow: [true, true, true, false, false],
-    moreSettings: ['sortRow', 'sortColumn', 'fontSize', 'color']
+    moreSettings: ['sortRow', 'sortColumn', 'fontSize', 'color'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.16,
@@ -308,7 +336,8 @@ export const charts = [
     chartClass: 'map',
     settings: [coordinate, color, radius],
     defaultShow: [true, false, false],
-    moreSettings: ['baseMap', 'showCircles', 'showMarkers', 'radius', 'color']
+    moreSettings: ['baseMap', 'showCircles', 'showMarkers', 'radius', 'color'],
+    canvasSettings: []
   },
   {
     id: 1.17,
@@ -316,7 +345,8 @@ export const charts = [
     chartClass: 'more',
     settings: [texts],
     defaultShow: [true],
-    moreSettings: ['delimiter', 'case', 'fontSizes', 'sizeScale', 'color']
+    moreSettings: ['delimiter', 'case', 'fontSizes', 'sizeScale', 'color'],
+    canvasSettings: ['auto', 'width', 'height']
   }
 ]
 

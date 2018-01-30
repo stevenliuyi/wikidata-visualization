@@ -102,7 +102,8 @@ class Map extends Component {
           height={551}
           style={{
             width: '100%',
-            height: 'auto',
+            height: this.props.canvasSettings.height < 0
+              ? 'auto' : this.props.canvasSettings.height,
           }}
         >
           <ZoomableGroup center={this.state.center} zoom={this.state.zoom}>

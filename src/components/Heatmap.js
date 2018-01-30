@@ -4,6 +4,7 @@ import { getMatrix2 } from '../utils/convertData'
 import ReactFauxDOM from 'react-faux-dom'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
+import { drawBorder } from '../utils/draw'
 
 // heat matrix d3 references:
 // https://moleleo.github.io/D3V4NetworkDataVisualizations/
@@ -21,6 +22,8 @@ const getD3Node = (props) => {
   var svg = d3.select(d3node)
     .attr('width', props.width)
     .attr('height', props.height)
+
+  if (props.canvasSettings.border) drawBorder(svg, props.width, props.height)
 
   var margin = 40
   svg = svg.append('g').attr('transform','translate(' + margin + ',' + margin + ')')

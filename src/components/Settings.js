@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { PanelGroup, Panel, Form, FormGroup, FormControl, ControlLabel, Col } from 'react-bootstrap'
-import { charts, moreSettingTitles } from '../utils/settings'
+import { charts, moreSettingTitles, canvasSettingTitles } from '../utils/settings'
 import ReactBootstrapSlider from 'react-bootstrap-slider'
 import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
 import Toggle from 'react-bootstrap-toggle'
@@ -289,6 +289,39 @@ class Settings extends Component {
           min={1}
           max={128} />
       )
+    } else if (setting === 'width' || setting === 'height') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.canvasSettings[setting]}
+          slideStop={(e)=>{
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onCanvasSettingsChange(newSetting)
+          }}
+          tooltip_position={setting==='width' ? 'top' : 'bottom'}
+          step={10}
+          min={200}
+          max={2048} />
+      )
+    } else if (setting === 'auto' || setting === 'border') {
+      return (
+        <Toggle
+          active={this.props.canvasSettings[setting]}
+          on='On'
+          off='Off'
+          size='sm'
+          height={30}
+          width='100%'
+          onstyle='default'
+          offstyle='default'
+          handlestyle='primary'
+          onClick={(state)=>{
+            const newSetting = {}
+            newSetting[setting] = state
+            return this.props.onCanvasSettingsChange(newSetting)
+          }}
+        />
+      )
     } else {
       return null
     }
@@ -297,10 +330,11 @@ class Settings extends Component {
   render() {
     const chartId = charts.map(chart => chart.id).indexOf(this.props.chart)
     const chartMoreSettings = (chartId >= 0) ? charts[chartId].moreSettings : null
+    const chartCanvasSettings = (chartId >= 0) ? charts[chartId].canvasSettings : null
 
     if (this.props.chart >= 2 || this.props.header.length === 0) return null 
 
-    const moreSettingsHeader = (this.props.chart !== 1.01) ? 'More options' : 'Options'
+    const moreSettingsHeader = (this.props.chart !== 1.01) ? 'Display options' : 'Options'
 
     return (
       <PanelGroup activeKey={this.state.panelKey} onSelect={this.handleSelect} accordion>
@@ -346,6 +380,26 @@ class Settings extends Component {
                       </Col>
                     </FormGroup>
                   ))
+                }
+              </Form>
+            </Panel>
+        }
+        { Array.isArray(chartCanvasSettings) && chartCanvasSettings.length > 0 &&
+            <Panel header='Canvas options' eventKey='3' key='3'>
+              <Form horizontal>
+                { // canvas options
+                  chartCanvasSettings.map(canvasSetting => {
+                    if (this.props.canvasSettings.auto && canvasSetting === 'width') return null
+
+                    return (
+                      <FormGroup key={canvasSetting}>
+                        <Col componentClass={ControlLabel} sm={4}>{canvasSettingTitles[canvasSetting]}</Col>
+                        <Col sm={8}>
+                          { this.getMoreSetting(canvasSetting, this.props.header) }
+                        </Col>
+                      </FormGroup>
+                    )
+                  })
                 }
               </Form>
             </Panel>

@@ -31,10 +31,16 @@ class Chart extends Component {
 
   render() {
     const width = Math.max(this.state.width, 1)
+    const height = width * 0.6
+
     const styles = {
-      width: width,
-      height: width * 0.6,
-      padding: 40,
+      width: this.props.canvasSettings.auto
+        ? width
+        : this.props.canvasSettings.width,
+      height: this.props.canvasSettings.height < 0
+        ? height 
+        : this.props.canvasSettings.height,
+      padding: 40
     }
 
     return (
@@ -43,6 +49,13 @@ class Chart extends Component {
           bounds
           onResize={(contentRect) => {
             this.setState({ width: contentRect.bounds.width })
+            // update canvas settings
+            if (this.props.canvasSettings.auto) this.props.onCanvasSettingsChange({
+              width: contentRect.bounds.width
+            })
+            if (this.props.canvasSettings.height < 0) this.props.onCanvasSettingsChange({
+              height: contentRect.bounds.width * 0.6
+            })
           }}
         >
           {({ measureRef }) =>

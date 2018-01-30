@@ -12,7 +12,7 @@ import Examples from './Examples'
 import TopNavBar from './TopNavBar'
 import * as WikidataAPI from '../utils/api'
 import { convertData } from '../utils/convertData'
-import { getChartNames, getSettings, moreSettings } from '../utils/settings'
+import { getChartNames, getSettings, moreSettings, canvasSettings } from '../utils/settings'
 import Measure from 'react-measure'
 import ImageGallery from './Gallery'
 import Promise from 'bluebird'
@@ -34,6 +34,7 @@ class App extends Component {
     chartNames: {},
     rowSelections: [],
     moreSettings: {},
+    canvasSettings: {},
     timingPromise: null
   }
 
@@ -81,6 +82,15 @@ class App extends Component {
     this.setState(prevState => ({
       moreSettings: {
         ...prevState.moreSettings,
+        ...new_setting
+      }
+    }))
+  }
+
+  handleCanvasSettingsChange = (new_setting) => {
+    this.setState(prevState => ({
+      canvasSettings: {
+        ...prevState.canvasSettings,
         ...new_setting
       }
     }))
@@ -137,7 +147,8 @@ class App extends Component {
           chart: new_chart,
           chartName: this.state.chartNames[new_chart],
           rowSelections: [...Array(new_data.length).keys()],
-          moreSettings: moreSettings
+          moreSettings: moreSettings,
+          canvasSettings: canvasSettings
         })
       })
       .finally(() => {
@@ -187,9 +198,11 @@ class App extends Component {
                     settings={this.state.settings}
                     info={this.state.settingsInfo}
                     moreSettings={this.state.moreSettings}
+                    canvasSettings={this.state.canvasSettings}
                     chart={this.state.chart}
                     onChange={this.setSettings}
                     onMoreSettingsChange={this.handleMoreSettingsChange}
+                    onCanvasSettingsChange={this.handleCanvasSettingsChange}
                   />
                 </Row>
                 }
@@ -220,6 +233,8 @@ class App extends Component {
                     header={this.state.header}
                     settings={this.state.settings}
                     moreSettings={this.state.moreSettings}
+                    canvasSettings={this.state.canvasSettings}
+                    onCanvasSettingsChange={this.handleCanvasSettingsChange}
                   />
                 }
                 {

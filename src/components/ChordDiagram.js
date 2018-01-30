@@ -4,6 +4,7 @@ import { getMatrix } from '../utils/convertData'
 import ReactFauxDOM from 'react-faux-dom'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
+import { drawBorder } from '../utils/draw'
 
 // chord diagram d3 reference: https://bl.ocks.org/mbostock/4062006
 const getD3Node = (props) => {
@@ -18,6 +19,8 @@ const getD3Node = (props) => {
   var svg = d3.select(d3node)
     .attr('width', props.width)
     .attr('height', props.height)
+
+  if (props.canvasSettings.border) drawBorder(svg, props.width, props.height)
 
   var outerRadius = Math.min(props.width, props.height) * 0.5 - 40,
     innerRadius = outerRadius * 0.8
