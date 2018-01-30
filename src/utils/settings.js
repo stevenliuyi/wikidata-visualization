@@ -133,7 +133,11 @@ export const moreSettings = {
   delimiter: ' ',
   case: 'default',
   sizeScale: 'linear',
-  fontSizes: [10, 40]
+  fontSizes: [10, 40],
+  showLegend: false,
+  legendScale: 1,
+  legendX: 0.8,
+  legendY: 0.02
 }
 
 export const moreSettingTitles = {
@@ -160,7 +164,11 @@ export const moreSettingTitles = {
   delimiter: 'Delimiter',
   case: 'Case',
   sizeScale: 'Size scale',
-  fontSizes: 'Font Sizes'
+  fontSizes: 'Font Sizes',
+  showLegend: 'Show legend',
+  legendScale: 'Legend scale',
+  legendX: 'Legend X position',
+  legendY: 'Legend Y position'
 }
 
 export const canvasSettings = {
@@ -210,7 +218,7 @@ export const charts = [
     chartClass: 'basic',
     settings: [x_axis, y_axis, label, color, radius],
     defaultShow: [true, true, false, false, false],
-    moreSettings: ['fontSize', 'radius', 'color'],
+    moreSettings: ['fontSize', 'radius', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -219,7 +227,7 @@ export const charts = [
     chartClass: 'basic',
     settings: [radius, label, color],
     defaultShow: [true, true, false],
-    moreSettings: ['fontSize', 'color'],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -228,7 +236,7 @@ export const charts = [
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color'],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -237,7 +245,7 @@ export const charts = [
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color'],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -246,7 +254,7 @@ export const charts = [
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color'],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -255,7 +263,7 @@ export const charts = [
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color'],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -264,7 +272,7 @@ export const charts = [
     chartClass: 'more',
     settings: [link_from, link_to, relation, label],
     defaultShow: [true, true, true, false],
-    moreSettings: ['fontSize', 'color'],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -273,7 +281,7 @@ export const charts = [
     chartClass: 'map',
     settings: [coordinate, color, radius, label],
     defaultShow: [true, false, false, false],
-    moreSettings: ['map', 'fontSize', 'radius', 'color'], // SVG rendering issue for map projection
+    moreSettings: ['map', 'fontSize', 'radius', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'], // SVG rendering issue for map projection
     canvasSettings: ['height', 'border']
   },
   {
@@ -309,7 +317,7 @@ export const charts = [
     chartClass: 'map',
     settings: [region, color],
     defaultShow: [true, false],
-    moreSettings: ['map2', 'fontSize', 'color'],
+    moreSettings: ['map2', 'fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
     canvasSettings: ['height', 'border']
   },
   {

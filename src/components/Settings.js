@@ -205,7 +205,7 @@ class Settings extends Component {
           }
         </FormControl>
       )
-    } else if (setting === 'showCircles' || setting === 'showMarkers' || setting === 'reasonator') {
+    } else if (setting === 'showCircles' || setting === 'showMarkers' || setting === 'reasonator' || setting === 'showLegend') {
       return (
         <Toggle
           active={this.props.moreSettings[setting]}
@@ -322,6 +322,33 @@ class Settings extends Component {
           }}
         />
       )
+    } else if (setting === 'legendScale') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings[setting]}
+          slideStop={(e)=>{
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onMoreSettingsChange(newSetting)
+          }}
+          step={0.1}
+          min={0.1}
+          max={3} />
+      )
+    } else if (setting === 'legendX' || setting === 'legendY') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings[setting]}
+          slideStop={(e)=>{
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onMoreSettingsChange(newSetting)
+          }}
+          tooltip_position={setting==='legendX' ? 'top' : 'legendY'}
+          step={0.01}
+          min={0}
+          max={1} />
+      )
     } else {
       return null
     }
@@ -372,14 +399,19 @@ class Settings extends Component {
             <Panel header={moreSettingsHeader} eventKey='2' key='2'>
               <Form horizontal>
                 { // more options
-                  chartMoreSettings.map(moreSetting => (
-                    <FormGroup key={moreSetting}>
-                      <Col componentClass={ControlLabel} sm={4}>{moreSettingTitles[moreSetting]}</Col>
-                      <Col sm={8}>
-                        { this.getMoreSetting(moreSetting, this.props.header) }
-                      </Col>
-                    </FormGroup>
-                  ))
+                  chartMoreSettings.map(moreSetting => {
+
+                    if (!this.props.moreSettings.showLegend &&  moreSetting.startsWith('legend')) return null
+
+                    return (
+                      <FormGroup key={moreSetting}>
+                        <Col componentClass={ControlLabel} sm={4}>{moreSettingTitles[moreSetting]}</Col>
+                        <Col sm={8}>
+                          { this.getMoreSetting(moreSetting, this.props.header) }
+                        </Col>
+                      </FormGroup>
+                    )
+                  })
                 }
               </Form>
             </Panel>

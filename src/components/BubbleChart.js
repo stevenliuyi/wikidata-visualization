@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import { getColorScale } from '../utils/scales'
 import { getTooltipHTML } from '../utils/convertData'
 import * as d3 from 'd3'
-import ReactFauxDOM from 'react-faux-dom'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
+import{ drawLegend } from '../utils/draw'
 
 // bubble chart d3 references
 // https://bl.ocks.org/mbostock/4063269
 // https://jrue.github.io/coding/2014/exercises/basicbubblepackchart/
-const getD3Node = (props) => {
+const updateD3Node = (props) => {
   var colorScale = getColorScale(props)
   var tooltipHTML = getTooltipHTML(props)
   
@@ -17,9 +17,11 @@ const getD3Node = (props) => {
     .size([props.width, props.height])
     .padding(5)
   
-  var d3node = new ReactFauxDOM.Element('svg')
+  var svg = d3.select('#chart')
 
-  var svg = d3.select(d3node)
+  svg = svg.select('g')
+  svg.selectAll('*').remove()
+  svg = svg.append('g')
     .attr('width', props.width)
     .attr('height', props.height)
     .attr('class', 'bubble')
@@ -98,16 +100,31 @@ const getD3Node = (props) => {
       tooltip.style('display', 'none')
     })
 
-  return d3node.toReact()
+  drawLegend(svg, colorScale, props)
 } 
 
 class BubbleChart extends Component {
 
+  state = {
+    mounted: false
+  }
+
+  componentDidMount() {
+    updateD3Node(this.props)
+    this.setState({mounted: true})
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.state.mounted) updateD3Node(nextProps)
+  }
+
   render() {
-    const d3node = getD3Node(this.props)
+    let d3node = (<svg width={this.props.width} height={this.props.height}></svg>)
 
     return (
-      <SVGPanZoom d3node={d3node} width={this.props.width} height={this.props.height} /> 
+      <div id='chart'>
+        <SVGPanZoom d3node={d3node} width={this.props.width} height={this.props.height} /> 
+      </div>
     )
   }
 }

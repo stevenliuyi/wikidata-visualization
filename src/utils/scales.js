@@ -132,17 +132,19 @@ export function getColorScale(props, nodes = null) {
     if ((typeof(props.data[0][label]) === 'number' && nodes == null) || (nodes != null && typeof(nodes[0]['color']) === 'number')) {
       const minValue = d3.min(selectedData, d => (nodes == null) ? d[label] : d['color'])
       const maxValue = d3.max(selectedData, d => (nodes == null) ? d[label] : d['color'])
-      colorScale = (minValue !== maxValue)
-        ? (v) => colorSchemes[schemeName]((v-minValue)/(maxValue-minValue))
-        : (v) => colorSchemes[schemeName](0.8)
+      colorScale = d3.scaleSequential(colorSchemes[schemeName])
+        .domain([minValue, maxValue])
     } else { // non-numeric values
       const values = (nodes == null)
         ? selectedData.map(item => item[label])
         : selectedData.map(item => item['color'])
       const unique_values = [...new Set(values)].sort()
+      const colorScaleFromValues = getColorScaleFromValues(unique_values, schemeName)
       colorScale = (unique_values.length !== 1)
-        ? getColorScaleFromValues(unique_values, schemeName)
-        : (v) => colorSchemes[schemeName](0.8) // only one unique value
+        ? d3.scaleOrdinal()
+          .domain(unique_values)
+          .range(unique_values.map(v => colorScaleFromValues(v)))
+        : d3.scaleLinear().domain(unique_values).range([colorSchemes[schemeName](0.8)]) // only one unique value
     }
   }
   return colorScale
