@@ -137,7 +137,8 @@ export const moreSettings = {
   showLegend: false,
   legendScale: 1,
   legendX: 0.8,
-  legendY: 0.02
+  legendY: 0.02,
+  rotation: 0
 }
 
 export const moreSettingTitles = {
@@ -165,10 +166,11 @@ export const moreSettingTitles = {
   case: 'Case',
   sizeScale: 'Size scale',
   fontSizes: 'Font Sizes',
-  showLegend: 'Show legend',
+  showLegend: 'Legend',
   legendScale: 'Legend scale',
   legendX: 'Legend X position',
-  legendY: 'Legend Y position'
+  legendY: 'Legend Y position',
+  rotation: 'Max rotation'
 }
 
 export const canvasSettings = {
@@ -353,7 +355,7 @@ export const charts = [
     chartClass: 'more',
     settings: [texts],
     defaultShow: [true],
-    moreSettings: ['delimiter', 'case', 'fontSizes', 'sizeScale', 'color'],
+    moreSettings: ['delimiter', 'case', 'fontSizes', 'sizeScale', 'rotation', 'color'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   }
 ]

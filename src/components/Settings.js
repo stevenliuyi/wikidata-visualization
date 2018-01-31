@@ -349,6 +349,19 @@ class Settings extends Component {
           min={0}
           max={1} />
       )
+    } else if (setting === 'rotation') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings[setting]}
+          slideStop={(e)=>{
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onMoreSettingsChange(newSetting)
+          }}
+          step={1}
+          min={0}
+          max={90} />
+      )
     } else {
       return null
     }
