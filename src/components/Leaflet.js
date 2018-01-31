@@ -51,7 +51,7 @@ class LeafletMap extends Component {
       <div>
         <Map
           ref='map'
-          style={{height: 350}}
+          style={{height: this.props.height, width: this.props.width}}
           bounds={bounds}>
           <Basemap basemap={this.props.moreSettings.baseMap} />
           {

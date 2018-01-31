@@ -347,7 +347,7 @@ export const charts = [
     settings: [coordinate, color, radius],
     defaultShow: [true, false, false],
     moreSettings: ['baseMap', 'showCircles', 'showMarkers', 'radius', 'color'],
-    canvasSettings: []
+    canvasSettings: ['auto', 'width', 'height']
   },
   {
     id: 1.17,
