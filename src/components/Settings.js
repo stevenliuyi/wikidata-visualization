@@ -9,6 +9,7 @@ import { colorSchemeNames, getColorScaleFromValues } from '../utils/scales'
 import { mapSettings, mapProjections } from '../utils/maps'
 import { map2Settings } from '../utils/maps2'
 import { baseMapSettings } from '../utils/basemap'
+import * as d3 from 'd3'
 
 class Settings extends Component {
 
@@ -30,6 +31,21 @@ class Settings extends Component {
         this.setState({ panelKey: '1' })
       }
     }
+  }
+
+  componentDidUpdate() {
+    // hack to fix react-bootstrap-slider tooltip position issue
+    setTimeout( () => {
+      //get tooltip nodes
+      const nodes = d3.selectAll('.tooltip-main').nodes()
+      if (nodes.length > 0) {
+        // get actual widths of all tooltips
+        const widths = nodes.map(node=>node.getBoundingClientRect().width)
+        // set tooltip margin-left
+        d3.selectAll('.tooltip-main')
+          .style('margin-left', (d,i) => `-${widths[i]/2}px`)
+      }
+    }, 100)
   }
 
   handleSelect(panelKey) {
