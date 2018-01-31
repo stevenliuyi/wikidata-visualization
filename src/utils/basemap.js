@@ -3,6 +3,9 @@ export const baseMapSettings = {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   },
+  'Google Map': {
+    maptype: 'roadmap'
+  },
   'OpenTopoMap': {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a>, &copy; <a href="https://opentopomap.org">OpenTopoMap</a>',
     url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'

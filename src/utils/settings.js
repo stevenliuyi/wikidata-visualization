@@ -155,7 +155,7 @@ export const moreSettingTitles = {
   nodePadding: 'Node padding',
   sortRow: 'Sort row by',
   sortColumn: 'Sort column by',
-  baseMap: 'Basemap',
+  baseMap: 'Base map',
   showCircles: 'Circles',
   showMarkers: 'Markers',
   ignoreCase: 'Ignore case',

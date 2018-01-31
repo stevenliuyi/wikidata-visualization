@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { TileLayer, LayersControl } from 'react-leaflet'
 import { baseMapSettings } from '../utils/basemap'
+import { GoogleLayer } from 'react-leaflet-google'
 
 const { Overlay } = LayersControl
 
@@ -16,7 +17,15 @@ class Basemap extends Component {
   render() {
     return (
       <div>
-        { baseMapSettings[this.state.basemap].overlay == null &&
+        { this.state.basemap.startsWith('Google') &&
+          <GoogleLayer
+            key='AIzaSyCTsXByA2UWSCIcX9BuPUdB8oMF6hXqJqU'
+            maptype={ baseMapSettings[this.state.basemap].maptype }
+          />
+        }
+
+        { !this.state.basemap.startsWith('Google') &&
+          baseMapSettings[this.state.basemap].overlay == null &&
           (
             <TileLayer
               attribution={ baseMapSettings[this.state.basemap].attribution }
@@ -25,7 +34,8 @@ class Basemap extends Component {
           )
         }
     
-        { baseMapSettings[this.state.basemap].overlay != null &&
+        { !this.state.basemap.startsWith('Google') &&
+          baseMapSettings[this.state.basemap].overlay != null &&
           (
             <LayersControl position='topright'>
               <TileLayer
