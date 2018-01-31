@@ -36,6 +36,7 @@ const updateD3Node = (props) => {
   //bubbles needs very specific format, convert data to this.
   var nodes = d3.hierarchy({children:data})
     .sum(function(d) { return d[props.header[props.settings['radius']]] })
+    .sort(function(a,b) { return b.value - a.value })
   
   //setup the chart
   var bubbles = svg.selectAll('.node')
