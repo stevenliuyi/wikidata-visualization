@@ -133,7 +133,7 @@ class RadialTree extends Component {
   render() {
     const d3node = getD3Node(this.props)
     return (
-      <SVGPanZoom d3node={d3node} width={this.props.width} height={this.props.height} /> 
+      <SVGPanZoom d3node={d3node} {...this.props} />
     )
   }
 }

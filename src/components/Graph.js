@@ -209,7 +209,7 @@ class Graph extends Component {
 
     return (
       <div id='chart'>
-        <SVGPanZoom d3node={d3node} width={this.props.width} height={this.props.height} /> 
+        <SVGPanZoom d3node={d3node} {...this.props} />
       </div>
     )
   }

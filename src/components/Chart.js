@@ -115,7 +115,7 @@ class Chart extends Component {
           }
         </Measure>
         { (this.state.show) && (this.props.chartId !== 1.16) &&
-          <Tools />
+          <Tools viewer={this.props.viewer} chartId={this.props.chartId} />
         } 
       </div>
     )

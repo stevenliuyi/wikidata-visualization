@@ -35,7 +35,8 @@ class App extends Component {
     rowSelections: [],
     moreSettings: {},
     canvasSettings: {},
-    timingPromise: null
+    timingPromise: null,
+    viewer: null
   }
 
   componentDidMount() {
@@ -235,6 +236,8 @@ class App extends Component {
                     moreSettings={this.state.moreSettings}
                     canvasSettings={this.state.canvasSettings}
                     onCanvasSettingsChange={this.handleCanvasSettingsChange}
+                    viewer={this.state.viewer}
+                    onViewerChange={(viewer)=>this.setState({ viewer })}
                   />
                 }
                 {

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import MdFileDownload from 'react-icons/lib/md/file-download'
 import MdInsertLink from 'react-icons/lib/md/insert-link'
 import MdContentCopy from 'react-icons/lib/md/content-copy'
+import MdRefresh from 'react-icons/lib/md/refresh'
 import * as d3 from 'd3'
 import saveSvgAsPng from 'save-svg-as-png'
 import { Modal, Button, Form, FormGroup, FormControl, InputGroup, Col, ControlLabel, DropdownButton, MenuItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
@@ -98,6 +99,8 @@ class Tools extends Component {
   }
 
   render() {
+    const noViewerRefreshCharts = [1.09, 1.11, 1.13]
+
     return (
       <div>
         <OverlayTrigger placement='bottom' overlay={
@@ -118,6 +121,17 @@ class Tools extends Component {
             className='clickable-icon pull-right'
           />
         </OverlayTrigger>
+        { (!noViewerRefreshCharts.includes(this.props.chartId)) &&
+          <OverlayTrigger placement='bottom' overlay={
+            <Tooltip id='get-image-url'>reset view</Tooltip>
+          }>
+            <MdRefresh
+              size={20}
+              onClick={()=>this.props.viewer.reset()}
+              className='clickable-icon pull-right'
+            />
+          </OverlayTrigger>
+        }
         <Modal show={this.state.show} onHide={()=>this.setState({ show: false })}>
           <Modal.Header>
             <Modal.Title>{ this.state.mode === 'download' ? 'Download Image' : 'Get SVG URL' }</Modal.Title>
