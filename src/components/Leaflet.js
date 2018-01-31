@@ -22,16 +22,27 @@ class LeafletMap extends Component {
     zoom: 1
   }
 
+  componentWillMount() {
+    this.fitBounds = this.fitBounds.bind(this)
+  }
+
   componentDidUpdate() {
     this.refs.map.leafletElement.invalidateSize(false)
   }
 
-  render() {
+  componentDidMount() {
+    this.props.updateFitBoundsFcn(this.fitBounds)
+  }
 
+  fitBounds() {
+    this.refs.map.leafletElement.fitBounds(this.getBounds(this.props))
+  }
+
+  getBounds(props) {
     // get coordinates
-    const coordData = this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
-      .filter(item => item[this.props.header[this.props.settings['coordinate']]] != null)
-      .map((item, i) => (item[this.props.header[this.props.settings['coordinate']]]
+    const coordData = props.data.filter((item, i) => props.rowSelections.includes(i))
+      .filter(item => item[props.header[props.settings['coordinate']]] != null)
+      .map((item, i) => (item[props.header[props.settings['coordinate']]]
         .split(', ').map(parseFloat).reverse()))
 
     // get bounds
@@ -42,6 +53,13 @@ class LeafletMap extends Component {
     if (Object.keys(bounds).length === 0) {
       bounds.extend([90,180]).extend([-90,-180])
     }
+
+   return bounds
+  }
+
+  render() {
+
+    const bounds = this.getBounds(this.props)
 
     const radii = getRadius(this.props)
     const colors = getColors(this.props)

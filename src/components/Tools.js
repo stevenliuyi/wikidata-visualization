@@ -3,6 +3,7 @@ import MdFileDownload from 'react-icons/lib/md/file-download'
 import MdInsertLink from 'react-icons/lib/md/insert-link'
 import MdContentCopy from 'react-icons/lib/md/content-copy'
 import MdRefresh from 'react-icons/lib/md/refresh'
+import MdCropFree from 'react-icons/lib/md/crop-free'
 import * as d3 from 'd3'
 import saveSvgAsPng from 'save-svg-as-png'
 import { Modal, Button, Form, FormGroup, FormControl, InputGroup, Col, ControlLabel, DropdownButton, MenuItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
@@ -103,31 +104,47 @@ class Tools extends Component {
 
     return (
       <div>
-        <OverlayTrigger placement='bottom' overlay={
-          <Tooltip id='get-image-url'>get SVG URL</Tooltip>
-        }>
-          <MdInsertLink
-            size={20}
-            onClick={()=>this.setState({ show: true, mode: 'url' })}
-            className='clickable-icon pull-right'
-          />
-        </OverlayTrigger>{'  '}
-        <OverlayTrigger placement='bottom' overlay={
-          <Tooltip id='download-image'>download</Tooltip>
-        }>
-          <MdFileDownload
-            size={20}
-            onClick={()=>this.setState({ show: true, mode: 'download' })}
-            className='clickable-icon pull-right'
-          />
-        </OverlayTrigger>
-        { (!noViewerRefreshCharts.includes(this.props.chartId)) &&
+        { this.props.chartId !== 1.16 &&
+          <div>
+            <OverlayTrigger placement='bottom' overlay={
+              <Tooltip id='get-image-url'>get SVG URL</Tooltip>
+            }>
+              <MdInsertLink
+                size={20}
+                onClick={()=>this.setState({ show: true, mode: 'url' })}
+                className='clickable-icon pull-right'
+              />
+            </OverlayTrigger>{'  '}
+            <OverlayTrigger placement='bottom' overlay={
+              <Tooltip id='download-image'>download</Tooltip>
+            }>
+              <MdFileDownload
+                size={20}
+                onClick={()=>this.setState({ show: true, mode: 'download' })}
+                className='clickable-icon pull-right'
+              />
+            </OverlayTrigger>
+            { (!noViewerRefreshCharts.includes(this.props.chartId)) &&
+              <OverlayTrigger placement='bottom' overlay={
+                <Tooltip id='get-image-url'>reset view</Tooltip>
+              }>
+                <MdRefresh
+                  size={20}
+                  onClick={()=>this.props.viewer.reset()}
+                  className='clickable-icon pull-right'
+                />
+              </OverlayTrigger>
+            }
+          </div>
+        }
+
+        { this.props.chartId === 1.16 &&
           <OverlayTrigger placement='bottom' overlay={
-            <Tooltip id='get-image-url'>reset view</Tooltip>
+            <Tooltip id='fit-markers'>fit markers</Tooltip>
           }>
-            <MdRefresh
+            <MdCropFree
               size={20}
-              onClick={()=>this.props.viewer.reset()}
+              onClick={this.props.fitBounds}
               className='clickable-icon pull-right'
             />
           </OverlayTrigger>

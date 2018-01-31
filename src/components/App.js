@@ -37,7 +37,8 @@ class App extends Component {
     canvasSettings: {},
     timingPromise: null,
     viewer: null,
-    showSide: true
+    showSide: true,
+    fitBounds: null
   }
 
   componentDidMount() {
@@ -112,6 +113,9 @@ class App extends Component {
     this.setState({ rowSelections: selection.sort() })
   }
 
+  updateFitBoundsFcn = (fcn) => {
+    if (fcn !== this.state.fitBounds) this.setState({ fitBounds: fcn }) 
+  }
   getSPARQLResult = (code) => {
     this.setState({
       status: 'waiting',
@@ -254,6 +258,8 @@ class App extends Component {
                     onCanvasSettingsChange={this.handleCanvasSettingsChange}
                     viewer={this.state.viewer}
                     onViewerChange={(viewer)=>this.setState({ viewer })}
+                    updateFitBoundsFcn={this.updateFitBoundsFcn}
+                    fitBounds={this.state.fitBounds}
                   />
                 }
                 {
@@ -274,6 +280,7 @@ class App extends Component {
             </Row>
           </Grid>
         </div>
+        <button onClick={this.state.fitBounds}>test</button>
         <footer className='footer text-muted'>Steven Liu&nbsp;&nbsp;2018</footer>
       </div>
     )
