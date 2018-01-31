@@ -6,6 +6,7 @@ import FaAreaChart from 'react-icons/lib/fa/area-chart'
 import FaTree from 'react-icons/lib/fa/tree'
 import MdMap from 'react-icons/lib/md/map'
 import MdRemoveRedEye from 'react-icons/lib/md/remove-red-eye'
+import FaCaretRight from 'react-icons/lib/fa/caret-right'
 
 class Navs extends Component {
 
@@ -22,6 +23,11 @@ class Navs extends Component {
         className='chart-navs'
         activeKey={this.props.currentChartId}
         onSelect={this.props.handleChartSelect}>
+        { !this.props.showSide &&
+          <NavItem eventKey={0} key={0}>
+            <FaCaretRight size={16} />Editor
+          </NavItem>
+        }
         <NavItem eventKey={charts[0].id}  key={charts[0].id}>{icons[0]} {charts[0].name}</NavItem>
         { chartClasses.map((chartClass, index) => {
           return (

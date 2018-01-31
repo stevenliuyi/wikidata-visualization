@@ -36,7 +36,8 @@ class App extends Component {
     moreSettings: {},
     canvasSettings: {},
     timingPromise: null,
-    viewer: null
+    viewer: null,
+    showSide: true
   }
 
   componentDidMount() {
@@ -49,7 +50,9 @@ class App extends Component {
   }
 
   handleChartSelect = (selected) => {
-    if (selected === 1) { // chart in the top navbar is selected
+    if (selected === 0) { // show editor/setting panels
+      this.toggleSide()
+    } else if (selected === 1) { // chart in the top navbar is selected
       if (this.state.chart >= 2) {
         this.setState({ chart: 1.01, chartName: 'Table' })
       }
@@ -72,6 +75,14 @@ class App extends Component {
       this.setState({ editorFullScreen: true, exampleIndex: -1 }) 
     } else {
       this.setState({ editorFullScreen: false, examleIndex: -1 })
+    }
+  }
+
+  toggleSide = () => {
+    if (this.state.showSide) {
+      this.setState({ showSide: false })
+    } else {
+      this.setState({ showSide: true })
     }
   }
 
@@ -171,49 +182,54 @@ class App extends Component {
           <TopNavBar handleChartSelect={this.handleChartSelect} />
           <Grid>
             <Row>
-              <Col sm={(this.state.editorFullScreen ? 12 : 4)}>
-                <Row className='padding-5'>
-                  <Measure
-                    bounds
-                    onResize={(contentRect) => this.setState({ editorWidth: contentRect.bounds.width })}
-                  >
-                    {({ measureRef}) =>
-                      <div ref={measureRef}>
-                        <Query
-                          onSubmit={this.getSPARQLResult}
-                          onChangeEditorSize={this.changeEditorSize}
-                          onCancel={() => this.state.timingPromise.cancel()}
-                          status={this.state.status}
-                          numResults={this.state.numResults}
-                          exampleIndex={this.state.exampleIndex}
-                          width={this.state.editorWidth}
-                        />
-                      </div>
-                    }
-                  </Measure>
-                </Row>
-                { !this.state.editorFullScreen && 
-                <Row className='padding-5'>
-                  <Settings
-                    header={this.state.header}
-                    settings={this.state.settings}
-                    info={this.state.settingsInfo}
-                    moreSettings={this.state.moreSettings}
-                    canvasSettings={this.state.canvasSettings}
-                    chart={this.state.chart}
-                    onChange={this.setSettings}
-                    onMoreSettingsChange={this.handleMoreSettingsChange}
-                    onCanvasSettingsChange={this.handleCanvasSettingsChange}
-                  />
-                </Row>
-                }
-              </Col>
+              {this.state.showSide &&
+                <Col sm={(this.state.editorFullScreen ? 12 : 4)}>
+                  <Row className='padding-5'>
+                    <Measure
+                      bounds
+                      onResize={(contentRect) => this.setState({ editorWidth: contentRect.bounds.width })}
+                    >
+                      {({ measureRef}) =>
+                        <div ref={measureRef}>
+                          <Query
+                            onSubmit={this.getSPARQLResult}
+                            onChangeEditorSize={this.changeEditorSize}
+                            onCancel={() => this.state.timingPromise.cancel()}
+                            onHide={this.toggleSide}
+                            status={this.state.status}
+                            numResults={this.state.numResults}
+                            exampleIndex={this.state.exampleIndex}
+                            width={this.state.editorWidth}
+                            editorFullScreen={this.state.editorFullScreen}
+                          />
+                        </div>
+                      }
+                    </Measure>
+                  </Row>
+                  { !this.state.editorFullScreen && 
+                  <Row className='padding-5'>
+                    <Settings
+                      header={this.state.header}
+                      settings={this.state.settings}
+                      info={this.state.settingsInfo}
+                      moreSettings={this.state.moreSettings}
+                      canvasSettings={this.state.canvasSettings}
+                      chart={this.state.chart}
+                      onChange={this.setSettings}
+                      onMoreSettingsChange={this.handleMoreSettingsChange}
+                      onCanvasSettingsChange={this.handleCanvasSettingsChange}
+                    />
+                  </Row>
+                  }
+                </Col>
+              }
               { !this.state.editorFullScreen &&
-              <Col sm={8}>
+              <Col sm={this.state.showSide ? 8 : 12}>
                 { this.state.chart < 2 &&
                   <Navs
                     currentChartId={this.state.chart}
-                    handleChartSelect={this.handleChartSelect} />
+                    handleChartSelect={this.handleChartSelect}
+                    showSide={this.state.showSide} />
                 }
                 { this.state.chart === 1.01 &&
                   <DataTable

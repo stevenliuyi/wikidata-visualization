@@ -22,6 +22,10 @@ class LeafletMap extends Component {
     zoom: 1
   }
 
+  componentDidUpdate() {
+    this.refs.map.leafletElement.invalidateSize(false)
+  }
+
   render() {
 
     // get coordinates
@@ -46,6 +50,7 @@ class LeafletMap extends Component {
     return (
       <div>
         <Map
+          ref='map'
           style={{height: 350}}
           bounds={bounds}>
           <Basemap basemap={this.props.moreSettings.baseMap} />

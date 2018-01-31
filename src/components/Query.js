@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { FormGroup, Button, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import MdAspectRatio from 'react-icons/lib/md/aspect-ratio'
 import FaClose from 'react-icons/lib/fa/close'
+import FaAngleDoubleLeft from 'react-icons/lib/fa/angle-double-left'
 import { readExample } from '../utils/examples'
 import AceEditor from 'react-ace'
 import 'brace/mode/sparql'
@@ -118,7 +119,7 @@ class Query extends Component {
           </Resizable>
         </FormGroup>
         <Row>
-          <Col xs={12} sm={10}>
+          <Col xs={12} sm={9}>
             <Button
               bsStyle="primary"
               onClick={ () => this.props.onSubmit(this.state.code) }
@@ -137,7 +138,13 @@ class Query extends Component {
                 )
             }
           </Col>
-          <Col xsHidden sm={2} className='align-right'>
+          <Col xsHidden sm={3} className='align-right'>
+            { !this.props.editorFullScreen &&
+              <FaAngleDoubleLeft
+                className='clickable-icon'
+                onClick={ () => this.props.onHide() }
+                size={18} />
+            }
             <MdAspectRatio
               className='clickable-icon'
               onClick={ this.props.onChangeEditorSize }
