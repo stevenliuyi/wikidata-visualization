@@ -33,9 +33,11 @@ const updateD3Node = (props) => {
     .map((d, index) => { d.id = index; return d })
   data = data.filter((d) => (d[props.header[props.settings['radius']]] != null))
   
+  // use maximum radius to scale the radii to avoid bubble overlap issue for very small values
+  const maxRadius = Math.max(...data.map(d => d[props.header[props.settings['radius']]]))
   //bubbles needs very specific format, convert data to this.
   var nodes = d3.hierarchy({children:data})
-    .sum(function(d) { return d[props.header[props.settings['radius']]] })
+    .sum(function(d) { return d[props.header[props.settings['radius']]]/maxRadius })
     .sort(function(a,b) { return b.value - a.value })
   
   //setup the chart
