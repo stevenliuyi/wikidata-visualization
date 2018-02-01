@@ -136,8 +136,6 @@ export const moreSettings = {
   fontSizes: [10, 40],
   showLegend: false,
   legendScale: 1,
-  legendX: 0.8,
-  legendY: 0.02,
   rotation: 0,
   solarSystem: 'Earth'
 }
@@ -169,8 +167,6 @@ export const moreSettingTitles = {
   fontSizes: 'Font Sizes',
   showLegend: 'Legend',
   legendScale: 'Legend scale',
-  legendX: 'Legend X position',
-  legendY: 'Legend Y position',
   rotation: 'Max rotation',
   solarSystem: 'Solar system'
 }
@@ -222,7 +218,7 @@ export const charts = [
     chartClass: 'basic',
     settings: [x_axis, y_axis, label, color, radius],
     defaultShow: [true, true, false, false, false],
-    moreSettings: ['fontSize', 'radius', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
+    moreSettings: ['fontSize', 'radius', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -231,7 +227,7 @@ export const charts = [
     chartClass: 'basic',
     settings: [radius, label, color],
     defaultShow: [true, true, false],
-    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -240,7 +236,7 @@ export const charts = [
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -249,7 +245,7 @@ export const charts = [
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -258,7 +254,7 @@ export const charts = [
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -267,7 +263,7 @@ export const charts = [
     chartClass: 'tree',
     settings: [link_from, link_to, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -276,7 +272,7 @@ export const charts = [
     chartClass: 'more',
     settings: [link_from, link_to, relation, label],
     defaultShow: [true, true, true, false],
-    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -285,7 +281,7 @@ export const charts = [
     chartClass: 'map',
     settings: [coordinate, color, radius, label],
     defaultShow: [true, false, false, false],
-    moreSettings: ['map', 'fontSize', 'radius', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'], // SVG rendering issue for map projection
+    moreSettings: ['map', 'fontSize', 'radius', 'color', 'showLegend', 'legendScale'], // SVG rendering issue for map projection
     canvasSettings: ['height', 'border']
   },
   {
@@ -321,7 +317,7 @@ export const charts = [
     chartClass: 'map',
     settings: [region, color],
     defaultShow: [true, false],
-    moreSettings: ['map2', 'fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
+    moreSettings: ['map2', 'fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['height', 'border']
   },
   {
@@ -339,7 +335,7 @@ export const charts = [
     chartClass: 'more',
     settings: [link_from, link_to, color, label_from, label_to],
     defaultShow: [true, true, true, false, false],
-    moreSettings: ['sortRow', 'sortColumn', 'fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
+    moreSettings: ['sortRow', 'sortColumn', 'fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
