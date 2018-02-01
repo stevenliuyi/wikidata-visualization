@@ -22,7 +22,9 @@ class Basemap extends Component {
         { this.state.solarSystem === 'Moon' &&
           <ImageOverlay
             bounds={[[-90,-180], [90,180]]}
-            url={ solarSystemSettings[this.state.solarSystem].url }
+            url={ (process.env.NODE_ENV === 'development')
+              ? solarSystemSettings[this.state.solarSystem].url
+              : `/wikidata-visualization${solarSystemSettings[this.state.solarSystem].url}` }
           />
         }
 
