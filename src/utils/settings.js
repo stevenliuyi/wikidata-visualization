@@ -339,7 +339,7 @@ export const charts = [
     chartClass: 'more',
     settings: [link_from, link_to, color, label_from, label_to],
     defaultShow: [true, true, true, false, false],
-    moreSettings: ['sortRow', 'sortColumn', 'fontSize', 'color'],
+    moreSettings: ['sortRow', 'sortColumn', 'fontSize', 'color', 'showLegend', 'legendScale', 'legendX', 'legendY'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {

@@ -1,21 +1,23 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
 import { getMatrix } from '../utils/convertData'
-import ReactFauxDOM from 'react-faux-dom'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
+import { drawLegend } from '../utils/draw'
 
 // chord diagram d3 reference: https://bl.ocks.org/mbostock/4062006
-const getD3Node = (props) => {
+const updateD3Node = (props) => {
 
   d3.selectAll('.d3ToolTip').remove()
   var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
 
-  var d3node = new ReactFauxDOM.Element('svg')
-  
-  var [matrix, colors, labels, tooltipHTMLs] = getMatrix(props)
+  var [matrix, colorScale, colors, labels, tooltipHTMLs] = getMatrix(props)
 
-  var svg = d3.select(d3node)
+  var svg = d3.select('#chart')
+
+  svg = svg.select('g')
+  svg.selectAll('*').remove()
+  svg = svg.append('g')
     .attr('width', props.width)
     .attr('height', props.height)
 
@@ -23,7 +25,7 @@ const getD3Node = (props) => {
     innerRadius = outerRadius * 0.8
 
   // make sure the radius is positive
-  if (innerRadius <= 0) return d3node.toReact()
+  if (innerRadius <= 0) return null
   
   var chord = d3.chord()
     .padAngle(0.05)
@@ -133,16 +135,32 @@ const getD3Node = (props) => {
         .attr('font-weight', 'normal')
     })
   
-  return d3node.toReact()
+  drawLegend(svg, colorScale, props)
 
 } 
 
 class ChordDiagram extends Component {
 
+  state = {
+    mounted: false
+  }
+
+  componentDidMount() {
+    updateD3Node(this.props)
+    this.setState({mounted: true})
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.state.mounted) updateD3Node(nextProps)
+  }
+
   render() {
-    const d3node = getD3Node(this.props)
+    let d3node = (<svg width={this.props.width} height={this.props.height}></svg>)
+
     return (
-      <SVGPanZoom d3node={d3node} {...this.props} />
+      <div id='chart'>
+        <SVGPanZoom d3node={d3node} {...this.props}/> 
+      </div>
     )
   }
 }

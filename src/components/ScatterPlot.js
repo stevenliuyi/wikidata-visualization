@@ -7,12 +7,13 @@ import { getTooltipHTML } from '../utils/convertData'
 import SVGPanZoom from './SVGPanZoom'
 import * as d3 from 'd3'
 import chroma from 'chroma-js'
+import { drawLegend } from '../utils/draw'
 
 class ScatterPlot extends Component {
   render() {
     const [scales, xLabel, yLabel] = getXYScales(this.props)
     const radii = getRadius(this.props)
-    const colors = getColors(this.props)
+    const [colors, colorScale] = getColors(this.props, true)
     const tooltipHTMLs = getTooltipHTML(this.props)
 
     d3.selectAll('.d3ToolTip').remove()
@@ -83,8 +84,15 @@ class ScatterPlot extends Component {
           .attr('font-weight', 'normal')
       })
 
+    // add legend
+    d3.selectAll('.legendCells').remove()
+    var svg = d3.select('#chart').select('g')
+    drawLegend(svg, colorScale, this.props)
+
     return (
-      <SVGPanZoom d3node={d3node} {...this.props} />
+      <div id='chart'>
+        <SVGPanZoom d3node={d3node} {...this.props} />
+      </div>
     )
   }
 }

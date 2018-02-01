@@ -112,7 +112,10 @@ export function getColorScaleFromValues(values, schemeName = 'Spectral') {
   // generate uniformly distributed points in [0, 1] and map to color scheme
   const scheme = [...Array(values.length).keys()]
     .map( v => colorSchemes[schemeName](v / (values.length-1)) )
-  const colorScale = (v) => scheme[values.indexOf(v)]
+  const colorScale = d3.scaleOrdinal()
+    .domain(values)
+    .range(values.map(v => scheme[values.indexOf(v)]))
+
   return colorScale
 }
 
@@ -150,12 +153,16 @@ export function getColorScale(props, nodes = null) {
   return colorScale
 }
 
-export function getColors(props) {
+export function getColors(props, returnScale = false) {
   const label = props.header[props.settings['color']]
   const colorScale = getColorScale(props)
   // change the color of unkown values (default is black)
   const colors = props.data.filter((item, i) => props.rowSelections.includes(i))
     .map(item => (item[label] != null || props.settings['color'] === -1) ? colorScale(item[label]) : '#ddd')
 
-  return colors
+  if (returnScale) {
+    return [colors, colorScale]
+  } else {
+    return colors
+  }
 }

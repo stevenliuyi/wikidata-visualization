@@ -119,10 +119,13 @@ export function getMatrix(props) {
     tooltipHTMLs[fromIndex] = getSingleTooltipHTML(item, props.header)
   })
 
-  const colorScale = getColorScaleFromValues(items, props.moreSettings.color)
+  let colorScale = getColorScaleFromValues(items, props.moreSettings.color)
   const colors = items.map(item => colorScale(item))
 
-  return [matrix, colors, labels, tooltipHTMLs]
+  // for legend
+  if (label != null) colorScale = colorScale.domain(labels)
+    
+  return [matrix, colorScale, colors, labels, tooltipHTMLs]
 }
 
 // get matrix (rows and columns are not the same in general) for heat map
@@ -136,7 +139,7 @@ export function getMatrix2(props) {
 
   const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
 
-  const colors = getColors(props)
+  const [colors, colorScale] = getColors(props, true)
 
   const maxItem = (a, b) => {
     if (typeof(a) === 'number' || typeof(b) === 'number') {
@@ -192,7 +195,7 @@ export function getMatrix2(props) {
     col_labels[colIndex] = item[label_to]
   })
   
-  return [matrix, row_labels, col_labels]
+  return [matrix, row_labels, col_labels, colorScale]
 }
 
 export function getGraph(props, link_index = false) {
