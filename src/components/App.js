@@ -75,13 +75,13 @@ class App extends Component {
     if (!this.state.editorFullScreen) {
       this.setState({ editorFullScreen: true, exampleIndex: -1 }) 
     } else {
-      this.setState({ editorFullScreen: false, examleIndex: -1 })
+      this.setState({ editorFullScreen: false, exampleIndex: -1 })
     }
   }
 
   toggleSide = () => {
     if (this.state.showSide) {
-      this.setState({ showSide: false })
+      this.setState({ showSide: false, exampleIndex: -1 })
     } else {
       this.setState({ showSide: true })
     }
@@ -186,47 +186,45 @@ class App extends Component {
           <TopNavBar handleChartSelect={this.handleChartSelect} />
           <Grid>
             <Row>
-              {this.state.showSide &&
-                <Col sm={(this.state.editorFullScreen ? 12 : 4)}>
-                  <Row className='padding-5'>
-                    <Measure
-                      bounds
-                      onResize={(contentRect) => this.setState({ editorWidth: contentRect.bounds.width })}
-                    >
-                      {({ measureRef}) =>
-                        <div ref={measureRef}>
-                          <Query
-                            onSubmit={this.getSPARQLResult}
-                            onChangeEditorSize={this.changeEditorSize}
-                            onCancel={() => this.state.timingPromise.cancel()}
-                            onHide={this.toggleSide}
-                            status={this.state.status}
-                            numResults={this.state.numResults}
-                            exampleIndex={this.state.exampleIndex}
-                            width={this.state.editorWidth}
-                            editorFullScreen={this.state.editorFullScreen}
-                          />
-                        </div>
-                      }
-                    </Measure>
-                  </Row>
-                  { !this.state.editorFullScreen && 
-                  <Row className='padding-5'>
-                    <Settings
-                      header={this.state.header}
-                      settings={this.state.settings}
-                      info={this.state.settingsInfo}
-                      moreSettings={this.state.moreSettings}
-                      canvasSettings={this.state.canvasSettings}
-                      chart={this.state.chart}
-                      onChange={this.setSettings}
-                      onMoreSettingsChange={this.handleMoreSettingsChange}
-                      onCanvasSettingsChange={this.handleCanvasSettingsChange}
-                    />
-                  </Row>
-                  }
-                </Col>
-              }
+              <Col sm={(this.state.editorFullScreen ? 12 : 4)} className={(!this.state.showSide) ? 'hide-side' : ''}>
+                <Row className='padding-5'>
+                  <Measure
+                    bounds
+                    onResize={(contentRect) => this.setState({ editorWidth: contentRect.bounds.width })}
+                  >
+                    {({ measureRef}) =>
+                      <div ref={measureRef}>
+                        <Query
+                          onSubmit={this.getSPARQLResult}
+                          onChangeEditorSize={this.changeEditorSize}
+                          onCancel={() => this.state.timingPromise.cancel()}
+                          onHide={this.toggleSide}
+                          status={this.state.status}
+                          numResults={this.state.numResults}
+                          exampleIndex={this.state.exampleIndex}
+                          width={this.state.editorWidth}
+                          editorFullScreen={this.state.editorFullScreen}
+                        />
+                      </div>
+                    }
+                  </Measure>
+                </Row>
+                { !this.state.editorFullScreen && 
+                <Row className='padding-5'>
+                  <Settings
+                    header={this.state.header}
+                    settings={this.state.settings}
+                    info={this.state.settingsInfo}
+                    moreSettings={this.state.moreSettings}
+                    canvasSettings={this.state.canvasSettings}
+                    chart={this.state.chart}
+                    onChange={this.setSettings}
+                    onMoreSettingsChange={this.handleMoreSettingsChange}
+                    onCanvasSettingsChange={this.handleCanvasSettingsChange}
+                  />
+                </Row>
+                }
+              </Col>
               { !this.state.editorFullScreen &&
               <Col sm={this.state.showSide ? 8 : 12}>
                 { this.state.chart < 2 &&

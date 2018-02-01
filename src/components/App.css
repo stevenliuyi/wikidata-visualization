@@ -176,3 +176,7 @@
   transform: translate(20px, -50px);
   display: block !important;
 }
+
+.hide-side {
+  display: none;
+}
