@@ -28,7 +28,7 @@ class LeafletMap extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.moreSettings.solarSystem !== nextProps.moreSettings.solarSystem) {
-      this.refs.map.leafletElement.options.crs = (nextProps.moreSettings.solarSystem==='Moon') ? Leaflet.CRS.Simple : Leaflet.CRS.EPSG3857
+      this.refs.map.leafletElement.options.crs = (nextProps.moreSettings.solarSystem!=='Earth') ? Leaflet.CRS.Simple : Leaflet.CRS.EPSG3857
       this.fitBounds()
     }
   }
@@ -46,12 +46,20 @@ class LeafletMap extends Component {
     this.refs.map.leafletElement.fitBounds(this.getBounds(this.props))
   }
 
+  // for Mars
+  convertCoord(coord) {
+    return (coord[1] > 180) ? [coord[0], coord[1]-360] : coord
+  }
+
   getBounds(props) {
     // get coordinates
-    const coordData = props.data.filter((item, i) => props.rowSelections.includes(i))
+    let coordData = props.data.filter((item, i) => props.rowSelections.includes(i))
       .filter(item => item[props.header[props.settings['coordinate']]] != null)
       .map((item, i) => (item[props.header[props.settings['coordinate']]]
         .split(', ').map(parseFloat).reverse()))
+    
+    if (this.props.moreSettings.solarSystem === 'Mars')
+      coordData = coordData.map(coord => this.convertCoord(coord))
 
     // get bounds
     const bounds = latLngBounds(coordData[0])
@@ -77,7 +85,7 @@ class LeafletMap extends Component {
       <div>
         <Map
           ref='map'
-          crs={(this.props.moreSettings.solarSystem==='Moon') ? Leaflet.CRS.Simple : Leaflet.CRS.EPSG3857}
+          crs={(this.props.moreSettings.solarSystem!=='Earth') ? Leaflet.CRS.Simple : Leaflet.CRS.EPSG3857}
           style={{height: this.props.height, width: this.props.width}}
           bounds={bounds}>
           <Basemap
@@ -87,8 +95,10 @@ class LeafletMap extends Component {
             this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
               .map((item, i) => {
                 if (item[this.props.header[this.props.settings['coordinate']]] != null) {
-                  const coord = item[this.props.header[this.props.settings['coordinate']]]
+                  let coord = item[this.props.header[this.props.settings['coordinate']]]
                     .split(', ').map(parseFloat).reverse()
+                
+                  if (this.props.moreSettings.solarSystem === 'Mars') coord = this.convertCoord(coord)
                   
                   if (coord.length === 2) {
                     return (

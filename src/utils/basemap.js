@@ -2,6 +2,9 @@ export const solarSystemSettings = {
   'Earth': {},
   'Moon': {
     url: '/maps/Moonmap_from_clementine_data.png'
+  },
+  'Mars': {
+    url: '/maps/Mars.jpg'
   }
 }
 

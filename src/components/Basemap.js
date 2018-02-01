@@ -19,7 +19,7 @@ class Basemap extends Component {
   render() {
     return (
       <div>
-        { this.state.solarSystem === 'Moon' &&
+        { this.state.solarSystem !== 'Earth' &&
           <ImageOverlay
             bounds={[[-90,-180], [90,180]]}
             url={ (process.env.NODE_ENV === 'development')
