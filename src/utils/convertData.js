@@ -14,7 +14,8 @@ function convertValue(value) {
   } else if (value['value'].startsWith('http://www.wikidata.org/entity/')) {
     return [value['value'].substr(31), 'item'] // Wikidata item 
   } else if (value['datatype'] === 'http://www.opengis.net/ont/geosparql#wktLiteral') {
-    return [value['value'].slice(6,-1).split(' ').join(', '), 'coordinate'] // coordinate
+    // for non-Earth coordinates, the entity is present before point
+    return [value['value'].slice(value['value'].indexOf('Point')+6,-1).split(' ').join(', '), 'coordinate'] // coordinate
   } else if (value['value'].startsWith('http://commons.wikimedia.org/wiki/Special:FilePath')) {
     return [value['value'], 'image']
   } else {

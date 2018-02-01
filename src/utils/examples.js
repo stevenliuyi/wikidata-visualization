@@ -67,6 +67,10 @@ export const examples = [
   {
     title: 'Most cited machine learning papers',
     filename: 'machine-learning-papers.rq'
+  },
+  {
+    title: 'Craters on the Moon named after French people',
+    filename: 'moon-craters-french.rq'
   }
 ]
 

@@ -8,7 +8,7 @@ import 'react-bootstrap-toggle/dist/bootstrap2-toggle.css'
 import { colorSchemeNames, getColorScaleFromValues } from '../utils/scales'
 import { mapSettings, mapProjections } from '../utils/maps'
 import { map2Settings } from '../utils/maps2'
-import { baseMapSettings } from '../utils/basemap'
+import { baseMapSettings, solarSystemSettings } from '../utils/basemap'
 import * as d3 from 'd3'
 
 class Settings extends Component {
@@ -216,6 +216,24 @@ class Settings extends Component {
         >
           {
             Object.keys(baseMapSettings).map(map => (
+              <option value={map} key={map}>{ map }</option>
+            ))
+          }
+        </FormControl>
+      )
+    } else if ( setting === 'solarSystem' ) {
+      return (
+        <FormControl
+          componentClass="select"
+          value={this.props.moreSettings[setting]}
+          onChange={(e)=>{
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onMoreSettingsChange(newSetting)
+          }}
+        >
+          {
+            Object.keys(solarSystemSettings).map(map => (
               <option value={map} key={map}>{ map }</option>
             ))
           }
@@ -431,6 +449,7 @@ class Settings extends Component {
                   chartMoreSettings.map(moreSetting => {
 
                     if (!this.props.moreSettings.showLegend &&  moreSetting.startsWith('legend')) return null
+                    if (this.props.moreSettings.solarSystem !== 'Earth' && moreSetting === 'baseMap') return null
 
                     return (
                       <FormGroup key={moreSetting}>

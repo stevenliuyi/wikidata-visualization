@@ -1,3 +1,10 @@
+export const solarSystemSettings = {
+  'Earth': {},
+  'Moon': {
+    url: '/maps/Moonmap_from_clementine_data.png'
+  }
+}
+
 export const baseMapSettings = {
   'OpenStreetMap': {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',

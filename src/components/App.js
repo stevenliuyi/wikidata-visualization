@@ -280,7 +280,6 @@ class App extends Component {
             </Row>
           </Grid>
         </div>
-        <button onClick={this.state.fitBounds}>test</button>
         <footer className='footer text-muted'>Steven Liu&nbsp;&nbsp;2018</footer>
       </div>
     )

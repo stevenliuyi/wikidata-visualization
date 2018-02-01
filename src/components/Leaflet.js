@@ -26,12 +26,20 @@ class LeafletMap extends Component {
     this.fitBounds = this.fitBounds.bind(this)
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.moreSettings.solarSystem !== nextProps.moreSettings.solarSystem) {
+      this.refs.map.leafletElement.options.crs = (nextProps.moreSettings.solarSystem==='Moon') ? Leaflet.CRS.Simple : Leaflet.CRS.EPSG3857
+      this.fitBounds()
+    }
+  }
+
   componentDidUpdate() {
     this.refs.map.leafletElement.invalidateSize(false)
   }
 
   componentDidMount() {
     this.props.updateFitBoundsFcn(this.fitBounds)
+    this.fitBounds()
   }
 
   fitBounds() {
@@ -69,9 +77,12 @@ class LeafletMap extends Component {
       <div>
         <Map
           ref='map'
+          crs={(this.props.moreSettings.solarSystem==='Moon') ? Leaflet.CRS.Simple : Leaflet.CRS.EPSG3857}
           style={{height: this.props.height, width: this.props.width}}
           bounds={bounds}>
-          <Basemap basemap={this.props.moreSettings.baseMap} />
+          <Basemap
+            solarSystem={this.props.moreSettings.solarSystem}
+            basemap={this.props.moreSettings.baseMap} />
           {
             this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
               .map((item, i) => {

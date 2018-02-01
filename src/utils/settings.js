@@ -138,7 +138,8 @@ export const moreSettings = {
   legendScale: 1,
   legendX: 0.8,
   legendY: 0.02,
-  rotation: 0
+  rotation: 0,
+  solarSystem: 'Earth'
 }
 
 export const moreSettingTitles = {
@@ -170,7 +171,8 @@ export const moreSettingTitles = {
   legendScale: 'Legend scale',
   legendX: 'Legend X position',
   legendY: 'Legend Y position',
-  rotation: 'Max rotation'
+  rotation: 'Max rotation',
+  solarSystem: 'Solar system'
 }
 
 export const canvasSettings = {
@@ -279,7 +281,7 @@ export const charts = [
   },
   {
     id: 1.09,
-    name: 'Basic Map',
+    name: 'Simple Map',
     chartClass: 'map',
     settings: [coordinate, color, radius, label],
     defaultShow: [true, false, false, false],
@@ -346,7 +348,7 @@ export const charts = [
     chartClass: 'map',
     settings: [coordinate, color, radius],
     defaultShow: [true, false, false],
-    moreSettings: ['baseMap', 'showCircles', 'showMarkers', 'radius', 'color'],
+    moreSettings: ['solarSystem', 'baseMap', 'showCircles', 'showMarkers', 'radius', 'color'],
     canvasSettings: ['auto', 'width', 'height']
   },
   {
