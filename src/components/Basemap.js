@@ -21,7 +21,7 @@ class Basemap extends Component {
       <div>
         { this.state.solarSystem !== 'Earth' &&
           <ImageOverlay
-            bounds={[[-90,-180], [90,180]]}
+            bounds={solarSystemSettings[this.state.solarSystem].bounds}
             url={ (process.env.NODE_ENV === 'development')
               ? solarSystemSettings[this.state.solarSystem].url
               : `/wikidata-visualization${solarSystemSettings[this.state.solarSystem].url}` }

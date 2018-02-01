@@ -1,10 +1,56 @@
 export const solarSystemSettings = {
-  'Earth': {},
+  'Earth': null,
   'Moon': {
-    url: '/maps/Moonmap_from_clementine_data.png'
+    url: '/maps/Moonmap_from_clementine_data.png',
+    bounds: [[-90,-180], [90,180]]
+  },
+  'Mercury': {
+    url: '/maps/Mercury.png',
+    bounds: [[-90,-180], [90,180]]
+  },
+  'Venus': {
+    url: '/maps/Venus.jpg',
+    bounds: [[-90,-120], [90,240]]
   },
   'Mars': {
-    url: '/maps/Mars.jpg'
+    url: '/maps/Mars.jpg',
+    bounds: [[-90,-180], [90,180]]
+  },
+  'Pluto': {
+    url: '/maps/Pluto.jpg',
+    bounds: [[-90,0], [90,360]]
+  },
+  'Ceres': {
+    url: '/maps/Ceres.jpg',
+    bounds: [[-90,0], [90,360]]
+  },
+  'Io': {
+    url: '/maps/Io.jpg',
+    bounds: [[-90,-180], [90,180]]
+  },
+  'Enceladus': {
+    url: '/maps/Enceladus.jpg',
+    bounds: [[-90,0], [90,360]]
+  },
+  'Tethys': {
+    url: '/maps/Tethys.jpg',
+    bounds: [[-90,0], [90,360]]
+  },
+  'Dione': {
+    url: '/maps/Dione.jpg',
+    bounds: [[-90,-180], [90,180]]
+  },
+  'Rhea': {
+    url: '/maps/Rhea.jpg',
+    bounds: [[-90,0], [90,360]]
+  },
+  'Titan': {
+    url: '/maps/Titan.jpg',
+    bounds: [[-90,0], [90,360]]
+  },
+  'Triton': {
+    url: '/maps/Triton.jpg',
+    bounds: [[-90,-180], [90,180]]
   }
 }
 

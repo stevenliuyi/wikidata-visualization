@@ -24,6 +24,7 @@ class LeafletMap extends Component {
 
   componentWillMount() {
     this.fitBounds = this.fitBounds.bind(this)
+    this.convertCoord = this.convertCoord.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -46,20 +47,32 @@ class LeafletMap extends Component {
     this.refs.map.leafletElement.fitBounds(this.getBounds(this.props))
   }
 
-  // for Mars
+  // convert coordinates
   convertCoord(coord) {
-    return (coord[1] > 180) ? [coord[0], coord[1]-360] : coord
+    const body = this.props.moreSettings.solarSystem
+    if (body === 'Mars' || body === 'Triton') {
+      return (coord[1] > 180) ? [coord[0], coord[1]-360] : coord
+    } else if (body === 'Pluto' || body === 'Enceladus' || body === 'Tethys' || body === 'Rhea' || body === 'Titan') {
+      return (coord[1] < 0) ? [coord[0], coord[1]+360] : coord
+    } else if (body === 'Mercury' || body === 'Io') {
+      let new_coord = (coord[1] < -180) ? [coord[0], coord[1]+360] : coord
+      return (new_coord[1] > 180) ? [new_coord[0], new_coord[1]-360] : new_coord
+    } else if (body === 'Venus') {
+      return (coord[1] > 240) ? [coord[0], coord[1]-360] : coord
+    } else if (body === 'Dione') {
+      return (coord[1] < -180) ? [coord[0], coord[1]+360] : coord
+    } else {
+      return coord
+    }
   }
 
   getBounds(props) {
     // get coordinates
-    let coordData = props.data.filter((item, i) => props.rowSelections.includes(i))
+    const coordData = props.data.filter((item, i) => props.rowSelections.includes(i))
       .filter(item => item[props.header[props.settings['coordinate']]] != null)
       .map((item, i) => (item[props.header[props.settings['coordinate']]]
         .split(', ').map(parseFloat).reverse()))
-    
-    if (this.props.moreSettings.solarSystem === 'Mars')
-      coordData = coordData.map(coord => this.convertCoord(coord))
+      .map(coord => this.convertCoord(coord))
 
     // get bounds
     const bounds = latLngBounds(coordData[0])
@@ -98,7 +111,7 @@ class LeafletMap extends Component {
                   let coord = item[this.props.header[this.props.settings['coordinate']]]
                     .split(', ').map(parseFloat).reverse()
                 
-                  if (this.props.moreSettings.solarSystem === 'Mars') coord = this.convertCoord(coord)
+                  coord = this.convertCoord(coord)
                   
                   if (coord.length === 2) {
                     return (
