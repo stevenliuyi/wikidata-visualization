@@ -388,7 +388,7 @@ export const charts = [
     chartClass: 'basic',
     settings: [x_axis_all, y_axis_groups, ngroups],
     defaultShow: [true, true, true],
-    moreSettings: ['barType', 'color', 'showLegend', 'legendScale'],
+    moreSettings: ['barType', 'fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   }
 ]

@@ -262,6 +262,7 @@ export function getGroupValues(props) {
   // fill values
   selectedData.forEach(item => {
     const x_idx = x_values.indexOf(item[x_label])
+
     group_indices.forEach((group_idx) => {
       const val = item[y_labels[group_idx]]
       if (val > 0) y_values[group_idx][x_idx] = val
@@ -280,11 +281,18 @@ export function getGroupValues(props) {
     y_values[group_idx] = y_values[group_idx].filter((_,x_idx) => !zero_indices.includes(x_idx))
   })
 
+  // tooltips
+  let tooltipHTMLs = x_values.map(val => '')
+  selectedData.forEach(item => {
+    const x_idx = x_values.indexOf(item[x_label])
+    tooltipHTMLs[x_idx] = getSingleTooltipHTML(item, props.header)
+  })
+
   // colors
   const colorScale = getColorScaleFromValues(y_labels, props.moreSettings.color)
   const colors = y_labels.map(val => colorScale(val))
 
-  return [x_values, y_values, colors, colorScale]
+  return [x_values, y_values, colors, colorScale, tooltipHTMLs]
 }
 
 export function getSingleTooltipHTML(item, header) {

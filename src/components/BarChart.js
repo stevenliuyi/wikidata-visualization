@@ -2,11 +2,15 @@ import React, { Component } from 'react'
 import { getGroupValues } from '../utils/convertData'
 import * as d3 from 'd3'
 import SVGPanZoom from './SVGPanZoom'
-import{ drawLegend } from '../utils/draw'
+import { drawLegend } from '../utils/draw'
+import chroma from 'chroma-js'
 
 // bar chart d3 references
 // http://bl.ocks.org/mbostock/3943967
 const updateD3Node = (props, transition) => {
+  d3.selectAll('.d3ToolTip').remove()
+  var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
+
   var svg = d3.select('#chart')
 
   svg = svg.select('g')
@@ -19,7 +23,7 @@ const updateD3Node = (props, transition) => {
   // The yz array has n elements, representing the y-values of each of the n series.
   // Each yz[i] is an array of m non-negative numbers representing a y-value for xz[i].
   // The y01z array has the same structure as yz, but with stacked [y₀, y₁] instead of y.
-  var [xz, yz, colors, colorScale] = getGroupValues(props) 
+  var [xz, yz, colors, colorScale, tooltipHTMLs] = getGroupValues(props) 
   var  n = yz.length,
     y01z = d3.stack().keys(d3.range(n))(d3.transpose(yz)),
     yMax = d3.max(yz, function(y) { return d3.max(y) }),
@@ -43,15 +47,41 @@ const updateD3Node = (props, transition) => {
   var series = svg.selectAll('.series')
     .data(y01z)
     .enter().append('g')
+    .attr('id', function(d, i) { return 'series'+i })
     .attr('fill', function(d, i) { return colors[i] })
 
   var rect = series.selectAll('rect')
     .data(function(d) { return d })
     .enter().append('rect')
+    .attr('class', function(d, i) { return 'rect'+i })
     .attr('x', function(d, i) { return x(xz[i]) })
     .attr('y', height)
     .attr('width', x.bandwidth())
     .attr('height', 0)
+    .on('mouseover', function(d,i) {
+      d3.range(n).forEach(group_idx => {
+        d3.select('#series'+group_idx+'>.rect'+i)
+          .attr('fill', function(d,i) { return chroma(colors[group_idx]).brighten(0.6) })
+      }) 
+      d3.select('#text'+i)
+        .attr('font-weight', 'bold')
+    })
+    .on('mousemove', function(d, i) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(tooltipHTMLs[i])
+    })
+    .on('mouseout', function(d,i) {
+      tooltip.style('display', 'none')
+      d3.range(n).forEach(group_idx => {
+        d3.select('#series'+group_idx+'>.rect'+i)
+          .attr('fill', function(d,i) { return colors[group_idx] })
+      }) 
+      d3.select('#text'+i)
+        .attr('font-weight', 'normal')
+    })
 
   const value = d3.select('#bartype-select').property('value')
   if (transition) {
@@ -69,7 +99,10 @@ const updateD3Node = (props, transition) => {
       .tickSize(0)
       .tickPadding(6))
     .selectAll('text')
+    .attr('id', function(d, i) { return 'text'+i })
+    .style('font-size', props.moreSettings.fontSize)
     .style('text-anchor', 'end')
+    .style('alignment-baseline', 'central')
     .attr('dx', '-.8em')
     .attr('dy', '-.3em')
     .attr('transform', 'rotate(-90)')
