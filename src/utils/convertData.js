@@ -245,7 +245,12 @@ export function getGraph(props, link_index = false) {
 }
 
 export function getGroupValues(props) {
-  const x_label = props.header[props.settings['x-axis-all']]  
+  let x_label = ''
+  if (props.chartId === 1.18) { // bar chart
+    x_label = props.header[props.settings['x-axis-all']]  
+  } else if (props.chartId === 1.19) { // radar chart
+    x_label = props.header[props.settings['axes']]
+  }
   const ngroups = props.settings['ngroups']
   const group_indices = [...Array(ngroups).keys()]
   const y_labels = group_indices.map(group_idx => {
@@ -290,9 +295,32 @@ export function getGroupValues(props) {
 
   // colors
   const colorScale = getColorScaleFromValues(y_labels, props.moreSettings.color)
-  const colors = y_labels.map(val => colorScale(val))
 
-  return [x_values, y_values, colors, colorScale, tooltipHTMLs]
+  if (props.chartId === 1.18) { // bar chart
+    const colors = y_labels.map(val => colorScale(val))
+    return [x_values, y_values, colors, colorScale, tooltipHTMLs]
+  } else if (props.chartId === 1.19) { // radar chart
+    const data = {
+      variables: x_values.map(val => ({ key: String(val), label: String(val)})),
+      sets: y_values.map((group_vals,group_idx) => {
+        let set = {}
+        set['key'] = y_labels[group_idx]
+        set['label'] = y_labels[group_idx]
+        set['values'] = {}
+        group_vals.forEach((val,x_idx) => {
+          set.values[x_values[x_idx]] = val
+        })
+        return set
+      })
+    } 
+    let colors = {}
+    y_labels.forEach((val, group_idx) => {
+      colors[y_labels[group_idx]] = colorScale(val)
+    })
+    const maxVal = Math.max(...[].concat.apply([], y_values))
+
+    return [data, maxVal, colors, colorScale]
+  }
 }
 
 export function getSingleTooltipHTML(item, header) {

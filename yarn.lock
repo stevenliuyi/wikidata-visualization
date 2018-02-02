@@ -2018,7 +2018,7 @@ d3-scale@1.0.3:
     d3-time "1"
     d3-time-format "2"
 
-d3-scale@1.0.7, d3-scale@^1.0.6:
+d3-scale@1.0.7, d3-scale@^1.0.4, d3-scale@^1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/d3-scale/-/d3-scale-1.0.7.tgz#fa90324b3ea8a776422bd0472afab0b252a0945d"
   dependencies:
@@ -2042,7 +2042,7 @@ d3-selection@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/d3-selection/-/d3-selection-1.2.0.tgz#1b8ec1c7cedadfb691f2ba20a4a3cfbeb71bbc88"
 
-d3-shape@1.2.0:
+d3-shape@1.2.0, d3-shape@^1.0.4:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-1.2.0.tgz#45d01538f064bafd05ea3d6d2cb748fd8c41f777"
   dependencies:
@@ -2096,7 +2096,7 @@ d3-transition@1.0.3:
     d3-selection "1"
     d3-timer "1"
 
-d3-voronoi@1.1.2:
+d3-voronoi@1.1.2, d3-voronoi@^1.1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/d3-voronoi/-/d3-voronoi-1.1.2.tgz#1687667e8f13a2d158c80c1480c5a29cb0d8973c"
 
@@ -2110,7 +2110,7 @@ d3-zoom@1.7.1:
     d3-selection "1"
     d3-transition "1"
 
-d3@^4.12.2:
+d3@^4.13.0:
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/d3/-/d3-4.13.0.tgz#ab236ff8cf0cfc27a81e69bf2fb7518bc9b4f33d"
   dependencies:
@@ -5807,6 +5807,15 @@ react-d3-cloud@^0.5.0:
     d3-scale "^1.0.6"
     d3-selection "^1.1.0"
     react-faux-dom "^3.0.0"
+
+react-d3-radar@^0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/react-d3-radar/-/react-d3-radar-0.2.6.tgz#4d24218899e37112a4e6db64c48f2030b3b0607e"
+  dependencies:
+    d3-scale "^1.0.4"
+    d3-shape "^1.0.4"
+    d3-voronoi "^1.1.1"
+    lodash "^4.17.4"
 
 react-dev-utils@^4.2.1:
   version "4.2.1"

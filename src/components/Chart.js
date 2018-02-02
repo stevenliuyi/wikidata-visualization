@@ -14,9 +14,10 @@ import Heatmap from './Heatmap'
 import LeafletMap from './Leaflet'
 import Tools from './Tools'
 import Cloud from './Cloud'
+import BarChart from './BarChart'
+import RadarChart from './RadarChart'
 import Border from './Border'
 import { charts } from '../utils/settings'
-import BarChart from './BarChart'
 
 class Chart extends Component {
   state = {
@@ -114,6 +115,9 @@ class Chart extends Component {
               }
               { (this.state.show) && (this.props.chartId === 1.18) &&
                   <BarChart {...this.props} {...styles} />
+              }
+              { (this.state.show) && (this.props.chartId === 1.19) &&
+                  <RadarChart {...this.props} {...styles} />
               }
             </div>
           }

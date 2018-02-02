@@ -13,6 +13,12 @@ const x_axis_all = {
   type: 'all'
 }
 
+const axes = {
+  value: 'axes',
+  title: 'Axes',
+  type: 'all'
+}
+
 const y_axis = {
   value: 'y-axis',
   title: 'Y-axis',
@@ -21,7 +27,7 @@ const y_axis = {
 
 const y_axis_groups = {
   value: 'y-axis-groups',
-  title: 'Y-axis',
+  title: 'Values',
   type: 'number',
 }
 
@@ -389,6 +395,15 @@ export const charts = [
     settings: [x_axis_all, y_axis_groups, ngroups],
     defaultShow: [true, true, true],
     moreSettings: ['barType', 'fontSize', 'color', 'showLegend', 'legendScale'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
+  },
+  {
+    id: 1.19,
+    name: 'Radar Chart',
+    chartClass: 'basic',
+    settings: [axes, y_axis_groups, ngroups],
+    defaultShow: [true, true, true],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   }
 ]
