@@ -16,6 +16,7 @@ import Tools from './Tools'
 import Cloud from './Cloud'
 import Border from './Border'
 import { charts } from '../utils/settings'
+import BarChart from './BarChart'
 
 class Chart extends Component {
   state = {
@@ -110,6 +111,9 @@ class Chart extends Component {
               }
               { (this.state.show) && (this.props.chartId === 1.17) &&
                   <Cloud {...this.props} {...styles} />
+              }
+              { (this.state.show) && (this.props.chartId === 1.18) &&
+                  <BarChart {...this.props} {...styles} />
               }
             </div>
           }

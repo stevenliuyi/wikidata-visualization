@@ -83,7 +83,7 @@ class LeafletMap extends Component {
       bounds.extend([90,180]).extend([-90,-180])
     }
 
-   return bounds
+    return bounds
   }
 
   render() {

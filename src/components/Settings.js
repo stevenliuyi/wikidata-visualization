@@ -284,11 +284,11 @@ class Settings extends Component {
           value={this.props.moreSettings['delimiter']}
           onChange={(e)=>this.props.onMoreSettingsChange({delimiter: e.target.value})}
         >
-           <option value='[NONE]' key='none'>none</option>
-           <option value=' ' key='space'>space</option>
-           <option value=',' key='comma'>,</option>
-           <option value=';' key='semi-colon'>;</option>
-           <option value='.' key='dot'>.</option>
+          <option value='[NONE]' key='none'>none</option>
+          <option value=' ' key='space'>space</option>
+          <option value=',' key='comma'>,</option>
+          <option value=';' key='semi-colon'>;</option>
+          <option value='.' key='dot'>.</option>
         </FormControl>
       )
     } else if (setting === 'case') {
@@ -298,9 +298,9 @@ class Settings extends Component {
           value={this.props.moreSettings['case']}
           onChange={(e)=>this.props.onMoreSettingsChange({case: e.target.value})}
         >
-           <option value='default' key='default'>default</option>
-           <option value='lower case' key='lower case'>lower case</option>
-           <option value='upper case' key='upper case'>upper case</option>
+          <option value='default' key='default'>default</option>
+          <option value='lower case' key='lower case'>lower case</option>
+          <option value='upper case' key='upper case'>upper case</option>
         </FormControl>
       )
     } else if (setting === 'sizeScale') {
@@ -310,8 +310,8 @@ class Settings extends Component {
           value={this.props.moreSettings['sizeScale']}
           onChange={(e)=>this.props.onMoreSettingsChange({sizeScale: e.target.value})}
         >
-           <option value='linear' key='linear'>linear</option>
-           <option value='log' key='log'>log</option>
+          <option value='linear' key='linear'>linear</option>
+          <option value='log' key='log'>log</option>
         </FormControl>
       )
     } else if (setting === 'fontSizes') {
@@ -396,6 +396,18 @@ class Settings extends Component {
           min={0}
           max={90} />
       )
+    } else if (setting === 'barType') {
+      return (
+        <FormControl
+          id='bartype-select'
+          componentClass="select"
+          value={this.props.moreSettings['barType']}
+          onChange={(e)=>this.props.onMoreSettingsChange({barType: e.target.value})}
+        >
+          <option value='stacked' key='stacked'>stacked</option>
+          <option value='grouped' key='grouped'>grouped</option>
+        </FormControl>
+      )
     } else {
       return null
     }
@@ -421,20 +433,56 @@ class Settings extends Component {
                       return (
                         <FormGroup key={index}>
                           <Col componentClass={ControlLabel} sm={4}>{setting.title}</Col>
-                          <Col sm={8}><FormControl
-                            name={setting.value}
-                            componentClass="select"
-                            value={this.props.settings[setting.value]}
-                            onChange={this.onSettingsChange}>
-                            {
-                              Array.isArray(this.props.header) &&
-                          setting.indices.map((index) => (
-                            <option value={index} key={index}>
-                              {(index === -1) ? 'none' : this.props.header[index]}
-                            </option>
-                          ))
+                          <Col sm={8}>
+                            { setting.type === 'slider' &&
+                              <ReactBootstrapSlider
+                                value={this.props.settings[setting.value]}
+                                slideStop={(e) => {
+                                  let new_event = e
+                                  new_event.target.name = setting.value
+                                  this.onSettingsChange(new_event)
+                                }}
+                                {...setting.props} />
                             }
-                          </FormControl></Col>
+                            { setting.value === 'y-axis-groups' &&
+                              <div>
+                                { [...Array(this.props.settings.ngroups).keys()].map((_,idx) => 
+                                  <FormControl
+                                    name={(idx>0) ? `${setting.value}${idx}`: setting.value}
+                                    componentClass="select"
+                                    value={this.props.settings[`${setting.value}${idx}`]}
+                                    style={{marginBottom: '10px'}}
+                                    onChange={this.onSettingsChange}>
+                                    {
+                                      Array.isArray(this.props.header) &&
+                                        setting.indices.map((index) => (
+                                          <option value={index} key={index}>
+                                            {(index === -1) ? 'none' : this.props.header[index]}
+                                          </option>
+                                        ))
+                                    }
+                                  </FormControl>
+                                )
+                                }
+                              </div>
+                            }
+                            { setting.type !== 'slider' && setting.value !== 'y-axis-groups' &&
+                              <FormControl
+                                name={setting.value}
+                                componentClass="select"
+                                value={this.props.settings[setting.value]}
+                                onChange={this.onSettingsChange}>
+                                {
+                                  Array.isArray(this.props.header) &&
+                                    setting.indices.map((index) => (
+                                      <option value={index} key={index}>
+                                        {(index === -1) ? 'none' : this.props.header[index]}
+                                      </option>
+                                    ))
+                                }
+                              </FormControl>
+                            }
+                          </Col>
                         </FormGroup>
                       )
                     })
