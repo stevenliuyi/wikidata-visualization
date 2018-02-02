@@ -7,10 +7,22 @@ const x_axis = {
   type: 'number'
 }
 
+const x_axis_all = {
+  value: 'x-axis-all',
+  title: 'X-axis',
+  type: 'all'
+}
+
 const y_axis = {
   value: 'y-axis',
   title: 'Y-axis',
   type: 'number'
+}
+
+const y_axis_groups = {
+  value: 'y-axis-groups',
+  title: 'Y-axis',
+  type: 'number',
 }
 
 const label = {
@@ -109,6 +121,18 @@ const texts = {
   type: 'all'
 }
 
+const ngroups = {
+  value: 'ngroups',
+  title: 'Groups',
+  type: 'slider',
+  defaultValue: 1,
+  props: {
+    step: 1,
+    min: 1,
+    max: 10
+  }
+}
+
 export const moreSettings = {
   fontSize: 10,
   radius: [5, 40],
@@ -137,7 +161,8 @@ export const moreSettings = {
   showLegend: false,
   legendScale: 1,
   rotation: 0,
-  solarSystem: 'Earth'
+  solarSystem: 'Earth',
+  barType: 'stacked'
 }
 
 export const moreSettingTitles = {
@@ -168,7 +193,8 @@ export const moreSettingTitles = {
   showLegend: 'Legend',
   legendScale: 'Legend scale',
   rotation: 'Max rotation',
-  solarSystem: 'Solar system'
+  solarSystem: 'Solar system',
+  barType: 'Bar type'
 }
 
 export const canvasSettings = {
@@ -355,6 +381,15 @@ export const charts = [
     defaultShow: [true],
     moreSettings: ['delimiter', 'case', 'fontSizes', 'sizeScale', 'rotation', 'color'],
     canvasSettings: ['auto', 'width', 'height', 'border']
+  },
+  {
+    id: 1.18,
+    name: 'Bar Chart',
+    chartClass: 'basic',
+    settings: [x_axis_all, y_axis_groups, ngroups],
+    defaultShow: [true, true, true],
+    moreSettings: ['barType', 'color', 'showLegend', 'legendScale'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   }
 ]
 
@@ -395,6 +430,8 @@ export function getSettings(chartId, header, data, dataTypes) {
     } else if (setting.type === 'image' && imageIndices.length >= 1 && show[index]) { // coordinate
       defaultValue = imageIndices[coordIdx] 
       if (imageIdx < imageIndices.length-1) imageIdx += 1
+    } else if (setting.type === 'slider') { // slider
+      defaultValue = setting.defaultValue
     } else if (show[index]) {
       defaultValue = 0
     }
@@ -403,11 +440,20 @@ export function getSettings(chartId, header, data, dataTypes) {
     return defaultSetting
   })
   defaultSettings = Object.assign({}, ...defaultSettings)
+
+  // set default value for all group members
+  if (Object.keys(defaultSettings).includes('y-axis-groups')) {
+    [...Array(9).keys()].forEach((_,idx) => {
+      defaultSettings[`y-axis-groups${idx+1}`] = defaultSettings['y-axis-groups']
+    })
+  }
  
   // for the settings component
   const settingsInfo =  chartSettings.map((setting, index) => {
     let info = { value: setting.value,
-      title: setting.title }
+      title: setting.title,
+      type: setting.type,
+      props: setting.props }
     if (setting.type === 'all') {
       info['indices'] = [...Array(header.length).keys()]
     } else if (setting.type === 'number')  {

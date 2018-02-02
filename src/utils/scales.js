@@ -109,12 +109,24 @@ export const colorSchemes = {
 }
 
 export function getColorScaleFromValues(values, schemeName = 'Spectral') {
-  // generate uniformly distributed points in [0, 1] and map to color scheme
+  // scale to avoid colors near two ends of scheme when number of values is small
+  const scale = (values.length <= 5) ? 0.7 : 1
+
+  // generate uniformly distributed points in [0, 1] (and scale) and map to color scheme
   const scheme = [...Array(values.length).keys()]
-    .map( v => colorSchemes[schemeName](v / (values.length-1)) )
-  const colorScale = d3.scaleOrdinal()
-    .domain(values)
-    .range(values.map(v => scheme[values.indexOf(v)]))
+    .map( v => {
+      let val = v / (values.length-1)
+      val = val*scale+(1-scale)*0.5
+      return colorSchemes[schemeName](val)
+    })
+
+  const colorScale = (values.length > 1)
+    ? d3.scaleOrdinal()
+      .domain(values)
+      .range(values.map((v,i) => scheme[i]))
+    : d3.scaleOrdinal()
+      .domain(values)
+      .range([colorSchemes[schemeName](0.8)])
 
   return colorScale
 }

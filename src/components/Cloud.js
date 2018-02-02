@@ -22,7 +22,7 @@ class Cloud extends Component {
           rotate={rotate}
           font='sans-serif'
           colors={colors} // colors are supported through a patch
-          />
+        />
       </div>
     )
   }

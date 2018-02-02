@@ -244,6 +244,48 @@ export function getGraph(props, link_index = false) {
 
 }
 
+export function getGroupValues(props) {
+  const x_label = props.header[props.settings['x-axis-all']]  
+  const ngroups = props.settings['ngroups']
+  const group_indices = [...Array(ngroups).keys()]
+  const y_labels = group_indices.map(group_idx => {
+    const setting = (group_idx > 0) ? `y-axis-groups${group_idx}` : 'y-axis-groups'
+    return props.header[props.settings[setting]]
+  })
+
+  const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
+  let x_values = [...new Set(selectedData.map(item => item[x_label]))]
+
+  // initialized values
+  let y_values = group_indices.map(i => Array(x_values.length).fill(0))
+ 
+  // fill values
+  selectedData.forEach(item => {
+    const x_idx = x_values.indexOf(item[x_label])
+    group_indices.forEach((group_idx) => {
+      const val = item[y_labels[group_idx]]
+      if (val > 0) y_values[group_idx][x_idx] = val
+    })
+  })
+
+  // remove all zero values
+  let zero_indices = []
+  x_values.forEach((_,x_idx) => {
+    if (group_indices.map(group_idx=>y_values[group_idx][x_idx]).reduce((a,b)=>a+b,0) === 0) {
+      zero_indices.push(x_idx)
+    }
+  })
+  x_values = x_values.filter((_,x_idx) => !zero_indices.includes(x_idx))
+  y_values.forEach((_,group_idx) => {
+    y_values[group_idx] = y_values[group_idx].filter((_,x_idx) => !zero_indices.includes(x_idx))
+  })
+
+  // colors
+  const colorScale = getColorScaleFromValues(y_labels, props.moreSettings.color)
+  const colors = y_labels.map(val => colorScale(val))
+
+  return [x_values, y_values, colors, colorScale]
+}
 
 export function getSingleTooltipHTML(item, header) {
   return header.map(header => `<span><b>${header}:</b> ${item[header]}</span>`)
