@@ -16,6 +16,7 @@ import Tools from './Tools'
 import Cloud from './Cloud'
 import BarChart from './BarChart'
 import RadarChart from './RadarChart'
+import PieChart from './PieChart'
 import Border from './Border'
 import { charts } from '../utils/settings'
 
@@ -118,6 +119,10 @@ class Chart extends Component {
               }
               { (this.state.show) && (this.props.chartId === 1.19) &&
                   <RadarChart {...this.props} {...styles} />
+              }
+              {
+                (this.state.show) && (this.props.chartId === 1.20) &&
+                  <PieChart {...this.props} {...styles} />
               }
             </div>
           }

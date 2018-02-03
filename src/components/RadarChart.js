@@ -3,7 +3,6 @@ import { getGroupValues } from '../utils/convertData'
 import * as d3 from 'd3'
 import SVGPanZoom from './SVGPanZoom'
 import { drawLegend } from '../utils/draw'
-import chroma from 'chroma-js'
 import Radar from 'react-d3-radar'
 
 class RadarChart extends Component {

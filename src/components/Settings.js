@@ -394,6 +394,15 @@ class Settings extends Component {
           <option value='grouped' key='grouped'>grouped</option>
         </FormControl>
       )
+    } else if (setting === 'innerRadius') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings.innerRadius}
+          slideStop={(e)=>this.props.onMoreSettingsChange({innerRadius: e.target.value})}
+          step={0.05}
+          min={0}
+          max={1} />
+      )
     } else {
       return null
     }

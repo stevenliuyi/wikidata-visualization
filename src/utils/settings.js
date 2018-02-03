@@ -31,6 +31,12 @@ const y_axis_groups = {
   type: 'number',
 }
 
+const value = {
+  value: 'value',
+  title: 'Value',
+  type: 'number'
+}
+
 const label = {
   value: 'label',
   title: 'Label',
@@ -168,7 +174,8 @@ export const moreSettings = {
   legendScale: 1,
   rotation: 0,
   solarSystem: 'Earth',
-  barType: 'stacked'
+  barType: 'stacked',
+  innerRadius: 0.6
 }
 
 export const moreSettingTitles = {
@@ -200,7 +207,8 @@ export const moreSettingTitles = {
   legendScale: 'Legend scale',
   rotation: 'Max rotation',
   solarSystem: 'Solar system',
-  barType: 'Bar type'
+  barType: 'Bar type',
+  innerRadius: 'Inner radius'
 }
 
 export const canvasSettings = {
@@ -404,6 +412,15 @@ export const charts = [
     settings: [axes, y_axis_groups, ngroups],
     defaultShow: [true, true, true],
     moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
+  },
+  {
+    id: 1.20,
+    name: 'Pie Chart',
+    chartClass: 'basic',
+    settings: [value, label, color],
+    defaultShow: [true, false, false],
+    moreSettings: ['fontSize', 'color', 'innerRadius', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   }
 ]

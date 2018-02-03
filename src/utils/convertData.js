@@ -244,6 +244,50 @@ export function getGraph(props, link_index = false) {
 
 }
 
+export function getValues(props) {
+  const value = props.header[props.settings['value']]  
+  const label = props.header[props.settings['label']]  
+  const color = props.header[props.settings['color']]  
+  const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
+ 
+  let values = selectedData.map(item => item[value])
+  let labels = (label != null)
+    ? selectedData.map(item => (item[label] != null) ? String(item[label]) : '')
+    : Array(values.length).fill('')
+  let colorLabels = (color != null)
+    ? selectedData.map(item => (item[color] != null) ? item[color] : null)
+    : Array(values.length).fill(null)
+  let tooltipHTMLs = getTooltipHTML(props)
+
+  let [colors, colorScale] = getColors(props, true)
+
+  // remove zero and negative values
+  let invalid_indices = []
+  values = values.filter((value, i) => {
+    if (value == null || value <= 0) {
+      invalid_indices.push(i) 
+      return false
+    } else {
+      return true
+    }
+  })
+  labels = labels.filter((_, i) => !invalid_indices.includes(i))
+  colors = colors.filter((_, i) => !invalid_indices.includes(i))
+  colorLabels = colorLabels.filter((_, i) => !invalid_indices.includes(i))
+  tooltipHTMLs = tooltipHTMLs.filter((_, i) => !invalid_indices.includes(i))
+
+  if (typeof colorScale.domain === 'function') {
+    const newDomain =colorScale.domain().filter((v) => (colorLabels.includes(v) && v != null))
+    colorScale = colorScale
+      .range(newDomain.map( v => colorScale(v)) )
+      .domain(newDomain)
+  }
+
+  const data = values.map((val,i) => ({ value: values[i], label: labels[i] }))
+
+  return [data, colors, colorScale, tooltipHTMLs]
+}
+
 export function getGroupValues(props) {
   let x_label = ''
   if (props.chartId === 1.18) { // bar chart
