@@ -276,7 +276,7 @@ export function getValues(props) {
   colorLabels = colorLabels.filter((_, i) => !invalid_indices.includes(i))
   tooltipHTMLs = tooltipHTMLs.filter((_, i) => !invalid_indices.includes(i))
 
-  if (typeof colorScale.domain === 'function') {
+  if (typeof colorScale.range === 'function') {
     const newDomain =colorScale.domain().filter((v) => (colorLabels.includes(v) && v != null))
     colorScale = colorScale
       .range(newDomain.map( v => colorScale(v)) )
