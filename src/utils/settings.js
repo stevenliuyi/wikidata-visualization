@@ -337,8 +337,8 @@ export const charts = [
     chartClass: 'map',
     settings: [coordinate, color, radius, label],
     defaultShow: [true, false, false, false],
-    moreSettings: ['map', 'fontSize', 'radius', 'color', 'showLegend', 'legendScale'], // SVG rendering issue for map projection
-    canvasSettings: ['height', 'border']
+    moreSettings: ['map', 'projection', 'fontSize', 'radius', 'color', 'showLegend', 'legendScale'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.10,
@@ -374,7 +374,7 @@ export const charts = [
     settings: [region, color],
     defaultShow: [true, false],
     moreSettings: ['map2', 'fontSize', 'color', 'showLegend', 'legendScale'],
-    canvasSettings: ['height', 'border']
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.14,

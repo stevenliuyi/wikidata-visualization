@@ -18,8 +18,7 @@ import FaMinus from 'react-icons/lib/fa/minus'
 
 const wrapperStyles = {
   width: '100%',
-  maxWidth: 980,
-  margin: '0 auto',
+  margin: '0 auto'
 }
 
 class Map extends Component {
@@ -40,6 +39,7 @@ class Map extends Component {
     this.setState({ center: [100,90]})
     this.setState({ center: mapSettings[nextProps.moreSettings.map].center })
     this.setState({ colors: getColors(nextProps) })
+    this.setState({ zoom: Math.min(nextProps.width/980, nextProps.height/551) })
   }
 
   componentDidMount() {
@@ -98,16 +98,15 @@ class Map extends Component {
             scale: mapSettings[this.props.moreSettings.map].scale,
             rotation: mapSettings[this.props.moreSettings.map].rotation
           }}
-          width={980}
-          height={551}
+          width={this.props.width}
+          height={this.props.height}
           style={{
-            width: '100%',
-            height: this.props.canvasSettings.height < 0
-              ? 'auto' : this.props.canvasSettings.height,
+            width: this.props.width,
+            height: this.props.height,
           }}
         >
           <ZoomableGroup center={this.state.center} zoom={this.state.zoom}>
-            <Geographies geography={json_filename}>
+            <Geographies geography={json_filename} disableOptimization>
               {(geographies, projection) =>
                 geographies.map((geography, i) =>
                   geography.id !== 'ATA' && (

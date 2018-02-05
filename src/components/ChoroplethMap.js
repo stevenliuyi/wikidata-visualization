@@ -16,8 +16,7 @@ import FaMinus from 'react-icons/lib/fa/minus'
 
 const wrapperStyles = {
   width: '100%',
-  maxWidth: 980,
-  margin: '0 auto',
+  margin: '0 auto'
 }
 
 class ChoroplethMap extends Component {
@@ -37,6 +36,7 @@ class ChoroplethMap extends Component {
     this.setState({ center: map2Settings[nextProps.moreSettings.map2].center })
     this.setState({ center: [100,90]})
     this.setState({ center: map2Settings[nextProps.moreSettings.map2].center })
+    this.setState({ zoom: Math.min(nextProps.width/980, nextProps.height/551) })
     const colors = getColors(nextProps)
     const tooltipHTMLs = getTooltipHTML(nextProps)
     this.setState({ colors, tooltipHTMLs })
@@ -65,17 +65,16 @@ class ChoroplethMap extends Component {
     return (
       <div style={wrapperStyles}>
         <ComposableMap
-          projection={this.props.moreSettings.projection}
+          projection='mercator'
           projectionConfig={{
             scale: settings.scale0,
             rotation: settings.rotation
           }}
-          width={980}
-          height={551}
+          width={this.props.width}
+          height={this.props.height}
           style={{
-            width: '100%',
-            height: this.props.canvasSettings.height < 0
-              ? 'auto' : this.props.canvasSettings.height,
+            width: this.props.width,
+            height: this.props.height
           }}
         >
           <ZoomableGroup center={this.state.center} zoom={this.state.zoom}>
