@@ -23,20 +23,6 @@ class ScatterPlot extends Component {
       .map((item,i) => ({ id: i, ...item})) // add ids
       .filter((item) => (item[xLabel] != null) && (item[yLabel] != null)) // remove undefined values
 
-    const d3node = (
-      <svg width={this.props.width} height={this.props.height}>
-        <DataCircles
-          xLabel={xLabel}
-          yLabel={yLabel}
-          radii={radii}
-          colors={colors}
-          {...this.props}
-          {...scales} />
-        <Labels xLabel={xLabel} yLabel={yLabel} {...this.props} {...scales} />
-        <XYAxis {...this.props} {...scales} />
-      </svg>
-    )
-
     // add tooltips
     d3.selectAll('.circle')
       .data(selectedData)
@@ -91,7 +77,19 @@ class ScatterPlot extends Component {
 
     return (
       <div id='chart'>
-        <SVGPanZoom d3node={d3node} {...this.props} />
+        <SVGPanZoom {...this.props}>
+          <svg width={this.props.width} height={this.props.height}>
+            <DataCircles
+              xLabel={xLabel}
+              yLabel={yLabel}
+              radii={radii}
+              colors={colors}
+              {...this.props}
+              {...scales} />
+            <Labels xLabel={xLabel} yLabel={yLabel} {...this.props} {...scales} />
+            <XYAxis {...this.props} {...scales} />
+          </svg>
+        </SVGPanZoom>
       </div>
     )
   }

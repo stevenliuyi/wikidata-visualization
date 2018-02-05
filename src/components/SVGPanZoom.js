@@ -19,7 +19,7 @@ class SVGPanZoom extends Component {
         miniaturePosition='none'
         detectAutoPan={false}>
         <svg width={this.props.width} height={this.props.height}>
-          { this.props.d3node }
+          { this.props.children }
         </svg>
       </ReactSVGPanZoom>
     )

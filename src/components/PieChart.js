@@ -123,11 +123,11 @@ class PieChart extends Component {
   }
 
   render() {
-    let d3node = (<svg width={this.props.width} height={this.props.height}></svg>)
-
     return (
       <div id='chart'>
-        <SVGPanZoom d3node={d3node} {...this.props}/> 
+        <SVGPanZoom {...this.props}>
+          <svg width={this.props.width} height={this.props.height}></svg>
+        </SVGPanZoom>
       </div>
     )
   }
