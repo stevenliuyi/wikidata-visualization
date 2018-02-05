@@ -139,7 +139,7 @@ class Query extends Component {
             }
           </Col>
           <Col xsHidden sm={3} className='align-right'>
-            { !this.props.editorFullScreen &&
+            { !this.props.editorFullScreen && (this.props.chartId < 2) &&
               <FaAngleDoubleLeft
                 className='clickable-icon'
                 onClick={ () => this.props.onHide() }

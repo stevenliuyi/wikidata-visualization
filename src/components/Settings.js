@@ -463,6 +463,7 @@ class Settings extends Component {
                               <div>
                                 { [...Array(this.props.settings.ngroups).keys()].map((_,idx) => 
                                   <FormControl
+                                    key={idx}
                                     name={(idx>0) ? `${setting.value}${idx}`: setting.value}
                                     componentClass="select"
                                     value={this.props.settings[`${setting.value}${idx}`]}

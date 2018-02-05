@@ -370,7 +370,10 @@ export function getGroupValues(props) {
 }
 
 export function getSingleTooltipHTML(item, header) {
-  return header.map(header => `<span><b>${header}:</b> ${item[header]}</span>`)
+  return header.map(header => {
+    const value = (item[header] != null) ? item[header] : '<span class="text-muted">(no data)</span>'
+    return `<span><b>${header}</b> ${value}</span>`
+  })
     .join('<br />')
 }
 

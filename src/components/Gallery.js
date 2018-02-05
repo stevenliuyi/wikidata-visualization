@@ -44,6 +44,7 @@ class ImageGallery extends Component {
       .map(item => ({
         src: item[imageLabel],
         caption: item[props.header[props.settings.label]],
+        showCaption: (props.header[props.settings.label] != null),
         tooltip: tooltip,
         tooltipHTML: getSingleTooltipHTML(item, props.header)
       }))
@@ -64,6 +65,7 @@ class ImageGallery extends Component {
         width: imgElement.naturalWidth,
         height: imgElement.naturalHeight,
         caption:img.caption,
+        showcaption: img.showCaption.toString(),
         tooltip: img.tooltip,
         tooltiphtml: img.tooltipHTML
       })

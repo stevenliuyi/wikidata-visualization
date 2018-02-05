@@ -34,9 +34,11 @@ class Image extends Component {
             photo.tooltip.style('display', 'none')
           }}
         />
-        <span style={{ maxWidth: photo.width, ...captionStyle }}>
-          { photo.caption }
-        </span>
+        { photo.showcaption === 'true' &&
+          <span style={{ maxWidth: photo.width, ...captionStyle }}>
+            { (photo.caption != null) ? photo.caption : '　' }
+          </span>
+        }
       </div>
     )
   }

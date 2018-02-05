@@ -204,6 +204,7 @@ class App extends Component {
                           exampleIndex={this.state.exampleIndex}
                           width={this.state.editorWidth}
                           editorFullScreen={this.state.editorFullScreen}
+                          chartId={this.state.chart}
                         />
                       </div>
                     }
