@@ -144,7 +144,7 @@ export function getColorScale(props, nodes = null) {
       : nodes
 
     // numeric values
-    if ((typeof(props.data[0][label]) === 'number' && nodes == null) || (nodes != null && typeof(nodes[0]['color']) === 'number')) {
+    if ((props.dataTypes[props.settings['color']] === 'number' && nodes == null) || (nodes != null && typeof(nodes[0]['color']) === 'number')) {
       const minValue = d3.min(selectedData, d => (nodes == null) ? d[label] : d['color'])
       const maxValue = d3.max(selectedData, d => (nodes == null) ? d[label] : d['color'])
       colorScale = d3.scaleSequential(colorSchemes[schemeName])

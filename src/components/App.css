@@ -170,6 +170,7 @@
 .sm-badge a:hover,
 .sm-badge a:active {
   color: #fff;
+  text-decoration: none;
 }
 
 .zoom-button {

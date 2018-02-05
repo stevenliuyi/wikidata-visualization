@@ -251,6 +251,7 @@ class App extends Component {
                     data={this.state.data}
                     rowSelections={this.state.rowSelections}
                     header={this.state.header}
+                    dataTypes={this.state.dataTypes}
                     settings={this.state.settings}
                     moreSettings={this.state.moreSettings}
                     canvasSettings={this.state.canvasSettings}
