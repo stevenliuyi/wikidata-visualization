@@ -11,6 +11,8 @@ class RadarChart extends Component {
 
     const [data, maxVal, colors, colorScale] = getGroupValues(this.props)
 
+    if (data.variables.length < 1) return null
+
     const d3node = (
       <Radar
         width={this.props.width}
