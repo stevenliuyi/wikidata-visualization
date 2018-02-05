@@ -135,7 +135,7 @@ const texts = {
 
 const ngroups = {
   value: 'ngroups',
-  title: 'Groups',
+  title: 'Number of groups',
   type: 'slider',
   defaultValue: 1,
   props: {
@@ -143,6 +143,18 @@ const ngroups = {
     min: 1,
     max: 10
   }
+}
+
+const start_time = {
+  value: 'start-time',
+  title: 'Start time',
+  type: 'time' 
+}
+
+const end_time = {
+  value: 'end-time',
+  title: 'End time',
+  type: 'time' 
 }
 
 export const moreSettings = {
@@ -175,7 +187,9 @@ export const moreSettings = {
   rotation: 0,
   solarSystem: 'Earth',
   barType: 'stacked',
-  innerRadius: 0.6
+  innerRadius: 0.6,
+  timelineType: 'separate',
+  padding: 10
 }
 
 export const moreSettingTitles = {
@@ -204,11 +218,13 @@ export const moreSettingTitles = {
   sizeScale: 'Size scale',
   fontSizes: 'Font Sizes',
   showLegend: 'Legend',
-  legendScale: 'Legend scale',
+  legendScale: 'Legend size',
   rotation: 'Max rotation',
   solarSystem: 'Solar system',
   barType: 'Bar type',
-  innerRadius: 'Inner radius'
+  innerRadius: 'Inner radius',
+  timelineType: 'Timeline type',
+  padding: 'Padding'
 }
 
 export const canvasSettings = {
@@ -422,6 +438,15 @@ export const charts = [
     defaultShow: [true, false, false],
     moreSettings: ['fontSize', 'color', 'innerRadius', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
+  },
+  {
+    id: 1.21,
+    name: 'Timeline',
+    chartClass: 'more',
+    settings: [start_time, end_time, label, color],
+    defaultShow: [true, true, false, false],
+    moreSettings: ['timelineType', 'padding', 'fontSize', 'color', 'showLegend', 'legendScale'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   }
 ]
 
@@ -442,12 +467,14 @@ export function getSettings(chartId, header, data, dataTypes) {
   const itemIndices = getDataTypeIndices(dataTypes, 'item')
   const coordinateIndices = getDataTypeIndices(dataTypes, 'coordinate')
   const imageIndices = getDataTypeIndices(dataTypes, 'image')
+  const timeIndices = getDataTypeIndices(dataTypes, 'time')
 
   // default settings
   let numIdx = 0,
     itemIdx = 0,
     coordIdx = 0,
-    imageIdx = 0
+    imageIdx = 0,
+    timeIdx = 0
   let defaultSettings = chartSettings.map((setting, index) => {
     let defaultValue = -1
     if (setting.type === 'number' && numberIndices.length >= 1 && show[index]) { // number
@@ -462,6 +489,9 @@ export function getSettings(chartId, header, data, dataTypes) {
     } else if (setting.type === 'image' && imageIndices.length >= 1 && show[index]) { // coordinate
       defaultValue = imageIndices[coordIdx] 
       if (imageIdx < imageIndices.length-1) imageIdx += 1
+    } else if (setting.type === 'time' && timeIndices.length >= 1 && show[index]) { // time
+      defaultValue = timeIndices[timeIdx]
+      if (timeIdx < timeIndices.length-1) timeIdx += 1
     } else if (setting.type === 'slider') { // slider
       defaultValue = setting.defaultValue
     } else if (show[index]) {
@@ -496,6 +526,8 @@ export function getSettings(chartId, header, data, dataTypes) {
       info['indices'] = coordinateIndices
     } else if (setting.type === 'image') {
       info['indices'] = imageIndices
+    } else if (setting.type === 'time') {
+      info['indices'] = timeIndices
     }
     // hide the setting by default
     if (!show[index]) info['indices'] = [-1].concat(info['indices'])

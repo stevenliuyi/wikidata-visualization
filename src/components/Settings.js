@@ -184,6 +184,15 @@ class Settings extends Component {
           min={1}
           max={50} />
       )
+    } else if (setting === 'padding') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings.padding}
+          slideStop={(e)=>this.props.onMoreSettingsChange({padding: e.target.value})}
+          step={1}
+          min={0}
+          max={50} />
+      )
     } else if ( setting === 'sortRow' || setting === 'sortColumn' ) {
       return (
         <FormControl
@@ -391,6 +400,17 @@ class Settings extends Component {
           onChange={(e)=>this.props.onMoreSettingsChange({barType: e.target.value})}
         >
           <option value='stacked' key='stacked'>stacked</option>
+          <option value='grouped' key='grouped'>grouped</option>
+        </FormControl>
+      )
+    } else if (setting === 'timelineType') {
+      return (
+        <FormControl
+          componentClass="select"
+          value={this.props.moreSettings['timelineType']}
+          onChange={(e)=>this.props.onMoreSettingsChange({timelineType: e.target.value})}
+        >
+          <option value='separate' key='separate'>separate</option>
           <option value='grouped' key='grouped'>grouped</option>
         </FormControl>
       )

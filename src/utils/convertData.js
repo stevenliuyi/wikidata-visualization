@@ -18,6 +18,8 @@ function convertValue(value) {
     return [value['value'].slice(value['value'].indexOf('Point')+6,-1).split(' ').join(', '), 'coordinate'] // coordinate
   } else if (value['value'].startsWith('http://commons.wikimedia.org/wiki/Special:FilePath')) {
     return [value['value'], 'image']
+  } else if (value['datatype'] === 'http://www.w3.org/2001/XMLSchema#dateTime') {
+    return [value['value'], 'time']
   } else {
     return [value['value'], 'string']
   }
@@ -438,4 +440,51 @@ export function getWordCloudData(props) {
   const colors = data.map(word=>colorSchemes[props.moreSettings.color](Math.random()))
 
   return [data, colors]
+}
+
+export  function getTimeData(props) {
+  const start_label = props.header[props.settings['start-time']]  
+  const end_label = props.header[props.settings['end-time']]  
+  const label = props.header[props.settings['label']]  
+  const color = props.header[props.settings['color']]  
+
+  const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
+
+  let [colors, colorScale] = getColors(props, true)
+  let invalid_indices = []
+
+  let data = []
+  selectedData.forEach((item, i) => {
+    const start_time = (item[start_label] != null) ? new Date(item[start_label]) : null
+    const end_time = (item[end_label] != null) ? new Date(item[end_label]) : null
+    if (start_time != null && end_time != null && !isNaN(start_time.getTime()) && !isNaN(end_time.getTime())) {
+      data.push({
+        start: start_time,
+        end: end_time,
+        label: (item[label] != null) ? String(item[label]) : ''
+      })
+    } else {
+      invalid_indices.push(i)
+    }
+  })
+
+  const minDate = new Date(Math.min(...data.map(period => period.start)))
+  const maxDate = new Date(Math.max(...data.map(period => period.end)))
+
+  let colorLabels = (color != null)
+    ? selectedData.map(item => (item[color] != null) ? item[color] : null)
+    : Array(data.length).fill(null)
+
+  colors = colors.filter((_, i) => !invalid_indices.includes(i))
+  colorLabels = colorLabels.filter((_, i) => !invalid_indices.includes(i))
+  //tooltipHTMLs = tooltipHTMLs.filter((_, i) => !invalid_indices.includes(i))
+
+  if (typeof colorScale.range === 'function') {
+    const newDomain =colorScale.domain().filter((v) => (colorLabels.includes(v) && v != null))
+    colorScale = colorScale
+      .range(newDomain.map( v => colorScale(v)) )
+      .domain(newDomain)
+  }
+
+  return [data, minDate, maxDate, colors, colorScale]
 }
