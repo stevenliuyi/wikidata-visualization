@@ -9,12 +9,9 @@ import chroma from 'chroma-js'
 import Info from './Info'
 
 // Sankey diagram d3 reference: https://bl.ocks.org/ebendennis/07c361ea822d99872adffea9c7ccf19b
-const updateD3Node = (props, test = false) => {
+const updateD3Node = (props) => {
   var graph = getGraph(props, true)
 
-  d3.selectAll('.d3ToolTip').remove()
-  var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
-  
   // remove self-pointing links
   graph.links = graph.links.filter(link => (link.source !== link.target))
 
@@ -23,10 +20,12 @@ const updateD3Node = (props, test = false) => {
     toposort(graph.links.map(link => ([link.source, link.target])))
   } catch(error) {
     // the graph is not acyclic, cannot generate Sankey diagram
-    return false
+    return 'sankey-error'
   }
-  if (test) return true // only test if the graph is legitimate
 
+  d3.selectAll('.d3ToolTip').remove()
+  var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
+  
   var colorScale = getColorScale(props, graph.nodes)
 
   var svg = d3.select('#chart')
@@ -51,6 +50,9 @@ const updateD3Node = (props, test = false) => {
     .nodes(graph.nodes)
     .links(graph.links)
     .layout(32)
+
+  // check if all heights are positive
+  if (!graph.nodes.map(n=>n.dy).every(h=>h>=0)) return 'negative-height'
 
   // add in the links
   var link = svg.append('g').selectAll('.link')
@@ -142,12 +144,15 @@ const updateD3Node = (props, test = false) => {
     if (connection == null) d3.selectAll('.link').classed('active', false)
     else d3.selectAll('.link.' + connection).classed('active', true)
   }
+
+  return 'ok'
 }
 
 class SankeyDiagram extends Component {
 
   state = {
-    mounted: false
+    mounted: false,
+    error: 'ok'
   }
 
   componentDidMount() {
@@ -156,19 +161,29 @@ class SankeyDiagram extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.mounted) updateD3Node(nextProps)
+    if (this.state.mounted) {
+      const err = updateD3Node(nextProps)
+      if (this.state.error !== err) this.setState({ error: err })
+    }
   }
 
   render() {
 
     if (!this.props.dataTypes.includes('item')) return <Info info='no-item' />
-    if (!updateD3Node(this.props, true)) return <Info info='sankey-error' showSettings={true} />
 
     return (
       <div id='chart'>
-        <SVGPanZoom {...this.props}>
-          <svg width={this.props.width} height={this.props.height}></svg>
-        </SVGPanZoom>
+        { this.state.error === 'sankey-error' &&
+          <Info info='sankey-error' showSettings={true} />
+        }
+        { this.state.error === 'negative-height' &&
+          <Info info='negative-height' showSettings={true} />
+        }
+        { this.state.error === 'ok' &&
+          <SVGPanZoom {...this.props}>
+            <svg width={this.props.width} height={this.props.height}></svg>
+          </SVGPanZoom>
+        }
       </div>
     )
   }

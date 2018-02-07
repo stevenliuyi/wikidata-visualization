@@ -25,6 +25,7 @@ const updateD3Node = (props) => {
   if (singleHeight == null) return null
   var timeline = d3Timeline()
 
+  let negativeHeight = false
   if (props.moreSettings.timelineType === 'separate') { // separate
     timeline = d3Timeline()
       .size([props.width-120, singleHeight-padding])
@@ -35,6 +36,10 @@ const updateD3Node = (props) => {
     data.forEach(function (period, i) {
     
       let band = timeline([period])
+      if (band[0].dy <= 0) {
+        negativeHeight = true
+        return
+      }
     
       svg.append('g')
         .attr('transform', 'translate(100,' + (padding + (i * singleHeight)) + ')')
@@ -67,6 +72,11 @@ const updateD3Node = (props) => {
       .maxBandHeight(props.height)
 
     var theseBands = timeline(data)
+    // check if all heights are positive
+    if (!theseBands.map(b=>b.dy).every(h=>h>0)) {
+      negativeHeight = true
+      return negativeHeight
+    }
     
     var g = svg.append('g')
       .attr('transform', 'translate(100,' + padding + ')')
@@ -93,6 +103,8 @@ const updateD3Node = (props) => {
   }
 
   if (colorScale != null) drawLegend(svg, colorScale, props)
+
+  return negativeHeight
 }
 class Timeline extends Component {
 
@@ -108,17 +120,13 @@ class Timeline extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.mounted) updateD3Node(nextProps)
-  }
-
-  componentDidUpdate() {
-    try {
-      if (d3.select('.rect').attr('height') <= 0) {
+    if (this.state.mounted) {
+      if (updateD3Node(nextProps)) {
         if (!this.state.negativeHeight) this.setState({ negativeHeight: true })
       } else {
         if (this.state.negativeHeight) this.setState({ negativeHeight: false })
       }
-    } catch(e) {}
+    }
   }
 
   render() {
@@ -129,9 +137,11 @@ class Timeline extends Component {
         { this.state.negativeHeight &&
           <Info info='negative-height' showSettings={true} />
         }
-        <SVGPanZoom {...this.props}>
-          <svg width={this.props.width} height={this.props.height}></svg>
-        </SVGPanZoom>
+        { !this.state.negativeHeight &&
+          <SVGPanZoom {...this.props}>
+            <svg width={this.props.width} height={this.props.height}></svg>
+          </SVGPanZoom>
+        }
       </div>
     )
   }
