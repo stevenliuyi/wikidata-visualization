@@ -356,7 +356,7 @@ export const charts = [
     settings: [region, area, color],
     defaultShow: [true, true, false],
     moreSettings: ['map2', 'iterations', 'color'],
-    canvasSettings: ['border']
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.12,
