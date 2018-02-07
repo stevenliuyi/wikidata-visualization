@@ -43,7 +43,7 @@ class Map extends Component {
     this.setState({ zoom: Math.min(nextProps.width/980, nextProps.height/551) })
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
 
     const tooltipHTMLs = getTooltipHTML(this.props)
 

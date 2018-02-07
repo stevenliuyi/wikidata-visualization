@@ -36,10 +36,14 @@ class LeafletMap extends Component {
   }
 
   componentDidUpdate() {
+    if (document.getElementsByClassName('info-text').length !== 0) return
+
     this.refs.map.leafletElement.invalidateSize(false)
   }
 
   componentDidMount() {
+    if (document.getElementsByClassName('info-text').length !== 0) return
+
     this.props.updateFitBoundsFcn(this.fitBounds)
     this.fitBounds()
   }
