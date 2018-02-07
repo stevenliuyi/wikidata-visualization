@@ -4,6 +4,7 @@ import { getMatrix2 } from '../utils/convertData'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
 import { drawLegend } from '../utils/draw'
+import Info from './Info'
 
 // heat matrix d3 references:
 // https://moleleo.github.io/D3V4NetworkDataVisualizations/
@@ -137,6 +138,9 @@ class Heatmap extends Component {
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('item')) return <Info info='no-item' />
+
     return (
       <div id='chart'>
         <SVGPanZoom {...this.props}>

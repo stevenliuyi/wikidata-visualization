@@ -4,6 +4,7 @@ import { getGraph } from '../utils/convertData'
 import { getColorScale } from '../utils/scales'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
+import Info from './Info'
 
 // force-directed graph d3 references:
 // https://bl.ocks.org/mbostock/4062045
@@ -205,6 +206,9 @@ class Graph extends Component {
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('item')) return <Info info='no-item' />
+
     return (
       <div id='chart'>
         <SVGPanZoom {...this.props}>

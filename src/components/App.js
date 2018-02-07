@@ -266,6 +266,7 @@ class App extends Component {
                   this.state.chart === 1.12 &&
                   <ImageGallery
                     data={this.state.data}
+                    dataTypes={this.state.dataTypes}
                     rowSelections={this.state.rowSelections}
                     header={this.state.header}
                     settings={this.state.settings}

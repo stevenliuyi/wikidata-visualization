@@ -11,6 +11,7 @@ import Basemap from './Basemap'
 import { getRadius, getColors } from '../utils/scales'
 import { getTooltipHTML } from '../utils/convertData'
 import 'leaflet/dist/leaflet.css'
+import Info from './Info'
 
 Leaflet.Icon.Default.imagePath =
   '//cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/images/'
@@ -87,6 +88,8 @@ class LeafletMap extends Component {
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('coordinate')) return <Info info='no-coordinate' />
 
     const bounds = this.getBounds(this.props)
 

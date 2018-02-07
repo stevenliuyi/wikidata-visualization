@@ -507,3 +507,18 @@ export const map2Settings = {
   'United States': { names: USNames, namekey: 'STUSPS10', objectname: 'state', filename: 'us-states.json', scale: 4, translate: [1.7,1.2], center: [-95, 40], scale0: 700, rotation: [0,0,0] }
 }
 
+// check if there exists any item that represents a supported region
+export const existRegionItems = (props) => {
+  
+  const selectedData = props.data.filter((item, i) => props.rowSelections.includes(i))
+  let existed = false
+
+  selectedData.forEach(item => {
+    if (Object.values(map2Settings[props.moreSettings.map2].names).includes(item[props.header[props.settings.region]])) {
+      existed = true
+      return
+    }
+  })
+
+  return existed
+}

@@ -429,6 +429,8 @@ class Settings extends Component {
   }
 
   render() {
+
+    if (document.getElementsByClassName('info-text').length !== 0 && document.getElementsByClassName('show-settings').length === 0) return null
     const chartId = charts.map(chart => chart.id).indexOf(this.props.chart)
     const chartMoreSettings = (chartId >= 0) ? charts[chartId].moreSettings : null
     const chartCanvasSettings = (chartId >= 0) ? charts[chartId].canvasSettings : null

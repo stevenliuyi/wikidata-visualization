@@ -4,6 +4,7 @@ import * as d3 from 'd3'
 import SVGPanZoom from './SVGPanZoom'
 import { drawLegend } from '../utils/draw'
 import { d3Timeline } from '../utils/timeline'
+import Info from './Info'
 
 // timeline reference: http://bl.ocks.org/denisemauldin/e6da337734f855c2a89666afb11dc329
 const updateD3Node = (props) => {
@@ -110,6 +111,9 @@ class Timeline extends Component {
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('time')) return <Info info='no-time' />
+
     return (
       <div id='chart'>
         <SVGPanZoom {...this.props}>

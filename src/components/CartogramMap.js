@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import * as d3 from 'd3'
 import { getColors } from '../utils/scales'
 import { geoMercator } from 'd3-geo'
-import { map2Settings } from '../utils/maps2'
+import { map2Settings, existRegionItems } from '../utils/maps2'
 import Cartogram from 'cartogram-chart/dist/cartogram-chart.min.js'
+import Info from './Info'
 
 const getTopoJsonFileName = (props) => (
   (process.env.NODE_ENV === 'development')
@@ -23,6 +24,9 @@ class CartogramMap extends Component {
     d3.selectAll('.cartogram-tooltip').html('')
 
     d3.json(getTopoJsonFileName(this.props), (error, map) => {
+      // prevent adding multiple maps
+      if (document.getElementsByClassName('cartogram').length > 0) return
+
       if (error) throw error
 
       if (this.props.moreSettings.map2 === 'World') {
@@ -136,16 +140,24 @@ class CartogramMap extends Component {
     this.setD3Node.bind(this)
   }
 
-  componentDidMount() {
-    this.setD3Node()
-  }
-
-  shouldComponentUpdate(nextProps) {
-    if (this.state.chart !== null) this.updateD3Node(nextProps)
-    return false
+  componentDidUpdate() {
+    if (document.getElementById('chart') != null) {
+      if (this.state.chart == null) {
+        this.setD3Node()
+      } else {
+        this.updateD3Node(this.props)
+      }
+    } else {
+      if (this.state.chart != null) this.setState({ chart: null })
+    } 
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('coordinate')) return <Info info='no-coordinate' />
+    if (!this.props.dataTypes.includes('number')) return <Info info='no-number' />
+    if (!existRegionItems(this.props)) return <Info info='no-region' text={this.props.moreSettings.map2} showSettings={true} />
+
     return (
       <div id='chart' style={{height: this.props.height, width: this.props.width}}
         dangerouslySetInnerHTML={{__html: ''}} />

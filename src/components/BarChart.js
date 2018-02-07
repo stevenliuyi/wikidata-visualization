@@ -4,6 +4,7 @@ import * as d3 from 'd3'
 import SVGPanZoom from './SVGPanZoom'
 import { drawLegend } from '../utils/draw'
 import chroma from 'chroma-js'
+import Info from './Info'
 
 // bar chart d3 references
 // http://bl.ocks.org/mbostock/3943967
@@ -173,6 +174,9 @@ class BarChart extends Component {
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('number')) return <Info info='no-number' />
+
     return (
       <div id='chart'>
         <SVGPanZoom {...this.props}>

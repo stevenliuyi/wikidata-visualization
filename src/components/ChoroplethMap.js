@@ -13,6 +13,8 @@ import chroma from 'chroma-js'
 import * as d3 from 'd3'
 import FaPlus from 'react-icons/lib/fa/plus'
 import FaMinus from 'react-icons/lib/fa/minus'
+import Info from './Info'
+import { existRegionItems } from '../utils/maps2'
 
 const wrapperStyles = {
   width: '100%',
@@ -51,6 +53,9 @@ class ChoroplethMap extends Component {
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('coordinate')) return <Info info='no-coordinate' />
+    if (!existRegionItems(this.props)) return <Info info='no-region' text={this.props.moreSettings.map2} showSettings={true} />
 
     d3.selectAll('.d3ToolTip').remove()
     var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')

@@ -4,10 +4,13 @@ import * as d3 from 'd3'
 import SVGPanZoom from './SVGPanZoom'
 import { drawLegend } from '../utils/draw'
 import Radar from 'react-d3-radar'
+import Info from './Info'
 
 class RadarChart extends Component {
 
   render() {
+
+    if (!this.props.dataTypes.includes('number')) return <Info info='no-number' />
 
     const [data, maxVal, colors, colorScale] = getGroupValues(this.props)
 

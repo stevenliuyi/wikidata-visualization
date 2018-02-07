@@ -168,7 +168,7 @@ export const moreSettings = {
   strength: -30,
   iterations: 20,
   nodeWidth: 16,
-  nodePadding: 20,
+  nodePadding: 5,
   sortRow: '',
   sortColumn: '',
   baseMap: 'OpenStreetMap',
@@ -354,7 +354,7 @@ export const charts = [
     name: 'Cartogram',
     chartClass: 'map',
     settings: [region, area, color],
-    defaultShow: [true, false, false],
+    defaultShow: [true, true, false],
     moreSettings: ['map2', 'iterations', 'color'],
     canvasSettings: ['border']
   },

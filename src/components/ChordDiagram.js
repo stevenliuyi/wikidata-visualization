@@ -4,6 +4,7 @@ import { getMatrix } from '../utils/convertData'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
 import { drawLegend } from '../utils/draw'
+import Info from './Info'
 
 // chord diagram d3 reference: https://bl.ocks.org/mbostock/4062006
 const updateD3Node = (props) => {
@@ -155,6 +156,9 @@ class ChordDiagram extends Component {
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('item')) return <Info info='no-item' />
+
     return (
       <div id='chart'>
         <SVGPanZoom {...this.props}>

@@ -15,6 +15,7 @@ import { getTooltipHTML } from '../utils/convertData'
 import chroma from 'chroma-js'
 import FaPlus from 'react-icons/lib/fa/plus'
 import FaMinus from 'react-icons/lib/fa/minus'
+import Info from './Info'
 
 const wrapperStyles = {
   width: '100%',
@@ -83,6 +84,8 @@ class Map extends Component {
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('coordinate')) return <Info info='no-coordinate' />
 
     const radii = getRadius(this.props)
 

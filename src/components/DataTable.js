@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import checkboxHOC from 'react-table/lib/hoc/selectTable'
-import { Well, Label, OverlayTrigger, Tooltip, Col, Row } from 'react-bootstrap'
+import { Label, OverlayTrigger, Tooltip, Col, Row } from 'react-bootstrap'
 import { getDataTypeIndices } from '../utils/convertData'
 import { getURL } from '../utils/commons'
+import Info from './Info'
 
 const CheckboxTable = checkboxHOC(ReactTable)
 
@@ -310,7 +311,7 @@ class DataTable extends Component {
           />
         }
         { Array.isArray(this.props.data) && this.props.data.length === 0 &&
-          <Well className='no-data-text'>No data now, please submit a new query!</Well>
+          <Info info='no-data' />
         }
       </div>
     )

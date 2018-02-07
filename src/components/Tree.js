@@ -5,6 +5,7 @@ import { getColorScale } from '../utils/scales'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
 import { drawLegend } from '../utils/draw'
+import Info from './Info'
 
 // tree d3 reference: https://bl.ocks.org/mbostock/4339184
 const updateD3Node = (props) => {
@@ -131,6 +132,10 @@ class Tree extends Component {
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('item')) return <Info info='no-item' />
+    if (getTreeRoot(this.props) == null) return <Info info='tree-error' showSettings={true} />
+
     return (
       <div id='chart'>
         <SVGPanZoom {...this.props}>

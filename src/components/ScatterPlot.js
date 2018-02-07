@@ -8,9 +8,13 @@ import SVGPanZoom from './SVGPanZoom'
 import * as d3 from 'd3'
 import chroma from 'chroma-js'
 import { drawLegend } from '../utils/draw'
+import Info from './Info'
 
 class ScatterPlot extends Component {
   render() {
+
+    if (!this.props.dataTypes.includes('number')) return <Info info='no-number' />
+
     const [scales, xLabel, yLabel] = getXYScales(this.props)
     const radii = getRadius(this.props)
     const [colors, colorScale] = getColors(this.props, true)

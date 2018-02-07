@@ -7,6 +7,7 @@ import { getURL } from '../utils/commons'
 import { getSingleTooltipHTML } from '../utils/convertData'
 import Image from './Image'
 import * as d3 from 'd3'
+import Info from './Info'
 
 class ImageGallery extends Component {
   state = {
@@ -104,7 +105,15 @@ class ImageGallery extends Component {
   }
 
   render() {
-    
+
+    if (this.props.data.length === 0) {
+      return <Info info='no-data' />
+    } else if (this.props.rowSelections.length === 0) {
+      return <Info info='no-selection' />
+    }
+
+    if (!this.props.dataTypes.includes('image')) return <Info info='no-image' />
+   
     return (
       <div>
         <OnImagesLoaded

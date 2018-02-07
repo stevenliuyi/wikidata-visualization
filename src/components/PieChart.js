@@ -4,6 +4,7 @@ import * as d3 from 'd3'
 import SVGPanZoom from './SVGPanZoom'
 import { drawLegend } from '../utils/draw'
 import chroma from 'chroma-js'
+import Info from './Info'
 
 // pie/donut chart d3 reference: https://bl.ocks.org/mbostock/3887193
 const updateD3Node = (props, transition) => {
@@ -123,6 +124,9 @@ class PieChart extends Component {
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('number')) return <Info info='no-number' />
+
     return (
       <div id='chart'>
         <SVGPanZoom {...this.props}>

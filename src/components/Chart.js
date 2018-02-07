@@ -19,6 +19,7 @@ import RadarChart from './RadarChart'
 import PieChart from './PieChart'
 import Timeline from './Timeline'
 import Border from './Border'
+import Info from './Info'
 import { charts } from '../utils/settings'
 
 class Chart extends Component {
@@ -50,6 +51,12 @@ class Chart extends Component {
     }
 
     const chartIndex = charts.map(chart => chart.id).indexOf(this.props.chartId)
+
+    if (this.props.data.length === 0) {
+      return <Info info='no-data' />
+    } else if (this.props.rowSelections.length === 0) {
+      return <Info info='no-selection' />
+    }
 
     return (
       <div>
@@ -132,7 +139,7 @@ class Chart extends Component {
             </div>
           }
         </Measure>
-        { (this.state.show) &&
+        { (this.state.show) && (document.getElementsByClassName('info-text').length === 0) &&
           <Tools {...this.props} />
         } 
       </div>

@@ -18,7 +18,7 @@ WHERE
   OPTIONAL { ?pandaItem wdt:P22 ?fatherItem .
              ?fatherItem rdfs:label ?fatherName .
              FILTER ( LANG(?fatherName) = 'en' ) . }
-  OPTIONAL { ?pandaItem wdt:P22 ?motherItem .
+  OPTIONAL { ?pandaItem wdt:P25 ?motherItem .
              ?motherItem rdfs:label ?motherName .
              FILTER ( LANG(?motherName) = 'en' ) . }   
   OPTIONAL { ?pandaItem wdt:P569 ?dateOfBirth . }

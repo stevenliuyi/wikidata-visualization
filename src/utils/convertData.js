@@ -89,10 +89,8 @@ export function getTreeRoot(props) {
     const root = stratify(relationships)
     return root
   } catch(err) {
-    console.log('Error encountered while generating the tree!')
-    console.log(err)
+    return null
   }
-  return null
 }
 
 // get matrix (rows and columns are the same) for chord diagram
@@ -425,12 +423,16 @@ export function getWordCloudData(props) {
 
   // calculate font sizes
   let calcFontSize = (count) => ( // log scale
-    (Math.log(count)-Math.log(minCount))/(Math.log(maxCount)-Math.log(minCount)) *
-      (maxFontSize - minFontSize) + minFontSize
+    (maxCount !== minCount)
+      ? (Math.log(count)-Math.log(minCount))/(Math.log(maxCount)-Math.log(minCount)) *
+        (maxFontSize - minFontSize) + minFontSize
+      : (maxFontSize + minFontSize) / 2
   )
   if (props.moreSettings.sizeScale === 'linear') {
     calcFontSize = (count) => ( // linear scale
-      (count-minCount)/(maxCount-minCount) * (maxFontSize-minFontSize) + minFontSize  
+      (maxCount !== minCount)
+        ? (count-minCount)/(maxCount-minCount) * (maxFontSize-minFontSize) + minFontSize  
+        : (maxFontSize + minFontSize) / 2
     )
   }
 

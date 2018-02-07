@@ -5,6 +5,7 @@ import * as d3 from 'd3'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
 import{ drawLegend } from '../utils/draw'
+import Info from './Info'
 
 // bubble chart d3 references
 // https://bl.ocks.org/mbostock/4063269
@@ -122,6 +123,8 @@ class BubbleChart extends Component {
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('number')) return <Info info='no-number' />
 
     return (
       <div id='chart'>

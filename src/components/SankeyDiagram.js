@@ -6,9 +6,10 @@ import SVGPanZoom from './SVGPanZoom'
 import { d3Sankey } from '../utils/sankey'
 import toposort from 'toposort'
 import chroma from 'chroma-js'
+import Info from './Info'
 
 // Sankey diagram d3 reference: https://bl.ocks.org/ebendennis/07c361ea822d99872adffea9c7ccf19b
-const updateD3Node = (props) => {
+const updateD3Node = (props, test = false) => {
   var graph = getGraph(props, true)
 
   d3.selectAll('.d3ToolTip').remove()
@@ -21,9 +22,10 @@ const updateD3Node = (props) => {
   try {
     toposort(graph.links.map(link => ([link.source, link.target])))
   } catch(error) {
-    console.log('The graph is not acyclic, cannot generate Sankey diagram!')
-    return null
+    // the graph is not acyclic, cannot generate Sankey diagram
+    return false
   }
+  if (test) return true // only test if the graph is legitimate
 
   var colorScale = getColorScale(props, graph.nodes)
 
@@ -140,7 +142,6 @@ const updateD3Node = (props) => {
     if (connection == null) d3.selectAll('.link').classed('active', false)
     else d3.selectAll('.link.' + connection).classed('active', true)
   }
-
 }
 
 class SankeyDiagram extends Component {
@@ -159,6 +160,10 @@ class SankeyDiagram extends Component {
   }
 
   render() {
+
+    if (!this.props.dataTypes.includes('item')) return <Info info='no-item' />
+    if (!updateD3Node(this.props, true)) return <Info info='sankey-error' showSettings={true} />
+
     return (
       <div id='chart'>
         <SVGPanZoom {...this.props}>
