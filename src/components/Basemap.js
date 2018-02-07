@@ -32,7 +32,7 @@ class Basemap extends Component {
           <div>
             { this.state.basemap.startsWith('Google') &&
               <GoogleLayer
-                key='AIzaSyCTsXByA2UWSCIcX9BuPUdB8oMF6hXqJqU'
+                googlekey='AIzaSyCTsXByA2UWSCIcX9BuPUdB8oMF6hXqJqU'
                 maptype={ baseMapSettings[this.state.basemap].maptype }
               />
             }
