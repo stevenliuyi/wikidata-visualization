@@ -71,6 +71,10 @@ export const examples = [
   {
     title: 'Craters on the Moon named after French people',
     filename: 'moon-craters-french.rq'
+  },
+  {
+    title: 'Heads of state and government during the World War II',
+    filename: 'wwii-heads.rq'
   }
 ]
 

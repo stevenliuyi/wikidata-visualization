@@ -42,6 +42,7 @@ const updateD3Node = (props) => {
         .data(band)
         .enter()
         .append('rect')
+        .attr('class', 'rect')
         .attr('rx', 2)
         .attr('x', function (d) {return d.start})
         .attr('y', function (d) {return d.y})
@@ -74,6 +75,7 @@ const updateD3Node = (props) => {
       .enter()
 
     g.append('rect')
+      .attr('class', 'rect')
       .attr('rx', 2)
       .attr('x', function (d) {return d.start})
       .attr('y', function (d) {return d.y})
@@ -91,13 +93,12 @@ const updateD3Node = (props) => {
   }
 
   if (colorScale != null) drawLegend(svg, colorScale, props)
-  
 }
-
 class Timeline extends Component {
 
   state = {
-    mounted: false
+    mounted: false,
+    negativeHeight: false
   }
 
   componentDidMount() {
@@ -110,12 +111,24 @@ class Timeline extends Component {
     if (this.state.mounted) updateD3Node(nextProps)
   }
 
+  componentDidUpdate() {
+    try {
+      if (d3.select('.rect').attr('height') <= 0) {
+        if (!this.state.negativeHeight) this.setState({ negativeHeight: true })
+      } else {
+        if (this.state.negativeHeight) this.setState({ negativeHeight: false })
+      }
+    } catch(e) {}
+  }
+
   render() {
 
     if (!this.props.dataTypes.includes('time')) return <Info info='no-time' />
-
     return (
       <div id='chart'>
+        { this.state.negativeHeight &&
+          <Info info='negative-height' showSettings={true} />
+        }
         <SVGPanZoom {...this.props}>
           <svg width={this.props.width} height={this.props.height}></svg>
         </SVGPanZoom>

@@ -1,0 +1,18 @@
+# Heads of state and government during the World War II
+
+SELECT DISTINCT ?personItem ?person ?countryItem ?country ?startTime ?endTime ?dateOfBirth ?dateOfDeath WHERE {
+  ?countryItem wdt:P31/wdt:P279? wd:Q6256 ; # country
+               p:P35|p:P6 [ ps:P35|ps:P6 ?personItem ;
+                            pq:P580 ?startTime ;
+                            pq:P582 ?endTime ] .
+  wd:Q362 wdt:P580 ?WWIIStartTime ;
+          wdt:P582 ?WWIIEndTime .
+  FILTER ( ((?startTime >= ?WWIIStartTime) && (?startTime <= ?WWIIEndTime)) ||
+           ((?endTime >= ?WWIIStartTime) && (?endTime <= ?WWIIEndTime)) ||
+           ((?startTime < ?WWIIStartTime) && (?endTime > ?WWIIEndTime)) ) .
+  OPTIONAL { ?personItem wdt:P569 ?dateOfBirth . }
+  OPTIONAL { ?personItem wdt:P570 ?dateOfDeath . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". 
+                           ?countryItem rdfs:label ?country .
+                           ?personItem rdfs:label ?person . }                     
+}

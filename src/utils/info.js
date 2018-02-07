@@ -8,6 +8,7 @@ export const info = {
   'no-image': 'Images are needed for generating gallery.',
   'no-time': 'Time values are needed for generating timeline.',
   'tree-error': 'Cannot generate tree from the data provided.',
-  'sankey-error': 'Cannot generate Sankey diagram because the graph is not acyclic.'
+  'sankey-error': 'Cannot generate Sankey diagram because the graph is not acyclic.',
+  'negative-height': 'Canvas space is not enough. Please consider decreasing the padding size or increasing the canvas height.'
 }
 
