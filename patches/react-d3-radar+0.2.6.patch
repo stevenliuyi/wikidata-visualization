@@ -1,0 +1,31 @@
+patch-package
+--- a/node_modules/react-d3-radar/lib/Radar.js
++++ b/node_modules/react-d3-radar/lib/Radar.js
+@@ -73,7 +73,8 @@ function Radar(props) {
+       domainMax = props.domainMax,
+       style = props.style,
+       onHover = props.onHover,
+-      highlighted = props.highlighted;
++      highlighted = props.highlighted,
++      colors = props.colors;
+ 
+   var _convertData = convertData(props),
+       allPoints = _convertData.allPoints,
+@@ -86,12 +87,12 @@ function Radar(props) {
+ 
+   var backgroundScale = scales[data.variables[0].key];
+ 
+-  var colors = {};
+-  (0, _utils.forEachArray)(allPoints, function (_ref3, idx) {
+-    var setKey = _ref3.setKey;
++  //var colors = {};
++  //(0, _utils.forEachArray)(allPoints, function (_ref3, idx) {
++  //  var setKey = _ref3.setKey;
+ 
+-    colors[setKey] = _d3Scale.schemeCategory10[idx];
+-  });
++  //  colors[setKey] = _d3Scale.schemeCategory10[idx];
++  //});
+ 
+   var _$partition = _lodash2.default.partition(allPoints, function (_ref4) {
+     var setKey = _ref4.setKey;

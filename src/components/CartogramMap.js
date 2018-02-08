@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 import { getColors } from '../utils/scales'
 import { geoMercator } from 'd3-geo'
 import { map2Settings, existRegionItems } from '../utils/maps2'
-import Cartogram from 'cartogram-chart/dist/cartogram-chart.min.js'
+import Cartogram from 'cartogram-chart/dist/cartogram-chart.js'
 import Info from './Info'
 
 const getTopoJsonFileName = (props) => (

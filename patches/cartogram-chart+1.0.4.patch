@@ -1,0 +1,30 @@
+patch-package
+--- a/node_modules/cartogram-chart/dist/cartogram-chart.js
++++ b/node_modules/cartogram-chart/dist/cartogram-chart.js
+@@ -6629,7 +6629,7 @@ var cartogram = new Kapsule({
+     topoJson: {},
+     topoObjectName: {},
+     value: { default: 1 },
+-    color: { default: 'lightgrey' },
++    color: { default: '#eceff1' },
+     label: { default: '' },
+     valFormatter: { default: function _default(n) {
+         return n;
+@@ -6686,7 +6686,7 @@ var cartogram = new Kapsule({
+ 
+     features.exit().remove();
+ 
+-    var newFeatures = features.enter().append('path').attr('class', 'feature').style('fill', 'lightgrey').attr('d', state.cartogram.path).on('mouseover', function (feature) {
++    var newFeatures = features.enter().append('path').attr('class', 'feature').style('fill', '#eceff1').attr('d', state.cartogram.path).on('mouseover', function (feature) {
+       var label = labelOf(feature);
+       var extraContent = tooltipContentOf(feature);
+       state.tooltip.style('display', 'inline');
+@@ -6700,7 +6700,7 @@ var cartogram = new Kapsule({
+   }
+ });
+ 
+-__$styleInject(".cartogram .feature {\n    stroke: darkgrey;\n    transition: fill-opacity .7s;\n    cursor: pointer;\n}\n\n.cartogram .feature:hover {\n    fill-opacity: 0.6;\n    transition: fill-opacity .1s;\n}\n\n.cartogram-tooltip {\n    display: none;\n    position: absolute;\n    max-width: 320px;\n    margin-top: 20px;\n    margin-left: 8px;\n    padding: 5px;\n    border-radius: 3px;\n    font: 11px sans-serif;\n    color: #eee;\n    background: rgba(0, 0, 140, 0.8);\n    pointer-events: none;\n}", undefined);
++__$styleInject(".cartogram .feature {\n    stroke: #607d8b;\n    stroke-width: 0.75;\n    cursor: pointer;\n}\n\n.cartogram .feature:hover {\n    fill-opacity: 0.6;\n    transition: fill-opacity .1s;\n}\n\n.cartogram-tooltip {\n    display: none;\n    position: absolute;\n    max-width: 320px;\n    margin-top: 20px;\n    margin-left: 8px;\n    padding: 5px;\n    border-radius: 3px;\n    font: 11px sans-serif;\n    color: #eee;\n    background: rgba(0, 0, 140, 0.8);\n    pointer-events: none;\n}", undefined);
+ 
+ return cartogram;
+ 

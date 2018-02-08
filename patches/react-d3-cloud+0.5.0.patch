@@ -1,0 +1,31 @@
+patch-package
+--- a/node_modules/react-d3-cloud/lib/WordCloud.js
++++ b/node_modules/react-d3-cloud/lib/WordCloud.js
+@@ -60,7 +60,8 @@ var WordCloud = function (_Component) {
+           padding = _props.padding,
+           font = _props.font,
+           fontSizeMapper = _props.fontSizeMapper,
+-          rotate = _props.rotate;
++          rotate = _props.rotate,
++          colors = _props.colors;
+ 
+       var wordCounts = data.map(function (text) {
+         return _extends({}, text);
+@@ -74,7 +75,7 @@ var WordCloud = function (_Component) {
+         (0, _d3Selection.select)(_this2.wordCloud).append('svg').attr('width', layout.size()[0]).attr('height', layout.size()[1]).append('g').attr('transform', 'translate(' + layout.size()[0] / 2 + ',' + layout.size()[1] / 2 + ')').selectAll('text').data(words).enter().append('text').style('font-size', function (d) {
+           return d.size + 'px';
+         }).style('font-family', font).style('fill', function (d, i) {
+-          return fill(i);
++          return (colors.length === 0) ? fill(i) : colors[i];
+         }).attr('text-anchor', 'middle').attr('transform', function (d) {
+           return 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')';
+         }).text(function (d) {
+@@ -97,6 +98,7 @@ WordCloud.defaultProps = {
+   padding: 5,
+   font: 'serif',
+   fontSizeMapper: _defaultMappers.defaultFontSizeMapper,
+-  rotate: 0
++  rotate: 0,
++  colors: []
+ };
+ exports.default = WordCloud;
