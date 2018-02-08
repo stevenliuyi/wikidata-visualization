@@ -9,6 +9,7 @@ export const info = {
   'no-time': 'Time values are needed for generating timeline.',
   'tree-error': 'Cannot generate tree from the data provided.',
   'sankey-error': 'Cannot generate Sankey diagram because the graph is not acyclic.',
-  'negative-height': 'Canvas space is not enough. Please consider decreasing the padding size or increasing the canvas height.'
+  'negative-height': 'Canvas space is not enough. Please consider decreasing the padding size or increasing the canvas height.',
+  'one-time': 'Only one column of time values is found. At least two are needed for start and end times.'
 }
 

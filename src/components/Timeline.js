@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getTimeData } from '../utils/convertData'
+import { getTimeData, getDataTypeIndices } from '../utils/convertData'
 import * as d3 from 'd3'
 import SVGPanZoom from './SVGPanZoom'
 import { drawLegend } from '../utils/draw'
@@ -132,6 +132,8 @@ class Timeline extends Component {
   render() {
 
     if (!this.props.dataTypes.includes('time')) return <Info info='no-time' />
+    if (getDataTypeIndices(this.props.dataTypes, 'time').length === 1) return <Info info='one-time' />
+
     return (
       <div id='chart'>
         { this.state.negativeHeight &&
