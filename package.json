@@ -49,7 +49,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "postinstall": "cp src/patches/WordCloud.js node_modules/react-d3-cloud/lib/;cp src/patches/Radar.js node_modules/react-d3-radar/lib/"
+    "postinstall": "cp src/patches/WordCloud.js node_modules/react-d3-cloud/lib/;cp src/patches/Radar.js node_modules/react-d3-radar/lib/; cp src/patches/cartogram-chart.min.js node_modules/cartogram-chart/dist/"
   },
   "devDependencies": {
     "eslint": "^4.14.0",

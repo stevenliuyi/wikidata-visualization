@@ -170,7 +170,7 @@ export function getColors(props, returnScale = false) {
   const colorScale = getColorScale(props)
   // change the color of unkown values (default is black)
   const colors = props.data.filter((item, i) => props.rowSelections.includes(i))
-    .map(item => (item[label] != null || props.settings['color'] === -1) ? colorScale(item[label]) : '#ddd')
+    .map(item => (item[label] != null || props.settings['color'] === -1) ? colorScale(item[label]) : '#eceff1')
 
   if (returnScale) {
     return [colors, colorScale]
