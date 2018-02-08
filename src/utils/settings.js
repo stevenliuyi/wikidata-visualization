@@ -287,21 +287,39 @@ export const charts = [
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
-    id: 1.04,
-    name: 'Radial Tree',
-    chartClass: 'tree',
-    settings: [link_from, link_to, label, color],
-    defaultShow: [true, true, false, false],
+    id: 1.18,
+    name: 'Bar Chart',
+    chartClass: 'basic',
+    settings: [x_axis_all, y_axis_groups, ngroups],
+    defaultShow: [true, true, true],
+    moreSettings: ['barType', 'fontSize', 'color', 'showLegend', 'legendScale'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
+  },
+  {
+    id: 1.20,
+    name: 'Pie Chart',
+    chartClass: 'basic',
+    settings: [value, label, color],
+    defaultShow: [true, false, false],
+    moreSettings: ['fontSize', 'color', 'innerRadius', 'showLegend', 'legendScale'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
+  },
+  {
+    id: 1.19,
+    name: 'Radar Chart',
+    chartClass: 'basic',
+    settings: [axes, y_axis_groups, ngroups],
+    defaultShow: [true, true, true],
     moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
-    id: 1.05,
-    name: 'Radial Cluster',
-    chartClass: 'tree',
-    settings: [link_from, link_to, label, color],
-    defaultShow: [true, true, false, false],
-    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
+    id: 1.10,
+    name: 'Force-directed Graph',
+    chartClass: 'basic',
+    settings: [link_from, link_to, label_from, label_to, edge_label, color],
+    defaultShow: [true, true, false, false, false, false],
+    moreSettings: ['strength', 'fontSize', 'edgeFontSize', 'color'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -323,13 +341,31 @@ export const charts = [
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
-    id: 1.08,
-    name: 'Chord Diagram',
-    chartClass: 'more',
-    settings: [link_from, link_to, relation, label],
-    defaultShow: [true, true, true, false],
+    id: 1.04,
+    name: 'Radial Tree',
+    chartClass: 'tree',
+    settings: [link_from, link_to, label, color],
+    defaultShow: [true, true, false, false],
     moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
+  },
+  {
+    id: 1.05,
+    name: 'Radial Cluster',
+    chartClass: 'tree',
+    settings: [link_from, link_to, label, color],
+    defaultShow: [true, true, false, false],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
+  },
+  {
+    id: 1.16,
+    name: 'Map',
+    chartClass: 'map',
+    settings: [coordinate, color, radius],
+    defaultShow: [true, false, false],
+    moreSettings: ['solarSystem', 'baseMap', 'showCircles', 'showMarkers', 'radius', 'color'],
+    canvasSettings: ['auto', 'width', 'height']
   },
   {
     id: 1.09,
@@ -341,12 +377,12 @@ export const charts = [
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
-    id: 1.10,
-    name: 'Force-directed Graph',
-    chartClass: 'basic',
-    settings: [link_from, link_to, label_from, label_to, edge_label, color],
-    defaultShow: [true, true, false, false, false, false],
-    moreSettings: ['strength', 'fontSize', 'edgeFontSize', 'color'],
+    id: 1.13,
+    name: 'Choropleth',
+    chartClass: 'map',
+    settings: [region, color],
+    defaultShow: [true, false],
+    moreSettings: ['map2', 'fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -359,21 +395,12 @@ export const charts = [
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
-    id: 1.12,
-    name: 'Gallery',
+    id: 1.08,
+    name: 'Chord Diagram',
     chartClass: 'more',
-    settings: [image, label],
-    defaultShow: [true, false],
-    moreSettings: [],
-    canvasSettings: []
-  },
-  {
-    id: 1.13,
-    name: 'Choropleth',
-    chartClass: 'map',
-    settings: [region, color],
-    defaultShow: [true, false],
-    moreSettings: ['map2', 'fontSize', 'color', 'showLegend', 'legendScale'],
+    settings: [link_from, link_to, relation, label],
+    defaultShow: [true, true, true, false],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -395,13 +422,13 @@ export const charts = [
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
-    id: 1.16,
-    name: 'Map',
-    chartClass: 'map',
-    settings: [coordinate, color, radius],
-    defaultShow: [true, false, false],
-    moreSettings: ['solarSystem', 'baseMap', 'showCircles', 'showMarkers', 'radius', 'color'],
-    canvasSettings: ['auto', 'width', 'height']
+    id: 1.21,
+    name: 'Timeline',
+    chartClass: 'more',
+    settings: [start_time, end_time, label, color],
+    defaultShow: [true, true, false, false],
+    moreSettings: ['timelineType', 'padding', 'fontSize', 'color', 'showLegend', 'legendScale'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
     id: 1.17,
@@ -413,40 +440,13 @@ export const charts = [
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
-    id: 1.18,
-    name: 'Bar Chart',
-    chartClass: 'basic',
-    settings: [x_axis_all, y_axis_groups, ngroups],
-    defaultShow: [true, true, true],
-    moreSettings: ['barType', 'fontSize', 'color', 'showLegend', 'legendScale'],
-    canvasSettings: ['auto', 'width', 'height', 'border']
-  },
-  {
-    id: 1.19,
-    name: 'Radar Chart',
-    chartClass: 'basic',
-    settings: [axes, y_axis_groups, ngroups],
-    defaultShow: [true, true, true],
-    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
-    canvasSettings: ['auto', 'width', 'height', 'border']
-  },
-  {
-    id: 1.20,
-    name: 'Pie Chart',
-    chartClass: 'basic',
-    settings: [value, label, color],
-    defaultShow: [true, false, false],
-    moreSettings: ['fontSize', 'color', 'innerRadius', 'showLegend', 'legendScale'],
-    canvasSettings: ['auto', 'width', 'height', 'border']
-  },
-  {
-    id: 1.21,
-    name: 'Timeline',
+    id: 1.12,
+    name: 'Gallery',
     chartClass: 'more',
-    settings: [start_time, end_time, label, color],
-    defaultShow: [true, true, false, false],
-    moreSettings: ['timelineType', 'padding', 'fontSize', 'color', 'showLegend', 'legendScale'],
-    canvasSettings: ['auto', 'width', 'height', 'border']
+    settings: [image, label],
+    defaultShow: [true, false],
+    moreSettings: [],
+    canvasSettings: []
   }
 ]
 
