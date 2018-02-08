@@ -1,6 +1,8 @@
 // convert the result from Wikidata to objects
 import * as d3 from 'd3'
 import { getColorScaleFromValues, getColors, colorSchemes } from './scales'
+import Segmentit, { useDefault } from 'segmentit'
+import TinySegmenter from 'tiny-segmenter'
 
 const numbers = ['double', 'float', 'decimal', 'integer', 'long', 'int', 'short', 'nonNegativeInteger', 'positiveInteger', 'unsignedLong', 'unsignedInt', 'unsignedShort', 'nonPositiveInteger', 'negativeInteger']
 const numberTypes = numbers.map(type => (
@@ -400,15 +402,27 @@ export function getWordCloudData(props) {
       let string = String([item[textLabel]])
       if (props.moreSettings.case === 'lower case') string = string.toLowerCase()
       if (props.moreSettings.case === 'upper case') string = string.toUpperCase()
-      texts += `${delimiter}${string}`
+      if (['Chinese', 'Japanese'].includes(delimiter)) {
+        texts += ` ${string}`
+      } else {
+        texts += `${delimiter}${string}`
+      }
     }
   })
 
   // remove extra spaces 
   texts = texts.replace(/\s+/g, ' ')  
   
-  // split by space 
-  texts = texts.split(delimiter)
+  // split
+  if (delimiter === 'Chinese') {
+    const segmentit = useDefault(new Segmentit())
+    texts = segmentit.doSegment(texts).map(s => s.w)
+  } else if (delimiter === 'Japanese') {
+    const segmenter = new TinySegmenter()
+    texts = segmenter.segment(texts).filter(s => s !== ' ')
+  } else {
+    texts = texts.split(delimiter)
+  }
   texts = texts.slice(1)
 
   // count word occurences

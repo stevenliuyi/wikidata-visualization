@@ -295,9 +295,11 @@ class Settings extends Component {
         >
           <option value='[NONE]' key='none'>none</option>
           <option value=' ' key='space'>space</option>
-          <option value=',' key='comma'>,</option>
-          <option value=';' key='semi-colon'>;</option>
-          <option value='.' key='dot'>.</option>
+          <option value=',' key='comma'>comma (,)</option>
+          <option value=';' key='semi-colon'>semi-colon (;)</option>
+          <option value='.' key='dot'>dot (.)</option>
+          <option value='Chinese' key='Chinese'>Chinese tokenizer</option>
+          <option value='Japanese' key='Japanese'>Japanese tokenizer</option>
         </FormControl>
       )
     } else if (setting === 'case') {

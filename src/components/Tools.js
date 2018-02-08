@@ -4,6 +4,7 @@ import MdInsertLink from 'react-icons/lib/md/insert-link'
 import MdContentCopy from 'react-icons/lib/md/content-copy'
 import MdRefresh from 'react-icons/lib/md/refresh'
 import MdCropFree from 'react-icons/lib/md/crop-free'
+import MdInfo from 'react-icons/lib/md/info'
 import * as d3 from 'd3'
 import saveSvgAsPng from 'save-svg-as-png'
 import { Modal, Button, Form, FormGroup, FormControl, InputGroup, Col, ControlLabel, DropdownButton, MenuItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
@@ -104,6 +105,30 @@ class Tools extends Component {
 
     return (
       <div>
+        { this.props.chartId === 1.17 && this.props.moreSettings.delimiter === 'Chinese' &&
+          <OverlayTrigger placement='bottom' overlay={
+            <Tooltip id='chinese-segement-info'>Chinese word segementation powered by segmentit</Tooltip>
+          }>
+            <MdInfo
+              size={20}
+              onClick={()=>window.open('https://github.com/linonetwo/segmentit', '_blank')}
+              className='clickable-icon pull-right'
+            />
+          </OverlayTrigger>
+        }
+
+        { this.props.chartId === 1.17 && this.props.moreSettings.delimiter === 'Japanese' &&
+          <OverlayTrigger placement='bottom' overlay={
+            <Tooltip id='chinese-segement-info'>Japanese word segementation powered by TinySegmenter</Tooltip>
+          }>
+            <MdInfo
+              size={20}
+              onClick={()=>window.open('https://github.com/leungwensen/tiny-segmenter', '_blank')}
+              className='clickable-icon pull-right'
+            />
+          </OverlayTrigger>
+        }
+
         { this.props.chartId !== 1.16 &&
           <div>
             <OverlayTrigger placement='bottom' overlay={
@@ -149,6 +174,7 @@ class Tools extends Component {
             />
           </OverlayTrigger>
         }
+
         <Modal show={this.state.show} onHide={()=>this.setState({ show: false })}>
           <Modal.Header>
             <Modal.Title>{ this.state.mode === 'download' ? 'Download Image' : 'Get SVG URL' }</Modal.Title>

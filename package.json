@@ -40,6 +40,8 @@
     "react-svg-pan-zoom": "^2.14.1",
     "react-table": "^6.7.6",
     "save-svg-as-png": "^1.2.0",
+    "segmentit": "^1.1.4",
+    "tiny-segmenter": "^0.2.0",
     "toposort": "^1.0.6"
   },
   "scripts": {
