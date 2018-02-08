@@ -84,6 +84,7 @@ const updateD3Node = (props, transition) => {
         .attr('font-weight', 'normal')
     })
 
+  if (document.getElementById('bartype-select') == null) return
   const value = d3.select('#bartype-select').property('value')
   if (transition) {
     if (value === 'grouped') transitionGrouped()
