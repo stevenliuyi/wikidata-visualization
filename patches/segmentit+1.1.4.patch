@@ -1,0 +1,1766 @@
+patch-package
+new file mode 100644
+Binary files /dev/null and b/node_modules/segmentit/dist/.DS_Store differ
+--- a/node_modules/segmentit/dist/Optimizer.js
++++ b/node_modules/segmentit/dist/Optimizer.js
+@@ -11,7 +11,8 @@
+  *
+  * @param {Segment} 分词接口
+  */
+-const Optimizer = module.exports = function (segment) {
++
++var Optimizer = module.exports = function (segment) {
+   this.segment = segment;
+ };
+ 
+@@ -24,7 +25,7 @@ const Optimizer = module.exports = function (segment) {
+  */
+ Optimizer.prototype.doOptimize = function (words, modules) {
+   // 按顺序分别调用各个module来进行分词 ： 各个module仅对没有识别类型的单词进行分词
+-  modules.forEach(module => {
++  modules.forEach(function (module) {
+     words = module.doOptimize(words);
+   });
+   return words;
+--- a/node_modules/segmentit/dist/POSTAG.js
++++ b/node_modules/segmentit/dist/POSTAG.js
+@@ -5,12 +5,11 @@ Object.defineProperty(exports, "__esModule", {
+ });
+ exports.getPOSTagTranslator = getPOSTagTranslator;
+ 
+-
+ /**
+  * 单词类型
+  */
+ 
+-const POSTAG = {
++var POSTAG = {
+   D_A: 0x40000000, // 形容词 形语素
+   D_B: 0x20000000, // 区别词 区别语素
+   D_C: 0x10000000, // 连词 连语素
+@@ -45,7 +44,7 @@ const POSTAG = {
+   URL: 0x00000001 // 网址、邮箱地址
+ };
+ 
+-const CN_POS_NAMES = {
++var CN_POS_NAMES = {
+   D_A: '形容词 形语素',
+   D_B: '区别词 区别语素',
+   D_C: '连词 连语素',
+@@ -80,7 +79,7 @@ const CN_POS_NAMES = {
+   URL: '网址 邮箱地址'
+ };
+ 
+-const EN_POS_NAMES = {
++var EN_POS_NAMES = {
+   D_A: 'a',
+   D_B: 'b',
+   D_C: 'c',
+@@ -116,12 +115,12 @@ const EN_POS_NAMES = {
+ };
+ 
+ function getPOSTagTranslator(POSTagDict, I18NDict) {
+-  return posTagNumber => {
++  return function (posTagNumber) {
+     if (isNaN(posTagNumber)) {
+       return I18NDict[posTagNumber] || I18NDict.UNK;
+     }
+-    const result = [];
+-    for (const key in POSTagDict) {
++    var result = [];
++    for (var key in POSTagDict) {
+       if ((posTagNumber & POSTagDict[key]) > 0) {
+         result.push(I18NDict[key]);
+       }
+@@ -133,7 +132,7 @@ function getPOSTagTranslator(POSTagDict, I18NDict) {
+   };
+ }
+ 
+-const cnPOSTag = exports.cnPOSTag = getPOSTagTranslator(POSTAG, CN_POS_NAMES);
+-const enPOSTag = exports.enPOSTag = getPOSTagTranslator(POSTAG, EN_POS_NAMES);
++var cnPOSTag = exports.cnPOSTag = getPOSTagTranslator(POSTAG, CN_POS_NAMES);
++var enPOSTag = exports.enPOSTag = getPOSTagTranslator(POSTAG, EN_POS_NAMES);
+ 
+ exports.default = POSTAG;
+--- a/node_modules/segmentit/dist/Segment.js
++++ b/node_modules/segmentit/dist/Segment.js
+@@ -24,56 +24,65 @@ var _Optimizer = require('./Optimizer');
+ 
+ var _Optimizer2 = _interopRequireDefault(_Optimizer);
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+ /**
+  * 创建分词器接口
+ */
+-let Segment = function () {
++var Segment = function () {
+   function Segment() {
++    var _this = this;
++
+     (0, _classCallCheck3.default)(this, Segment);
+ 
+-    this.use = Module => {
++    this.use = function (Module) {
+       // 传入列表的话就递归调用
+       if (Array.isArray(Module)) {
+-        Module.forEach(this.use);
++        Module.forEach(_this.use);
+       } else {
+         // 初始化并注册模块
+         if (typeof Module.init === "function") {
+-          Module.init(this);
+-          this.modules[Module.type].push(Module);
++          Module.init(_this);
++          _this.modules[Module.type].push(Module);
+         } else {
+-          const module = new Module(this);
+-          this.modules[module.type].push(module);
++          var module = new Module(_this);
++          _this.modules[module.type].push(module);
+         }
+       }
+ 
+-      return this;
++      return _this;
+     };
+ 
+-    this.loadDict = (dict, type = 'TABLE', convertToLower = false) => {
++    this.loadDict = function (dict) {
++      var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'TABLE';
++      var convertToLower = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
++
+       if (Array.isArray(dict)) {
+-        dict.forEach(d => this.loadDict(d));
++        dict.forEach(function (d) {
++          return _this.loadDict(d);
++        });
+       } else {
+         // 初始化词典
+-        if (!this.DICT[type]) this.DICT[type] = {};
+-        if (!this.DICT[`${type}2`]) this.DICT[`${type}2`] = {};
+-        const TABLE = this.DICT[type]; // 词典表  '词' => {属性}
+-        const TABLE2 = this.DICT[`${type}2`]; // 词典表  '长度' => '词' => 属性
++        if (!_this.DICT[type]) _this.DICT[type] = {};
++        if (!_this.DICT[type + '2']) _this.DICT[type + '2'] = {};
++        var TABLE = _this.DICT[type]; // 词典表  '词' => {属性}
++        var TABLE2 = _this.DICT[type + '2']; // 词典表  '长度' => '词' => 属性
+         // 导入数据
+-        dict.split(/\r?\n/).map(line => {
++        dict.split(/\r?\n/).map(function (line) {
+           if (convertToLower) return line.toLowerCase();
+           return line;
+-        }).forEach(line => {
+-          const blocks = line.split('|');
++        }).forEach(function (line) {
++          var blocks = line.split('|');
+           if (blocks.length > 2) {
+-            const w = blocks[0].trim();
+-            const p = Number(blocks[1]);
+-            const f = Number(blocks[2]);
++            var w = blocks[0].trim();
++            var p = Number(blocks[1]);
++            var f = Number(blocks[2]);
+ 
+             // 一定要检查单词是否为空，如果为空会导致Bug
+             if (w.length > 0) {
+-              TABLE[w] = { f, p };
++              TABLE[w] = { f: f, p: p };
+               if (!TABLE2[w.length]) TABLE2[w.length] = {};
+               TABLE2[w.length][w] = TABLE[w];
+             }
+@@ -81,25 +90,31 @@ let Segment = function () {
+         });
+       }
+ 
+-      return this;
++      return _this;
+     };
+ 
+-    this.getDict = type => this.DICT[type];
++    this.getDict = function (type) {
++      return _this.DICT[type];
++    };
+ 
+-    this.loadSynonymDict = dict => {
++    this.loadSynonymDict = function (dict) {
+       if (Array.isArray(dict)) {
+-        dict.forEach(d => this.loadSynonymDict(d));
++        dict.forEach(function (d) {
++          return _this.loadSynonymDict(d);
++        });
+       } else {
+-        const type = 'SYNONYM';
++        var type = 'SYNONYM';
+ 
+         // 初始化词典
+-        if (!this.DICT[type]) this.DICT[type] = {};
+-        const TABLE = this.DICT[type]; // 词典表  '同义词' => '标准词'
++        if (!_this.DICT[type]) _this.DICT[type] = {};
++        var TABLE = _this.DICT[type]; // 词典表  '同义词' => '标准词'
+         // 导入数据
+-        dict.split(/\r?\n/).map(line => line.split(',')).forEach(blocks => {
++        dict.split(/\r?\n/).map(function (line) {
++          return line.split(',');
++        }).forEach(function (blocks) {
+           if (blocks.length > 1) {
+-            const n1 = blocks[0].trim();
+-            const n2 = blocks[1].trim();
++            var n1 = blocks[0].trim();
++            var n2 = blocks[1].trim();
+             TABLE[n1] = n2;
+             if (TABLE[n2] === n1) {
+               delete TABLE[n2];
+@@ -108,43 +123,47 @@ let Segment = function () {
+         });
+       }
+ 
+-      return this;
++      return _this;
+     };
+ 
+-    this.loadStopwordDict = dict => {
++    this.loadStopwordDict = function (dict) {
+       if (Array.isArray(dict)) {
+-        dict.forEach(d => this.loadStopwordDict(d));
++        dict.forEach(function (d) {
++          return _this.loadStopwordDict(d);
++        });
+       } else {
+-        const type = 'STOPWORD';
++        var type = 'STOPWORD';
+ 
+         // 初始化词典
+-        if (!this.DICT[type]) this.DICT[type] = {};
+-        const TABLE = this.DICT[type]; // 词典表  '同义词' => '标准词'
++        if (!_this.DICT[type]) _this.DICT[type] = {};
++        var TABLE = _this.DICT[type]; // 词典表  '同义词' => '标准词'
+         // 导入数据
+-        dict.split(/\r?\n/).map(line => line.trim()).forEach(line => {
++        dict.split(/\r?\n/).map(function (line) {
++          return line.trim();
++        }).forEach(function (line) {
+           if (line) {
+             TABLE[line] = true;
+           }
+         });
+       }
+ 
+-      return this;
++      return _this;
+     };
+ 
+-    this.doSegment = (text, options) => {
+-      const me = this;
++    this.doSegment = function (text, options) {
++      var me = _this;
+       options = options || {};
+-      let ret = [];
++      var ret = [];
+ 
+       // 将文本按照换行符分割成多段，并逐一分词
+       text.replace(/\r/g, '\n')
+       // 用换行符和空格把长文本切小，以减小传入中间件的数组长度
+-      .split(/\n+/).forEach(section => {
++      .split(/\n+/).forEach(function (section) {
+         var section = section.trim();
+         if (section.length < 1) return;
+         // ======================================
+         // 分词
+-        let sret = me.tokenizer.split(section, me.modules.tokenizer);
++        var sret = me.tokenizer.split(section, me.modules.tokenizer);
+ 
+         // 优化
+         sret = me.optimizer.doOptimize(sret, me.modules.optimizer);
+@@ -156,21 +175,23 @@ let Segment = function () {
+ 
+       // 去除标点符号
+       if (options.stripPunctuation) {
+-        ret = ret.filter(item => item.p !== _POSTAG2.default.D_W);
++        ret = ret.filter(function (item) {
++          return item.p !== _POSTAG2.default.D_W;
++        });
+       }
+ 
+       // 转换同义词
+       function convertSynonym(list) {
+-        let count = 0;
+-        const TABLE = me.getDict('SYNONYM');
+-        list = list.map(item => {
++        var count = 0;
++        var TABLE = me.getDict('SYNONYM');
++        list = list.map(function (item) {
+           if (item.w in TABLE) {
+             count++;
+             return { w: TABLE[item.w], p: item.p };
+           }
+           return item;
+         });
+-        return { count, list };
++        return { count: count, list: list };
+       }
+       if (options.convertSynonym) {
+         do {
+@@ -181,13 +202,17 @@ let Segment = function () {
+ 
+       // 去除停止符
+       if (options.stripStopword) {
+-        const STOPWORD = me.getDict('STOPWORD');
+-        ret = ret.filter(item => !(item.w in STOPWORD));
++        var STOPWORD = me.getDict('STOPWORD');
++        ret = ret.filter(function (item) {
++          return !(item.w in STOPWORD);
++        });
+       }
+ 
+       // 仅返回单词内容
+       if (options.simple) {
+-        ret = ret.map(item => item.w);
++        ret = ret.map(function (item) {
++          return item.w;
++        });
+       }
+ 
+       return ret;
+@@ -210,7 +235,6 @@ let Segment = function () {
+   * @return {Segment}
+   */
+ 
+-
+   /**
+   * 载入字典文件
+   *
+@@ -220,7 +244,6 @@ let Segment = function () {
+   * @return {Segment}
+   */
+ 
+-
+   /**
+   * 取词典表
+   *
+@@ -228,21 +251,18 @@ let Segment = function () {
+   * @return {object}
+   */
+ 
+-
+   /**
+   * 载入同义词词典
+   *
+   * @param {Object} dict 字典文件
+   */
+ 
+-
+   /**
+   * 载入停止符词典
+   *
+   * @param {Object} dict 字典文件
+   */
+ 
+-
+   /**
+   * 开始分词
+   *
+@@ -255,11 +275,9 @@ let Segment = function () {
+   * @return {Array}
+   */
+ 
+-
+   (0, _createClass3.default)(Segment, [{
+     key: 'toString',
+ 
+-
+     /**
+     * 将单词数组连接成字符串
+     *
+@@ -267,7 +285,9 @@ let Segment = function () {
+     * @return {String}
+     */
+     value: function toString(words) {
+-      return words.map(item => item.w).join('');
++      return words.map(function (item) {
++        return item.w;
++      }).join('');
+     }
+ 
+     /**
+@@ -281,10 +301,10 @@ let Segment = function () {
+   }, {
+     key: 'split',
+     value: function split(words, s) {
+-      const ret = [];
+-      let lasti = 0;
+-      let i = 0;
+-      const f = typeof s === 'string' ? 'w' : 'p';
++      var ret = [];
++      var lasti = 0;
++      var i = 0;
++      var f = typeof s === 'string' ? 'w' : 'p';
+ 
+       while (i < words.length) {
+         if (words[i][f] === s) {
+@@ -316,7 +336,7 @@ let Segment = function () {
+     key: 'indexOf',
+     value: function indexOf(words, s, cur) {
+       cur = isNaN(cur) ? 0 : cur;
+-      const f = typeof s === 'string' ? 'w' : 'p';
++      var f = typeof s === 'string' ? 'w' : 'p';
+ 
+       while (cur < words.length) {
+         if (words[cur][f] === s) return cur;
+--- a/node_modules/segmentit/dist/Tokenizer.js
++++ b/node_modules/segmentit/dist/Tokenizer.js
+@@ -11,7 +11,8 @@
+ *
+ * @param {Segment} 分词接口
+ */
+-const Tokenizer = module.exports = function (segment) {
++
++var Tokenizer = module.exports = function (segment) {
+   this.segment = segment;
+ };
+ 
+@@ -27,8 +28,8 @@ Tokenizer.prototype.split = function (text, modules) {
+     throw Error('No tokenizer module!');
+   } else {
+     // 按顺序分别调用各个module来进行分词 ： 各个module仅对没有识别类型的单词进行分词
+-    let ret = [{ w: text }];
+-    modules.forEach(module => {
++    var ret = [{ w: text }];
++    modules.forEach(function (module) {
+       ret = module.split(ret);
+     });
+     return ret;
+--- a/node_modules/segmentit/dist/index.js
++++ b/node_modules/segmentit/dist/index.js
+@@ -9,25 +9,25 @@ var _POSTAG = require('./POSTAG');
+ 
+ Object.defineProperty(exports, 'POSTAG', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _POSTAG.POSTAG;
+   }
+ });
+ Object.defineProperty(exports, 'getPOSTagTranslator', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _POSTAG.getPOSTagTranslator;
+   }
+ });
+ Object.defineProperty(exports, 'cnPOSTag', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _POSTAG.cnPOSTag;
+   }
+ });
+ Object.defineProperty(exports, 'enPOSTag', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _POSTAG.enPOSTag;
+   }
+ });
+@@ -36,97 +36,97 @@ var _module = require('./module');
+ 
+ Object.defineProperty(exports, 'modules', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.modules;
+   }
+ });
+ Object.defineProperty(exports, 'Module', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.Module;
+   }
+ });
+ Object.defineProperty(exports, 'Tokenizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.Tokenizer;
+   }
+ });
+ Object.defineProperty(exports, 'Optimizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.Optimizer;
+   }
+ });
+ Object.defineProperty(exports, 'CHS_NAMES', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.CHS_NAMES;
+   }
+ });
+ Object.defineProperty(exports, 'ChsNameTokenizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.ChsNameTokenizer;
+   }
+ });
+ Object.defineProperty(exports, 'DictOptimizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.DictOptimizer;
+   }
+ });
+ Object.defineProperty(exports, 'EmailOptimizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.EmailOptimizer;
+   }
+ });
+ Object.defineProperty(exports, 'PunctuationTokenizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.PunctuationTokenizer;
+   }
+ });
+ Object.defineProperty(exports, 'URLTokenizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.URLTokenizer;
+   }
+ });
+ Object.defineProperty(exports, 'ChsNameOptimizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.ChsNameOptimizer;
+   }
+ });
+ Object.defineProperty(exports, 'DatetimeOptimizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.DatetimeOptimizer;
+   }
+ });
+ Object.defineProperty(exports, 'DictTokenizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.DictTokenizer;
+   }
+ });
+ Object.defineProperty(exports, 'ForeignTokenizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.ForeignTokenizer;
+   }
+ });
+ Object.defineProperty(exports, 'SingleTokenizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.SingleTokenizer;
+   }
+ });
+ Object.defineProperty(exports, 'WildcardTokenizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _module.WildcardTokenizer;
+   }
+ });
+@@ -135,61 +135,61 @@ var _knowledge = require('./knowledge');
+ 
+ Object.defineProperty(exports, 'pangu', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _knowledge.pangu;
+   }
+ });
+ Object.defineProperty(exports, 'panguExtend1', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _knowledge.panguExtend1;
+   }
+ });
+ Object.defineProperty(exports, 'panguExtend2', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _knowledge.panguExtend2;
+   }
+ });
+ Object.defineProperty(exports, 'names', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _knowledge.names;
+   }
+ });
+ Object.defineProperty(exports, 'wildcard', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _knowledge.wildcard;
+   }
+ });
+ Object.defineProperty(exports, 'synonym', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _knowledge.synonym;
+   }
+ });
+ Object.defineProperty(exports, 'stopword', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _knowledge.stopword;
+   }
+ });
+ Object.defineProperty(exports, 'dicts', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _knowledge.dicts;
+   }
+ });
+ Object.defineProperty(exports, 'synonyms', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _knowledge.synonyms;
+   }
+ });
+ Object.defineProperty(exports, 'stopwords', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _knowledge.stopwords;
+   }
+ });
+@@ -202,7 +202,9 @@ var _useDefault = require('./useDefault');
+ 
+ var _useDefault2 = _interopRequireDefault(_useDefault);
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+ exports.default = _Segment2.default;
+ exports.useDefault = _useDefault2.default;
+--- a/node_modules/segmentit/dist/module/AdjectiveOptimizer.js
++++ b/node_modules/segmentit/dist/module/AdjectiveOptimizer.js
+@@ -24,10 +24,12 @@ var _BaseModule = require('./BaseModule');
+ 
+ var _COLORS = require('./COLORS');
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+ // 把一些错认为名词的词标注为形容词，或者对名词作定语的情况
+-let AdjectiveOptimizer = function (_Optimizer) {
++var AdjectiveOptimizer = function (_Optimizer) {
+   (0, _inherits3.default)(AdjectiveOptimizer, _Optimizer);
+ 
+   function AdjectiveOptimizer() {
+@@ -38,11 +40,12 @@ let AdjectiveOptimizer = function (_Optimizer) {
+   (0, _createClass3.default)(AdjectiveOptimizer, [{
+     key: 'doOptimize',
+     value: function doOptimize(words) {
+-      const { POSTAG } = this.segment;
+-      let index = 0;
++      var POSTAG = this.segment.POSTAG;
++
++      var index = 0;
+       while (index < words.length) {
+-        const word = words[index];
+-        const nextword = words[index + 1];
++        var word = words[index];
++        var nextword = words[index + 1];
+         if (nextword) {
+           // 对于<颜色>+<的>，直接判断颜色是形容词（字典里颜色都是名词）
+           if (nextword.p === POSTAG.D_U && _COLORS.colors.includes(word.w)) {
+@@ -64,7 +67,8 @@ let AdjectiveOptimizer = function (_Optimizer) {
+       if (Array.isArray(pos)) {
+         return this.isNominal(pos[0]);
+       }
+-      const { POSTAG } = this.segment;
++      var POSTAG = this.segment.POSTAG;
++
+       return pos === POSTAG.D_N || pos === POSTAG.A_NT || pos === POSTAG.A_NX || pos === POSTAG.A_NZ || pos === POSTAG.A_NR || pos === POSTAG.A_NS || pos === POSTAG.URL;
+     }
+   }]);
+--- a/node_modules/segmentit/dist/module/BaseModule.js
++++ b/node_modules/segmentit/dist/module/BaseModule.js
+@@ -21,35 +21,51 @@ var _ = require('../');
+ 
+ var _2 = _interopRequireDefault(_);
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+-let Module = exports.Module = function Module(segment) {
++var Module = exports.Module = function Module(segment) {
+   (0, _classCallCheck3.default)(this, Module);
+ 
+   this.segment = segment;
+ };
+ 
+-let Tokenizer = exports.Tokenizer = function (_Module) {
++var Tokenizer = exports.Tokenizer = function (_Module) {
+   (0, _inherits3.default)(Tokenizer, _Module);
+ 
+-  function Tokenizer(...args) {
++  function Tokenizer() {
++    var _ref;
++
+     var _temp, _this, _ret;
+ 
+     (0, _classCallCheck3.default)(this, Tokenizer);
+-    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (Tokenizer.__proto__ || Object.getPrototypeOf(Tokenizer)).call(this, ...args)), _this), _this.type = 'tokenizer', _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
++
++    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
++      args[_key] = arguments[_key];
++    }
++
++    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Tokenizer.__proto__ || Object.getPrototypeOf(Tokenizer)).call.apply(_ref, [this].concat(args))), _this), _this.type = 'tokenizer', _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+   }
+ 
+   return Tokenizer;
+ }(Module);
+ 
+-let Optimizer = exports.Optimizer = function (_Module2) {
++var Optimizer = exports.Optimizer = function (_Module2) {
+   (0, _inherits3.default)(Optimizer, _Module2);
+ 
+-  function Optimizer(...args) {
++  function Optimizer() {
++    var _ref2;
++
+     var _temp2, _this2, _ret2;
+ 
+     (0, _classCallCheck3.default)(this, Optimizer);
+-    return _ret2 = (_temp2 = (_this2 = (0, _possibleConstructorReturn3.default)(this, (Optimizer.__proto__ || Object.getPrototypeOf(Optimizer)).call(this, ...args)), _this2), _this2.type = 'optimizer', _temp2), (0, _possibleConstructorReturn3.default)(_this2, _ret2);
++
++    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
++      args[_key2] = arguments[_key2];
++    }
++
++    return _ret2 = (_temp2 = (_this2 = (0, _possibleConstructorReturn3.default)(this, (_ref2 = Optimizer.__proto__ || Object.getPrototypeOf(Optimizer)).call.apply(_ref2, [this].concat(args))), _this2), _this2.type = 'optimizer', _temp2), (0, _possibleConstructorReturn3.default)(_this2, _ret2);
+   }
+ 
+   return Optimizer;
+--- a/node_modules/segmentit/dist/module/CHS_NAMES.js
++++ b/node_modules/segmentit/dist/module/CHS_NAMES.js
+@@ -5,26 +5,27 @@
+  */
+ 
+ // 单姓
+-const FAMILY_NAME_1 = [
++
++var FAMILY_NAME_1 = [
+ // 有明显歧义的姓氏
+ '王', '张', '黄', '周', '徐', '胡', '高', '林', '马', '于', '程', '傅', '曾', '叶', '余', '夏', '钟', '田', '任', '方', '石', '熊', '白', '毛', '江', '史', '候', '龙', '万', '段', '雷', '钱', '汤', '易', '常', '武', '赖', '文', '查',
+ // 没有明显歧义的姓氏
+ '赵', '肖', '孙', '李', '吴', '郑', '冯', '陈', '褚', '卫', '蒋', '沈', '韩', '杨', '朱', '秦', '尤', '许', '何', '吕', '施', '桓', '孔', '曹', '严', '华', '金', '魏', '陶', '姜', '戚', '谢', '邹', '喻', '柏', '窦', '苏', '潘', '葛', '奚', '范', '彭', '鲁', '韦', '昌', '俞', '袁', '酆', '鲍', '唐', '费', '廉', '岑', '薛', '贺', '倪', '滕', '殷', '罗', '毕', '郝', '邬', '卞', '康', '卜', '顾', '孟', '穆', '萧', '尹', '姚', '邵', '湛', '汪', '祁', '禹', '狄', '贝', '臧', '伏', '戴', '宋', '茅', '庞', '纪', '舒', '屈', '祝', '董', '梁', '杜', '阮', '闵', '贾', '娄', '颜', '郭', '邱', '骆', '蔡', '樊', '凌', '霍', '虞', '柯', '昝', '卢', '柯', '缪', '宗', '丁', '贲', '邓', '郁', '杭', '洪', '崔', '龚', '嵇', '邢', '滑', '裴', '陆', '荣', '荀', '惠', '甄', '芮', '羿', '储', '靳', '汲', '邴', '糜', '隗', '侯', '宓', '蓬', '郗', '仲', '栾', '钭', '历', '戎', '刘', '詹', '幸', '韶', '郜', '黎', '蓟', '溥', '蒲', '邰', '鄂', '咸', '卓', '蔺', '屠', '乔', '郁', '胥', '苍', '莘', '翟', '谭', '贡', '劳', '冉', '郦', '雍', '璩', '桑', '桂', '濮', '扈', '冀', '浦', '庄', '晏', '瞿', '阎', '慕', '茹', '习', '宦', '艾', '容', '慎', '戈', '廖', '庾', '衡', '耿', '弘', '匡', '阙', '殳', '沃', '蔚', '夔', '隆', '巩', '聂', '晁', '敖', '融', '訾', '辛', '阚', '毋', '乜', '鞠', '丰', '蒯', '荆', '竺', '盍', '单', '欧'];
+ // 复姓
+-const FAMILY_NAME_2 = ['司马', '上官', '欧阳', '夏侯', '诸葛', '闻人', '东方', '赫连', '皇甫', '尉迟', '公羊', '澹台', '公冶', '宗政', '濮阳', '淳于', '单于', '太叔', '申屠', '公孙', '仲孙', '轩辕', '令狐', '徐离', '宇文', '长孙', '慕容', '司徒', '司空', '万俟'];
++var FAMILY_NAME_2 = ['司马', '上官', '欧阳', '夏侯', '诸葛', '闻人', '东方', '赫连', '皇甫', '尉迟', '公羊', '澹台', '公冶', '宗政', '濮阳', '淳于', '单于', '太叔', '申屠', '公孙', '仲孙', '轩辕', '令狐', '徐离', '宇文', '长孙', '慕容', '司徒', '司空', '万俟'];
+ 
+ // 双字姓名第一个字
+-const DOUBLE_NAME_1 = ['阿', '建', '小', '晓', '文', '志', '国', '玉', '丽', '永', '海', '春', '金', '明', '新', '德', '秀', '红', '亚', '伟', '雪', '俊', '桂', '爱', '美', '世', '正', '庆', '学', '家', '立', '淑', '振', '云', '华', '光', '惠', '兴', '天', '长', '艳', '慧', '利', '宏', '佳', '瑞', '凤', '荣', '秋', '继', '嘉', '卫', '燕', '思', '维', '少', '福', '忠', '宝', '子', '成', '月', '洪', '东', '一', '泽', '林', '大', '素', '旭', '宇', '智', '锦', '冬', '玲', '雅', '伯', '翠', '传', '启', '剑', '安', '树', '良', '中', '梦', '广', '昌', '元', '万', '清', '静', '友', '宗', '兆', '丹', '克', '彩', '绍', '喜', '远', '朝', '敏', '培', '胜', '祖', '先', '菊', '士', '向', '有', '连', '军', '健', '巧', '耀', '莉', '英', '方', '和', '仁', '孝', '梅', '汉', '兰', '松', '水', '江', '益', '开', '景', '运', '贵', '祥', '青', '芳', '碧', '婷', '龙', '鹏', '自', '顺', '双', '书', '生', '义', '跃', '银', '佩', '雨', '保', '贤', '仲', '鸿', '浩', '加', '定', '炳', '飞', '锡', '柏', '发', '超', '道', '怀', '进', '其', '富', '平', '全', '阳', '吉', '茂', '彦', '诗', '洁', '润', '承', '治', '焕', '如', '君', '增', '善', '希', '根', '应', '勇', '宜', '守', '会', '凯', '育', '湘', '凌', '本', '敬', '博', '延', '乐', '三', '二', '四', '五', '六', '七', '八', '九', '十'];
++var DOUBLE_NAME_1 = ['阿', '建', '小', '晓', '文', '志', '国', '玉', '丽', '永', '海', '春', '金', '明', '新', '德', '秀', '红', '亚', '伟', '雪', '俊', '桂', '爱', '美', '世', '正', '庆', '学', '家', '立', '淑', '振', '云', '华', '光', '惠', '兴', '天', '长', '艳', '慧', '利', '宏', '佳', '瑞', '凤', '荣', '秋', '继', '嘉', '卫', '燕', '思', '维', '少', '福', '忠', '宝', '子', '成', '月', '洪', '东', '一', '泽', '林', '大', '素', '旭', '宇', '智', '锦', '冬', '玲', '雅', '伯', '翠', '传', '启', '剑', '安', '树', '良', '中', '梦', '广', '昌', '元', '万', '清', '静', '友', '宗', '兆', '丹', '克', '彩', '绍', '喜', '远', '朝', '敏', '培', '胜', '祖', '先', '菊', '士', '向', '有', '连', '军', '健', '巧', '耀', '莉', '英', '方', '和', '仁', '孝', '梅', '汉', '兰', '松', '水', '江', '益', '开', '景', '运', '贵', '祥', '青', '芳', '碧', '婷', '龙', '鹏', '自', '顺', '双', '书', '生', '义', '跃', '银', '佩', '雨', '保', '贤', '仲', '鸿', '浩', '加', '定', '炳', '飞', '锡', '柏', '发', '超', '道', '怀', '进', '其', '富', '平', '全', '阳', '吉', '茂', '彦', '诗', '洁', '润', '承', '治', '焕', '如', '君', '增', '善', '希', '根', '应', '勇', '宜', '守', '会', '凯', '育', '湘', '凌', '本', '敬', '博', '延', '乐', '三', '二', '四', '五', '六', '七', '八', '九', '十'];
+ 
+ // 双字姓名第二个字
+-const DOUBLE_NAME_2 = ['华', '平', '明', '英', '军', '林', '萍', '芳', '玲', '红', '生', '霞', '梅', '文', '荣', '珍', '兰', '娟', '峰', '琴', '云', '辉', '东', '龙', '敏', '伟', '强', '丽', '春', '杰', '燕', '民', '君', '波', '国', '芬', '清', '祥', '斌', '婷', '飞', '良', '忠', '新', '凤', '锋', '成', '勇', '刚', '玉', '元', '宇', '海', '兵', '安', '庆', '涛', '鹏', '亮', '青', '阳', '艳', '松', '江', '莲', '娜', '兴', '光', '德', '武', '香', '俊', '秀', '慧', '雄', '才', '宏', '群', '琼', '胜', '超', '彬', '莉', '中', '山', '富', '花', '宁', '利', '贵', '福', '发', '义', '蓉', '喜', '娥', '昌', '仁', '志', '全', '宝', '权', '美', '琳', '建', '金', '贤', '星', '丹', '根', '和', '珠', '康', '菊', '琪', '坤', '泉', '秋', '静', '佳', '顺', '源', '珊', '达', '欣', '如', '莹', '章', '浩', '勤', '芹', '容', '友', '芝', '豪', '洁', '鑫', '惠', '洪', '旺', '虎', '远', '妮', '森', '妹', '南', '雯', '奇', '健', '卿', '虹', '娇', '媛', '怡', '铭', '川', '进', '博', '智', '来', '琦', '学', '聪', '洋', '乐', '年', '翔', '然', '栋', '凯', '颖', '鸣', '丰', '瑞', '奎', '立', '堂', '威', '雪', '鸿', '晶', '桂', '凡', '娣', '先', '洲', '毅', '雅', '月', '旭', '田', '晖', '方', '恒', '亚', '泽', '风', '银', '高', '贞', '九', '薇'];
++var DOUBLE_NAME_2 = ['华', '平', '明', '英', '军', '林', '萍', '芳', '玲', '红', '生', '霞', '梅', '文', '荣', '珍', '兰', '娟', '峰', '琴', '云', '辉', '东', '龙', '敏', '伟', '强', '丽', '春', '杰', '燕', '民', '君', '波', '国', '芬', '清', '祥', '斌', '婷', '飞', '良', '忠', '新', '凤', '锋', '成', '勇', '刚', '玉', '元', '宇', '海', '兵', '安', '庆', '涛', '鹏', '亮', '青', '阳', '艳', '松', '江', '莲', '娜', '兴', '光', '德', '武', '香', '俊', '秀', '慧', '雄', '才', '宏', '群', '琼', '胜', '超', '彬', '莉', '中', '山', '富', '花', '宁', '利', '贵', '福', '发', '义', '蓉', '喜', '娥', '昌', '仁', '志', '全', '宝', '权', '美', '琳', '建', '金', '贤', '星', '丹', '根', '和', '珠', '康', '菊', '琪', '坤', '泉', '秋', '静', '佳', '顺', '源', '珊', '达', '欣', '如', '莹', '章', '浩', '勤', '芹', '容', '友', '芝', '豪', '洁', '鑫', '惠', '洪', '旺', '虎', '远', '妮', '森', '妹', '南', '雯', '奇', '健', '卿', '虹', '娇', '媛', '怡', '铭', '川', '进', '博', '智', '来', '琦', '学', '聪', '洋', '乐', '年', '翔', '然', '栋', '凯', '颖', '鸣', '丰', '瑞', '奎', '立', '堂', '威', '雪', '鸿', '晶', '桂', '凡', '娣', '先', '洲', '毅', '雅', '月', '旭', '田', '晖', '方', '恒', '亚', '泽', '风', '银', '高', '贞', '九', '薇'];
+ 
+ // 单字姓名
+-const SINGLE_NAME = ['家', '民', '敏', '伟', '勇', '军', '斌', '静', '丽', '涛', '芳', '杰', '萍', '强', '俊', '明', '燕', '磊', '玲', '华', '平', '鹏', '健', '波', '红', '丹', '辉', '超', '艳', '莉', '刚', '娟', '峰', '婷', '亮', '洁', '颖', '琳', '英', '慧', '飞', '霞', '浩', '凯', '宇', '毅', '林', '佳', '云', '莹', '娜', '晶', '洋', '文', '鑫', '欣', '琴', '宁', '琼', '兵', '青', '琦', '翔', '彬', '锋', '阳', '璐', '旭', '蕾', '剑', '虹', '蓉', '建', '倩', '梅', '宏', '威', '博', '君', '力', '龙', '晨', '薇', '雪', '琪', '欢', '荣', '江', '炜', '成', '庆', '冰', '东', '帆', '雷', '楠', '锐', '进', '海', '凡', '巍', '维', '迪', '媛', '玮', '杨', '群', '瑛', '悦', '春', '瑶', '婧', '兰', '茜', '松', '爽', '立', '瑜', '睿', '晖', '聪', '帅', '瑾', '骏', '雯', '晓', '昊', '勤', '新', '瑞', '岩', '星', '忠', '志', '怡', '坤', '康', '航', '利', '畅', '坚', '雄', '智', '萌', '哲', '岚', '洪', '捷', '珊', '恒', '靖', '清', '扬', '昕', '乐', '武', '玉', '诚', '菲', '锦', '凤', '珍', '晔', '妍', '璇', '胜', '菁', '科', '芬', '露', '越', '彤', '曦', '义', '良', '鸣', '芸', '方', '月', '铭', '光', '震', '冬', '源', '政', '虎', '莎', '彪', '蓓', '钢', '凌', '奇', '卫', '彦', '烨', '可', '黎', '川', '淼', '惠', '祥', '然', '三', '二', '一', '四', '五', '六', '七', '八', '九', '十'];
++var SINGLE_NAME = ['家', '民', '敏', '伟', '勇', '军', '斌', '静', '丽', '涛', '芳', '杰', '萍', '强', '俊', '明', '燕', '磊', '玲', '华', '平', '鹏', '健', '波', '红', '丹', '辉', '超', '艳', '莉', '刚', '娟', '峰', '婷', '亮', '洁', '颖', '琳', '英', '慧', '飞', '霞', '浩', '凯', '宇', '毅', '林', '佳', '云', '莹', '娜', '晶', '洋', '文', '鑫', '欣', '琴', '宁', '琼', '兵', '青', '琦', '翔', '彬', '锋', '阳', '璐', '旭', '蕾', '剑', '虹', '蓉', '建', '倩', '梅', '宏', '威', '博', '君', '力', '龙', '晨', '薇', '雪', '琪', '欢', '荣', '江', '炜', '成', '庆', '冰', '东', '帆', '雷', '楠', '锐', '进', '海', '凡', '巍', '维', '迪', '媛', '玮', '杨', '群', '瑛', '悦', '春', '瑶', '婧', '兰', '茜', '松', '爽', '立', '瑜', '睿', '晖', '聪', '帅', '瑾', '骏', '雯', '晓', '昊', '勤', '新', '瑞', '岩', '星', '忠', '志', '怡', '坤', '康', '航', '利', '畅', '坚', '雄', '智', '萌', '哲', '岚', '洪', '捷', '珊', '恒', '靖', '清', '扬', '昕', '乐', '武', '玉', '诚', '菲', '锦', '凤', '珍', '晔', '妍', '璇', '胜', '菁', '科', '芬', '露', '越', '彤', '曦', '义', '良', '鸣', '芸', '方', '月', '铭', '光', '震', '冬', '源', '政', '虎', '莎', '彪', '蓓', '钢', '凌', '奇', '卫', '彦', '烨', '可', '黎', '川', '淼', '惠', '祥', '然', '三', '二', '一', '四', '五', '六', '七', '八', '九', '十'];
+ 
+ function p(a, f, n) {
+   exports[f] = {};
+-  a.forEach(v => {
++  a.forEach(function (v) {
+     exports[f][v] = n;
+   });
+ }
+--- a/node_modules/segmentit/dist/module/COLORS.js
++++ b/node_modules/segmentit/dist/module/COLORS.js
+@@ -1,8 +1,12 @@
+ 'use strict';
+ 
++function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
++
+ Object.defineProperty(exports, "__esModule", {
+   value: true
+ });
+-const COLOR_WITH_RGB = exports.COLOR_WITH_RGB = [['薰衣草紫红', '#fff0f5', '255,245,245'], ['淡藕合', '#f0dfee', '240,238,238'], ['甘石粉', '#ffe8f3', '255,243,243'], ['浅粉红', '#ffd9e6', '255,230,230'], ['浅血牙', '#ffd7ea', '255,234,234'], ['粉凤仙', '#fccce6', '252,230,230'], ['浅珍珠红', '#ffb3e6', '255,230,230'], ['淡粉', '#ffb3cc', '255,204,204'], ['火鹤红', '#e68ab8', '230,184,184'], ['豆棕', '#502e3e', '80,62,62'], ['茄皮紫', '#3a212f', '58,47,47'], ['蒲萄灰', '#4e2c3f', '78,63,63'], ['荷花', '#eb7faf', '235,175,175'], ['灰紫红', '#db7093', '219,147,147'], ['浅珊瑚红', '#ff80bf', '255,191,191'], ['暗粉', '#ff77bb', '255,187,187'], ['陈玫红', '#b85798', '184,152,152'], ['肉红', '#d26091', '210,145,145'], ['尖晶石红', '#ff73b3', '255,179,179'], ['银红', '#c85b92', '200,146,146'], ['暖粉红', '#ff69b4', '255,180,180'], ['浅玫瑰红', '#ff66cc', '255,204,204'], ['紫扇贝色', '#923a60', '146,96,96'], ['长春花色', '#ff47d1', '255,209,209'], ['山茶红', '#e63995', '230,149,149'], ['中青紫红', '#c71585', '199,133,133'], ['深粉红', '#ff1493', '255,147,147'], ['洋玫瑰红', '#ff0da6', '255,166,166'], ['玫瑰红', '#ff007f', '255,127,127'], ['品红', '#f400a1', '244,161,161'], ['胭脂红', '#e6005c', '230,92,92'], ['艶粉', '#e6005c', '230,92,92'], ['红宝石色', '#cc0080', '204,128,128'], ['枢机红', '#990036', '153,54,54'], ['毅红', '#8a002e', '138,46,46'], ['牵牛紫', '#800040', '128,64,64'], ['紫粉', '#80002b', '128,43,43'], ['鶏冠花红', '#660033', '102,51,51'], ['枣红', '#640021', '100,33,33'], ['紫绛色', '#51001b', '81,27,27'], ['玫瑰灰', '#4d0026', '77,38,38'], ['勃艮第酒红', '#470024', '71,36,36'], ['黒紫', '#3e0014', '62,20,20'], ['雪紫', '#33001a', '51,26,26'], ['深红', '#33001a', '51,26,26'], ['雪色', '#fffafa', '255,250,250'], ['浅肉粉', '#f5eeeb', '245,235,235'], ['粉棕', '#ebdad3', '235,211,211'], ['雾玫瑰色', '#ffe4e1', '255,225,225'], ['米红', '#fddfdf', '253,223,223'], ['沙棕', '#e6c3c3', '230,195,195'], ['肉粉', '#ffd7d7', '255,215,215'], ['奶棕', '#deb6b6', '222,182,182'], ['玫瑰褐', '#bc8f8f', '188,143,143'], ['红灰莲', '#ab8282', '171,130,130'], ['粉红', '#ffc0cb', '255,203,203'], ['亮粉红', '#ffb6c1', '255,193,193'], ['壳黄红', '#ffb3bf', '255,191,191'], ['浅粉', '#ffb3b3', '255,179,179'], ['十様锦', '#ffb3b3', '255,179,179'], ['深烟', '#311f1e', '49,30,30'], ['凤仙粉', '#ff9393', '255,147,147'], ['亮珊瑚色', '#f08080', '240,128,128'], ['暗鲑红', '#e9967a', '233,122,122'], ['绛紫', '#492525', '73,37,37'], ['浅鲑红', '#ff8099', '255,153,153'], ['紫铜色', '#6b3636', '107,54,54'], ['珈琲色', '#623131', '98,49,49'], ['烟栗色', '#221311', '34,17,17'], ['亮鲑红', '#ffa07a', '255,122,122'], ['红莲灰', '#c76079', '199,121,121'], ['鲑红', '#fa8072', '250,114,114'], ['印度红', '#cd5c5c', '205,92,92'], ['银朱', '#c85554', '200,84,84'], ['赦红', '#d1634b', '209,75,75'], ['二硃', '#c24545', '194,69,69'], ['芯木色', '#c14444', '193,68,68'], ['銹红', '#4d1919', '77,25,25'], ['珊瑚红', '#ff7f50', '255,80,80'], ['辰沙', '#ce3b3b', '206,59,59'], ['红扇贝色', '#ce3b3b', '206,59,59'], ['蕃茄红', '#ff6347', '255,71,71'], ['柿子橙', '#ff4d40', '255,64,64'], ['妃红', '#b8542e', '184,46,46'], ['甎红', '#ab2b2b', '171,43,43'], ['褐色', '#a52a2a', '165,42,42'], ['硃砂', '#972626', '151,38,38'], ['土红', '#bc2e2e', '188,46,46'], ['樱桃红', '#de3163', '222,99,99'], ['砖红色', '#b22222', '178,34,34'], ['茜红', '#e32636', '227,54,54'], ['银星海棠', '#f52443', '245,67,67'], ['橙色', '#fe621f', '254,31,31'], ['桔红', '#ff441a', '255,26,26'], ['柿子色', '#ff531a', '255,26,26'], ['绯红', '#dc143c', '220,60,60'], ['月季红', '#e10b2b', '225,43,43'], ['鸟罗松红', '#c80926', '200,38,38'], ['蕉红色', '#d70419', '215,25,25'], ['艶红', '#bf0417', '191,23,23'], ['烟色', '#2e0a01', '46,1,1'], ['牡丹红', '#b80233', '184,51,51'], ['榴花红', '#b02502', '176,2,2'], ['枣紫', '#540101', '84,1,1'], ['红色', '#ff0000', '255,0,0'], ['腥红', '#ff2400', '255,0,0'], ['橙红', '#ff4500', '255,0,0'], ['朱红', '#ff4d00', '255,0,0'], ['鲜红', '#e60000', '230,0,0'], ['曙红', '#e60039', '230,57,57'], ['章丹', '#dd3700', '221,0,0'], ['茉莉花红', '#cc0033', '204,51,51'], ['猩红', '#cc0000', '204,0,0'], ['象牙红', '#b30000', '179,0,0'], ['血红', '#990000', '153,0,0'], ['深釉红', '#971b00', '151,0,0'], ['暗红', '#8b0000', '139,0,0'], ['栗色', '#800000', '128,0,0'], ['釉红', '#7b1800', '123,0,0'], ['臙脂', '#700000', '112,0,0'], ['花卉白', '#fffaf0', '255,240,240'], ['海贝色', '#fff5ee', '255,238,238'], ['浅棕灰', '#eee7dd', '238,221,221'], ['亚麻色', '#faf0e6', '250,230,230'], ['胡粉', '#fffae8', '255,232,232'], ['旧蕾丝色', '#fdf5e6', '253,230,230'], ['银白色', '#fffae6', '255,230,230'], ['铁灰色', '#625b57', '98,87,87'], ['蝋白', '#fef8de', '254,222,222'], ['玉米丝色', '#fff8dc', '255,220,220'], ['古董白', '#faebd7', '250,215,215'], ['红梍', '#3a3932', '58,50,50'], ['蕃木瓜色', '#ffefd5', '255,213,213'], ['芽灰', '#e3dbbf', '227,191,191'], ['米灰', '#d3cbaf', '211,175,175'], ['元青', '#24231e', '36,30,30'], ['果肉色', '#fee3d1', '254,209,209'], ['杏仁白', '#ffebcd', '255,205,205'], ['柠檬绸色', '#fffacd', '255,205,205'], ['乳白色', '#fef3c9', '254,201,201'], ['淡黄', '#fef8c9', '254,201,201'], ['真丝紬色', '#ffe3c8', '255,200,200'], ['肉黄', '#fce2c4', '252,196,196'], ['芦黄', '#ebd2b8', '235,184,184'], ['陶坯黄', '#ffe4c4', '255,196,196'], ['深银灰', '#c7bd9a', '199,154,154'], ['承徳梍', '#474336', '71,54,54'], ['粉扑桃色', '#ffdab9', '255,185,185'], ['小麦色', '#f5deb3', '245,179,179'], ['乳黄色', '#feefb6', '254,182,182'], ['小鸠黄', '#efe7ab', '239,171,171'], ['鹿皮鞋色', '#ffe4b5', '255,181,181'], ['桃色', '#ffe5b4', '255,180,180'], ['牙黄', '#fef4b4', '254,180,180'], ['富春纺色', '#fef4b4', '254,180,180'], ['乳灰', '#cfc592', '207,146,146'], ['灰米', '#c4be8c', '196,140,140'], ['庭院瓦灰色', '#706750', '112,80,80'], ['肉棕', '#debf9a', '222,154,154'], ['灰土色', '#ccb38c', '204,140,140'], ['那瓦霍白', '#ffdead', '255,173,173'], ['甘草黄', '#eddd9e', '237,158,158'], ['日晒色', '#d2b48c', '210,140,140'], ['纸棕', '#d2b38c', '210,140,140'], ['相思灰', '#4a4331', '74,49,49'], ['蝶粉', '#ffd0a2', '255,162,162'], ['乳棕', '#c9b481', '201,129,129'], ['燋茶色', '#3d3a27', '61,39,39'], ['浅驼色', '#d7af88', '215,136,136'], ['中驼', '#ad876b', '173,107,107'], ['玛瑙粉', '#ffbc9b', '255,155,155'], ['硬木色', '#deb887', '222,135,135'], ['土布色', '#fdd599', '253,153,153'], ['骆驼色', '#dcb183', '220,131,131'], ['亮卡其色', '#f0e68c', '240,140,140'], ['中棕灰', '#695f3d', '105,61,61'], ['淡棕茶', '#c0a86d', '192,109,109'], ['草灰色', '#3d3123', '61,35,35'], ['肉棕灰', '#cd9b69', '205,105,105'], ['珈琲棕', '#705438', '112,56,56'], ['深栗色', '#402f20', '64,32,32'], ['深褐色', '#251c12', '37,18,18'], ['黄棕色', '#b39255', '179,85,85'], ['杏黄', '#e69966', '230,102,102'], ['獣皮色', '#c69c57', '198,87,87'], ['驼色', '#a16b47', '161,71,71'], ['卡其黄', '#cda456', '205,86,86'], ['蜜橙', '#ffb366', '255,102,102'], ['茉莉黄', '#e6c35c', '230,92,92'], ['红孤色', '#c98150', '201,80,80'], ['沙褐', '#f4a460', '244,96,96'], ['蛤蜊粉', '#ffb061', '255,97,97'], ['丹东石', '#f9e459', '249,89,89'], ['南瓜黄', '#f4ad57', '244,87,87'], ['浅黄', '#f3aa58', '243,88,88'], ['鹿皮色', '#fad156', '250,86,86'], ['赦石色', '#d17547', '209,71,71'], ['秘鲁色', '#cd853f', '205,63,63'], ['向日黄', '#ffc34d', '255,77,77'], ['将校呢', '#363210', '54,16,16'], ['棕茶', '#c78738', '199,56,56'], ['铜色', '#b87333', '184,51,51'], ['赭黄', '#a0522d', '160,45,45'], ['桂皮色', '#c66f35', '198,53,53'], ['罗汉果色', '#502f16', '80,22,22'], ['醤色', '#39200f', '57,15,15'], ['雄黄', '#c66231', '198,49,49'], ['金黄', '#b85c2e', '184,46,46'], ['松皮色', '#a45128', '164,40,40'], ['棕红', '#934824', '147,36,36'], ['黄鸭色', '#874521', '135,33,33'], ['浅桔黄', '#ec9433', '236,51,51'], ['热带橙', '#ff8033', '255,51,51'], ['卡其色', '#996b1f', '153,31,31'], ['乌贼墨色', '#704214', '112,20,20'], ['赭色', '#cc7722', '204,34,34'], ['明黄', '#ffc428', '255,40,40'], ['丝爪花黄', '#fed927', '254,39,39'], ['大赤金', '#e6b422', '230,34,34'], ['金菊色', '#daa520', '218,32,32'], ['粉橙色', '#ff7b24', '255,36,36'], ['巧克力色', '#d2691e', '210,30,30'], ['鞍褐', '#8b4513', '139,19,19'], ['选金', '#e9c61f', '233,31,31'], ['库金', '#e0b712', '224,18,18'], ['玛瑙色', '#b1470e', '177,14,14'], ['黄金色', '#dab710', '218,16,16'], ['琉璃色', '#c9780c', '201,12,12'], ['暗金菊色', '#b8860b', '184,11,11'], ['坛香色', '#d57306', '213,6,6'], ['苍黄', '#c65306', '198,6,6'], ['艶黄', '#fc8705', '252,5,5'], ['雄精', '#d94f04', '217,4,4'], ['姜黄', '#806102', '128,2,2'], ['朱古力色', '#381801', '56,1,1'], ['蛋黄', '#e6a202', '230,2,2'], ['黄琉璃', '#e4b803', '228,3,3'], ['枝黄', '#cfb603', '207,3,3'], ['鹿皮棕', '#a67902', '166,2,2'], ['阳橙', '#ff7300', '255,0,0'], ['暗橙', '#ff8c00', '255,0,0'], ['万寿菊黄', '#ff9900', '255,0,0'], ['琥珀色', '#ffbf00', '255,0,0'], ['金色', '#ffd700', '255,0,0'], ['石黄', '#f9bb00', '249,0,0'], ['鹅黄', '#f8b500', '248,0,0'], ['橘色', '#f28500', '242,0,0'], ['桔黄', '#f08300', '240,0,0'], ['硃膘', '#eb6101', '235,1,1'], ['土黄', '#e88b00', '232,0,0'], ['铬黄', '#e6b800', '230,0,0'], ['金红', '#e65c00', '230,0,0'], ['虾黄', '#db6d00', '219,0,0'], ['燃橙', '#cc5500', '204,0,0'], ['椰褐', '#4d1f00', '77,0,0'], ['咖啡色', '#4d3900', '77,0,0'], ['灯草灰', '#131100', '19,0,0'], ['蛤粉', '#fdfff4', '253,244,244'], ['红灰', '#5f605b', '95,91,91'], ['象牙色', '#fffff0', '255,240,240'], ['貂水灰', '#8b8e86', '139,134,134'], ['蝋黄', '#edf9df', '237,223,223'], ['米黄色', '#f5f5dc', '245,220,220'], ['松緑色', '#ced5bd', '206,189,189'], ['黄灰', '#b6bea9', '182,169,169'], ['亮黄', '#ffffe0', '255,224,224'], ['春緑', '#e3efd1', '227,209,209'], ['承徳灰', '#4f4f44', '79,68,68'], ['油烟墨', '#272923', '39,35,35'], ['淡米色', '#ffffd7', '255,215,215'], ['亮金菊黄', '#fafad2', '250,210,210'], ['芦灰', '#c1d0ae', '193,174,174'], ['奶緑', '#cadcb6', '202,182,182'], ['奶油色', '#fffdd0', '255,208,208'], ['水黄', '#ddeec4', '221,196,196'], ['銹緑', '#d9e7ba', '217,186,186'], ['虾灰', '#dad6ab', '218,171,171'], ['法国梧桐皮色', '#949773', '148,115,115'], ['灰金菊色', '#eee8aa', '238,170,170'], ['中条虾緑', '#687452', '104,82,82'], ['茶緑', '#343724', '52,36,36'], ['牙緑', '#f4fea3', '244,163,163'], ['鉄緑', '#3f472c', '63,44,44'], ['香槟黄', '#ffff99', '255,153,153'], ['浅草緑', '#ccff99', '204,153,153'], ['枯緑', '#d3d37c', '211,124,124'], ['铜緑色', '#a6d279', '166,121,121'], ['嫩葱緑', '#93b469', '147,105,105'], ['暗卡其色', '#bdb76b', '189,107,107'], ['青豆色', '#98bc67', '152,103,103'], ['苦瓜緑', '#e1ff86', '225,134,134'], ['卡其緑', '#717234', '113,52,52'], ['暗橄榄绿', '#556b2f', '85,47,47'], ['杨桃色', '#eefd6a', '238,106,106'], ['嫩姜黄', '#fef263', '254,99,99'], ['芥末黄', '#cccc4d', '204,77,77'], ['黄緑', '#8cb33e', '140,62,62'], ['草绿', '#99e64d', '153,77,77'], ['月黄', '#ffff4d', '255,77,77'], ['槐黄', '#ffff4d', '255,77,77'], ['藤黄', '#faed4b', '250,75,75'], ['苔藓绿', '#697723', '105,35,35'], ['橄榄军服绿', '#6b8e23', '107,35,35'], ['黄绿', '#9acd32', '154,50,50'], ['含羞草黄', '#e6d933', '230,51,51'], ['绿黄', '#adff2f', '173,47,47'], ['嫩草緑', '#a3b61f', '163,31,31'], ['橄榄緑', '#49460c', '73,12,12'], ['柠檬黄', '#ffff24', '255,36,36'], ['草黄', '#f4ea20', '244,32,32'], ['深芽緑', '#739b06', '115,6,6'], ['军緑', '#3d6402', '61,2,2'], ['鲜黄', '#ffff00', '255,0,0'], ['黄色', '#ffff00', '255,0,0'], ['亮柠檬绿', '#ccff00', '204,0,0'], ['查特酒绿', '#7fff00', '127,0,0'], ['草坪绿', '#7cfc00', '124,0,0'], ['苹果绿', '#8ce600', '140,0,0'], ['橄榄色', '#808000', '128,0,0'], ['新芽色', '#7d7d00', '125,0,0'], ['蜜瓜绿', '#f0fff0', '240,240,240'], ['织锦灰', '#7b8c7c', '123,124,124'], ['竜泉青瓷釉色', '#c8e6c6', '200,198,198'], ['暗灰', '#465146', '70,70,70'], ['深灰', '#353e35', '53,53,53'], ['橄揽灰', '#75856d', '117,109,109'], ['冬灰色', '#63715b', '99,91,91'], ['苔灰', '#425140', '66,64,64'], ['暗海绿', '#8fbc8f', '143,143,143'], ['暗苔緑', '#405742', '64,66,66'], ['灰绿', '#98fb98', '152,152,152'], ['亮绿', '#90ee90', '144,144,144'], ['荷茎緑', '#a0d878', '160,120,120'], ['果緑', '#8ace57', '138,87,87'], ['葱緑', '#99f158', '153,88,88'], ['钴绿', '#66ff59', '102,89,89'], ['叶绿', '#73b839', '115,57,57'], ['嫩绿', '#99ff4d', '153,77,77'], ['常春藤绿', '#36bf36', '54,54,54'], ['柠檬绿', '#32cd32', '50,50,50'], ['森林绿', '#228b22', '34,34,34'], ['鹦鹉緑', '#156a1e', '21,30,30'], ['孔雀石绿', '#22c32e', '34,46,46'], ['双緑', '#043403', '4,3,3'], ['明绿', '#66ff00', '102,0,0'], ['鲜绿色', '#00ff00', '0,0,0'], ['绿色', '#008000', '0,0,0'], ['暗绿', '#006400', '0,0,0'], ['鉄灰', '#3e403f', '62,63,63'], ['薄荷奶油色', '#f5fffa', '245,250,250'], ['深瓦灰', '#717774', '113,116,116'], ['大理石色', '#c9d8cd', '201,205,205'], ['淡灰緑', '#c0d6cb', '192,203,203'], ['粗晶梍', '#323836', '50,54,54'], ['枝緑', '#dffff5', '223,245,245'], ['淡緑', '#dbfbe3', '219,227,227'], ['青虾色', '#6f847d', '111,125,125'], ['浅水緑', '#ccfbea', '204,234,234'], ['蟹青', '#6f9388', '111,136,136'], ['油緑', '#2b3c2f', '43,47,47'], ['三緑', '#b3ffbc', '179,188,188'], ['苍色', '#a6ffcc', '166,204,204'], ['墨緑', '#1e3124', '30,36,36'], ['老緑', '#2d5131', '45,49,49'], ['碧蓝色', '#7fffd4', '127,212,212'], ['青瓷绿', '#73e68c', '115,140,140'], ['中碧蓝色', '#66cdaa', '102,170,170'], ['玉緑', '#6ff9c1', '111,193,193'], ['夜緑色', '#285b41', '40,65,65'], ['冬緑', '#337d56', '51,86,86'], ['碧绿', '#50c878', '80,120,120'], ['緑琉璃色', '#296939', '41,57,57'], ['中海绿', '#3cb371', '60,113,113'], ['绿松石绿', '#4de680', '77,128,128'], ['冬瓜緑', '#349e69', '52,105,105'], ['海绿', '#2e8b57', '46,87,87'], ['铬绿', '#127436', '18,54,54'], ['薄荷绿', '#16982b', '22,43,43'], ['粗孔雀緑', '#028255', '2,85,85'], ['深緑宝石', '#02774f', '2,79,79'], ['巴黎緑', '#02b340', '2,64,64'], ['翡翠', '#015437', '1,55,55'], ['春绿', '#00ff80', '0,128,128'], ['中春绿色', '#00fa9a', '0,154,154'], ['孔雀绿', '#00a15c', '0,92,92'], ['正灰', '#bcc7c7', '188,199,199'], ['鸭蛋青', '#e6fffd', '230,253,253'], ['浅青色', '#e0f3f8', '224,248,248'], ['月白色', '#daf3ef', '218,239,239'], ['云灰', '#cbe2e4', '203,228,228'], ['亮青', '#e0ffff', '224,255,255'], ['蓝灰色', '#8ba39e', '139,158,158'], ['春蓝', '#98b4b3', '152,179,179'], ['石板色', '#4a595b', '74,91,91'], ['婴儿粉蓝', '#b0e0e6', '176,230,230'], ['水色', '#afdfe4', '175,228,228'], ['亮蓝', '#add8e6', '173,230,230'], ['灰绿松石色', '#afeeee', '175,238,238'], ['浅鲜緑', '#b6fee9', '182,233,233'], ['鸠灰', '#9ec8da', '158,218,218'], ['湖蓝灰', '#425c60', '66,96,96'], ['蟹蓝', '#597e82', '89,130,130'], ['灰蓝', '#477066', '71,102,102'], ['黛蓝', '#131e1e', '19,30,30'], ['果灰', '#7ecdb6', '126,182,182'], ['碧玉石', '#66a8a8', '102,168,168'], ['灰緑', '#5c968a', '92,138,138'], ['军服蓝', '#5f9ea0', '95,160,160'], ['暗岩灰', '#2f4f4f', '47,79,79'], ['浅松緑', '#79d2d2', '121,210,210'], ['天蓝', '#87ceeb', '135,235,235'], ['玉石蓝', '#427371', '66,113,113'], ['毛緑', '#28414a', '40,74,74'], ['水蓝', '#66ffe6', '102,230,230'], ['萨克斯蓝', '#4798b3', '71,179,179'], ['深松緑', '#42bfac', '66,172,172'], ['中绿松石色', '#48d1cc', '72,204,204'], ['绿松石色', '#30d5c8', '48,200,200'], ['土耳其蓝', '#33e6cc', '51,204,204'], ['亮海绿', '#20b2aa', '32,170,170'], ['青蓝', '#0dbf8c', '13,140,140'], ['品緑', '#07817a', '7,122,122'], ['湖緑', '#015f5a', '1,90,90'], ['青色', '#00ffff', '0,255,255'], ['深天蓝', '#00bfff', '0,255,255'], ['暗绿松石色', '#00ced1', '0,209,209'], ['暗青', '#008b8b', '0,139,139'], ['孔雀蓝', '#00808c', '0,140,140'], ['凫绿', '#008080', '0,128,128'], ['浓蓝', '#006374', '0,116,116'], ['沙緑', '#003129', '0,41,41'], ['银蓝', '#e1e3e6', '225,230,230'], ['爱丽丝蓝', '#f0f8ff', '240,255,255'], ['鉄青', '#292c2e', '41,46,46'], ['亮钢蓝', '#b0c4de', '176,222,222'], ['亮岩灰', '#778899', '119,153,153'], ['岩灰', '#708090', '112,144,144'], ['花青', '#576d93', '87,147,147'], ['鹊灰', '#283144', '40,68,68'], ['钴蓝', '#6b9bb8', '107,184,184'], ['浅蓝', '#89cff0', '137,240,240'], ['绀青', '#3f4470', '63,112,112'], ['浅天蓝', '#87cefa', '135,250,250'], ['竹月色', '#6b9ac9', '107,201,201'], ['栢坊灰蓝', '#41627c', '65,124,124'], ['灰丁宁蓝', '#5e86c1', '94,193,193'], ['韦奇伍德瓷蓝', '#5686bf', '86,191,191'], ['矢车菊蓝', '#6495ed', '100,237,237'], ['钢青色', '#4682b4', '70,180,180'], ['浅海昌蓝', '#2f4988', '47,136,136'], ['鼠尾草蓝', '#4d80e6', '77,230,230'], ['労动布色', '#1c2859', '28,89,89'], ['品蓝', '#4169e1', '65,225,225'], ['暗矿蓝', '#24367d', '36,125,125'], ['深毛月色', '#284f95', '40,149,149'], ['沙青', '#205580', '32,128,128'], ['琉璃蓝', '#183a65', '24,101,101'], ['浅土蓝', '#122c4b', '18,75,75'], ['绒蓝', '#1f4f89', '31,137,137'], ['北京毛蓝', '#1f4f89', '31,137,137'], ['深竹月', '#2e62cd', '46,205,205'], ['毛月色', '#2c80c5', '44,197,197'], ['蔚蓝', '#2a52be', '42,190,190'], ['深蓝', '#0e1a49', '14,73,73'], ['蔵蓝', '#111f6a', '17,106,106'], ['道奇蓝', '#1e90ff', '30,255,255'], ['海蓝', '#0b2d64', '11,100,100'], ['蓝宝石色', '#082567', '8,103,103'], ['深毛蓝', '#031025', '3,37,37'], ['天青石蓝', '#0d33ff', '13,255,255'], ['郡青', '#043ab9', '4,185,185'], ['湛蓝', '#007fff', '0,255,255'], ['极浓海蓝', '#0033ff', '0,255,255'], ['国际奇连蓝', '#002fa7', '0,167,167'], ['矿蓝', '#004d99', '0,153,153'], ['暗婴儿粉蓝', '#003399', '0,153,153'], ['水手蓝', '#00477d', '0,125,125'], ['普鲁士蓝', '#003153', '0,83,83'], ['雪灰', '#ededef', '237,239,239'], ['幽灵白', '#f8f8ff', '248,255,255'], ['薰衣草紫', '#e6e6fa', '230,250,250'], ['雪青灰', '#bfbed3', '191,211,211'], ['闪蝶紫', '#b4a4ca', '180,202,202'], ['矿紫', '#b8a1cf', '184,207,207'], ['青金色', '#9fa0d7', '159,215,215'], ['罗蓝灰', '#3c374a', '60,74,74'], ['浅灰紫红', '#8674a1', '134,161,161'], ['紫水晶', '#d9b3ff', '217,255,255'], ['紫丁香色', '#b399ff', '179,255,255'], ['浅石英紫', '#cc99ff', '204,255,255'], ['蔵墨蓝', '#27243c', '39,60,60'], ['雪蓝', '#777bce', '119,206,206'], ['中紫红', '#9370db', '147,219,219'], ['靛蓝', '#201f3d', '32,61,61'], ['木槿紫', '#bf80ff', '191,255,255'], ['钛鉄', '#1a152b', '26,43,43'], ['中岩蓝', '#7b68ee', '123,238,238'], ['岩蓝', '#6a5acd', '106,205,205'], ['暗岩蓝', '#483d8b', '72,139,139'], ['紫藤色', '#5c50e6', '92,230,230'], ['紫水晶色', '#6633cc', '102,204,204'], ['午夜蓝', '#191970', '25,112,112'], ['宝石蓝', '#1e25bb', '30,187,187'], ['鲜蓝', '#1515f9', '21,249,249'], ['蓝色', '#0000ff', '0,255,255'], ['中蓝', '#0000cd', '0,205,205'], ['缬草紫', '#5000b8', '80,184,184'], ['暗蓝', '#00008b', '0,139,139'], ['藏青', '#000080', '0,128,128'], ['浅藤紫', '#ece4f3', '236,243,243'], ['淡紫丁香色', '#e6cfe6', '230,230,230'], ['蓟紫', '#d8bfd8', '216,216,216'], ['莲灰', '#d1bfdd', '209,221,221'], ['紫藤灰', '#b5a4c4', '181,196,196'], ['铁线莲紫', '#cca3cc', '204,204,204'], ['梅红色', '#dda0dd', '221,221,221'], ['紫薇花', '#ff99ff', '255,255,255'], ['凤仙紫', '#9565b1', '149,177,177'], ['丁香紫', '#503a65', '80,101,101'], ['亮紫', '#ee82ee', '238,238,238'], ['兰紫', '#da70d6', '218,214,214'], ['洋葱紫', '#8e488e', '142,142,142'], ['优品紫红', '#e680ff', '230,255,255'], ['浅凤仙紫', '#e666ff', '230,255,255'], ['中兰紫', '#ba55d3', '186,211,211'], ['紫罗蓝', '#732e7e', '115,126,126'], ['锦葵紫', '#d94dff', '217,255,255'], ['暗兰紫', '#9932cc', '153,204,204'], ['蓝紫', '#8a2be2', '138,226,226'], ['紫罗兰色', '#8b00ff', '139,255,255'], ['洋红', '#ff00ff', '255,255,255'], ['暗紫', '#9400d3', '148,211,211'], ['三色堇紫', '#7400a1', '116,161,161'], ['青莲紫', '#730099', '115,153,153'], ['暗洋红', '#8b008b', '139,139,139'], ['靛色', '#4b0080', '75,128,128'], ['紫色', '#800080', '128,128,128'], ['竜胆紫', '#1a0033', '26,51,51'], ['白色', '#ffffff', '255,255,255'], ['立徳粉', '#ffffff', '255,255,255'], ['白烟色', '#f5f5f5', '245,245,245'], ['庚斯博罗灰', '#dcdcdc', '220,220,220'], ['亮灰色', '#d3d3d3', '211,211,211'], ['银箔', '#d4d4d4', '212,212,212'], ['银色', '#c0c0c0', '192,192,192'], ['灰色', '#808080', '128,128,128'], ['银鼠灰', '#797979', '121,121,121'], ['昏灰', '#696969', '105,105,105'], ['青灰色', '#484848', '72,72,72'], ['百草霜', '#1c1c1c', '28,28,28'], ['黑色', '#000000', '0,0,0'], ['妃色', '#ED5736', '237,87,54'], ['桃红', '#F47983', '244,121,131'], ['海棠红', '#DB5A6B', '219,90,107'], ['石榴红', '#F20C00', '242,12,0'], ['樱桃色', '#C93756', '201,55,86'], ['大红', '#FF2121', '255,33,33'], ['胭脂', '#9D2933', '157,41,51'], ['丹', '#FF4E20', '255,78,32'], ['彤', '#F35336', '243,83,54'], ['茜色', '#CB3A56', '203,58,86'], ['火红', '#FF2D51', '255,45,81'], ['赫赤', '#C91F37', '201,31,55'], ['嫣红', '#EF7A82', '239,122,130'], ['炎', '#FF3300', '255,51,0'], ['赤', '#C3272B', '195,39,43'], ['绾', '#A98175', '169,129,117'], ['檀', '#B36D61', '179,109,97'], ['殷红', '#BE002F', '190,0,47'], ['酡红', '#DC3023', '220,48,35'], ['酡颜', '#F9906F', '249,144,111'], ['鸭黄', '#FAFF72', '250,255,114'], ['樱草色', '#EAFF56', '234,255,86'], ['杏红', '#FF8C31', '255,140,​​49'], ['橘黄', '#FF8936', '255,137,54'], ['橙黄', '#FFA400', '255,164,0'], ['橘红', '#FF7500', '255,117,0'], ['缃色', '#F0C239', '240,194,57'], ['茶色', '#B35C44', '179,92,68'], ['昏黄', '#C89B40', '200,155,64'], ['棕色', '#B25D25', '178,93,37'], ['棕绿', '#827100', '130,113,0'], ['棕黑', '#7C4B00', '124,75,0'], ['棕黄', '#AE7000', '174,112,0'], ['琥珀', '#CA6924', '202,105,36'], ['枯黄', '#D3B17D', '211,177,125'], ['黄栌', '#E29C45', '226,156,69'], ['秋色', '#896C39', '137,108,57'], ['秋香色', '#D9B611', '217,182,17'], ['柳黄', '#C9DD22', '201,221,34'], ['柳绿', '#AFDD22', '175,221,34'], ['竹青', '#789262', '120,146,98'], ['葱黄', '#A3D900', '163,217,0'], ['葱绿', '#9ED900', '158,217,0'], ['葱青', '#0EB83A', '14,184,58'], ['青葱', '#0AA344', '10,163,68'], ['油绿', '#00BC12', '0,188,18'], ['绿沉', '#0C8918', '12,137,24'], ['碧色', '#1BD1A5', '27,209,165'], ['青碧', '#48C0A3', '72,192,163'], ['翡翠色', '#3DE1AD', '61,225,173'], ['青翠', '#00E079', '0,224,121'], ['青白', '#C0EBD7', '192,235,215'], ['鸭卵青', '#E0EEE8', '224,238,232'], ['蟹壳青', '#BBCDC5', '187,205,197'], ['鸦青', '#424C50', '66,76,80'], ['豆绿', '#9ED048', '158,208,72'], ['豆青', '#96CE54', '150,206,84'], ['石青', '#7BCFA6', '123,207,166'], ['玉色', '#7BCFA6', '46,223,163'], ['缥', '#7FECAD', '127,236,173'], ['艾绿', '#A4E2C6', '164,226,198'], ['松柏绿', '#21A675', '33,166,117'], ['松花绿', '#057748', '5,119,72'], ['松花色', '#BCE672', '5,119,72'], ['蓝', '#44CEF6', '68,206,246'], ['靛青', '#177CB0', '23,124,176'], ['碧蓝', '#3EEDE7', '62,237,231'], ['宝蓝', '#4B5CC4', '75,92,196'], ['藏蓝', '#3B2E7E', '59,46,126'], ['黛', '#4A4266', '74,66,102'], ['黛绿', '#426666', '66,102,102'], ['黛紫', '#574266', '87,66,102'], ['紫酱', '#815463', '129,84,99'], ['酱紫', '#815476', '129,84,118'], ['紫檀', '#4C221B', '76,34,27'], ['紫棠', '#56004F', '86,0,79'], ['青莲', '#801DAE', '128,29,174'], ['群青', '#4C8DAE', '76,141,174'], ['雪青', '#B0A4E3', '176,164,227'], ['丁香色', '#CCA4E3', '204,164,227'], ['藕色', '#EDD1D8', '237,209,216'], ['藕荷色', '#E4C6D0', '228,198,208'], ['苍青', '#A29B7C', '162,155,124'], ['苍黑', '#7397AB', '115,151,171'], ['苍白', '#D1D9E0', '209,217,224'], ['水红', '#F3D3E7', '243,211,231'], ['水绿', '#D4F2E7', '212,242,231'], ['淡青', '#D3E0F3', '211,224,243'], ['湖蓝', '#30DFF3', '48,2​​23,243'], ['湖绿', '#25F8CB', '37,248,203'], ['精白', '#FFFFFF', '255,255,255'], ['像牙白', '#FFFBF0', '255,251,240'], ['雪白', '#F0FCFF', '240,252,255'], ['月白', '#D6ECF0', '214,236,240'], ['缟', '#F2ECDE', '242,236,222'], ['素', '#E0F0E9', '224,240,233'], ['荼白', '#F3F9F1', '243,249,241'], ['霜色', '#E9F1F6', '233,241,246'], ['花白', '#C2CCD0', '194,204,208'], ['鱼肚白', '#FCEFE8', '252,239,232'], ['莹白', '#E3F9FD', '227,239,253'], ['牙色', '#EEDEB0', '238,222,176'], ['铅白', '#F0F0F4', '240,240,244'], ['玄色', '#622A1D', '98,42,29'], ['玄青', '#3D3B4F', '61,59,79'], ['乌色', '#725E82', '114,94,130'], ['乌黑', '#392F41', '57,47,65'], ['漆黑', '#161823', '22,24,35'], ['墨色', '#50616D', '80,97,109'], ['墨灰', '#758A99', '117,138,153'], ['缁色', '#493131', '73,49,49'], ['煤黑', '#312520', '49,37,32'], ['黧', '#5D513C', '93,81,60'], ['黎', '#75664D', '117,102,77'], ['黝', '#6B6882', '107,104,130'], ['黝黑', '#665757', '102,87,87'], ['黯', '#41555D', '65,85,93'], ['赤金', '#F2BE45', '242,190,69'], ['银白', '#E9E7EF', '233,231,239'], ['铜绿', '#549688', '84,150,136'], ['乌金', '#A78E44', '167,142,68'], ['老银', '#BACAC6', '186,202,198'], ['猩红色', '#FF2400', '255,36,0'], ['朱红色', '#FF4D00', '255,77,0'], ['柠檬绿色', '#CCFF00', '204,255,0'], ['黄绿色', '#66FF00', '102,255,0'], ['蔚蓝色', '#007FFF', '0,127,255'], ['蓝绿色', '#7FFFD4', '127,255,212'], ['浅蓝色', '#E0FFFF', '137,207,240'], ['绿松色', '#30D5C8', '48,213,200'], ['粉末蓝', '#003399', '0,51,153'], ['皇室蓝', '#4169E1', '65,105,225'], ['天青蓝', '#2A52BE', '42,82,190'], ['钴蓝色', '#0047AB', '0,71,171'], ['海军蓝', '#000080', '0,0,128'], ['白牛仔布色', '#5E86C1', '94,134,193'], ['青玉色', '#082567', '8,37,103'], ['深茜红', '#E32636', '227,38,54'], ['洋红色', '#FF00FF', '255,0,255'], ['橙黄色', '#FFCC00', '255,204,0'], ['春绿色', '#00FF80', '0,255,128'], ['鸭绿色', '#008080', '0,128,128'], ['鲑肉色', '#FF8C69', '255,140,105'], ['米色', '#F5F5DC', '245,245,210'], ['薰衣草色', '#E6E6FA', '230,230,250'], ['兰花色', '#DA70D6', '218,112,214'], ['粉红色', '#FFC0CB', '255,192,203'], ['燃橙色', '#CC5500', '204,85,0'], ['暗灰色', '#404040', '64,64,64']];
++var COLOR_WITH_RGB = exports.COLOR_WITH_RGB = [['薰衣草紫红', '#fff0f5', '255,245,245'], ['淡藕合', '#f0dfee', '240,238,238'], ['甘石粉', '#ffe8f3', '255,243,243'], ['浅粉红', '#ffd9e6', '255,230,230'], ['浅血牙', '#ffd7ea', '255,234,234'], ['粉凤仙', '#fccce6', '252,230,230'], ['浅珍珠红', '#ffb3e6', '255,230,230'], ['淡粉', '#ffb3cc', '255,204,204'], ['火鹤红', '#e68ab8', '230,184,184'], ['豆棕', '#502e3e', '80,62,62'], ['茄皮紫', '#3a212f', '58,47,47'], ['蒲萄灰', '#4e2c3f', '78,63,63'], ['荷花', '#eb7faf', '235,175,175'], ['灰紫红', '#db7093', '219,147,147'], ['浅珊瑚红', '#ff80bf', '255,191,191'], ['暗粉', '#ff77bb', '255,187,187'], ['陈玫红', '#b85798', '184,152,152'], ['肉红', '#d26091', '210,145,145'], ['尖晶石红', '#ff73b3', '255,179,179'], ['银红', '#c85b92', '200,146,146'], ['暖粉红', '#ff69b4', '255,180,180'], ['浅玫瑰红', '#ff66cc', '255,204,204'], ['紫扇贝色', '#923a60', '146,96,96'], ['长春花色', '#ff47d1', '255,209,209'], ['山茶红', '#e63995', '230,149,149'], ['中青紫红', '#c71585', '199,133,133'], ['深粉红', '#ff1493', '255,147,147'], ['洋玫瑰红', '#ff0da6', '255,166,166'], ['玫瑰红', '#ff007f', '255,127,127'], ['品红', '#f400a1', '244,161,161'], ['胭脂红', '#e6005c', '230,92,92'], ['艶粉', '#e6005c', '230,92,92'], ['红宝石色', '#cc0080', '204,128,128'], ['枢机红', '#990036', '153,54,54'], ['毅红', '#8a002e', '138,46,46'], ['牵牛紫', '#800040', '128,64,64'], ['紫粉', '#80002b', '128,43,43'], ['鶏冠花红', '#660033', '102,51,51'], ['枣红', '#640021', '100,33,33'], ['紫绛色', '#51001b', '81,27,27'], ['玫瑰灰', '#4d0026', '77,38,38'], ['勃艮第酒红', '#470024', '71,36,36'], ['黒紫', '#3e0014', '62,20,20'], ['雪紫', '#33001a', '51,26,26'], ['深红', '#33001a', '51,26,26'], ['雪色', '#fffafa', '255,250,250'], ['浅肉粉', '#f5eeeb', '245,235,235'], ['粉棕', '#ebdad3', '235,211,211'], ['雾玫瑰色', '#ffe4e1', '255,225,225'], ['米红', '#fddfdf', '253,223,223'], ['沙棕', '#e6c3c3', '230,195,195'], ['肉粉', '#ffd7d7', '255,215,215'], ['奶棕', '#deb6b6', '222,182,182'], ['玫瑰褐', '#bc8f8f', '188,143,143'], ['红灰莲', '#ab8282', '171,130,130'], ['粉红', '#ffc0cb', '255,203,203'], ['亮粉红', '#ffb6c1', '255,193,193'], ['壳黄红', '#ffb3bf', '255,191,191'], ['浅粉', '#ffb3b3', '255,179,179'], ['十様锦', '#ffb3b3', '255,179,179'], ['深烟', '#311f1e', '49,30,30'], ['凤仙粉', '#ff9393', '255,147,147'], ['亮珊瑚色', '#f08080', '240,128,128'], ['暗鲑红', '#e9967a', '233,122,122'], ['绛紫', '#492525', '73,37,37'], ['浅鲑红', '#ff8099', '255,153,153'], ['紫铜色', '#6b3636', '107,54,54'], ['珈琲色', '#623131', '98,49,49'], ['烟栗色', '#221311', '34,17,17'], ['亮鲑红', '#ffa07a', '255,122,122'], ['红莲灰', '#c76079', '199,121,121'], ['鲑红', '#fa8072', '250,114,114'], ['印度红', '#cd5c5c', '205,92,92'], ['银朱', '#c85554', '200,84,84'], ['赦红', '#d1634b', '209,75,75'], ['二硃', '#c24545', '194,69,69'], ['芯木色', '#c14444', '193,68,68'], ['銹红', '#4d1919', '77,25,25'], ['珊瑚红', '#ff7f50', '255,80,80'], ['辰沙', '#ce3b3b', '206,59,59'], ['红扇贝色', '#ce3b3b', '206,59,59'], ['蕃茄红', '#ff6347', '255,71,71'], ['柿子橙', '#ff4d40', '255,64,64'], ['妃红', '#b8542e', '184,46,46'], ['甎红', '#ab2b2b', '171,43,43'], ['褐色', '#a52a2a', '165,42,42'], ['硃砂', '#972626', '151,38,38'], ['土红', '#bc2e2e', '188,46,46'], ['樱桃红', '#de3163', '222,99,99'], ['砖红色', '#b22222', '178,34,34'], ['茜红', '#e32636', '227,54,54'], ['银星海棠', '#f52443', '245,67,67'], ['橙色', '#fe621f', '254,31,31'], ['桔红', '#ff441a', '255,26,26'], ['柿子色', '#ff531a', '255,26,26'], ['绯红', '#dc143c', '220,60,60'], ['月季红', '#e10b2b', '225,43,43'], ['鸟罗松红', '#c80926', '200,38,38'], ['蕉红色', '#d70419', '215,25,25'], ['艶红', '#bf0417', '191,23,23'], ['烟色', '#2e0a01', '46,1,1'], ['牡丹红', '#b80233', '184,51,51'], ['榴花红', '#b02502', '176,2,2'], ['枣紫', '#540101', '84,1,1'], ['红色', '#ff0000', '255,0,0'], ['腥红', '#ff2400', '255,0,0'], ['橙红', '#ff4500', '255,0,0'], ['朱红', '#ff4d00', '255,0,0'], ['鲜红', '#e60000', '230,0,0'], ['曙红', '#e60039', '230,57,57'], ['章丹', '#dd3700', '221,0,0'], ['茉莉花红', '#cc0033', '204,51,51'], ['猩红', '#cc0000', '204,0,0'], ['象牙红', '#b30000', '179,0,0'], ['血红', '#990000', '153,0,0'], ['深釉红', '#971b00', '151,0,0'], ['暗红', '#8b0000', '139,0,0'], ['栗色', '#800000', '128,0,0'], ['釉红', '#7b1800', '123,0,0'], ['臙脂', '#700000', '112,0,0'], ['花卉白', '#fffaf0', '255,240,240'], ['海贝色', '#fff5ee', '255,238,238'], ['浅棕灰', '#eee7dd', '238,221,221'], ['亚麻色', '#faf0e6', '250,230,230'], ['胡粉', '#fffae8', '255,232,232'], ['旧蕾丝色', '#fdf5e6', '253,230,230'], ['银白色', '#fffae6', '255,230,230'], ['铁灰色', '#625b57', '98,87,87'], ['蝋白', '#fef8de', '254,222,222'], ['玉米丝色', '#fff8dc', '255,220,220'], ['古董白', '#faebd7', '250,215,215'], ['红梍', '#3a3932', '58,50,50'], ['蕃木瓜色', '#ffefd5', '255,213,213'], ['芽灰', '#e3dbbf', '227,191,191'], ['米灰', '#d3cbaf', '211,175,175'], ['元青', '#24231e', '36,30,30'], ['果肉色', '#fee3d1', '254,209,209'], ['杏仁白', '#ffebcd', '255,205,205'], ['柠檬绸色', '#fffacd', '255,205,205'], ['乳白色', '#fef3c9', '254,201,201'], ['淡黄', '#fef8c9', '254,201,201'], ['真丝紬色', '#ffe3c8', '255,200,200'], ['肉黄', '#fce2c4', '252,196,196'], ['芦黄', '#ebd2b8', '235,184,184'], ['陶坯黄', '#ffe4c4', '255,196,196'], ['深银灰', '#c7bd9a', '199,154,154'], ['承徳梍', '#474336', '71,54,54'], ['粉扑桃色', '#ffdab9', '255,185,185'], ['小麦色', '#f5deb3', '245,179,179'], ['乳黄色', '#feefb6', '254,182,182'], ['小鸠黄', '#efe7ab', '239,171,171'], ['鹿皮鞋色', '#ffe4b5', '255,181,181'], ['桃色', '#ffe5b4', '255,180,180'], ['牙黄', '#fef4b4', '254,180,180'], ['富春纺色', '#fef4b4', '254,180,180'], ['乳灰', '#cfc592', '207,146,146'], ['灰米', '#c4be8c', '196,140,140'], ['庭院瓦灰色', '#706750', '112,80,80'], ['肉棕', '#debf9a', '222,154,154'], ['灰土色', '#ccb38c', '204,140,140'], ['那瓦霍白', '#ffdead', '255,173,173'], ['甘草黄', '#eddd9e', '237,158,158'], ['日晒色', '#d2b48c', '210,140,140'], ['纸棕', '#d2b38c', '210,140,140'], ['相思灰', '#4a4331', '74,49,49'], ['蝶粉', '#ffd0a2', '255,162,162'], ['乳棕', '#c9b481', '201,129,129'], ['燋茶色', '#3d3a27', '61,39,39'], ['浅驼色', '#d7af88', '215,136,136'], ['中驼', '#ad876b', '173,107,107'], ['玛瑙粉', '#ffbc9b', '255,155,155'], ['硬木色', '#deb887', '222,135,135'], ['土布色', '#fdd599', '253,153,153'], ['骆驼色', '#dcb183', '220,131,131'], ['亮卡其色', '#f0e68c', '240,140,140'], ['中棕灰', '#695f3d', '105,61,61'], ['淡棕茶', '#c0a86d', '192,109,109'], ['草灰色', '#3d3123', '61,35,35'], ['肉棕灰', '#cd9b69', '205,105,105'], ['珈琲棕', '#705438', '112,56,56'], ['深栗色', '#402f20', '64,32,32'], ['深褐色', '#251c12', '37,18,18'], ['黄棕色', '#b39255', '179,85,85'], ['杏黄', '#e69966', '230,102,102'], ['獣皮色', '#c69c57', '198,87,87'], ['驼色', '#a16b47', '161,71,71'], ['卡其黄', '#cda456', '205,86,86'], ['蜜橙', '#ffb366', '255,102,102'], ['茉莉黄', '#e6c35c', '230,92,92'], ['红孤色', '#c98150', '201,80,80'], ['沙褐', '#f4a460', '244,96,96'], ['蛤蜊粉', '#ffb061', '255,97,97'], ['丹东石', '#f9e459', '249,89,89'], ['南瓜黄', '#f4ad57', '244,87,87'], ['浅黄', '#f3aa58', '243,88,88'], ['鹿皮色', '#fad156', '250,86,86'], ['赦石色', '#d17547', '209,71,71'], ['秘鲁色', '#cd853f', '205,63,63'], ['向日黄', '#ffc34d', '255,77,77'], ['将校呢', '#363210', '54,16,16'], ['棕茶', '#c78738', '199,56,56'], ['铜色', '#b87333', '184,51,51'], ['赭黄', '#a0522d', '160,45,45'], ['桂皮色', '#c66f35', '198,53,53'], ['罗汉果色', '#502f16', '80,22,22'], ['醤色', '#39200f', '57,15,15'], ['雄黄', '#c66231', '198,49,49'], ['金黄', '#b85c2e', '184,46,46'], ['松皮色', '#a45128', '164,40,40'], ['棕红', '#934824', '147,36,36'], ['黄鸭色', '#874521', '135,33,33'], ['浅桔黄', '#ec9433', '236,51,51'], ['热带橙', '#ff8033', '255,51,51'], ['卡其色', '#996b1f', '153,31,31'], ['乌贼墨色', '#704214', '112,20,20'], ['赭色', '#cc7722', '204,34,34'], ['明黄', '#ffc428', '255,40,40'], ['丝爪花黄', '#fed927', '254,39,39'], ['大赤金', '#e6b422', '230,34,34'], ['金菊色', '#daa520', '218,32,32'], ['粉橙色', '#ff7b24', '255,36,36'], ['巧克力色', '#d2691e', '210,30,30'], ['鞍褐', '#8b4513', '139,19,19'], ['选金', '#e9c61f', '233,31,31'], ['库金', '#e0b712', '224,18,18'], ['玛瑙色', '#b1470e', '177,14,14'], ['黄金色', '#dab710', '218,16,16'], ['琉璃色', '#c9780c', '201,12,12'], ['暗金菊色', '#b8860b', '184,11,11'], ['坛香色', '#d57306', '213,6,6'], ['苍黄', '#c65306', '198,6,6'], ['艶黄', '#fc8705', '252,5,5'], ['雄精', '#d94f04', '217,4,4'], ['姜黄', '#806102', '128,2,2'], ['朱古力色', '#381801', '56,1,1'], ['蛋黄', '#e6a202', '230,2,2'], ['黄琉璃', '#e4b803', '228,3,3'], ['枝黄', '#cfb603', '207,3,3'], ['鹿皮棕', '#a67902', '166,2,2'], ['阳橙', '#ff7300', '255,0,0'], ['暗橙', '#ff8c00', '255,0,0'], ['万寿菊黄', '#ff9900', '255,0,0'], ['琥珀色', '#ffbf00', '255,0,0'], ['金色', '#ffd700', '255,0,0'], ['石黄', '#f9bb00', '249,0,0'], ['鹅黄', '#f8b500', '248,0,0'], ['橘色', '#f28500', '242,0,0'], ['桔黄', '#f08300', '240,0,0'], ['硃膘', '#eb6101', '235,1,1'], ['土黄', '#e88b00', '232,0,0'], ['铬黄', '#e6b800', '230,0,0'], ['金红', '#e65c00', '230,0,0'], ['虾黄', '#db6d00', '219,0,0'], ['燃橙', '#cc5500', '204,0,0'], ['椰褐', '#4d1f00', '77,0,0'], ['咖啡色', '#4d3900', '77,0,0'], ['灯草灰', '#131100', '19,0,0'], ['蛤粉', '#fdfff4', '253,244,244'], ['红灰', '#5f605b', '95,91,91'], ['象牙色', '#fffff0', '255,240,240'], ['貂水灰', '#8b8e86', '139,134,134'], ['蝋黄', '#edf9df', '237,223,223'], ['米黄色', '#f5f5dc', '245,220,220'], ['松緑色', '#ced5bd', '206,189,189'], ['黄灰', '#b6bea9', '182,169,169'], ['亮黄', '#ffffe0', '255,224,224'], ['春緑', '#e3efd1', '227,209,209'], ['承徳灰', '#4f4f44', '79,68,68'], ['油烟墨', '#272923', '39,35,35'], ['淡米色', '#ffffd7', '255,215,215'], ['亮金菊黄', '#fafad2', '250,210,210'], ['芦灰', '#c1d0ae', '193,174,174'], ['奶緑', '#cadcb6', '202,182,182'], ['奶油色', '#fffdd0', '255,208,208'], ['水黄', '#ddeec4', '221,196,196'], ['銹緑', '#d9e7ba', '217,186,186'], ['虾灰', '#dad6ab', '218,171,171'], ['法国梧桐皮色', '#949773', '148,115,115'], ['灰金菊色', '#eee8aa', '238,170,170'], ['中条虾緑', '#687452', '104,82,82'], ['茶緑', '#343724', '52,36,36'], ['牙緑', '#f4fea3', '244,163,163'], ['鉄緑', '#3f472c', '63,44,44'], ['香槟黄', '#ffff99', '255,153,153'], ['浅草緑', '#ccff99', '204,153,153'], ['枯緑', '#d3d37c', '211,124,124'], ['铜緑色', '#a6d279', '166,121,121'], ['嫩葱緑', '#93b469', '147,105,105'], ['暗卡其色', '#bdb76b', '189,107,107'], ['青豆色', '#98bc67', '152,103,103'], ['苦瓜緑', '#e1ff86', '225,134,134'], ['卡其緑', '#717234', '113,52,52'], ['暗橄榄绿', '#556b2f', '85,47,47'], ['杨桃色', '#eefd6a', '238,106,106'], ['嫩姜黄', '#fef263', '254,99,99'], ['芥末黄', '#cccc4d', '204,77,77'], ['黄緑', '#8cb33e', '140,62,62'], ['草绿', '#99e64d', '153,77,77'], ['月黄', '#ffff4d', '255,77,77'], ['槐黄', '#ffff4d', '255,77,77'], ['藤黄', '#faed4b', '250,75,75'], ['苔藓绿', '#697723', '105,35,35'], ['橄榄军服绿', '#6b8e23', '107,35,35'], ['黄绿', '#9acd32', '154,50,50'], ['含羞草黄', '#e6d933', '230,51,51'], ['绿黄', '#adff2f', '173,47,47'], ['嫩草緑', '#a3b61f', '163,31,31'], ['橄榄緑', '#49460c', '73,12,12'], ['柠檬黄', '#ffff24', '255,36,36'], ['草黄', '#f4ea20', '244,32,32'], ['深芽緑', '#739b06', '115,6,6'], ['军緑', '#3d6402', '61,2,2'], ['鲜黄', '#ffff00', '255,0,0'], ['黄色', '#ffff00', '255,0,0'], ['亮柠檬绿', '#ccff00', '204,0,0'], ['查特酒绿', '#7fff00', '127,0,0'], ['草坪绿', '#7cfc00', '124,0,0'], ['苹果绿', '#8ce600', '140,0,0'], ['橄榄色', '#808000', '128,0,0'], ['新芽色', '#7d7d00', '125,0,0'], ['蜜瓜绿', '#f0fff0', '240,240,240'], ['织锦灰', '#7b8c7c', '123,124,124'], ['竜泉青瓷釉色', '#c8e6c6', '200,198,198'], ['暗灰', '#465146', '70,70,70'], ['深灰', '#353e35', '53,53,53'], ['橄揽灰', '#75856d', '117,109,109'], ['冬灰色', '#63715b', '99,91,91'], ['苔灰', '#425140', '66,64,64'], ['暗海绿', '#8fbc8f', '143,143,143'], ['暗苔緑', '#405742', '64,66,66'], ['灰绿', '#98fb98', '152,152,152'], ['亮绿', '#90ee90', '144,144,144'], ['荷茎緑', '#a0d878', '160,120,120'], ['果緑', '#8ace57', '138,87,87'], ['葱緑', '#99f158', '153,88,88'], ['钴绿', '#66ff59', '102,89,89'], ['叶绿', '#73b839', '115,57,57'], ['嫩绿', '#99ff4d', '153,77,77'], ['常春藤绿', '#36bf36', '54,54,54'], ['柠檬绿', '#32cd32', '50,50,50'], ['森林绿', '#228b22', '34,34,34'], ['鹦鹉緑', '#156a1e', '21,30,30'], ['孔雀石绿', '#22c32e', '34,46,46'], ['双緑', '#043403', '4,3,3'], ['明绿', '#66ff00', '102,0,0'], ['鲜绿色', '#00ff00', '0,0,0'], ['绿色', '#008000', '0,0,0'], ['暗绿', '#006400', '0,0,0'], ['鉄灰', '#3e403f', '62,63,63'], ['薄荷奶油色', '#f5fffa', '245,250,250'], ['深瓦灰', '#717774', '113,116,116'], ['大理石色', '#c9d8cd', '201,205,205'], ['淡灰緑', '#c0d6cb', '192,203,203'], ['粗晶梍', '#323836', '50,54,54'], ['枝緑', '#dffff5', '223,245,245'], ['淡緑', '#dbfbe3', '219,227,227'], ['青虾色', '#6f847d', '111,125,125'], ['浅水緑', '#ccfbea', '204,234,234'], ['蟹青', '#6f9388', '111,136,136'], ['油緑', '#2b3c2f', '43,47,47'], ['三緑', '#b3ffbc', '179,188,188'], ['苍色', '#a6ffcc', '166,204,204'], ['墨緑', '#1e3124', '30,36,36'], ['老緑', '#2d5131', '45,49,49'], ['碧蓝色', '#7fffd4', '127,212,212'], ['青瓷绿', '#73e68c', '115,140,140'], ['中碧蓝色', '#66cdaa', '102,170,170'], ['玉緑', '#6ff9c1', '111,193,193'], ['夜緑色', '#285b41', '40,65,65'], ['冬緑', '#337d56', '51,86,86'], ['碧绿', '#50c878', '80,120,120'], ['緑琉璃色', '#296939', '41,57,57'], ['中海绿', '#3cb371', '60,113,113'], ['绿松石绿', '#4de680', '77,128,128'], ['冬瓜緑', '#349e69', '52,105,105'], ['海绿', '#2e8b57', '46,87,87'], ['铬绿', '#127436', '18,54,54'], ['薄荷绿', '#16982b', '22,43,43'], ['粗孔雀緑', '#028255', '2,85,85'], ['深緑宝石', '#02774f', '2,79,79'], ['巴黎緑', '#02b340', '2,64,64'], ['翡翠', '#015437', '1,55,55'], ['春绿', '#00ff80', '0,128,128'], ['中春绿色', '#00fa9a', '0,154,154'], ['孔雀绿', '#00a15c', '0,92,92'], ['正灰', '#bcc7c7', '188,199,199'], ['鸭蛋青', '#e6fffd', '230,253,253'], ['浅青色', '#e0f3f8', '224,248,248'], ['月白色', '#daf3ef', '218,239,239'], ['云灰', '#cbe2e4', '203,228,228'], ['亮青', '#e0ffff', '224,255,255'], ['蓝灰色', '#8ba39e', '139,158,158'], ['春蓝', '#98b4b3', '152,179,179'], ['石板色', '#4a595b', '74,91,91'], ['婴儿粉蓝', '#b0e0e6', '176,230,230'], ['水色', '#afdfe4', '175,228,228'], ['亮蓝', '#add8e6', '173,230,230'], ['灰绿松石色', '#afeeee', '175,238,238'], ['浅鲜緑', '#b6fee9', '182,233,233'], ['鸠灰', '#9ec8da', '158,218,218'], ['湖蓝灰', '#425c60', '66,96,96'], ['蟹蓝', '#597e82', '89,130,130'], ['灰蓝', '#477066', '71,102,102'], ['黛蓝', '#131e1e', '19,30,30'], ['果灰', '#7ecdb6', '126,182,182'], ['碧玉石', '#66a8a8', '102,168,168'], ['灰緑', '#5c968a', '92,138,138'], ['军服蓝', '#5f9ea0', '95,160,160'], ['暗岩灰', '#2f4f4f', '47,79,79'], ['浅松緑', '#79d2d2', '121,210,210'], ['天蓝', '#87ceeb', '135,235,235'], ['玉石蓝', '#427371', '66,113,113'], ['毛緑', '#28414a', '40,74,74'], ['水蓝', '#66ffe6', '102,230,230'], ['萨克斯蓝', '#4798b3', '71,179,179'], ['深松緑', '#42bfac', '66,172,172'], ['中绿松石色', '#48d1cc', '72,204,204'], ['绿松石色', '#30d5c8', '48,200,200'], ['土耳其蓝', '#33e6cc', '51,204,204'], ['亮海绿', '#20b2aa', '32,170,170'], ['青蓝', '#0dbf8c', '13,140,140'], ['品緑', '#07817a', '7,122,122'], ['湖緑', '#015f5a', '1,90,90'], ['青色', '#00ffff', '0,255,255'], ['深天蓝', '#00bfff', '0,255,255'], ['暗绿松石色', '#00ced1', '0,209,209'], ['暗青', '#008b8b', '0,139,139'], ['孔雀蓝', '#00808c', '0,140,140'], ['凫绿', '#008080', '0,128,128'], ['浓蓝', '#006374', '0,116,116'], ['沙緑', '#003129', '0,41,41'], ['银蓝', '#e1e3e6', '225,230,230'], ['爱丽丝蓝', '#f0f8ff', '240,255,255'], ['鉄青', '#292c2e', '41,46,46'], ['亮钢蓝', '#b0c4de', '176,222,222'], ['亮岩灰', '#778899', '119,153,153'], ['岩灰', '#708090', '112,144,144'], ['花青', '#576d93', '87,147,147'], ['鹊灰', '#283144', '40,68,68'], ['钴蓝', '#6b9bb8', '107,184,184'], ['浅蓝', '#89cff0', '137,240,240'], ['绀青', '#3f4470', '63,112,112'], ['浅天蓝', '#87cefa', '135,250,250'], ['竹月色', '#6b9ac9', '107,201,201'], ['栢坊灰蓝', '#41627c', '65,124,124'], ['灰丁宁蓝', '#5e86c1', '94,193,193'], ['韦奇伍德瓷蓝', '#5686bf', '86,191,191'], ['矢车菊蓝', '#6495ed', '100,237,237'], ['钢青色', '#4682b4', '70,180,180'], ['浅海昌蓝', '#2f4988', '47,136,136'], ['鼠尾草蓝', '#4d80e6', '77,230,230'], ['労动布色', '#1c2859', '28,89,89'], ['品蓝', '#4169e1', '65,225,225'], ['暗矿蓝', '#24367d', '36,125,125'], ['深毛月色', '#284f95', '40,149,149'], ['沙青', '#205580', '32,128,128'], ['琉璃蓝', '#183a65', '24,101,101'], ['浅土蓝', '#122c4b', '18,75,75'], ['绒蓝', '#1f4f89', '31,137,137'], ['北京毛蓝', '#1f4f89', '31,137,137'], ['深竹月', '#2e62cd', '46,205,205'], ['毛月色', '#2c80c5', '44,197,197'], ['蔚蓝', '#2a52be', '42,190,190'], ['深蓝', '#0e1a49', '14,73,73'], ['蔵蓝', '#111f6a', '17,106,106'], ['道奇蓝', '#1e90ff', '30,255,255'], ['海蓝', '#0b2d64', '11,100,100'], ['蓝宝石色', '#082567', '8,103,103'], ['深毛蓝', '#031025', '3,37,37'], ['天青石蓝', '#0d33ff', '13,255,255'], ['郡青', '#043ab9', '4,185,185'], ['湛蓝', '#007fff', '0,255,255'], ['极浓海蓝', '#0033ff', '0,255,255'], ['国际奇连蓝', '#002fa7', '0,167,167'], ['矿蓝', '#004d99', '0,153,153'], ['暗婴儿粉蓝', '#003399', '0,153,153'], ['水手蓝', '#00477d', '0,125,125'], ['普鲁士蓝', '#003153', '0,83,83'], ['雪灰', '#ededef', '237,239,239'], ['幽灵白', '#f8f8ff', '248,255,255'], ['薰衣草紫', '#e6e6fa', '230,250,250'], ['雪青灰', '#bfbed3', '191,211,211'], ['闪蝶紫', '#b4a4ca', '180,202,202'], ['矿紫', '#b8a1cf', '184,207,207'], ['青金色', '#9fa0d7', '159,215,215'], ['罗蓝灰', '#3c374a', '60,74,74'], ['浅灰紫红', '#8674a1', '134,161,161'], ['紫水晶', '#d9b3ff', '217,255,255'], ['紫丁香色', '#b399ff', '179,255,255'], ['浅石英紫', '#cc99ff', '204,255,255'], ['蔵墨蓝', '#27243c', '39,60,60'], ['雪蓝', '#777bce', '119,206,206'], ['中紫红', '#9370db', '147,219,219'], ['靛蓝', '#201f3d', '32,61,61'], ['木槿紫', '#bf80ff', '191,255,255'], ['钛鉄', '#1a152b', '26,43,43'], ['中岩蓝', '#7b68ee', '123,238,238'], ['岩蓝', '#6a5acd', '106,205,205'], ['暗岩蓝', '#483d8b', '72,139,139'], ['紫藤色', '#5c50e6', '92,230,230'], ['紫水晶色', '#6633cc', '102,204,204'], ['午夜蓝', '#191970', '25,112,112'], ['宝石蓝', '#1e25bb', '30,187,187'], ['鲜蓝', '#1515f9', '21,249,249'], ['蓝色', '#0000ff', '0,255,255'], ['中蓝', '#0000cd', '0,205,205'], ['缬草紫', '#5000b8', '80,184,184'], ['暗蓝', '#00008b', '0,139,139'], ['藏青', '#000080', '0,128,128'], ['浅藤紫', '#ece4f3', '236,243,243'], ['淡紫丁香色', '#e6cfe6', '230,230,230'], ['蓟紫', '#d8bfd8', '216,216,216'], ['莲灰', '#d1bfdd', '209,221,221'], ['紫藤灰', '#b5a4c4', '181,196,196'], ['铁线莲紫', '#cca3cc', '204,204,204'], ['梅红色', '#dda0dd', '221,221,221'], ['紫薇花', '#ff99ff', '255,255,255'], ['凤仙紫', '#9565b1', '149,177,177'], ['丁香紫', '#503a65', '80,101,101'], ['亮紫', '#ee82ee', '238,238,238'], ['兰紫', '#da70d6', '218,214,214'], ['洋葱紫', '#8e488e', '142,142,142'], ['优品紫红', '#e680ff', '230,255,255'], ['浅凤仙紫', '#e666ff', '230,255,255'], ['中兰紫', '#ba55d3', '186,211,211'], ['紫罗蓝', '#732e7e', '115,126,126'], ['锦葵紫', '#d94dff', '217,255,255'], ['暗兰紫', '#9932cc', '153,204,204'], ['蓝紫', '#8a2be2', '138,226,226'], ['紫罗兰色', '#8b00ff', '139,255,255'], ['洋红', '#ff00ff', '255,255,255'], ['暗紫', '#9400d3', '148,211,211'], ['三色堇紫', '#7400a1', '116,161,161'], ['青莲紫', '#730099', '115,153,153'], ['暗洋红', '#8b008b', '139,139,139'], ['靛色', '#4b0080', '75,128,128'], ['紫色', '#800080', '128,128,128'], ['竜胆紫', '#1a0033', '26,51,51'], ['白色', '#ffffff', '255,255,255'], ['立徳粉', '#ffffff', '255,255,255'], ['白烟色', '#f5f5f5', '245,245,245'], ['庚斯博罗灰', '#dcdcdc', '220,220,220'], ['亮灰色', '#d3d3d3', '211,211,211'], ['银箔', '#d4d4d4', '212,212,212'], ['银色', '#c0c0c0', '192,192,192'], ['灰色', '#808080', '128,128,128'], ['银鼠灰', '#797979', '121,121,121'], ['昏灰', '#696969', '105,105,105'], ['青灰色', '#484848', '72,72,72'], ['百草霜', '#1c1c1c', '28,28,28'], ['黑色', '#000000', '0,0,0'], ['妃色', '#ED5736', '237,87,54'], ['桃红', '#F47983', '244,121,131'], ['海棠红', '#DB5A6B', '219,90,107'], ['石榴红', '#F20C00', '242,12,0'], ['樱桃色', '#C93756', '201,55,86'], ['大红', '#FF2121', '255,33,33'], ['胭脂', '#9D2933', '157,41,51'], ['丹', '#FF4E20', '255,78,32'], ['彤', '#F35336', '243,83,54'], ['茜色', '#CB3A56', '203,58,86'], ['火红', '#FF2D51', '255,45,81'], ['赫赤', '#C91F37', '201,31,55'], ['嫣红', '#EF7A82', '239,122,130'], ['炎', '#FF3300', '255,51,0'], ['赤', '#C3272B', '195,39,43'], ['绾', '#A98175', '169,129,117'], ['檀', '#B36D61', '179,109,97'], ['殷红', '#BE002F', '190,0,47'], ['酡红', '#DC3023', '220,48,35'], ['酡颜', '#F9906F', '249,144,111'], ['鸭黄', '#FAFF72', '250,255,114'], ['樱草色', '#EAFF56', '234,255,86'], ['杏红', '#FF8C31', '255,140,​​49'], ['橘黄', '#FF8936', '255,137,54'], ['橙黄', '#FFA400', '255,164,0'], ['橘红', '#FF7500', '255,117,0'], ['缃色', '#F0C239', '240,194,57'], ['茶色', '#B35C44', '179,92,68'], ['昏黄', '#C89B40', '200,155,64'], ['棕色', '#B25D25', '178,93,37'], ['棕绿', '#827100', '130,113,0'], ['棕黑', '#7C4B00', '124,75,0'], ['棕黄', '#AE7000', '174,112,0'], ['琥珀', '#CA6924', '202,105,36'], ['枯黄', '#D3B17D', '211,177,125'], ['黄栌', '#E29C45', '226,156,69'], ['秋色', '#896C39', '137,108,57'], ['秋香色', '#D9B611', '217,182,17'], ['柳黄', '#C9DD22', '201,221,34'], ['柳绿', '#AFDD22', '175,221,34'], ['竹青', '#789262', '120,146,98'], ['葱黄', '#A3D900', '163,217,0'], ['葱绿', '#9ED900', '158,217,0'], ['葱青', '#0EB83A', '14,184,58'], ['青葱', '#0AA344', '10,163,68'], ['油绿', '#00BC12', '0,188,18'], ['绿沉', '#0C8918', '12,137,24'], ['碧色', '#1BD1A5', '27,209,165'], ['青碧', '#48C0A3', '72,192,163'], ['翡翠色', '#3DE1AD', '61,225,173'], ['青翠', '#00E079', '0,224,121'], ['青白', '#C0EBD7', '192,235,215'], ['鸭卵青', '#E0EEE8', '224,238,232'], ['蟹壳青', '#BBCDC5', '187,205,197'], ['鸦青', '#424C50', '66,76,80'], ['豆绿', '#9ED048', '158,208,72'], ['豆青', '#96CE54', '150,206,84'], ['石青', '#7BCFA6', '123,207,166'], ['玉色', '#7BCFA6', '46,223,163'], ['缥', '#7FECAD', '127,236,173'], ['艾绿', '#A4E2C6', '164,226,198'], ['松柏绿', '#21A675', '33,166,117'], ['松花绿', '#057748', '5,119,72'], ['松花色', '#BCE672', '5,119,72'], ['蓝', '#44CEF6', '68,206,246'], ['靛青', '#177CB0', '23,124,176'], ['碧蓝', '#3EEDE7', '62,237,231'], ['宝蓝', '#4B5CC4', '75,92,196'], ['藏蓝', '#3B2E7E', '59,46,126'], ['黛', '#4A4266', '74,66,102'], ['黛绿', '#426666', '66,102,102'], ['黛紫', '#574266', '87,66,102'], ['紫酱', '#815463', '129,84,99'], ['酱紫', '#815476', '129,84,118'], ['紫檀', '#4C221B', '76,34,27'], ['紫棠', '#56004F', '86,0,79'], ['青莲', '#801DAE', '128,29,174'], ['群青', '#4C8DAE', '76,141,174'], ['雪青', '#B0A4E3', '176,164,227'], ['丁香色', '#CCA4E3', '204,164,227'], ['藕色', '#EDD1D8', '237,209,216'], ['藕荷色', '#E4C6D0', '228,198,208'], ['苍青', '#A29B7C', '162,155,124'], ['苍黑', '#7397AB', '115,151,171'], ['苍白', '#D1D9E0', '209,217,224'], ['水红', '#F3D3E7', '243,211,231'], ['水绿', '#D4F2E7', '212,242,231'], ['淡青', '#D3E0F3', '211,224,243'], ['湖蓝', '#30DFF3', '48,2​​23,243'], ['湖绿', '#25F8CB', '37,248,203'], ['精白', '#FFFFFF', '255,255,255'], ['像牙白', '#FFFBF0', '255,251,240'], ['雪白', '#F0FCFF', '240,252,255'], ['月白', '#D6ECF0', '214,236,240'], ['缟', '#F2ECDE', '242,236,222'], ['素', '#E0F0E9', '224,240,233'], ['荼白', '#F3F9F1', '243,249,241'], ['霜色', '#E9F1F6', '233,241,246'], ['花白', '#C2CCD0', '194,204,208'], ['鱼肚白', '#FCEFE8', '252,239,232'], ['莹白', '#E3F9FD', '227,239,253'], ['牙色', '#EEDEB0', '238,222,176'], ['铅白', '#F0F0F4', '240,240,244'], ['玄色', '#622A1D', '98,42,29'], ['玄青', '#3D3B4F', '61,59,79'], ['乌色', '#725E82', '114,94,130'], ['乌黑', '#392F41', '57,47,65'], ['漆黑', '#161823', '22,24,35'], ['墨色', '#50616D', '80,97,109'], ['墨灰', '#758A99', '117,138,153'], ['缁色', '#493131', '73,49,49'], ['煤黑', '#312520', '49,37,32'], ['黧', '#5D513C', '93,81,60'], ['黎', '#75664D', '117,102,77'], ['黝', '#6B6882', '107,104,130'], ['黝黑', '#665757', '102,87,87'], ['黯', '#41555D', '65,85,93'], ['赤金', '#F2BE45', '242,190,69'], ['银白', '#E9E7EF', '233,231,239'], ['铜绿', '#549688', '84,150,136'], ['乌金', '#A78E44', '167,142,68'], ['老银', '#BACAC6', '186,202,198'], ['猩红色', '#FF2400', '255,36,0'], ['朱红色', '#FF4D00', '255,77,0'], ['柠檬绿色', '#CCFF00', '204,255,0'], ['黄绿色', '#66FF00', '102,255,0'], ['蔚蓝色', '#007FFF', '0,127,255'], ['蓝绿色', '#7FFFD4', '127,255,212'], ['浅蓝色', '#E0FFFF', '137,207,240'], ['绿松色', '#30D5C8', '48,213,200'], ['粉末蓝', '#003399', '0,51,153'], ['皇室蓝', '#4169E1', '65,105,225'], ['天青蓝', '#2A52BE', '42,82,190'], ['钴蓝色', '#0047AB', '0,71,171'], ['海军蓝', '#000080', '0,0,128'], ['白牛仔布色', '#5E86C1', '94,134,193'], ['青玉色', '#082567', '8,37,103'], ['深茜红', '#E32636', '227,38,54'], ['洋红色', '#FF00FF', '255,0,255'], ['橙黄色', '#FFCC00', '255,204,0'], ['春绿色', '#00FF80', '0,255,128'], ['鸭绿色', '#008080', '0,128,128'], ['鲑肉色', '#FF8C69', '255,140,105'], ['米色', '#F5F5DC', '245,245,210'], ['薰衣草色', '#E6E6FA', '230,230,250'], ['兰花色', '#DA70D6', '218,112,214'], ['粉红色', '#FFC0CB', '255,192,203'], ['燃橙色', '#CC5500', '204,85,0'], ['暗灰色', '#404040', '64,64,64']];
+ 
+-const colors = exports.colors = ['赤', '朱', '丹', '绯', '彤', '绛', '茜', '纁', '赭', '栗', '褐', '驼', '赭', '橘', '曙', '翠', '碧', '金', '米', '缃', '靛', '紫', '藕', '桃', '青', '玄', '皂', '乌', '墨', '黛', '黝', '素', '杏', '缟', '鹤', '皓', '苍', '华', '银', ...COLOR_WITH_RGB.map(item => item[0])];
+\ No newline at end of file
++var colors = exports.colors = ['赤', '朱', '丹', '绯', '彤', '绛', '茜', '纁', '赭', '栗', '褐', '驼', '赭', '橘', '曙', '翠', '碧', '金', '米', '缃', '靛', '紫', '藕', '桃', '青', '玄', '皂', '乌', '墨', '黛', '黝', '素', '杏', '缟', '鹤', '皓', '苍', '华', '银'].concat(_toConsumableArray(COLOR_WITH_RGB.map(function (item) {
++  return item[0];
++})));
+\ No newline at end of file
+--- a/node_modules/segmentit/dist/module/ChsNameOptimizer.js
++++ b/node_modules/segmentit/dist/module/ChsNameOptimizer.js
+@@ -24,9 +24,11 @@ var _BaseModule = require('./BaseModule');
+ 
+ var _CHS_NAMES = require('./CHS_NAMES');
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+-let ChsNameOptimizer = function (_Optimizer) {
++var ChsNameOptimizer = function (_Optimizer) {
+   (0, _inherits3.default)(ChsNameOptimizer, _Optimizer);
+ 
+   function ChsNameOptimizer() {
+@@ -37,13 +39,13 @@ let ChsNameOptimizer = function (_Optimizer) {
+   (0, _createClass3.default)(ChsNameOptimizer, [{
+     key: 'doOptimize',
+     value: function doOptimize(words) {
+-      const POSTAG = this.segment.POSTAG;
+-      let i = 0;
++      var POSTAG = this.segment.POSTAG;
++      var i = 0;
+ 
+       /* 第一遍扫描 */
+       while (i < words.length) {
+-        const word = words[i];
+-        const nextword = words[i + 1];
++        var word = words[i];
++        var nextword = words[i + 1];
+         if (nextword) {
+           // debug(nextword);
+           // 如果为  "小|老" + 姓
+@@ -74,7 +76,7 @@ let ChsNameOptimizer = function (_Optimizer) {
+                 p: POSTAG.A_NR
+               });
+               // 如果上一个单词可能是一个姓，则合并
+-              const preword = words[i - 1];
++              var preword = words[i - 1];
+               if (preword && (preword.w in _CHS_NAMES.FAMILY_NAME_1 || preword.w in _CHS_NAMES.FAMILY_NAME_2)) {
+                 words.splice(i - 1, 2, {
+                   w: preword.w + word.w + nextword.w,
+@@ -104,13 +106,13 @@ let ChsNameOptimizer = function (_Optimizer) {
+       /* 第二遍扫描 */
+       i = 0;
+       while (i < words.length) {
+-        const word = words[i];
+-        const nextword = words[i + 1];
+-        if (nextword) {
++        var _word = words[i];
++        var _nextword = words[i + 1];
++        if (_nextword) {
+           // 如果为 姓 + 单字名
+-          if ((word.w in _CHS_NAMES.FAMILY_NAME_1 || word.w in _CHS_NAMES.FAMILY_NAME_2) && nextword.w in _CHS_NAMES.SINGLE_NAME) {
++          if ((_word.w in _CHS_NAMES.FAMILY_NAME_1 || _word.w in _CHS_NAMES.FAMILY_NAME_2) && _nextword.w in _CHS_NAMES.SINGLE_NAME) {
+             words.splice(i, 2, {
+-              w: word.w + nextword.w,
++              w: _word.w + _nextword.w,
+               p: POSTAG.A_NR
+             });
+             i++;
+--- a/node_modules/segmentit/dist/module/ChsNameTokenizer.js
++++ b/node_modules/segmentit/dist/module/ChsNameTokenizer.js
+@@ -24,9 +24,11 @@ var _BaseModule = require('./BaseModule');
+ 
+ var _CHS_NAMES = require('./CHS_NAMES');
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+-let ChsNameTokenizer = function (_Tokenizer) {
++var ChsNameTokenizer = function (_Tokenizer) {
+   (0, _inherits3.default)(ChsNameTokenizer, _Tokenizer);
+ 
+   function ChsNameTokenizer() {
+@@ -37,21 +39,21 @@ let ChsNameTokenizer = function (_Tokenizer) {
+   (0, _createClass3.default)(ChsNameTokenizer, [{
+     key: 'split',
+     value: function split(words) {
+-      const POSTAG = this.segment.POSTAG;
+-      const ret = [];
++      var POSTAG = this.segment.POSTAG;
++      var ret = [];
+       for (var i = 0, word; word = words[i]; i++) {
+         if (word.p > 0) {
+           ret.push(word);
+           continue;
+         }
+         // 仅对未识别的词进行匹配
+-        const nameinfo = ChsNameTokenizer.matchName(word.w);
++        var nameinfo = ChsNameTokenizer.matchName(word.w);
+         if (nameinfo.length < 1) {
+           ret.push(word);
+           continue;
+         }
+         // 分离出人名
+-        let lastc = 0;
++        var lastc = 0;
+         for (var ui = 0, url; url = nameinfo[ui]; ui++) {
+           if (url.c > lastc) {
+             ret.push({ w: word.w.substr(lastc, url.c - lastc) });
+@@ -59,7 +61,7 @@ let ChsNameTokenizer = function (_Tokenizer) {
+           ret.push({ w: url.w, p: POSTAG.A_NR });
+           lastc = url.c + url.w.length;
+         }
+-        const lastn = nameinfo[nameinfo.length - 1];
++        var lastn = nameinfo[nameinfo.length - 1];
+         if (lastn.c + lastn.w.length < word.w.length) {
+           ret.push({ w: word.w.substr(lastn.c + lastn.w.length) });
+         }
+@@ -71,25 +73,25 @@ let ChsNameTokenizer = function (_Tokenizer) {
+   }], [{
+     key: 'matchName',
+     value: function matchName(text, startPos) {
+-      let startPosition = 0;
++      var startPosition = 0;
+       if (!isNaN(startPos)) startPosition = startPos;
+-      const result = [];
++      var result = [];
+       while (startPosition < text.length) {
+-        let name = false;
++        var name = false;
+         // 取两个字，看看在不在复姓表里
+-        const f2 = text.substr(startPosition, 2);
++        var f2 = text.substr(startPosition, 2);
+         if (f2 in _CHS_NAMES.FAMILY_NAME_2) {
+-          const n1 = text.charAt(startPosition + 2);
+-          const n2 = text.charAt(startPosition + 3);
++          var _n = text.charAt(startPosition + 2);
++          var _n2 = text.charAt(startPosition + 3);
+           // 看看姓后面的字在不在名表里
+-          if (n1 in _CHS_NAMES.DOUBLE_NAME_1 && n2 in _CHS_NAMES.DOUBLE_NAME_2) {
+-            name = f2 + n1 + n2;
+-          } else if (n1 in _CHS_NAMES.SINGLE_NAME) {
+-            name = f2 + n1 + (n1 === n2 ? n2 : '');
++          if (_n in _CHS_NAMES.DOUBLE_NAME_1 && _n2 in _CHS_NAMES.DOUBLE_NAME_2) {
++            name = f2 + _n + _n2;
++          } else if (_n in _CHS_NAMES.SINGLE_NAME) {
++            name = f2 + _n + (_n === _n2 ? _n2 : '');
+           }
+         }
+         // 单姓
+-        const f1 = text.charAt(startPosition);
++        var f1 = text.charAt(startPosition);
+         if (name === false && f1 in _CHS_NAMES.FAMILY_NAME_1) {
+           var n1 = text.charAt(startPosition + 1);
+           var n2 = text.charAt(startPosition + 2);
+--- a/node_modules/segmentit/dist/module/DatetimeOptimizer.js
++++ b/node_modules/segmentit/dist/module/DatetimeOptimizer.js
+@@ -22,18 +22,20 @@ var _inherits3 = _interopRequireDefault(_inherits2);
+ 
+ var _BaseModule = require('./BaseModule');
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+ // 日期时间常见组合
+-const DATETIME_WORDS = ['世纪', '年', '年份', '年度', '月', '月份', '月度', '日', '号', '时', '点', '点钟', '分', '分钟', '秒', '毫秒'];
++var DATETIME_WORDS = ['世纪', '年', '年份', '年度', '月', '月份', '月度', '日', '号', '时', '点', '点钟', '分', '分钟', '秒', '毫秒'];
+ 
+-const DATETIME = {};
++var DATETIME = {};
+ // eslint-disable-next-line
+-for (const i in DATETIME_WORDS) {
++for (var i in DATETIME_WORDS) {
+   DATETIME[DATETIME_WORDS[i]] = DATETIME_WORDS[i].length;
+ }
+ 
+-let DatetimeOptimizer = function (_Optimizer) {
++var DatetimeOptimizer = function (_Optimizer) {
+   (0, _inherits3.default)(DatetimeOptimizer, _Optimizer);
+ 
+   function DatetimeOptimizer() {
+@@ -56,11 +58,11 @@ let DatetimeOptimizer = function (_Optimizer) {
+         isNotFirst = false;
+       }
+       // 合并相邻的能组成一个单词的两个词
+-      const TABLE = this.segment.getDict('TABLE');
+-      const POSTAG = this.segment.POSTAG;
++      var TABLE = this.segment.getDict('TABLE');
++      var POSTAG = this.segment.POSTAG;
+ 
+-      let i = 0;
+-      let ie = words.length - 1;
++      var i = 0;
++      var ie = words.length - 1;
+       while (i < ie) {
+         var w1 = words[i];
+         var w2 = words[i + 1];
+@@ -70,8 +72,8 @@ let DatetimeOptimizer = function (_Optimizer) {
+           // =========================================
+           // 日期时间组合   数字 + 日期单位，如 “2005年"
+           if (w2.w in DATETIME) {
+-            let nw = w1.w + w2.w;
+-            let len = 2;
++            var nw = w1.w + w2.w;
++            var len = 2;
+             // 继续搜索后面连续的日期时间描述，必须符合  数字 + 日期单位
+             while (true) {
+               var w1 = words[i + len];
+--- a/node_modules/segmentit/dist/module/DictOptimizer.js
++++ b/node_modules/segmentit/dist/module/DictOptimizer.js
+@@ -22,9 +22,11 @@ var _inherits3 = _interopRequireDefault(_inherits2);
+ 
+ var _BaseModule = require('./BaseModule');
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+-let DictOptimizer = function (_Optimizer) {
++var DictOptimizer = function (_Optimizer) {
+   (0, _inherits3.default)(DictOptimizer, _Optimizer);
+ 
+   function DictOptimizer() {
+@@ -48,19 +50,19 @@ let DictOptimizer = function (_Optimizer) {
+         isNotFirst = false;
+       }
+       // 合并相邻的能组成一个单词的两个词
+-      const TABLE = this.segment.getDict('TABLE');
+-      const POSTAG = this.segment.POSTAG;
++      var TABLE = this.segment.getDict('TABLE');
++      var POSTAG = this.segment.POSTAG;
+ 
+-      let i = 0;
+-      let ie = words.length - 1;
++      var i = 0;
++      var ie = words.length - 1;
+       while (i < ie) {
+-        const w1 = words[i];
+-        const w2 = words[i + 1];
++        var w1 = words[i];
++        var w2 = words[i + 1];
+         // debug(w1.w + ', ' + w2.w);
+ 
+         // ==========================================
+         // 能组成一个新词的(词性必须相同)
+-        const nw = w1.w + w2.w;
++        var nw = w1.w + w2.w;
+         if (w1.p === w2.p && nw in TABLE) {
+           words.splice(i, 2, {
+             w: nw,
+@@ -118,9 +120,9 @@ let DictOptimizer = function (_Optimizer) {
+         // 修正 “十五点五八”问题
+         if ((w1.p & POSTAG.D_MQ) > 0 && w1.w.substr(-1) === '点' && w2.p & POSTAG.A_M) {
+           // debug(w1, w2);
+-          let i2 = 2;
+-          let w4w = '';
+-          for (let j = i + i2; j < ie; j++) {
++          var i2 = 2;
++          var w4w = '';
++          for (var j = i + i2; j < ie; j++) {
+             var w3 = words[j];
+             if ((w3.p & POSTAG.A_M) > 0) {
+               w4w += w3.w;
+--- a/node_modules/segmentit/dist/module/DictTokenizer.js
++++ b/node_modules/segmentit/dist/module/DictTokenizer.js
+@@ -24,21 +24,23 @@ var _BaseModule = require('./BaseModule');
+ 
+ var _CHS_NAMES = require('./CHS_NAMES');
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+ // 日期时间常见组合
+-const _DATETIME = ['世纪', '年', '年份', '年度', '月', '月份', '月度', '日', '号', '时', '点', '点钟', '分', '分钟', '秒', '毫秒'];
+-const DATETIME = {};
+-for (const i in _DATETIME) DATETIME[_DATETIME[i]] = _DATETIME[i].length;
+-
+-/**
+- * 对未识别的单词进行分词
+- *
+- * @param {array} words 单词数组
+- * @return {array}
+- */
+-
+-let DictTokenizer = function (_Tokenizer) {
++var _DATETIME = ['世纪', '年', '年份', '年度', '月', '月份', '月度', '日', '号', '时', '点', '点钟', '分', '分钟', '秒', '毫秒'];
++var DATETIME = {};
++for (var i in _DATETIME) {
++  DATETIME[_DATETIME[i]] = _DATETIME[i].length;
++} /**
++   * 对未识别的单词进行分词
++   *
++   * @param {array} words 单词数组
++   * @return {array}
++   */
++
++var DictTokenizer = function (_Tokenizer) {
+   (0, _inherits3.default)(DictTokenizer, _Tokenizer);
+ 
+   function DictTokenizer() {
+@@ -50,22 +52,22 @@ let DictTokenizer = function (_Tokenizer) {
+     key: 'split',
+     value: function split(words) {
+       // debug(words);
+-      const POSTAG = this.segment.POSTAG;
+-      const TABLE = this.segment.getDict('TABLE');
+-      const ret = [];
++      var POSTAG = this.segment.POSTAG;
++      var TABLE = this.segment.getDict('TABLE');
++      var ret = [];
+       for (var i = 0, word; word = words[i]; i++) {
+         if (word.p > 0) {
+           ret.push(word);
+           continue;
+         }
+         // 仅对未识别的词进行匹配
+-        const wordinfo = this.matchWord(word.w, 0, words[i - 1]);
++        var wordinfo = this.matchWord(word.w, 0, words[i - 1]);
+         if (wordinfo.length < 1) {
+           ret.push(word);
+           continue;
+         }
+         // 分离出已识别的单词
+-        let lastc = 0;
++        var lastc = 0;
+         for (var ui = 0, bw; bw = wordinfo[ui]; ui++) {
+           if (bw.c > lastc) {
+             ret.push({ w: word.w.substr(lastc, bw.c - lastc) });
+@@ -73,7 +75,7 @@ let DictTokenizer = function (_Tokenizer) {
+           ret.push({ w: bw.w, p: TABLE[bw.w].p });
+           lastc = bw.c + bw.w.length;
+         }
+-        const lastword = wordinfo[wordinfo.length - 1];
++        var lastword = wordinfo[wordinfo.length - 1];
+         if (lastword.c + lastword.w.length < word.w.length) {
+           ret.push({ w: word.w.substr(lastword.c + lastword.w.length) });
+         }
+@@ -94,15 +96,15 @@ let DictTokenizer = function (_Tokenizer) {
+     key: 'matchWord',
+     value: function matchWord(text, cur, preword) {
+       if (isNaN(cur)) cur = 0;
+-      const ret = [];
+-      const s = false;
+-      const TABLE = this.segment.getDict('TABLE2');
++      var ret = [];
++      var s = false;
++      var TABLE = this.segment.getDict('TABLE2');
+       // 匹配可能出现的单词
+       while (cur < text.length) {
+-        for (const i in TABLE) {
+-          const w = text.substr(cur, i);
+-          if (w in TABLE[i]) {
+-            ret.push({ w, c: cur, f: TABLE[i][w].f });
++        for (var _i in TABLE) {
++          var w = text.substr(cur, _i);
++          if (w in TABLE[_i]) {
++            ret.push({ w: w, c: cur, f: TABLE[_i][w].f });
+           }
+         }
+         cur++;
+@@ -124,12 +126,12 @@ let DictTokenizer = function (_Tokenizer) {
+   }, {
+     key: 'filterWord',
+     value: function filterWord(words, preword, text) {
+-      const POSTAG = this.segment.POSTAG;
+-      const TABLE = this.segment.getDict('TABLE');
+-      let ret = [];
++      var POSTAG = this.segment.POSTAG;
++      var TABLE = this.segment.getDict('TABLE');
++      var ret = [];
+ 
+       // 将单词按位置分组
+-      const wordpos = DictTokenizer.getPosInfo(words, text);
++      var wordpos = DictTokenizer.getPosInfo(words, text);
+       // debug(wordpos);
+ 
+       // 使用类似于MMSG的分词算法
+@@ -140,9 +142,9 @@ let DictTokenizer = function (_Tokenizer) {
+       // c、未识别词最少；
+       // d、符合语法结构项：如两个连续的动词减分，数词后面跟量词加分；
+       // 取以上几项综合排名最最好的
+-      const chunks = DictTokenizer.getChunks(wordpos, 0, text);
++      var chunks = DictTokenizer.getChunks(wordpos, 0, text);
+       // debug(chunks);
+-      const assess = []; // 评价表
++      var assess = []; // 评价表
+ 
+       // 对各个分支就行评估
+       for (var i = 0, chunk; chunk = chunks[i]; i++) {
+@@ -154,9 +156,9 @@ let DictTokenizer = function (_Tokenizer) {
+           d: 0
+         };
+         // 词平均长度
+-        const sp = text.length / chunk.length;
++        var sp = text.length / chunk.length;
+         // 句子经常包含的语法结构
+-        let has_D_V = false; // 是否包含动词
++        var has_D_V = false; // 是否包含动词
+ 
+         // 遍历各个词
+         if (preword) {
+@@ -202,7 +204,7 @@ let DictTokenizer = function (_Tokenizer) {
+               }
+ 
+               // 探测下一个词
+-              const nextw = chunk[j + 1];
++              var nextw = chunk[j + 1];
+               if (nextw) {
+                 if (nextw.w in TABLE) {
+                   nextw.p = TABLE[nextw.w].p;
+@@ -233,8 +235,8 @@ let DictTokenizer = function (_Tokenizer) {
+       }
+ 
+       // 计算排名
+-      const top = DictTokenizer.getTops(assess);
+-      const currchunk = chunks[top];
++      var top = DictTokenizer.getTops(assess);
++      var currchunk = chunks[top];
+ 
+       // 剔除不能识别的词
+       for (var i = 0, word; word = currchunk[i]; i++) {
+@@ -258,7 +260,7 @@ let DictTokenizer = function (_Tokenizer) {
+   }], [{
+     key: 'getPosInfo',
+     value: function getPosInfo(words, text) {
+-      const wordpos = {};
++      var wordpos = {};
+       // 将单词按位置分组
+       for (var i = 0, word; word = words[i]; i++) {
+         if (!wordpos[word.c]) {
+@@ -287,17 +289,17 @@ let DictTokenizer = function (_Tokenizer) {
+   }, {
+     key: 'getChunks',
+     value: function getChunks(wordpos, pos, text) {
+-      const words = wordpos[pos] || [];
+-      const ret = [];
+-      for (let i = 0; i < words.length; i++) {
+-        const word = words[i];
++      var words = wordpos[pos] || [];
++      var ret = [];
++      for (var _i2 = 0; _i2 < words.length; _i2++) {
++        var word = words[_i2];
+         // debug(word);
+-        const nextcur = word.c + word.w.length;
++        var nextcur = word.c + word.w.length;
+         if (!wordpos[nextcur]) {
+           ret.push([word]);
+         } else {
+-          const chunks = DictTokenizer.getChunks(wordpos, nextcur);
+-          for (let j = 0; j < chunks.length; j++) {
++          var chunks = DictTokenizer.getChunks(wordpos, nextcur);
++          for (var j = 0; j < chunks.length; j++) {
+             ret.push([word].concat(chunks[j]));
+           }
+         }
+@@ -315,7 +317,7 @@ let DictTokenizer = function (_Tokenizer) {
+     key: 'getTops',
+     value: function getTops(assess) {
+       // 取各项最大值
+-      const top = {
++      var top = {
+         x: assess[0].x,
+         a: assess[0].a,
+         b: assess[0].b,
+@@ -332,7 +334,7 @@ let DictTokenizer = function (_Tokenizer) {
+       // debug(top);
+ 
+       // 评估排名
+-      const tops = [];
++      var tops = [];
+       for (var i = 0, ass; ass = assess[i]; i++) {
+         tops[i] = 0;
+         // 词数量，越小越好
+@@ -350,17 +352,17 @@ let DictTokenizer = function (_Tokenizer) {
+       // debug(tops.join('  '));
+ 
+       // 取分数最高的
+-      let curri = 0;
+-      let maxs = tops[0];
++      var curri = 0;
++      var maxs = tops[0];
+       for (var i in tops) {
+-        const s = tops[i];
++        var s = tops[i];
+         if (s > maxs) {
+           curri = i;
+           maxs = s;
+         } else if (s === maxs) {
+           // 如果分数相同，则根据词长度、未识别词个数和平均频率来选择
+-          let a = 0;
+-          let b = 0;
++          var a = 0;
++          var b = 0;
+           if (assess[i].c < assess[curri].c) a++;else b++;
+           if (assess[i].a > assess[curri].a) a++;else b++;
+           if (assess[i].x < assess[curri].x) a++;else b++;
+--- a/node_modules/segmentit/dist/module/EmailOptimizer.js
++++ b/node_modules/segmentit/dist/module/EmailOptimizer.js
+@@ -22,16 +22,18 @@ var _inherits3 = _interopRequireDefault(_inherits2);
+ 
+ var _BaseModule = require('./BaseModule');
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+ // 邮箱地址中允许出现的字符
+ // 参考：http://www.cs.tut.fi/~jkorpela/rfc/822addr.html
+-const _EMAILCHAR = '!"#$%&\'*+-/0123456789=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~.'.split('');
++var _EMAILCHAR = '!"#$%&\'*+-/0123456789=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~.'.split('');
+ 
+-const EMAILCHAR = {};
+-for (const i in _EMAILCHAR) EMAILCHAR[_EMAILCHAR[i]] = 1;
+-
+-let EmailOptimizer = function (_Optimizer) {
++var EMAILCHAR = {};
++for (var i in _EMAILCHAR) {
++  EMAILCHAR[_EMAILCHAR[i]] = 1;
++}var EmailOptimizer = function (_Optimizer) {
+   (0, _inherits3.default)(EmailOptimizer, _Optimizer);
+ 
+   function EmailOptimizer() {
+@@ -42,13 +44,13 @@ let EmailOptimizer = function (_Optimizer) {
+   (0, _createClass3.default)(EmailOptimizer, [{
+     key: 'doOptimize',
+     value: function doOptimize(words) {
+-      const POSTAG = this.segment.POSTAG;
++      var POSTAG = this.segment.POSTAG;
+       // debug(words);
+ 
+-      let i = 0;
+-      let ie = words.length - 1;
+-      let addr_start = false;
+-      let has_at = false;
++      var i = 0;
++      var ie = words.length - 1;
++      var addr_start = false;
++      var has_at = false;
+       while (i < ie) {
+         var word = words[i];
+         var is_ascii = !!(word.p === POSTAG.A_NX || word.p === POSTAG.A_M && word.w.charCodeAt(0) < 128);
+@@ -117,7 +119,7 @@ let EmailOptimizer = function (_Optimizer) {
+   }], [{
+     key: 'toEmailAddress',
+     value: function toEmailAddress(words) {
+-      let ret = words[0].w;
++      var ret = words[0].w;
+       for (var i = 1, word; word = words[i]; i++) {
+         ret += word.w;
+       }
+--- a/node_modules/segmentit/dist/module/ForeignTokenizer.js
++++ b/node_modules/segmentit/dist/module/ForeignTokenizer.js
+@@ -22,9 +22,11 @@ var _inherits3 = _interopRequireDefault(_inherits2);
+ 
+ var _BaseModule = require('./BaseModule');
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+-let ForeignTokenizer = function (_Tokenizer) {
++var ForeignTokenizer = function (_Tokenizer) {
+   (0, _inherits3.default)(ForeignTokenizer, _Tokenizer);
+ 
+   function ForeignTokenizer() {
+@@ -35,8 +37,8 @@ let ForeignTokenizer = function (_Tokenizer) {
+   (0, _createClass3.default)(ForeignTokenizer, [{
+     key: 'split',
+     value: function split(words) {
+-      const POSTAG = this.segment.POSTAG;
+-      let ret = [];
++      var POSTAG = this.segment.POSTAG;
++      var ret = [];
+       for (var i = 0, word; word = words[i]; i++) {
+         if (word.p) {
+           ret.push(word);
+@@ -58,13 +60,13 @@ let ForeignTokenizer = function (_Tokenizer) {
+   }, {
+     key: 'splitForeign',
+     value: function splitForeign(text, cur) {
+-      const POSTAG = this.segment.POSTAG;
++      var POSTAG = this.segment.POSTAG;
+       if (isNaN(cur)) cur = 0;
+-      const ret = [];
++      var ret = [];
+ 
+       // 取第一个字符的ASCII码
+-      let lastcur = 0;
+-      let lasttype = 0;
++      var lastcur = 0;
++      var lasttype = 0;
+       var c = text.charCodeAt(0);
+       // 全角数字或字母
+       if (c >= 65296 && c <= 65370) c -= 65248;
+--- a/node_modules/segmentit/dist/module/PunctuationTokenizer.js
++++ b/node_modules/segmentit/dist/module/PunctuationTokenizer.js
+@@ -22,23 +22,25 @@ var _inherits3 = _interopRequireDefault(_inherits2);
+ 
+ var _BaseModule = require('./BaseModule');
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+ // 标点符号
+-let _STOPWORD = ' ,.;+-|/\\\'":?<>[]{}=!@#$%^&*()~`' + '。，、＇：∶；?‘’“”〝〞ˆˇ﹕︰﹔﹖﹑·¨….¸;！´？！～—ˉ｜‖＂〃｀@﹫¡¿﹏﹋﹌︴々﹟#﹩$﹠&﹪%*﹡﹢﹦' + '﹤‐￣¯―﹨ˆ˜﹍﹎+=<­＿_-ˇ~﹉﹊（）〈〉‹›﹛﹜『』〖〗［］《》〔〕{}「」【】︵︷︿︹︽_﹁﹃︻︶︸' + '﹀︺︾ˉ﹂﹄︼＋－×÷﹢﹣±／＝≈≡≠∧∨∑∏∪∩∈⊙⌒⊥∥∠∽≌＜＞≤≥≮≯∧∨√﹙﹚[]﹛﹜∫∮∝∞⊙∏' + '┌┬┐┏┳┓╒╤╕─│├┼┤┣╋┫╞╪╡━┃└┴┘┗┻┛╘╧╛┄┆┅┇╭─╮┏━┓╔╦╗┈┊│╳│┃┃╠╬╣┉┋╰─╯┗━┛' + '╚╩╝╲╱┞┟┠┡┢┦┧┨┩┪╉╊┭┮┯┰┱┲┵┶┷┸╇╈┹┺┽┾┿╀╁╂╃╄╅╆' + '○◇□△▽☆●◆■▲▼★♠♥♦♣☼☺◘♀√☻◙♂×▁▂▃▄▅▆▇█⊙◎۞卍卐╱╲▁▏↖↗↑←↔◤◥╲╱▔▕↙↘↓→↕◣◢∷▒░℡™';
++var _STOPWORD = ' ,.;+-|/\\\'":?<>[]{}=!@#$%^&*()~`' + '。，、＇：∶；?‘’“”〝〞ˆˇ﹕︰﹔﹖﹑·¨….¸;！´？！～—ˉ｜‖＂〃｀@﹫¡¿﹏﹋﹌︴々﹟#﹩$﹠&﹪%*﹡﹢﹦' + '﹤‐￣¯―﹨ˆ˜﹍﹎+=<­＿_-ˇ~﹉﹊（）〈〉‹›﹛﹜『』〖〗［］《》〔〕{}「」【】︵︷︿︹︽_﹁﹃︻︶︸' + '﹀︺︾ˉ﹂﹄︼＋－×÷﹢﹣±／＝≈≡≠∧∨∑∏∪∩∈⊙⌒⊥∥∠∽≌＜＞≤≥≮≯∧∨√﹙﹚[]﹛﹜∫∮∝∞⊙∏' + '┌┬┐┏┳┓╒╤╕─│├┼┤┣╋┫╞╪╡━┃└┴┘┗┻┛╘╧╛┄┆┅┇╭─╮┏━┓╔╦╗┈┊│╳│┃┃╠╬╣┉┋╰─╯┗━┛' + '╚╩╝╲╱┞┟┠┡┢┦┧┨┩┪╉╊┭┮┯┰┱┲┵┶┷┸╇╈┹┺┽┾┿╀╁╂╃╄╅╆' + '○◇□△▽☆●◆■▲▼★♠♥♦♣☼☺◘♀√☻◙♂×▁▂▃▄▅▆▇█⊙◎۞卍卐╱╲▁▏↖↗↑←↔◤◥╲╱▔▕↙↘↓→↕◣◢∷▒░℡™';
+ 
+ _STOPWORD = _STOPWORD.split('');
+-const STOPWORD = {};
+-const STOPWORD2 = {};
+-for (const i in _STOPWORD) {
++var STOPWORD = {};
++var STOPWORD2 = {};
++for (var i in _STOPWORD) {
+   if (_STOPWORD[i] === '') continue;
+-  const len = _STOPWORD[i].length;
++  var len = _STOPWORD[i].length;
+   STOPWORD[_STOPWORD[i]] = len;
+   if (!STOPWORD2[len]) STOPWORD2[len] = {};
+   STOPWORD2[len][_STOPWORD[i]] = len;
+ }
+ 
+-let PunctuationTokenizer = function (_Tokenizer) {
++var PunctuationTokenizer = function (_Tokenizer) {
+   (0, _inherits3.default)(PunctuationTokenizer, _Tokenizer);
+ 
+   function PunctuationTokenizer() {
+@@ -49,21 +51,21 @@ let PunctuationTokenizer = function (_Tokenizer) {
+   (0, _createClass3.default)(PunctuationTokenizer, [{
+     key: 'split',
+     value: function split(words) {
+-      const POSTAG = this.segment.POSTAG;
+-      const ret = [];
++      var POSTAG = this.segment.POSTAG;
++      var ret = [];
+       for (var i = 0, word; word = words[i]; i++) {
+         if (word.p > 0) {
+           ret.push(word);
+           continue;
+         }
+         // 仅对未识别的词进行匹配
+-        const stopinfo = PunctuationTokenizer.matchStopword(word.w);
++        var stopinfo = PunctuationTokenizer.matchStopword(word.w);
+         if (stopinfo.length < 1) {
+           ret.push(word);
+           continue;
+         }
+         // 分离出标点符号
+-        let lastc = 0;
++        var lastc = 0;
+         for (var ui = 0, sw; sw = stopinfo[ui]; ui++) {
+           if (sw.c > lastc) {
+             ret.push({ w: word.w.substr(lastc, sw.c - lastc) });
+@@ -74,7 +76,7 @@ let PunctuationTokenizer = function (_Tokenizer) {
+           }
+           lastc = sw.c + sw.w.length;
+         }
+-        const lastsw = stopinfo[stopinfo.length - 1];
++        var lastsw = stopinfo[stopinfo.length - 1];
+         if (lastsw.c + lastsw.w.length < word.w.length) {
+           ret.push({ w: word.w.substr(lastsw.c + lastsw.w.length) });
+         }
+@@ -94,13 +96,13 @@ let PunctuationTokenizer = function (_Tokenizer) {
+     key: 'matchStopword',
+     value: function matchStopword(text, cur) {
+       if (isNaN(cur)) cur = 0;
+-      const ret = [];
+-      let isMatch = false;
++      var ret = [];
++      var isMatch = false;
+       while (cur < text.length) {
+-        for (const i in STOPWORD2) {
+-          var w = text.substr(cur, i);
+-          if (w in STOPWORD2[i]) {
+-            ret.push({ w, c: cur });
++        for (var _i in STOPWORD2) {
++          var w = text.substr(cur, _i);
++          if (w in STOPWORD2[_i]) {
++            ret.push({ w: w, c: cur });
+             isMatch = true;
+             break;
+           }
+--- a/node_modules/segmentit/dist/module/SingleTokenizer.js
++++ b/node_modules/segmentit/dist/module/SingleTokenizer.js
+@@ -22,10 +22,12 @@ var _inherits3 = _interopRequireDefault(_inherits2);
+ 
+ var _BaseModule = require('./BaseModule');
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+ // 单字切分模块
+-let SingleTokenizer = function (_Tokenizer) {
++var SingleTokenizer = function (_Tokenizer) {
+   (0, _inherits3.default)(SingleTokenizer, _Tokenizer);
+ 
+   function SingleTokenizer() {
+@@ -36,8 +38,8 @@ let SingleTokenizer = function (_Tokenizer) {
+   (0, _createClass3.default)(SingleTokenizer, [{
+     key: 'split',
+     value: function split(words) {
+-      const POSTAG = this.segment.POSTAG;
+-      let ret = [];
++      var POSTAG = this.segment.POSTAG;
++      var ret = [];
+       for (var i = 0, word; word = words[i]; i++) {
+         if (word.p) {
+           ret.push(word);
+@@ -60,9 +62,9 @@ let SingleTokenizer = function (_Tokenizer) {
+   }, {
+     key: 'splitSingle',
+     value: function splitSingle(text, cur) {
+-      const POSTAG = this.segment.POSTAG;
++      var POSTAG = this.segment.POSTAG;
+       if (isNaN(cur)) cur = 0;
+-      const ret = [];
++      var ret = [];
+       while (cur < text.length) {
+         ret.push({
+           w: text.charAt(cur),
+--- a/node_modules/segmentit/dist/module/URLTokenizer.js
++++ b/node_modules/segmentit/dist/module/URLTokenizer.js
+@@ -22,26 +22,28 @@ var _inherits3 = _interopRequireDefault(_inherits2);
+ 
+ var _BaseModule = require('./BaseModule');
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+ // 协议URL头
+-const PROTOTAL = ['http://', 'https://', 'ftp://', 'news://', 'telnet://'];
++var PROTOTAL = ['http://', 'https://', 'ftp://', 'news://', 'telnet://'];
+ // 协议头最小长度
+ 
+-let MIN_PROTOTAL_LEN = 100;
++var MIN_PROTOTAL_LEN = 100;
+ for (var i in PROTOTAL) {
+   if (PROTOTAL[i].length < MIN_PROTOTAL_LEN) {
+     MIN_PROTOTAL_LEN = PROTOTAL[i].length;
+   }
+ }
+ // 允许出现在URL中的字符
+-const _URLCHAR = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '#', '$', '%', '&', '‘', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '=', '?', '@', '[', '\\', ']', '^', '_', '`', '|', '~'];
+-const URLCHAR = {};
++var _URLCHAR = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '#', '$', '%', '&', '‘', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '=', '?', '@', '[', '\\', ']', '^', '_', '`', '|', '~'];
++var URLCHAR = {};
+ for (var i in _URLCHAR) {
+   URLCHAR[_URLCHAR[i]] = 1;
+ }
+ 
+-let URLTokenizer = function (_Tokenizer) {
++var URLTokenizer = function (_Tokenizer) {
+   (0, _inherits3.default)(URLTokenizer, _Tokenizer);
+ 
+   function URLTokenizer() {
+@@ -52,21 +54,21 @@ let URLTokenizer = function (_Tokenizer) {
+   (0, _createClass3.default)(URLTokenizer, [{
+     key: 'split',
+     value: function split(words) {
+-      const POSTAG = this.segment.POSTAG;
+-      const ret = [];
++      var POSTAG = this.segment.POSTAG;
++      var ret = [];
+       for (var i = 0, word; word = words[i]; i++) {
+         if (word.p > 0) {
+           ret.push(word);
+           continue;
+         }
+         // 仅对未识别的词进行匹配
+-        const urlinfo = URLTokenizer.matchURL(word.w);
++        var urlinfo = URLTokenizer.matchURL(word.w);
+         if (urlinfo.length < 1) {
+           ret.push(word);
+           continue;
+         }
+         // 分离出URL
+-        let lastc = 0;
++        var lastc = 0;
+         for (var ui = 0, url; url = urlinfo[ui]; ui++) {
+           if (url.c > lastc) {
+             ret.push({ w: word.w.substr(lastc, url.c - lastc) });
+@@ -74,7 +76,7 @@ let URLTokenizer = function (_Tokenizer) {
+           ret.push({ w: url.w, p: POSTAG.URL });
+           lastc = url.c + url.w.length;
+         }
+-        const lasturl = urlinfo[urlinfo.length - 1];
++        var lasturl = urlinfo[urlinfo.length - 1];
+         if (lasturl.c + lasturl.w.length < word.w.length) {
+           ret.push({ w: word.w.substr(lasturl.c + lasturl.w.length) });
+         }
+@@ -95,8 +97,8 @@ let URLTokenizer = function (_Tokenizer) {
+     key: 'matchURL',
+     value: function matchURL(text, cur) {
+       if (isNaN(cur)) cur = 0;
+-      const ret = [];
+-      let s = false;
++      var ret = [];
++      var s = false;
+       while (cur < text.length) {
+         // 判断是否为 http:// 之类的文本开头
+         if (s === false && cur < text.length - MIN_PROTOTAL_LEN) {
+--- a/node_modules/segmentit/dist/module/WildcardTokenizer.js
++++ b/node_modules/segmentit/dist/module/WildcardTokenizer.js
+@@ -22,10 +22,12 @@ var _inherits3 = _interopRequireDefault(_inherits2);
+ 
+ var _BaseModule = require('./BaseModule');
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+ // 通配符识别模块
+-let WildcardTokenizer = function (_Tokenizer) {
++var WildcardTokenizer = function (_Tokenizer) {
+   (0, _inherits3.default)(WildcardTokenizer, _Tokenizer);
+ 
+   function WildcardTokenizer() {
+@@ -36,22 +38,22 @@ let WildcardTokenizer = function (_Tokenizer) {
+   (0, _createClass3.default)(WildcardTokenizer, [{
+     key: 'split',
+     value: function split(words) {
+-      const POSTAG = this.segment.POSTAG;
+-      const TABLE = this.segment.getDict('WILDCARD');
+-      const ret = [];
++      var POSTAG = this.segment.POSTAG;
++      var TABLE = this.segment.getDict('WILDCARD');
++      var ret = [];
+       for (var i = 0, word; word = words[i]; i++) {
+         if (word.p > 0) {
+           ret.push(word);
+           continue;
+         }
+         // 仅对未识别的词进行匹配
+-        const wordinfo = this.matchWord(word.w);
++        var wordinfo = this.matchWord(word.w);
+         if (wordinfo.length < 1) {
+           ret.push(word);
+           continue;
+         }
+         // 分离出已识别的单词
+-        let lastc = 0;
++        var lastc = 0;
+         for (var ui = 0, bw; bw = wordinfo[ui]; ui++) {
+           if (bw.c > lastc) {
+             ret.push({ w: word.w.substr(lastc, bw.c - lastc) });
+@@ -59,7 +61,7 @@ let WildcardTokenizer = function (_Tokenizer) {
+           ret.push({ w: bw.w, p: TABLE[bw.w.toLowerCase()].p });
+           lastc = bw.c + bw.w.length;
+         }
+-        const lastword = wordinfo[wordinfo.length - 1];
++        var lastword = wordinfo[wordinfo.length - 1];
+         if (lastword.c + lastword.w.length < word.w.length) {
+           ret.push({ w: word.w.substr(lastword.c + lastword.w.length) });
+         }
+@@ -78,14 +80,14 @@ let WildcardTokenizer = function (_Tokenizer) {
+     key: 'matchWord',
+     value: function matchWord(text, cur) {
+       if (isNaN(cur)) cur = 0;
+-      const ret = [];
+-      const s = false;
+-      const TABLE = this.segment.getDict('WILDCARD2');
++      var ret = [];
++      var s = false;
++      var TABLE = this.segment.getDict('WILDCARD2');
+       // 匹配可能出现的单词，取长度最大的那个
+-      const lowertext = text.toLowerCase();
++      var lowertext = text.toLowerCase();
+       while (cur < text.length) {
+-        let stopword = false;
+-        for (const i in TABLE) {
++        var stopword = false;
++        for (var i in TABLE) {
+           if (lowertext.substr(cur, i) in TABLE[i]) {
+             stopword = { w: text.substr(cur, i), c: cur };
+           }
+--- a/node_modules/segmentit/dist/module/index.js
++++ b/node_modules/segmentit/dist/module/index.js
+@@ -9,19 +9,19 @@ var _BaseModule = require('./BaseModule');
+ 
+ Object.defineProperty(exports, 'Module', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _BaseModule.Module;
+   }
+ });
+ Object.defineProperty(exports, 'Tokenizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _BaseModule.Tokenizer;
+   }
+ });
+ Object.defineProperty(exports, 'Optimizer', {
+   enumerable: true,
+-  get: function () {
++  get: function get() {
+     return _BaseModule.Optimizer;
+   }
+ });
+@@ -78,7 +78,9 @@ var _WildcardTokenizer = require('./WildcardTokenizer');
+ 
+ var _WildcardTokenizer2 = _interopRequireDefault(_WildcardTokenizer);
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+ exports.AdjectiveOptimizer = // 日期时间识别优化
+ _AdjectiveOptimizer2.default;
+@@ -107,4 +109,4 @@ _ForeignTokenizer2.default;
+ exports.SingleTokenizer = _SingleTokenizer2.default;
+ exports.WildcardTokenizer = // URL识别
+ _WildcardTokenizer2.default;
+-const modules = exports.modules = [_URLTokenizer2.default, _WildcardTokenizer2.default, _PunctuationTokenizer2.default, _ForeignTokenizer2.default, _DictTokenizer2.default, _ChsNameTokenizer2.default, _EmailOptimizer2.default, _ChsNameOptimizer2.default, _DictOptimizer2.default, _DatetimeOptimizer2.default, _AdjectiveOptimizer2.default];
+\ No newline at end of file
++var modules = exports.modules = [_URLTokenizer2.default, _WildcardTokenizer2.default, _PunctuationTokenizer2.default, _ForeignTokenizer2.default, _DictTokenizer2.default, _ChsNameTokenizer2.default, _EmailOptimizer2.default, _ChsNameOptimizer2.default, _DictOptimizer2.default, _DatetimeOptimizer2.default, _AdjectiveOptimizer2.default];
+\ No newline at end of file
+--- a/node_modules/segmentit/dist/useDefault.js
++++ b/node_modules/segmentit/dist/useDefault.js
+@@ -9,7 +9,9 @@ var _ = require('./');
+ 
+ var _2 = _interopRequireDefault(_);
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
+ 
+ function useDefault(segmentInstance) {
+   segmentInstance.use(_.modules);
