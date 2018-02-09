@@ -10,7 +10,16 @@ patch-package
      label: { default: '' },
      valFormatter: { default: function _default(n) {
          return n;
-@@ -6686,7 +6686,7 @@ var cartogram = new Kapsule({
+@@ -6650,7 +6650,7 @@ var cartogram = new Kapsule({
+     state.svg = d3Select(domNode).append('svg').attr('class', 'cartogram');
+ 
+     // tooltips
+-    state.tooltip = d3Select('body').append('div').attr('class', 'chart-tooltip cartogram-tooltip');
++    state.tooltip = d3Select('body').append('div').attr('class', 'chart-tooltip d3ToolTip');
+ 
+     // tooltip cleanup on unmount
+     domNode.addEventListener('DOMNodeRemoved', function (e) {
+@@ -6686,11 +6686,12 @@ var cartogram = new Kapsule({
  
      features.exit().remove();
  
@@ -19,7 +28,13 @@ patch-package
        var label = labelOf(feature);
        var extraContent = tooltipContentOf(feature);
        state.tooltip.style('display', 'inline');
-@@ -6700,7 +6700,7 @@ var cartogram = new Kapsule({
+-      state.tooltip.html('\n          ' + (label ? '<b>' + label + '</b>:' : '') + '\n          ' + state.valFormatter(valueOf(feature)) + '\n          ' + state.units + '\n          ' + (extraContent ? '<br/><br/>' + extraContent : '') + '\n        ');
++      state.tooltip.html(extraContent);
++      //state.tooltip.html('\n          ' + (label ? '<b>' + label + '</b>:' : '') + '\n          ' + state.valFormatter(valueOf(feature)) + '\n          ' + state.units + '\n          ' + (extraContent ? '<br/><br/>' + extraContent : '') + '\n        ');
+     }).on('mouseout', function () {
+       state.tooltip.style('display', 'none');
+     }).on('click', state.onClick);
+@@ -6700,7 +6701,7 @@ var cartogram = new Kapsule({
    }
  });
  

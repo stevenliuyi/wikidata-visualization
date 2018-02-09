@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
 import { getColors } from '../utils/scales'
+import { getTooltipHTML } from '../utils/convertData'
 import { geoMercator } from 'd3-geo'
 import { map2Settings, existRegionItems } from '../utils/maps2'
 import Cartogram from 'cartogram-chart/dist/cartogram-chart.js'
@@ -20,8 +21,6 @@ class CartogramMap extends Component {
 
   // initialize cartogram
   setD3Node = () => {
-
-    d3.selectAll('.cartogram-tooltip').html('')
 
     d3.json(getTopoJsonFileName(this.props), (error, map) => {
       // prevent adding multiple maps
@@ -43,6 +42,7 @@ class CartogramMap extends Component {
         geo.properties['label'] = geo.properties[settings.namekey]
         geo.properties['value'] = 1
         geo.properties['color'] = '#ECEFF1'
+        geo.properties['tooltip'] = ''
       })
 
       myCartogram
@@ -56,6 +56,7 @@ class CartogramMap extends Component {
         .value(({ properties }) => properties.value)
         .color(({ properties }) => properties.color)
         .label(({ properties }) => properties.label)
+        .tooltipContent(({ properties }) => properties.tooltip)
         .valFormatter(() => '')
         .iterations(1)(document.getElementById('chart'))
      
@@ -85,6 +86,7 @@ class CartogramMap extends Component {
           geo.properties['label'] = geo.properties[settings.namekey]
           geo.properties['value'] = 1
           geo.properties['color'] = '#ECEFF1'
+          geo.properties['tooltip'] = ''
         })
 
         this.state.chart
@@ -104,7 +106,7 @@ class CartogramMap extends Component {
       const areas = props.data.map(item => item[props.header[props.settings.area]])
       const items = props.data.map(item => item[props.header[props.settings.region]])
       const colors = getColors(props)
-
+      const tooltipHTMLs = getTooltipHTML(props)
 
       let new_geometries = []
       map.objects[settings.objectname].geometries.forEach( geo => {
@@ -115,6 +117,7 @@ class CartogramMap extends Component {
           geo.properties['value'] = areas[regionIndex]
           geo.properties['color'] = colors[regionIndex]
           geo.properties['label'] = geo.properties[settings.namekey]
+          geo.properties['tooltip'] = tooltipHTMLs[regionIndex]
 
           new_geometries.push(geo)
         } 
