@@ -13,7 +13,7 @@ import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
 import GitHub from 'github-api'
 import { getTinyURL } from '../utils/api'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { baseMapSettings } from '../utils/basemap'
+import { baseMapSettings, solarSystemSettings } from '../utils/basemap'
 
 class Tools extends Component {
 
@@ -142,6 +142,24 @@ class Tools extends Component {
               size={20}
               onClick={()=>window.open(
                 baseMapSettings[this.props.moreSettings.baseMap].attribution_url,
+                '_blank')}
+              className='clickable-icon pull-right'
+            />
+          </OverlayTrigger>
+        }
+
+        { this.props.chartId === 1.16 && this.props.moreSettings.solarSystem !== 'Earth' &&
+          <OverlayTrigger placement='bottom' overlay={
+            <Tooltip id='leaflet-info'>
+              <div align='right' dangerouslySetInnerHTML={{__html:
+                solarSystemSettings[this.props.moreSettings.solarSystem].attribution + '<br />powered by <b>Leaflet</b>'
+              }} />
+            </Tooltip>
+          }>
+            <MdInfo
+              size={20}
+              onClick={()=>window.open(
+                solarSystemSettings[this.props.moreSettings.solarSystem].attribution_url,
                 '_blank')}
               className='clickable-icon pull-right'
             />
