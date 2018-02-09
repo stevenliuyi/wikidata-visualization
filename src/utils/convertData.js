@@ -1,8 +1,6 @@
 // convert the result from Wikidata to objects
 import * as d3 from 'd3'
 import { getColorScaleFromValues, getColors, colorSchemes } from './scales'
-import Segmentit, { useDefault } from 'segmentit'
-import TinySegmenter from 'tiny-segmenter'
 
 const numbers = ['double', 'float', 'decimal', 'integer', 'long', 'int', 'short', 'nonNegativeInteger', 'positiveInteger', 'unsignedLong', 'unsignedInt', 'unsignedShort', 'nonPositiveInteger', 'negativeInteger']
 const numberTypes = numbers.map(type => (
@@ -388,7 +386,7 @@ export function getTooltipHTML(props) {
   return html
 }
 
-export function getWordCloudData(props) {
+export function getWordCloudData(props, segmenter) {
 
   const [minFontSize, maxFontSize] = props.moreSettings.fontSizes
   
@@ -412,22 +410,25 @@ export function getWordCloudData(props) {
 
   // remove extra spaces 
   texts = texts.replace(/\s+/g, ' ')  
-  
+
+  let splitted_texts = []
+
   // split
-  if (delimiter === 'Chinese') {
-    const segmentit = useDefault(new Segmentit())
-    texts = segmentit.doSegment(texts).map(s => s.w)
-  } else if (delimiter === 'Japanese') {
-    const segmenter = new TinySegmenter()
-    texts = segmenter.segment(texts).filter(s => s !== ' ')
+  if (delimiter === 'Chinese' || delimiter === 'Japanese') {
+    if (segmenter != null) {
+      splitted_texts = (typeof segmenter.doSegment === 'function')
+        ? segmenter.doSegment(texts).map(s => s.w)
+        : segmenter.segment(texts).filter(s => s !== ' ')
+    } else {
+      splitted_texts = texts.split(' ').slice(1)
+    }
   } else {
-    texts = texts.split(delimiter)
+    splitted_texts = texts.split(delimiter).slice(1)
   }
-  texts = texts.slice(1)
 
   // count word occurences
   let data = {}
-  texts.forEach((word, i) => {
+  splitted_texts.forEach((word, i) => {
     if (!data[word]) data[word] = 0
     ++data[word]
   }) 
