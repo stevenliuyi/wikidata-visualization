@@ -107,7 +107,8 @@ class LeafletMap extends Component {
           ref='map'
           crs={(this.props.moreSettings.solarSystem!=='Earth') ? Leaflet.CRS.Simple : Leaflet.CRS.EPSG3857}
           style={{height: this.props.height, width: this.props.width}}
-          bounds={bounds}>
+          bounds={bounds}
+          attributionControl={false}>
           <Basemap
             solarSystem={this.props.moreSettings.solarSystem}
             basemap={this.props.moreSettings.baseMap} />

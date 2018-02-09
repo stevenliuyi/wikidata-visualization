@@ -13,6 +13,7 @@ import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
 import GitHub from 'github-api'
 import { getTinyURL } from '../utils/api'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { baseMapSettings } from '../utils/basemap'
 
 class Tools extends Component {
 
@@ -119,11 +120,29 @@ class Tools extends Component {
 
         { this.props.chartId === 1.17 && this.props.moreSettings.delimiter === 'Japanese' &&
           <OverlayTrigger placement='bottom' overlay={
-            <Tooltip id='chinese-segement-info'>Japanese word segementation powered by TinySegmenter</Tooltip>
+            <Tooltip id='japanese-segement-info'>Japanese word segementation powered by TinySegmenter</Tooltip>
           }>
             <MdInfo
               size={20}
               onClick={()=>window.open('https://github.com/leungwensen/tiny-segmenter', '_blank')}
+              className='clickable-icon pull-right'
+            />
+          </OverlayTrigger>
+        }
+
+        { this.props.chartId === 1.16 && this.props.moreSettings.solarSystem === 'Earth' &&
+          <OverlayTrigger placement='bottom' overlay={
+            <Tooltip id='leaflet-info'>
+              <div align='right' dangerouslySetInnerHTML={{__html:
+                baseMapSettings[this.props.moreSettings.baseMap].attribution + '<br />powered by <b>Leaflet</b>'
+              }} />
+            </Tooltip>
+          }>
+            <MdInfo
+              size={20}
+              onClick={()=>window.open(
+                baseMapSettings[this.props.moreSettings.baseMap].attribution_url,
+                '_blank')}
               className='clickable-icon pull-right'
             />
           </OverlayTrigger>
