@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { PanelGroup, Panel, Form, FormGroup, FormControl, ControlLabel, Col } from 'react-bootstrap'
-import { charts, moreSettingTitles, canvasSettingTitles } from '../utils/settings'
+import { charts, moreSettingTitles, canvasSettingTitles, axisSettingTitles } from '../utils/settings'
 import ReactBootstrapSlider from 'react-bootstrap-slider'
 import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
 import Toggle from 'react-bootstrap-toggle'
@@ -9,6 +9,7 @@ import { colorSchemeNames, getColorScaleFromValues } from '../utils/scales'
 import { mapSettings, mapProjections } from '../utils/maps'
 import { map2Settings } from '../utils/maps2'
 import { baseMapSettings, solarSystemSettings } from '../utils/basemap'
+import { formats } from '../utils/format'
 import * as d3 from 'd3'
 
 class Settings extends Component {
@@ -425,6 +426,38 @@ class Settings extends Component {
           min={0}
           max={1} />
       )
+    } else if (setting === 'xformat' || setting === 'yformat') {
+      return (
+        <FormControl
+          componentClass="select"
+          value={this.props.axisSettings[setting]}
+          onChange={(e)=>{
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onAxisSettingsChange(newSetting)
+          }}
+        >
+          {
+            Object.keys(formats).map(format => (
+              <option value={format} key={format}>{ format }</option>
+            ))
+          }
+        </FormControl>
+      )
+    } else if (setting === 'xprecision' || setting === 'yprecision') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.axisSettings[setting]}
+          slideStop={(e)=>{
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onAxisSettingsChange(newSetting)
+          }}
+          tooltip_position={setting==='xprecision' ? 'top' : 'bottom'}
+          step={1}
+          min={0}
+          max={10} />
+      )
     } else {
       return null
     }
@@ -436,6 +469,7 @@ class Settings extends Component {
     const chartId = charts.map(chart => chart.id).indexOf(this.props.chart)
     const chartMoreSettings = (chartId >= 0) ? charts[chartId].moreSettings : null
     const chartCanvasSettings = (chartId >= 0) ? charts[chartId].canvasSettings : null
+    const chartAxisSettings = (chartId >= 0) ? charts[chartId].axisSettings : null
 
     if (this.props.chart >= 2 || this.props.header.length === 0) return null 
 
@@ -532,8 +566,26 @@ class Settings extends Component {
               </Form>
             </Panel>
         }
+        { Array.isArray(chartAxisSettings) && chartAxisSettings.length > 0 &&
+            <Panel header='Axes options' eventKey='3' key='3'>
+              <Form horizontal>
+                { // canvas options
+                  chartAxisSettings.map(axisSetting => {
+                    return (
+                      <FormGroup key={axisSetting}>
+                        <Col componentClass={ControlLabel} sm={4}>{axisSettingTitles[axisSetting]}</Col>
+                        <Col sm={8}>
+                          { this.getMoreSetting(axisSetting, this.props.header) }
+                        </Col>
+                      </FormGroup>
+                    )
+                  })
+                }
+              </Form>
+            </Panel>
+        }
         { Array.isArray(chartCanvasSettings) && chartCanvasSettings.length > 0 &&
-            <Panel header='Canvas options' eventKey='3' key='3'>
+            <Panel header='Canvas options' eventKey='4' key='4'>
               <Form horizontal>
                 { // canvas options
                   chartCanvasSettings.map(canvasSetting => {

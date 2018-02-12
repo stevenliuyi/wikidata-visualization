@@ -241,6 +241,20 @@ export const canvasSettingTitles = {
   border: 'Border'
 }
 
+export const axisSettings = {
+ xformat: 'none',
+ yformat: 'none',
+ xprecision: 2,
+ yprecision: 2
+}
+
+export const axisSettingTitles = {
+ xformat: 'X value format',
+ yformat: 'Y value format',
+ xprecision: 'X value precision',
+ yprecision: 'Y value precision'
+}
+
 // chart classes
 export const chartClasses = [
   {
@@ -275,6 +289,7 @@ export const charts = [
     settings: [x_axis, y_axis, label, color, radius],
     defaultShow: [true, true, false, false, false],
     moreSettings: ['fontSize', 'radius', 'color', 'showLegend', 'legendScale'],
+    axisSettings: ['xformat', 'yformat', 'xprecision', 'yprecision'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {

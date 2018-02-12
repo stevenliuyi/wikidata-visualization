@@ -12,7 +12,7 @@ import Examples from './Examples'
 import TopNavBar from './TopNavBar'
 import * as WikidataAPI from '../utils/api'
 import { convertData } from '../utils/convertData'
-import { getChartNames, getSettings, moreSettings, canvasSettings } from '../utils/settings'
+import { getChartNames, getSettings, moreSettings, canvasSettings, axisSettings } from '../utils/settings'
 import Measure from 'react-measure'
 import ImageGallery from './Gallery'
 import Promise from 'bluebird'
@@ -35,6 +35,7 @@ class App extends Component {
     rowSelections: [],
     moreSettings: {},
     canvasSettings: {},
+    axisSettings: {},
     timingPromise: null,
     viewer: null,
     showSide: true,
@@ -109,6 +110,15 @@ class App extends Component {
     }))
   }
 
+  handleAxisSettingsChange = (new_setting) => {
+    this.setState(prevState => ({
+      axisSettings: {
+        ...prevState.axisSettings,
+        ...new_setting
+      }
+    }))
+  }
+
   updateRowSelections = (selection) => {
     this.setState({ rowSelections: selection.sort() })
   }
@@ -164,7 +174,8 @@ class App extends Component {
           chartName: this.state.chartNames[new_chart],
           rowSelections: [...Array(new_data.length).keys()],
           moreSettings: moreSettings,
-          canvasSettings: canvasSettings
+          canvasSettings: canvasSettings,
+          axisSettings: axisSettings
         })
       })
       .finally(() => {
@@ -218,10 +229,12 @@ class App extends Component {
                     info={this.state.settingsInfo}
                     moreSettings={this.state.moreSettings}
                     canvasSettings={this.state.canvasSettings}
+                    axisSettings={this.state.axisSettings}
                     chart={this.state.chart}
                     onChange={this.setSettings}
                     onMoreSettingsChange={this.handleMoreSettingsChange}
                     onCanvasSettingsChange={this.handleCanvasSettingsChange}
+                    onAxisSettingsChange={this.handleAxisSettingsChange}
                   />
                 </Row>
                 }
@@ -256,6 +269,8 @@ class App extends Component {
                     moreSettings={this.state.moreSettings}
                     canvasSettings={this.state.canvasSettings}
                     onCanvasSettingsChange={this.handleCanvasSettingsChange}
+                    axisSettings={this.state.axisSettings}
+                    onAxisSettingsChange={this.handleAxisSettingsChange}
                     viewer={this.state.viewer}
                     onViewerChange={(viewer)=>this.setState({ viewer })}
                     updateFitBoundsFcn={this.updateFitBoundsFcn}

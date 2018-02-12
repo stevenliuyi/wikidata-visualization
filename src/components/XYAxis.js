@@ -17,8 +17,8 @@ class XYAxis extends Component {
 
     return (
       <g className="xy-axis">
-        <Axis {...xSettings} />
-        <Axis {...ySettings} />
+        <Axis {...xSettings} {...this.props} />
+        <Axis {...ySettings} {...this.props} />
       </g>
     )
   }
