@@ -76,6 +76,7 @@ class Chart extends Component {
           {({ measureRef }) =>
             <div ref={measureRef}>
               { this.props.canvasSettings.border && charts[chartIndex].canvasSettings.includes('border') &&
+                document.getElementsByClassName('info-text').length === 0 &&
                 <Border {...styles} /> }
               { (this.state.show) && (this.props.chartId === 1.02) &&
                   <ScatterPlot {...this.props} {...styles} />
