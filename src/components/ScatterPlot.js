@@ -83,6 +83,7 @@ class ScatterPlot extends Component {
       <div id='chart'>
         <SVGPanZoom {...this.props}>
           <svg width={this.props.width} height={this.props.height}>
+            <XYAxis {...this.props} {...scales} />
             <DataCircles
               xLabel={xLabel}
               yLabel={yLabel}
@@ -91,7 +92,6 @@ class ScatterPlot extends Component {
               {...this.props}
               {...scales} />
             <Labels xLabel={xLabel} yLabel={yLabel} {...this.props} {...scales} />
-            <XYAxis {...this.props} {...scales} />
           </svg>
         </SVGPanZoom>
       </div>

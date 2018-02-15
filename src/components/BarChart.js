@@ -5,6 +5,7 @@ import SVGPanZoom from './SVGPanZoom'
 import { drawLegend } from '../utils/draw'
 import chroma from 'chroma-js'
 import Info from './Info'
+import { getFormat } from '../utils/format'
 
 // bar chart d3 references
 // http://bl.ocks.org/mbostock/3943967
@@ -30,7 +31,7 @@ const updateD3Node = (props, transition) => {
     yMax = d3.max(yz, function(y) { return d3.max(y) }),
     y1Max = d3.max(y01z, function(y) { return d3.max(y, function(d) { return d[1] }) })
 
-  var  margin = {top: 40, right: 10, bottom: 40, left: 10},
+  var  margin = {top: 40, right: 40, bottom: 40, left: 60},
     width = props.width - margin.left - margin.right,
     height = props.height - margin.top - margin.bottom
 
@@ -44,6 +45,18 @@ const updateD3Node = (props, transition) => {
   var y = d3.scaleLinear()
     .domain([0, y1Max])
     .range([height, 0])
+
+  // grid lines
+  var gridlines = null
+  if (props.axisSettings.ygridlines) {
+    const yFormat = getFormat(props.axisSettings.yformat, props.axisSettings.yprecision)
+    gridlines = svg.append('g')
+      .attr('class', 'gridline')
+      .call(d3.axisLeft(y)
+        .tickSize(-width)
+        .ticks(props.axisSettings.yticks)
+        .tickFormat(yFormat))
+  }
 
   var series = svg.selectAll('.series')
     .data(y01z)
@@ -122,6 +135,15 @@ const updateD3Node = (props, transition) => {
       .transition()
       .attr('y', function(d) { return y(d[1] - d[0]) })
       .attr('height', function(d) { return y(0) - y(d[1] - d[0]) })
+
+    if (props.axisSettings.ygridlines) {
+      const yFormat = getFormat(props.axisSettings.yformat, props.axisSettings.yprecision)
+      gridlines.transition()
+        .call(d3.axisLeft(y)
+          .tickSize(-width)
+          .ticks(props.axisSettings.yticks)
+          .tickFormat(yFormat))
+    }
   }
 
   function noTransitionGrouped() {
@@ -132,6 +154,14 @@ const updateD3Node = (props, transition) => {
       .attr('y', function(d) { return y(d[1] - d[0]) })
       .attr('height', function(d) { return y(0) - y(d[1] - d[0]) })
 
+    if (props.axisSettings.ygridlines) {
+      const yFormat = getFormat(props.axisSettings.yformat, props.axisSettings.yprecision)
+      gridlines
+        .call(d3.axisLeft(y)
+          .tickSize(-width)
+          .ticks(props.axisSettings.yticks)
+          .tickFormat(yFormat))
+    }
   }
 
   function transitionStacked() {
@@ -145,6 +175,15 @@ const updateD3Node = (props, transition) => {
       .transition()
       .attr('x', function(d, i) { return x(xz[i]) })
       .attr('width', x.bandwidth())
+
+    if (props.axisSettings.ygridlines) {
+      const yFormat = getFormat(props.axisSettings.yformat, props.axisSettings.yprecision)
+      gridlines.transition()
+        .call(d3.axisLeft(y)
+          .tickSize(-width)
+          .ticks(props.axisSettings.yticks)
+          .tickFormat(yFormat))
+    }
   }
 
   function noTransitionStacked() {
@@ -154,6 +193,15 @@ const updateD3Node = (props, transition) => {
       .attr('height', function(d) { return y(d[0]) - y(d[1]) })
       .attr('x', function(d, i) { return x(xz[i]) })
       .attr('width', x.bandwidth())
+
+    if (props.axisSettings.ygridlines) {
+      const yFormat = getFormat(props.axisSettings.yformat, props.axisSettings.yprecision)
+      gridlines
+        .call(d3.axisLeft(y)
+          .tickSize(-width)
+          .ticks(props.axisSettings.yticks)
+          .tickFormat(yFormat))
+    }
   }
 
 } 

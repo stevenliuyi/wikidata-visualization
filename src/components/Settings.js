@@ -458,6 +458,39 @@ class Settings extends Component {
           min={0}
           max={10} />
       )
+    } else if (setting === 'xgridlines' || setting === 'ygridlines') {
+      return (
+        <Toggle
+          active={this.props.axisSettings[setting]}
+          on='On'
+          off='Off'
+          size='sm'
+          height={30}
+          width='100%'
+          onstyle='default'
+          offstyle='default'
+          handlestyle='primary'
+          onClick={(state)=>{
+            const newSetting = {}
+            newSetting[setting] = state
+            return this.props.onAxisSettingsChange(newSetting)
+          }}
+        />
+      )
+    } else if (setting === 'xticks' || setting === 'yticks') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.axisSettings[setting]}
+          slideStop={(e)=>{
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onAxisSettingsChange(newSetting)
+          }}
+          tooltip_position={setting==='xticks' ? 'top' : 'bottom'}
+          step={2}
+          min={2}
+          max={20} />
+      )
     } else {
       return null
     }

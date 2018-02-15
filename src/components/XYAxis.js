@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Axis from './Axis'
+import Gridlines from './Gridlines'
 
 class XYAxis extends Component {
   render() {
@@ -16,9 +17,19 @@ class XYAxis extends Component {
     }
 
     return (
-      <g className="xy-axis">
-        <Axis {...xSettings} {...this.props} />
-        <Axis {...ySettings} {...this.props} />
+      <g>
+        <g>
+          { this.props.axisSettings.xgridlines &&
+            <Gridlines {...xSettings} {...this.props} />
+          }
+          { this.props.axisSettings.ygridlines &&
+            <Gridlines {...ySettings} {...this.props} />
+          }
+        </g>
+        <g className="xy-axis">
+          <Axis {...xSettings} {...this.props} />
+          <Axis {...ySettings} {...this.props} />
+        </g>
       </g>
     )
   }

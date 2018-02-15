@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { getFormat } from '../utils/format'
 import * as d3 from 'd3'
 
-class Axis extends Component {
+class Gridlines extends Component {
   componentDidMount() {
     this.renderAxis()
   }
@@ -12,18 +11,18 @@ class Axis extends Component {
   }
 
   renderAxis() {
-    const xFormat = getFormat(this.props.axisSettings.xformat, this.props.axisSettings.xprecision)
-    const yFormat = getFormat(this.props.axisSettings.yformat, this.props.axisSettings.yprecision)
 
     let axis = null
     if (this.props.orient === 'bottom') {
       axis = d3.axisBottom(this.props.scale)
+        .tickSize(-(this.props.height-this.props.padding*2))
         .ticks(this.props.axisSettings.xticks)
-        .tickFormat(xFormat)
+        .tickFormat('')
     } else if (this.props.orient === 'left') {
       axis = d3.axisLeft(this.props.scale)
+        .tickSize(-(this.props.width-this.props.padding*3))
         .ticks(this.props.axisSettings.yticks)
-        .tickFormat(yFormat)
+        .tickFormat('')
     }
     let node = this.refs.axis
     d3.select(node).call(axis)
@@ -31,11 +30,11 @@ class Axis extends Component {
 
   render() {
     return (
-      <g className="axis"
+      <g className="gridline"
         ref="axis"
         transform={this.props.translate} />
     )
   }
 }
 
-export default Axis
+export default Gridlines

@@ -245,14 +245,22 @@ export const axisSettings = {
  xformat: 'none',
  yformat: 'none',
  xprecision: 2,
- yprecision: 2
+ yprecision: 2,
+ xgridlines: false,
+ ygridlines: false,
+ xticks: 4,
+ yticks: 4
 }
 
 export const axisSettingTitles = {
  xformat: 'X value format',
  yformat: 'Y value format',
  xprecision: 'X value precision',
- yprecision: 'Y value precision'
+ yprecision: 'Y value precision',
+ xgridlines: 'X grid lines',
+ ygridlines: 'Y grid lines',
+ xticks: 'X ticks',
+ yticks: 'Y ticks'
 }
 
 // chart classes
@@ -289,7 +297,7 @@ export const charts = [
     settings: [x_axis, y_axis, label, color, radius],
     defaultShow: [true, true, false, false, false],
     moreSettings: ['fontSize', 'radius', 'color', 'showLegend', 'legendScale'],
-    axisSettings: ['xformat', 'yformat', 'xprecision', 'yprecision'],
+    axisSettings: ['xformat', 'yformat', 'xprecision', 'yprecision', 'xgridlines', 'ygridlines', 'xticks', 'yticks'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -308,6 +316,7 @@ export const charts = [
     settings: [x_axis_all, y_axis_groups, ngroups],
     defaultShow: [true, true, true],
     moreSettings: ['barType', 'fontSize', 'color', 'showLegend', 'legendScale'],
+    axisSettings: ['ygridlines', 'yformat', 'yprecision', 'yticks'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
