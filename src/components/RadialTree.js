@@ -134,9 +134,11 @@ const updateD3Node = props => {
     })
     .attr('dy', '0.3em')
     .attr('x', function(d) {
+      // eslint-disable-next-line
       return d.x < Math.PI === !d.children ? 6 : -6
     })
     .attr('text-anchor', function(d) {
+      // eslint-disable-next-line
       return d.x < Math.PI === !d.children ? 'start' : 'end'
     })
     .attr('transform', function(d) {
