@@ -192,6 +192,10 @@
   stroke-width: 0;
 }
 
+.axis path {
+  display: none;
+}
+
 #data-table input[type="text"]:focus {
   border-color: #337ab7 !important;
   box-shadow: 0 0 0 1px #337ab7;

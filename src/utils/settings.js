@@ -248,8 +248,8 @@ export const axisSettings = {
  yformat: 'none',
  xprecision: 2,
  yprecision: 2,
- xgridlines: false,
- ygridlines: false,
+ xgridlines: true,
+ ygridlines: true,
  xticks: 4,
  yticks: 4
 }
