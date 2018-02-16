@@ -7,9 +7,8 @@ import { getDataTypeIndices } from '../utils/convertData'
 import { getURL } from '../utils/commons'
 import Info from './Info'
 import MdArrowForward from 'react-icons/lib/md/arrow-forward'
-import DatePicker from 'react-datepicker'
+import TimePicker from './TimePicker'
 import moment from 'moment'
-import 'react-datepicker/dist/react-datepicker.css'
 
 const CheckboxTable = checkboxHOC(ReactTable)
 
@@ -309,40 +308,16 @@ class DataTable extends Component {
       let component = ({ filter, onChange }) => (
         <Row>
           <Col sm={5} className='no-padding-right'>
-            <DatePicker
+            <TimePicker
               selected={this.state.starttimes[colIndex]}
               onChange={date => this.handleTimeRangeChange(date, colIndex, onChange, true)}
-              dateFormat='YYYY/MM/DD'
-              dateFormatCalendar='MMMM'
-              showYearDropdown
-              yearDropdownItemNumbers={1000}
-              dropdownMode='select'
-              popperModifiers={{
-                preventOverflow: {
-                  enabled: true,
-                  escapeWithReference: false,
-                  boundariesElement: document.getElementsByClassName('ReactTable')[0]
-                }
-              }}
             />
           </Col>
           <Col sm={2} className='no-padding'><MdArrowForward /></Col>
           <Col sm={5} className='no-padding-left'>
-            <DatePicker
+            <TimePicker
               selected={this.state.endtimes[colIndex]}
               onChange={date => this.handleTimeRangeChange(date, colIndex, onChange, false)}
-              dateFormat='YYYY/MM/DD'
-              dateFormatCalendar='MMMM'
-              showYearDropdown
-              yearDropdownItemNumbers={1000}
-              dropdownMode='select'
-              popperModifiers={{
-                preventOverflow: {
-                  enabled: true,
-                  escapeWithReference: false,
-                  boundariesElement: document.getElementsByClassName('ReactTable')[0]
-                }
-              }}
             />
           </Col>
         </Row>
