@@ -9,6 +9,7 @@ import Info from './Info'
 import MdArrowForward from 'react-icons/lib/md/arrow-forward'
 import TimePicker from './TimePicker'
 import moment from 'moment'
+import { formatBCDates } from '../utils/format'
 
 const CheckboxTable = checkboxHOC(ReactTable)
 
@@ -109,6 +110,10 @@ class DataTable extends Component {
           <img src={getURL(row.value, '50px')} width={48} alt="" />
         </a>
       )
+    } else if (dataType === 'time') {
+      return row.value != null
+        ? moment(formatBCDates(row.value)).format('ll')
+        : ''
     } else {
       return row.value
     }
@@ -253,16 +258,17 @@ class DataTable extends Component {
   timeRangeFilterMethod = (filter, row) => {
     const id = filter.pivotId || filter.id
     const [startTime, endTime] = filter.value.split('to')
+    const time = row[id] != null ? moment(formatBCDates(row[id])) : null
 
     if (startTime !== 'NULL' && endTime !== 'NULL') {
-      return (
-        moment(startTime).isBefore(moment(row[id])) &&
-        moment(endTime).isAfter(moment(row[id]))
-      )
+      if (time == null) return false
+      return moment(startTime).isBefore(time) && moment(endTime).isAfter(time)
     } else if (startTime !== 'NULL') {
-      return moment(startTime).isBefore(moment(row[id]))
+      if (time == null) return false
+      return moment(startTime).isBefore(time)
     } else if (endTime !== 'NULL') {
-      return moment(endTime).isAfter(moment(row[id]))
+      if (time == null) return false
+      return moment(endTime).isAfter(time)
     } else {
       return true
     }

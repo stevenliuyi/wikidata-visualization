@@ -15,3 +15,15 @@ export const getFormat = (format, precision = 2) => {
       : d => d
   return f
 }
+
+// fill leading zeros in ISO date string for BC dates
+export const formatBCDates = dateString => {
+  if (dateString.slice(0, 1) === '-') {
+    const yearEndIndex = dateString.slice(1).indexOf('-')
+    return `-${dateString
+      .slice(1, yearEndIndex + 1)
+      .padStart(6, '0')}${dateString.slice(yearEndIndex + 1)}`
+  } else {
+    return dateString
+  }
+}
