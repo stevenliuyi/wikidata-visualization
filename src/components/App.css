@@ -196,8 +196,14 @@
   display: none;
 }
 
+/* fix display issue on iOS */
+input[type="text"] {
+  -webkit-appearance: none;
+}
+
 #data-table input[type="text"]:focus {
   border-color: #337ab7 !important;
+  -webkit-appearance: none;
   box-shadow: 0 0 0 1px #337ab7;
 }
 
