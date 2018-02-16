@@ -3,8 +3,10 @@
         "browser": true,
         "es6": true
     },
-    "extends": ["eslint:recommended",
-        "react-app"
+    "extends": [
+        "eslint:recommended",
+        "react-app",
+        "prettier"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -14,25 +16,14 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "prettier"
     ],
     "rules": {
-        "indent": [
-            "error",
-            2
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "never"
-        ],
-        "jsx-a11y/href-no-hash": "off"
+        "jsx-a11y/href-no-hash": "off",
+        "prettier/prettier": ["error", {
+          "singleQuote": true,
+          "semi": false
+        }]
     }
 }

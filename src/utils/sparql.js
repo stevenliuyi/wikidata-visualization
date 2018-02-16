@@ -82,11 +82,14 @@ export const keywords = [
 ]
 
 export const snippets = {
-  'Label service': 'SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }',
+  'Label service':
+    'SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }',
 
   'Disable optimizer': 'hint:Query hint:optimizer "None"',
 
-  'Gas service SSSP': 'SERVICE gas:service { gas:program gas:gasClass "com.bigdata.rdf.graph.analytics.SSSP" ;\n                      gas:in ?in ;\n                      gas:out ?out ;\n                      gas:out1 ?depth ;\n                      gas:out2 ?predecessor ;\n                      gas:maxIterations 10 ;\n                      gas:traversalDirection "Forward" ;\n                      gas:linkType ?linkType .\n}',
+  'Gas service SSSP':
+    'SERVICE gas:service { gas:program gas:gasClass "com.bigdata.rdf.graph.analytics.SSSP" ;\n                      gas:in ?in ;\n                      gas:out ?out ;\n                      gas:out1 ?depth ;\n                      gas:out2 ?predecessor ;\n                      gas:maxIterations 10 ;\n                      gas:traversalDirection "Forward" ;\n                      gas:linkType ?linkType .\n}',
 
-  'Gas service BFS': 'SERVICE gas:service { gas:program gas:gasClass "com.bigdata.rdf.graph.analytics.BFS" ;\n                      gas:in ?in ;\n                      gas:target ?target ;\n                      gas:out ?out ;\n                      gas:out1 ?depth ;\n                      gas:out2 ?predecessor ;\n                      gas:maxIterations 10 ;\n                      gas:traversalDirection "Undirected" ;\n                      gas:linkType ?linkType .\n}',
+  'Gas service BFS':
+    'SERVICE gas:service { gas:program gas:gasClass "com.bigdata.rdf.graph.analytics.BFS" ;\n                      gas:in ?in ;\n                      gas:target ?target ;\n                      gas:out ?out ;\n                      gas:out1 ?depth ;\n                      gas:out2 ?predecessor ;\n                      gas:maxIterations 10 ;\n                      gas:traversalDirection "Undirected" ;\n                      gas:linkType ?linkType .\n}'
 }

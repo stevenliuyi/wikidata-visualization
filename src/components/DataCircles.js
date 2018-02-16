@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-const renderCircles = (props) => {
+const renderCircles = props => {
   return (item, index) => {
     if (item[props.xLabel] == null || item[props.yLabel] == null) return null
     const circleProps = {
@@ -21,10 +21,9 @@ class DataCircles extends Component {
   render() {
     return (
       <g>
-        {
-          this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
-            .map(renderCircles(this.props))
-        }
+        {this.props.data
+          .filter((item, i) => this.props.rowSelections.includes(i))
+          .map(renderCircles(this.props))}
       </g>
     )
   }

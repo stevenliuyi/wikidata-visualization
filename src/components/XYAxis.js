@@ -5,7 +5,7 @@ import Gridlines from './Gridlines'
 class XYAxis extends Component {
   render() {
     const xSettings = {
-      translate: `translate(0, ${this.props.height-this.props.padding})`,
+      translate: `translate(0, ${this.props.height - this.props.padding})`,
       scale: this.props.xScale,
       orient: 'bottom'
     }
@@ -19,12 +19,12 @@ class XYAxis extends Component {
     return (
       <g>
         <g>
-          { this.props.axisSettings.xgridlines &&
+          {this.props.axisSettings.xgridlines && (
             <Gridlines {...xSettings} {...this.props} />
-          }
-          { this.props.axisSettings.ygridlines &&
+          )}
+          {this.props.axisSettings.ygridlines && (
             <Gridlines {...ySettings} {...this.props} />
-          }
+          )}
         </g>
         <g className="xy-axis">
           <Axis {...xSettings} {...this.props} />

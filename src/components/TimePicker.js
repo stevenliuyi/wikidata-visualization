@@ -24,7 +24,6 @@ const dateFormats = [
 ]
 
 class TimePicker extends Component {
-  
   render() {
     return (
       <DatePicker

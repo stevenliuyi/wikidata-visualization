@@ -12,7 +12,13 @@ import Examples from './Examples'
 import TopNavBar from './TopNavBar'
 import * as WikidataAPI from '../utils/api'
 import { convertData } from '../utils/convertData'
-import { getChartNames, getSettings, moreSettings, canvasSettings, axisSettings } from '../utils/settings'
+import {
+  getChartNames,
+  getSettings,
+  moreSettings,
+  canvasSettings,
+  axisSettings
+} from '../utils/settings'
 import Measure from 'react-measure'
 import ImageGallery from './Gallery'
 import Promise from 'bluebird'
@@ -51,21 +57,28 @@ class App extends Component {
     })
   }
 
-  handleChartSelect = (selected) => {
-    if (selected === 0) { // show editor/setting panels
+  handleChartSelect = selected => {
+    if (selected === 0) {
+      // show editor/setting panels
       this.toggleSide()
-    } else if (selected === 1) { // chart in the top navbar is selected
+    } else if (selected === 1) {
+      // chart in the top navbar is selected
       if (this.state.chart >= 2) {
         this.setState({ chart: 1.01, chartName: 'Table' })
       }
-    } else if (selected < 2) { // chart
-      const [defaultSettings, settingsInfo] = getSettings(parseFloat(selected),
+    } else if (selected < 2) {
+      // chart
+      const [defaultSettings, settingsInfo] = getSettings(
+        parseFloat(selected),
         this.state.header,
         this.state.data,
-        this.state.dataTypes)
-      this.setState({ chart: parseFloat(selected),
+        this.state.dataTypes
+      )
+      this.setState({
+        chart: parseFloat(selected),
         settings: defaultSettings,
-        settingsInfo: settingsInfo })
+        settingsInfo: settingsInfo
+      })
       this.setState({ chartName: this.state.chartNames[selected] })
     } else {
       this.setState({ chart: parseFloat(selected) })
@@ -74,7 +87,7 @@ class App extends Component {
 
   changeEditorSize = () => {
     if (!this.state.editorFullScreen) {
-      this.setState({ editorFullScreen: true, exampleIndex: -1 }) 
+      this.setState({ editorFullScreen: true, exampleIndex: -1 })
     } else {
       this.setState({ editorFullScreen: false, exampleIndex: -1 })
     }
@@ -88,11 +101,11 @@ class App extends Component {
     }
   }
 
-  handleExampleSelect = (index) => {
+  handleExampleSelect = index => {
     this.setState({ exampleIndex: index })
   }
 
-  handleMoreSettingsChange = (new_setting) => {
+  handleMoreSettingsChange = new_setting => {
     this.setState(prevState => ({
       moreSettings: {
         ...prevState.moreSettings,
@@ -101,7 +114,7 @@ class App extends Component {
     }))
   }
 
-  handleCanvasSettingsChange = (new_setting) => {
+  handleCanvasSettingsChange = new_setting => {
     this.setState(prevState => ({
       canvasSettings: {
         ...prevState.canvasSettings,
@@ -110,7 +123,7 @@ class App extends Component {
     }))
   }
 
-  handleAxisSettingsChange = (new_setting) => {
+  handleAxisSettingsChange = new_setting => {
     this.setState(prevState => ({
       axisSettings: {
         ...prevState.axisSettings,
@@ -119,14 +132,14 @@ class App extends Component {
     }))
   }
 
-  updateRowSelections = (selection) => {
+  updateRowSelections = selection => {
     this.setState({ rowSelections: selection.sort() })
   }
 
-  updateFitBoundsFcn = (fcn) => {
-    if (fcn !== this.state.fitBounds) this.setState({ fitBounds: fcn }) 
+  updateFitBoundsFcn = fcn => {
+    if (fcn !== this.state.fitBounds) this.setState({ fitBounds: fcn })
   }
-  getSPARQLResult = (code) => {
+  getSPARQLResult = code => {
     this.setState({
       status: 'waiting',
       exampleIndex: -1
@@ -138,10 +151,7 @@ class App extends Component {
     })
     this.setState({ timingPromise })
 
-    Promise.race([
-      WikidataAPI.fetchSPARQLResult(query),
-      timingPromise
-    ])
+    Promise.race([WikidataAPI.fetchSPARQLResult(query), timingPromise])
       .then(data => {
         if (data === null) {
           this.setState({ status: 'error' })
@@ -156,14 +166,20 @@ class App extends Component {
         }
 
         const header = data.head.vars
-        const [new_data, data_types] = convertData(header, data.results.bindings)
-        const new_chart = (this.state.chart < 2) ? this.state.chart : 1.01
-        const [defaultSettings, settingsInfo] = getSettings(new_chart,
+        const [new_data, data_types] = convertData(
+          header,
+          data.results.bindings
+        )
+        const new_chart = this.state.chart < 2 ? this.state.chart : 1.01
+        const [defaultSettings, settingsInfo] = getSettings(
+          new_chart,
           header,
           new_data,
-          data_types)
+          data_types
+        )
 
-        this.setState({ data: new_data,
+        this.setState({
+          data: new_data,
           header: header,
           dataTypes: data_types,
           status: 'done',
@@ -186,24 +202,29 @@ class App extends Component {
       })
   }
 
-  setSettings = (settings) => {
+  setSettings = settings => {
     this.setState({ settings })
   }
 
   render() {
     return (
-      <div className='site'>
-        <div className='site-content'>
+      <div className="site">
+        <div className="site-content">
           <TopNavBar handleChartSelect={this.handleChartSelect} />
           <Grid>
             <Row>
-              <Col sm={(this.state.editorFullScreen ? 12 : 4)} className={(!this.state.showSide) ? 'hide-side' : ''}>
-                <Row className='padding-5'>
+              <Col
+                sm={this.state.editorFullScreen ? 12 : 4}
+                className={!this.state.showSide ? 'hide-side' : ''}
+              >
+                <Row className="padding-5">
                   <Measure
                     bounds
-                    onResize={(contentRect) => this.setState({ editorWidth: contentRect.bounds.width })}
+                    onResize={contentRect =>
+                      this.setState({ editorWidth: contentRect.bounds.width })
+                    }
                   >
-                    {({ measureRef}) =>
+                    {({ measureRef }) => (
                       <div ref={measureRef}>
                         <Query
                           onSubmit={this.getSPARQLResult}
@@ -218,85 +239,89 @@ class App extends Component {
                           chartId={this.state.chart}
                         />
                       </div>
-                    }
+                    )}
                   </Measure>
                 </Row>
-                { !this.state.editorFullScreen && 
-                <Row className='padding-5'>
-                  <Settings
-                    header={this.state.header}
-                    settings={this.state.settings}
-                    info={this.state.settingsInfo}
-                    moreSettings={this.state.moreSettings}
-                    canvasSettings={this.state.canvasSettings}
-                    axisSettings={this.state.axisSettings}
-                    chart={this.state.chart}
-                    onChange={this.setSettings}
-                    onMoreSettingsChange={this.handleMoreSettingsChange}
-                    onCanvasSettingsChange={this.handleCanvasSettingsChange}
-                    onAxisSettingsChange={this.handleAxisSettingsChange}
-                  />
-                </Row>
-                }
+                {!this.state.editorFullScreen && (
+                  <Row className="padding-5">
+                    <Settings
+                      header={this.state.header}
+                      settings={this.state.settings}
+                      info={this.state.settingsInfo}
+                      moreSettings={this.state.moreSettings}
+                      canvasSettings={this.state.canvasSettings}
+                      axisSettings={this.state.axisSettings}
+                      chart={this.state.chart}
+                      onChange={this.setSettings}
+                      onMoreSettingsChange={this.handleMoreSettingsChange}
+                      onCanvasSettingsChange={this.handleCanvasSettingsChange}
+                      onAxisSettingsChange={this.handleAxisSettingsChange}
+                    />
+                  </Row>
+                )}
               </Col>
-              { !this.state.editorFullScreen &&
-              <Col sm={this.state.showSide ? 8 : 12}>
-                { this.state.chart < 2 &&
-                  <Navs
-                    currentChartId={this.state.chart}
-                    handleChartSelect={this.handleChartSelect}
-                    showSide={this.state.showSide} />
-                }
-                { this.state.chart === 1.01 &&
-                  <DataTable
-                    data={this.state.data}
-                    header={this.state.header}
-                    dataTypes={this.state.dataTypes}
-                    selection={this.state.rowSelections}
-                    updateSelection={this.updateRowSelections}
-                    moreSettings={this.state.moreSettings}
-                  />
-                }
+              {!this.state.editorFullScreen && (
+                <Col sm={this.state.showSide ? 8 : 12}>
+                  {this.state.chart < 2 && (
+                    <Navs
+                      currentChartId={this.state.chart}
+                      handleChartSelect={this.handleChartSelect}
+                      showSide={this.state.showSide}
+                    />
+                  )}
+                  {this.state.chart === 1.01 && (
+                    <DataTable
+                      data={this.state.data}
+                      header={this.state.header}
+                      dataTypes={this.state.dataTypes}
+                      selection={this.state.rowSelections}
+                      updateSelection={this.updateRowSelections}
+                      moreSettings={this.state.moreSettings}
+                    />
+                  )}
 
-                { this.state.chart > 1.01 && this.state.chart < 2 && this.state.chart !== 1.12 &&
-                  <Chart
-                    chartId={this.state.chart}
-                    data={this.state.data}
-                    rowSelections={this.state.rowSelections}
-                    header={this.state.header}
-                    dataTypes={this.state.dataTypes}
-                    settings={this.state.settings}
-                    moreSettings={this.state.moreSettings}
-                    canvasSettings={this.state.canvasSettings}
-                    onCanvasSettingsChange={this.handleCanvasSettingsChange}
-                    axisSettings={this.state.axisSettings}
-                    onAxisSettingsChange={this.handleAxisSettingsChange}
-                    viewer={this.state.viewer}
-                    onViewerChange={(viewer)=>this.setState({ viewer })}
-                    updateFitBoundsFcn={this.updateFitBoundsFcn}
-                    fitBounds={this.state.fitBounds}
-                  />
-                }
-                {
-                  this.state.chart === 1.12 &&
-                  <ImageGallery
-                    data={this.state.data}
-                    dataTypes={this.state.dataTypes}
-                    rowSelections={this.state.rowSelections}
-                    header={this.state.header}
-                    settings={this.state.settings}
-                  />
-                }
+                  {this.state.chart > 1.01 &&
+                    this.state.chart < 2 &&
+                    this.state.chart !== 1.12 && (
+                      <Chart
+                        chartId={this.state.chart}
+                        data={this.state.data}
+                        rowSelections={this.state.rowSelections}
+                        header={this.state.header}
+                        dataTypes={this.state.dataTypes}
+                        settings={this.state.settings}
+                        moreSettings={this.state.moreSettings}
+                        canvasSettings={this.state.canvasSettings}
+                        onCanvasSettingsChange={this.handleCanvasSettingsChange}
+                        axisSettings={this.state.axisSettings}
+                        onAxisSettingsChange={this.handleAxisSettingsChange}
+                        viewer={this.state.viewer}
+                        onViewerChange={viewer => this.setState({ viewer })}
+                        updateFitBoundsFcn={this.updateFitBoundsFcn}
+                        fitBounds={this.state.fitBounds}
+                      />
+                    )}
+                  {this.state.chart === 1.12 && (
+                    <ImageGallery
+                      data={this.state.data}
+                      dataTypes={this.state.dataTypes}
+                      rowSelections={this.state.rowSelections}
+                      header={this.state.header}
+                      settings={this.state.settings}
+                    />
+                  )}
 
-                { this.state.chart === 2 && // examples
-                  <Examples onSelect={this.handleExampleSelect} />
-                }
-              </Col>
-              }
+                  {this.state.chart === 2 && ( // examples
+                    <Examples onSelect={this.handleExampleSelect} />
+                  )}
+                </Col>
+              )}
             </Row>
           </Grid>
         </div>
-        <footer className='footer text-muted'>Steven Liu&nbsp;&nbsp;2018</footer>
+        <footer className="footer text-muted">
+          Steven Liu&nbsp;&nbsp;2018
+        </footer>
       </div>
     )
   }

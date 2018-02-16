@@ -27,7 +27,6 @@ class ImageGallery extends Component {
     this.handleImagesLoaded = this.handleImagesLoaded.bind(this)
 
     this.getSources(this.props)
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,17 +34,20 @@ class ImageGallery extends Component {
   }
 
   getSources(props) {
-
     d3.selectAll('.d3ToolTip').remove()
-    var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
+    var tooltip = d3
+      .select('body')
+      .append('div')
+      .attr('class', 'd3ToolTip')
 
     const imageLabel = props.header[props.settings.image]
-    const imgInfo = props.data.filter((item, i) => props.rowSelections.includes(i))
+    const imgInfo = props.data
+      .filter((item, i) => props.rowSelections.includes(i))
       .filter(item => item[imageLabel] != null)
       .map(item => ({
         src: item[imageLabel],
         caption: item[props.header[props.settings.label]],
-        showCaption: (props.header[props.settings.label] != null),
+        showCaption: props.header[props.settings.label] != null,
         tooltip: tooltip,
         tooltipHTML: getSingleTooltipHTML(item, props.header)
       }))
@@ -56,24 +58,26 @@ class ImageGallery extends Component {
   }
 
   handleImagesLoaded(info) {
-    const imgInfo = (info != null) ? info : this.state.imgInfo
+    const imgInfo = info != null ? info : this.state.imgInfo
     let photos = [],
       lightbox_photos = []
     imgInfo.forEach((img, i) => {
       const imgElement = document.getElementById(`img${i}`)
-      if (imgElement.naturalWidth > 0) photos.push({
-        src: getURL(img.src, '320px'),
-        width: imgElement.naturalWidth,
-        height: imgElement.naturalHeight,
-        caption:img.caption,
-        showcaption: img.showCaption.toString(),
-        tooltip: img.tooltip,
-        tooltiphtml: img.tooltipHTML
-      })
-      if (imgElement.naturalWidth > 0) lightbox_photos.push({
-        src: img.src,
-        caption:img.caption
-      })
+      if (imgElement.naturalWidth > 0)
+        photos.push({
+          src: getURL(img.src, '320px'),
+          width: imgElement.naturalWidth,
+          height: imgElement.naturalHeight,
+          caption: img.caption,
+          showcaption: img.showCaption.toString(),
+          tooltip: img.tooltip,
+          tooltiphtml: img.tooltipHTML
+        })
+      if (imgElement.naturalWidth > 0)
+        lightbox_photos.push({
+          src: img.src,
+          caption: img.caption
+        })
     })
     this.setState({ photos, lightbox_photos })
   }
@@ -81,82 +85,86 @@ class ImageGallery extends Component {
   openLightbox(event, obj) {
     this.setState({
       currentImage: obj.index,
-      lightboxIsOpen: true,
+      lightboxIsOpen: true
     })
   }
 
   closeLightbox() {
     this.setState({
       currentImage: 0,
-      lightboxIsOpen: false,
+      lightboxIsOpen: false
     })
   }
 
   gotoPrevious() {
     this.setState({
-      currentImage: this.state.currentImage - 1,
+      currentImage: this.state.currentImage - 1
     })
   }
 
   gotoNext() {
     this.setState({
-      currentImage: this.state.currentImage + 1,
+      currentImage: this.state.currentImage + 1
     })
   }
 
   render() {
-
     if (this.props.data.length === 0) {
-      return <Info info='no-data' />
+      return <Info info="no-data" />
     } else if (this.props.rowSelections.length === 0) {
-      return <Info info='no-selection' />
+      return <Info info="no-selection" />
     }
 
-    if (!this.props.dataTypes.includes('image')) return <Info info='no-image' />
-   
+    if (!this.props.dataTypes.includes('image')) return <Info info="no-image" />
+
     return (
       <div>
-        <OnImagesLoaded
-          onLoaded={this.handleImagesLoaded}
-        >
-          {
-            this.state.imgInfo.map((img, i) => (
-              <img id={`img${i}`} key={`img${i}`} src={getURL(img.src,'10px')} alt='' style={{display: 'none'}} />
-            ))
-          }      
+        <OnImagesLoaded onLoaded={this.handleImagesLoaded}>
+          {this.state.imgInfo.map((img, i) => (
+            <img
+              id={`img${i}`}
+              key={`img${i}`}
+              src={getURL(img.src, '10px')}
+              alt=""
+              style={{ display: 'none' }}
+            />
+          ))}
         </OnImagesLoaded>
         <Measure
           bounds
-          onResize={(contentRect) => this.setState({ width: contentRect.bounds.width })}>
-          { // change number of columns dynamically
-            ({ measureRef }) => {
-              if (this.state.width < 1) {
-                return <div ref={measureRef}></div>
-              }
-              let columns = 1
-              if (this.state.width >= 384) {
-                columns = 2
-              }
-              if (this.state.width >= 512) {
-                columns = 3
-              }
-              if (this.state.width >= 768) {
-                columns = 4
-              }
-              return (
-                <div ref={measureRef}>
-                  <Gallery
-                    photos={this.state.photos}
-                    columns={columns}
-                    onClick={this.openLightbox}
-                    ImageComponent={Image}
-                  />
-                </div>
-              )
-            }
+          onResize={contentRect =>
+            this.setState({ width: contentRect.bounds.width })
           }
+        >
+          {// change number of columns dynamically
+          ({ measureRef }) => {
+            if (this.state.width < 1) {
+              return <div ref={measureRef} />
+            }
+            let columns = 1
+            if (this.state.width >= 384) {
+              columns = 2
+            }
+            if (this.state.width >= 512) {
+              columns = 3
+            }
+            if (this.state.width >= 768) {
+              columns = 4
+            }
+            return (
+              <div ref={measureRef}>
+                <Gallery
+                  photos={this.state.photos}
+                  columns={columns}
+                  onClick={this.openLightbox}
+                  ImageComponent={Image}
+                />
+              </div>
+            )
+          }}
         </Measure>
-        <Lightbox images={this.state.lightbox_photos}
+        <Lightbox
+          images={this.state.lightbox_photos}
           onClose={this.closeLightbox}
           onClickPrev={this.gotoPrevious}
           onClickNext={this.gotoNext}

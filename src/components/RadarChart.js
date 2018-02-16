@@ -8,10 +8,9 @@ import Info from './Info'
 import { getFormat } from '../utils/format'
 
 class RadarChart extends Component {
-
   render() {
-
-    if (!this.props.dataTypes.includes('number')) return <Info info='no-number' />
+    if (!this.props.dataTypes.includes('number'))
+      return <Info info="no-number" />
 
     const [data, maxVal, colors, colorScale] = getGroupValues(this.props)
 
@@ -21,7 +20,7 @@ class RadarChart extends Component {
     drawLegend(d3.select('#chart').select('svg'), colorScale, this.props)
 
     return (
-      <div id='chart'>
+      <div id="chart">
         <SVGPanZoom {...this.props}>
           <Radar
             width={this.props.width}
@@ -31,7 +30,10 @@ class RadarChart extends Component {
             data={data}
             colors={colors}
             numRings={this.props.axisSettings.ticks}
-            format={getFormat(this.props.axisSettings.format, this.props.axisSettings.precision)}
+            format={getFormat(
+              this.props.axisSettings.format,
+              this.props.axisSettings.precision
+            )}
             fontSize={this.props.moreSettings.fontSize}
           />
         </SVGPanZoom>

@@ -15,15 +15,18 @@ const captionStyle = {
 
 class Image extends Component {
   render() {
-
     const { index, onClick, photo, margin } = this.props
 
     return (
-      <div style={{ margin, width: photo.width, ...imgStyle }} className='galleryImage'>
-        <img {...photo}
-          alt=''
-          onClick={(e) => onClick(e, { index, photo })}
-          onMouseMove={(e) => {
+      <div
+        style={{ margin, width: photo.width, ...imgStyle }}
+        className="galleryImage"
+      >
+        <img
+          {...photo}
+          alt=""
+          onClick={e => onClick(e, { index, photo })}
+          onMouseMove={e => {
             photo.tooltip
               .style('left', e.pageX + 10 + 'px')
               .style('top', e.pageY + 10 + 'px')
@@ -34,11 +37,11 @@ class Image extends Component {
             photo.tooltip.style('display', 'none')
           }}
         />
-        { photo.showcaption === 'true' &&
+        {photo.showcaption === 'true' && (
           <span style={{ maxWidth: photo.width, ...captionStyle }}>
-            { (photo.caption != null) ? photo.caption : '　' }
+            {photo.caption != null ? photo.caption : '　'}
           </span>
-        }
+        )}
       </div>
     )
   }

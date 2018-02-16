@@ -13,7 +13,6 @@ import moment from 'moment'
 const CheckboxTable = checkboxHOC(ReactTable)
 
 class DataTable extends Component {
-
   state = {
     selectAll: true,
     table: CheckboxTable,
@@ -26,23 +25,30 @@ class DataTable extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.moreSettings.numericRangeFilter !== this.state.numericRangeFilter) {
-      this.setState({ numericRangeFilter: nextProps.moreSettings.numericRangeFilter })
+    if (
+      nextProps.moreSettings.numericRangeFilter !==
+      this.state.numericRangeFilter
+    ) {
+      this.setState({
+        numericRangeFilter: nextProps.moreSettings.numericRangeFilter
+      })
       // reset filter values
       this.setState({ filtered: [] })
     }
     if (nextProps.moreSettings.timeRangeFilter !== this.state.timeRangeFilter) {
-      this.setState({ timeRangeFilter: nextProps.moreSettings.timeRangeFilter })
+      this.setState({
+        timeRangeFilter: nextProps.moreSettings.timeRangeFilter
+      })
       // reset filter values
       this.setState({ filtered: [] })
     }
-  }  
+  }
 
   toggleTable = () => {
     if (this.state.isCheckboxTable) {
-      this.setState({table: ReactTable, isCheckboxTable: false})
-    } else  {
-      this.setState({table: CheckboxTable, isCheckboxTable: true})
+      this.setState({ table: ReactTable, isCheckboxTable: false })
+    } else {
+      this.setState({ table: CheckboxTable, isCheckboxTable: true })
     }
   }
 
@@ -52,25 +58,57 @@ class DataTable extends Component {
     if (dataType === 'item') {
       return (
         <div>
-          <a target='_blank' href={`https://www.wikidata.org/wiki/${row.value}`}>{row.value}</a>
-          { (this.props.moreSettings.reasonator) && (
-            <span className='sm-badge pull-right'>{' '}
-              <OverlayTrigger placement='bottom' overlay={
-                <Tooltip id='tooltip-reasonator'>View with Reasonator</Tooltip>
-              }>
-                <Label><a target='_blank' href={`https://tools.wmflabs.org/reasonator/test/?q=${row.value}`}>R</a></Label>
+          <a
+            target="_blank"
+            href={`https://www.wikidata.org/wiki/${row.value}`}
+          >
+            {row.value}
+          </a>
+          {this.props.moreSettings.reasonator && (
+            <span className="sm-badge pull-right">
+              {' '}
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id="tooltip-reasonator">
+                    View with Reasonator
+                  </Tooltip>
+                }
+              >
+                <Label>
+                  <a
+                    target="_blank"
+                    href={`https://tools.wmflabs.org/reasonator/test/?q=${
+                      row.value
+                    }`}
+                  >
+                    R
+                  </a>
+                </Label>
               </OverlayTrigger>{' '}
-              <OverlayTrigger placement='bottom' overlay={
-                <Tooltip id='tooltip-sqid'>View with SQID</Tooltip>
-              }>
-                <Label><a target='_blank' href={`https://tools.wmflabs.org/sqid#view?id=${row.value}`}>S</a></Label>
+              <OverlayTrigger
+                placement="bottom"
+                overlay={<Tooltip id="tooltip-sqid">View with SQID</Tooltip>}
+              >
+                <Label>
+                  <a
+                    target="_blank"
+                    href={`https://tools.wmflabs.org/sqid#view?id=${row.value}`}
+                  >
+                    S
+                  </a>
+                </Label>
               </OverlayTrigger>
             </span>
-          )
-          }
-        </div>)
+          )}
+        </div>
+      )
     } else if (dataType === 'image' && row.value != null) {
-      return (<a target='_blank' href={row.value}><img src={getURL(row.value, '50px')} width={48} alt='' /></a>)
+      return (
+        <a target="_blank" href={row.value}>
+          <img src={getURL(row.value, '50px')} width={48} alt="" />
+        </a>
+      )
     } else {
       return row.value
     }
@@ -81,9 +119,12 @@ class DataTable extends Component {
     // seperate coordinates into two columns
     const tidified = this.props.data.map((item, i) => {
       item['_id'] = i // add id for Select Table
-      coordIndices.filter(index => item[this.props.header[index]] != null)
+      coordIndices
+        .filter(index => item[this.props.header[index]] != null)
         .forEach(index => {
-          const [coordX, coordY] = item[this.props.header[index]].split(', ').map(parseFloat)
+          const [coordX, coordY] = item[this.props.header[index]]
+            .split(', ')
+            .map(parseFloat)
           item[`${this.props.header[index]} (Lon)`] = coordX
           item[`${this.props.header[index]} (Lat)`] = coordY
         })
@@ -91,9 +132,10 @@ class DataTable extends Component {
     })
     // get new header
     let header = this.props.header.map((col, i) => {
-      if (coordIndices.indexOf(i) < 0) { 
+      if (coordIndices.indexOf(i) < 0) {
         return col
-      } else { // coordinate type
+      } else {
+        // coordinate type
         return [`${col} (Lon)`, `${col} (Lat)`]
       }
     })
@@ -103,7 +145,7 @@ class DataTable extends Component {
   }
 
   // reference for Select Table: https://react-table.js.org/#/story/select-table-hoc
-  isSelected = (key) => {
+  isSelected = key => {
     return this.props.selection.includes(key)
   }
 
@@ -114,9 +156,7 @@ class DataTable extends Component {
       Other implementations could use object keys, a Javascript Set, or Redux... etc.
     */
     // start off with the existing state
-    let selection = [
-      ...this.props.selection
-    ]
+    let selection = [...this.props.selection]
     const keyIndex = selection.indexOf(key)
     // check to see if the key exists
     if (keyIndex >= 0) {
@@ -160,7 +200,7 @@ class DataTable extends Component {
     // the 'sortedData' property contains the currently accessible records based on the filter and sort
     const currentRecords = wrappedInstance.getResolvedState().sortedData
     // we just push all the IDs onto the selection array
-    currentRecords.forEach((item) => {
+    currentRecords.forEach(item => {
       currentSelection.push(item._original._id)
     })
 
@@ -168,12 +208,14 @@ class DataTable extends Component {
     if (selectAll) {
       newSelection = [...new Set(this.props.selection.concat(currentSelection))]
     } else {
-      newSelection = this.props.selection.filter(key => currentSelection.indexOf(key) < 0)
+      newSelection = this.props.selection.filter(
+        key => currentSelection.indexOf(key) < 0
+      )
     }
     this.setState({ selectAll })
     this.props.updateSelection(newSelection)
   }
-  
+
   defaultFilterMethod = (filter, row) => {
     const id = filter.pivotId || filter.id
     let value = this.props.moreSettings.ignoreCase
@@ -193,10 +235,9 @@ class DataTable extends Component {
         ? new RegExp(filter.value, 'i')
         : new RegExp(filter.value)
 
-      const value = (row[id] != null) ? String(row[id]) : ''
-      return (value.match(re) != null)
-    }
-    catch(e) {
+      const value = row[id] != null ? String(row[id]) : ''
+      return value.match(re) != null
+    } catch (e) {
       // invaild RegExp encountered, use default method instead
       return this.defaultFilterMethod(filter, row)
     }
@@ -206,7 +247,7 @@ class DataTable extends Component {
     const id = filter.pivotId || filter.id
     const [fromValue, toValue] = filter.value.split('to').map(parseFloat)
 
-    return (parseFloat(row[id]) >= fromValue) && (parseFloat(row[id]) <= toValue)
+    return parseFloat(row[id]) >= fromValue && parseFloat(row[id]) <= toValue
   }
 
   timeRangeFilterMethod = (filter, row) => {
@@ -214,7 +255,10 @@ class DataTable extends Component {
     const [startTime, endTime] = filter.value.split('to')
 
     if (startTime !== 'NULL' && endTime !== 'NULL') {
-      return moment(startTime).isBefore(moment(row[id])) && moment(endTime).isAfter(moment(row[id]))
+      return (
+        moment(startTime).isBefore(moment(row[id])) &&
+        moment(endTime).isAfter(moment(row[id]))
+      )
     } else if (startTime !== 'NULL') {
       return moment(startTime).isBefore(moment(row[id]))
     } else if (endTime !== 'NULL') {
@@ -224,13 +268,13 @@ class DataTable extends Component {
     }
   }
 
-  getRangeString = (value, colIndex, from=true) => {
-    let fromValue = (from)
+  getRangeString = (value, colIndex, from = true) => {
+    let fromValue = from
       ? parseFloat(value)
       : parseFloat(document.getElementById(`col${colIndex}-from`).value)
     if (isNaN(fromValue)) fromValue = -Infinity
 
-    let toValue = (from)
+    let toValue = from
       ? parseFloat(document.getElementById(`col${colIndex}-to`).value)
       : parseFloat(value)
     if (isNaN(toValue)) toValue = Infinity
@@ -238,27 +282,27 @@ class DataTable extends Component {
     return `${fromValue}to${toValue}`
   }
 
-  handleTimeRangeChange = (date, colIndex, onChange, from=true) => {
+  handleTimeRangeChange = (date, colIndex, onChange, from = true) => {
     const startTime = this.state.starttimes[colIndex]
     const endTime = this.state.endtimes[colIndex]
-    const fromValue = (from)
-      ? ((date != null) ? date.toISOString() : 'NULL')
-      : ((startTime != null) ? startTime.toISOString() : 'NULL')
-    const toValue = (from)
-      ? ((endTime != null) ? endTime.toISOString() : 'NULL')
-      : ((date != null) ? date.toISOString() : 'NULL')
+    const fromValue = from
+      ? date != null ? date.toISOString() : 'NULL'
+      : startTime != null ? startTime.toISOString() : 'NULL'
+    const toValue = from
+      ? endTime != null ? endTime.toISOString() : 'NULL'
+      : date != null ? date.toISOString() : 'NULL'
 
     if (from) {
       this.setState(prevState => {
         let starttimes = prevState.starttimes
-        starttimes[colIndex] = date  
-        return { starttimes }  
+        starttimes[colIndex] = date
+        return { starttimes }
       })
     } else {
       this.setState(prevState => {
         let endtimes = prevState.endtimes
-        endtimes[colIndex] = date  
-        return { endtimes }  
+        endtimes[colIndex] = date
+        return { endtimes }
       })
     }
 
@@ -266,7 +310,7 @@ class DataTable extends Component {
     onChange(rangeString)
   }
 
-  getFilterMethod = (col) => {
+  getFilterMethod = col => {
     const colIndex = this.props.header.indexOf(col)
     const dataType = this.props.dataTypes[colIndex]
     if (dataType === 'number' && this.props.moreSettings.numericRangeFilter) {
@@ -278,27 +322,37 @@ class DataTable extends Component {
     }
   }
 
-  filterComponent = (col) => {
+  filterComponent = col => {
     const colIndex = this.props.header.indexOf(col)
     const dataType = this.props.dataTypes[colIndex]
     if (dataType === 'number' && this.props.moreSettings.numericRangeFilter) {
       let component = ({ filter, onChange }) => (
         <Row>
-          <Col sm={5} className='no-padding-right'>
+          <Col sm={5} className="no-padding-right">
             <input
               id={`col${colIndex}-from`}
-              type='text'
-              onChange={event=>onChange(this.getRangeString(event.target.value, colIndex, true))}
-              style={{width: '100%'}}
+              type="text"
+              onChange={event =>
+                onChange(
+                  this.getRangeString(event.target.value, colIndex, true)
+                )
+              }
+              style={{ width: '100%' }}
             />
           </Col>
-          <Col sm={2} className='no-padding'><MdArrowForward /></Col>
-          <Col sm={5} className='no-padding-left'>
+          <Col sm={2} className="no-padding">
+            <MdArrowForward />
+          </Col>
+          <Col sm={5} className="no-padding-left">
             <input
               id={`col${colIndex}-to`}
-              type='text'
-              onChange={event=>onChange(this.getRangeString(event.target.value, colIndex, false))}
-              style={{width: '100%'}}
+              type="text"
+              onChange={event =>
+                onChange(
+                  this.getRangeString(event.target.value, colIndex, false)
+                )
+              }
+              style={{ width: '100%' }}
             />
           </Col>
         </Row>
@@ -307,21 +361,27 @@ class DataTable extends Component {
     } else if (dataType === 'time' && this.props.moreSettings.timeRangeFilter) {
       let component = ({ filter, onChange }) => (
         <Row>
-          <Col sm={5} className='no-padding-right'>
+          <Col sm={5} className="no-padding-right">
             <TimePicker
               selected={this.state.starttimes[colIndex]}
-              onChange={date => this.handleTimeRangeChange(date, colIndex, onChange, true)}
+              onChange={date =>
+                this.handleTimeRangeChange(date, colIndex, onChange, true)
+              }
             />
           </Col>
-          <Col sm={2} className='no-padding'><MdArrowForward /></Col>
-          <Col sm={5} className='no-padding-left'>
+          <Col sm={2} className="no-padding">
+            <MdArrowForward />
+          </Col>
+          <Col sm={5} className="no-padding-left">
             <TimePicker
               selected={this.state.endtimes[colIndex]}
-              onChange={date => this.handleTimeRangeChange(date, colIndex, onChange, false)}
+              onChange={date =>
+                this.handleTimeRangeChange(date, colIndex, onChange, false)
+              }
             />
           </Col>
         </Row>
-      ) 
+      )
       return component
     } else {
       return undefined // default filter component
@@ -336,7 +396,7 @@ class DataTable extends Component {
     return 0
   }
 
-  getSortMethod = (col) => {
+  getSortMethod = col => {
     const colIndex = this.props.header.indexOf(col)
     const dataType = this.props.dataTypes[colIndex]
     if (dataType !== 'item') {
@@ -358,41 +418,44 @@ class DataTable extends Component {
     }
 
     return (
-      <div id='data-table'>
-        { Array.isArray(this.props.data) && this.props.data.length >= 1 &&
-          <this.state.table
-            ref={(r)=>this.checkboxTable=r}
-            data={data}
-            filterable
-            filtered={this.state.filtered}
-            columns={ header.map( col => {
-              return {
-                Header: col,
-                accessor: col,
-                Cell: row => this.convertDataToCell(row, col),
-                filterMethod: this.getFilterMethod(col),
-                Filter: this.filterComponent(col),
-                sortMethod: this.getSortMethod(col)
+      <div id="data-table">
+        {Array.isArray(this.props.data) &&
+          this.props.data.length >= 1 && (
+            <this.state.table
+              ref={r => (this.checkboxTable = r)}
+              data={data}
+              filterable
+              filtered={this.state.filtered}
+              columns={header.map(col => {
+                return {
+                  Header: col,
+                  accessor: col,
+                  Cell: row => this.convertDataToCell(row, col),
+                  filterMethod: this.getFilterMethod(col),
+                  Filter: this.filterComponent(col),
+                  sortMethod: this.getSortMethod(col)
+                }
+              })}
+              defaultPageSize={10}
+              defaultFilterMethod={
+                this.props.moreSettings.regex
+                  ? this.regexFilterMethod
+                  : this.defaultFilterMethod
               }
-            })}
-            defaultPageSize={10}
-            defaultFilterMethod={this.props.moreSettings.regex
-              ? this.regexFilterMethod
-              : this.defaultFilterMethod}
-            className='-striped -highlight'
-            pageSizeOptions={[10, 20, 50, 100, 200, 500, 1000]}
-            onFilteredChange={filtered => this.setState({ filtered })}
-            getTheadFilterThProps={()=>{ // fix date picker display issue
-              return {
-                style: { overflow: 'inherit' }
-              }
-            }}
-            {...checkboxProps}
-          />
-        }
-        { Array.isArray(this.props.data) && this.props.data.length === 0 &&
-          <Info info='no-data' />
-        }
+              className="-striped -highlight"
+              pageSizeOptions={[10, 20, 50, 100, 200, 500, 1000]}
+              onFilteredChange={filtered => this.setState({ filtered })}
+              getTheadFilterThProps={() => {
+                // fix date picker display issue
+                return {
+                  style: { overflow: 'inherit' }
+                }
+              }}
+              {...checkboxProps}
+            />
+          )}
+        {Array.isArray(this.props.data) &&
+          this.props.data.length === 0 && <Info info="no-data" />}
       </div>
     )
   }

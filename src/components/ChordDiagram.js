@@ -7,10 +7,12 @@ import { drawLegend } from '../utils/draw'
 import Info from './Info'
 
 // chord diagram d3 reference: https://bl.ocks.org/mbostock/4062006
-const updateD3Node = (props) => {
-
+const updateD3Node = props => {
   d3.selectAll('.d3ToolTip').remove()
-  var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
+  var tooltip = d3
+    .select('body')
+    .append('div')
+    .attr('class', 'd3ToolTip')
 
   var [matrix, colorScale, colors, labels, tooltipHTMLs] = getMatrix(props)
 
@@ -18,7 +20,8 @@ const updateD3Node = (props) => {
 
   svg = svg.select('g')
   svg.selectAll('*').remove()
-  svg = svg.append('g')
+  svg = svg
+    .append('g')
     .attr('width', props.width)
     .attr('height', props.height)
 
@@ -27,43 +30,58 @@ const updateD3Node = (props) => {
 
   // make sure the radius is positive
   if (innerRadius <= 0) return null
-  
-  var chord = d3.chord()
+
+  var chord = d3
+    .chord()
     .padAngle(0.05)
     .sortSubgroups(d3.descending)
-  
-  var arc = d3.arc()
+
+  var arc = d3
+    .arc()
     .innerRadius(innerRadius)
     .outerRadius(outerRadius)
-  
-  var ribbon = d3.ribbon()
-    .radius(innerRadius)
-  
-  var g = svg.append('g')
-    .attr('transform', 'translate(' + props.width / 2 + ',' + props.height / 2 + ')')
+
+  var ribbon = d3.ribbon().radius(innerRadius)
+
+  var g = svg
+    .append('g')
+    .attr(
+      'transform',
+      'translate(' + props.width / 2 + ',' + props.height / 2 + ')'
+    )
     .datum(chord(matrix))
-  
-  var group = g.append('g')
+
+  var group = g
+    .append('g')
     .attr('class', 'groups')
     .selectAll('g')
-    .data(function(chords) { return chords.groups })
-    .enter().append('g')
+    .data(function(chords) {
+      return chords.groups
+    })
+    .enter()
+    .append('g')
     .on('mouseover', function(d) {
-      d3.select('#arc'+d.index)
+      d3
+        .select('#arc' + d.index)
         .attr('fill', chroma(colors[d.index]).brighten(0.6))
-      d3.select('#text'+d.index)
-        .attr('font-weight', 'bold')
+      d3.select('#text' + d.index).attr('font-weight', 'bold')
     })
     .on('mouseout', function(d) {
-      d3.select('#arc'+d.index).attr('fill', colors[d.index])
-      d3.select('#text'+d.index)
-        .attr('font-weight', 'normal')
+      d3.select('#arc' + d.index).attr('fill', colors[d.index])
+      d3.select('#text' + d.index).attr('font-weight', 'normal')
     })
 
-  group.append('path')
-    .attr('id', function(d) { return 'arc' + d.index })
-    .attr('fill', function(d) { return colors[d.index] })
-    .style('stroke', function(d) { return d3.rgb(colors[d.index]).darker() })
+  group
+    .append('path')
+    .attr('id', function(d) {
+      return 'arc' + d.index
+    })
+    .attr('fill', function(d) {
+      return colors[d.index]
+    })
+    .style('stroke', function(d) {
+      return d3.rgb(colors[d.index]).darker()
+    })
     .attr('d', arc)
     .on('mousemove', function(d) {
       tooltip
@@ -72,22 +90,36 @@ const updateD3Node = (props) => {
         .style('display', 'inline-block')
         .html(tooltipHTMLs[d.index])
     })
-    .on('mouseout', function(d,i) {
+    .on('mouseout', function(d, i) {
       tooltip.style('display', 'none')
     })
 
-  group.append('g')
+  group
+    .append('g')
     .attr('transform', function(d) {
-      return 'rotate(' + ((d.startAngle+d.endAngle)/2 * 180 / Math.PI - 90) + ') translate(' + outerRadius + ',0)' })
+      return (
+        'rotate(' +
+        ((d.startAngle + d.endAngle) / 2 * 180 / Math.PI - 90) +
+        ') translate(' +
+        outerRadius +
+        ',0)'
+      )
+    })
     .append('text')
-    .attr('id', function(d) { return 'text' + d.index })
+    .attr('id', function(d) {
+      return 'text' + d.index
+    })
     .attr('x', 6)
     .attr('transform', function(d) {
-      return (d.startAngle+d.endAngle)/2 > Math.PI ? 'rotate(180) translate(-12)' : null
+      return (d.startAngle + d.endAngle) / 2 > Math.PI
+        ? 'rotate(180) translate(-12)'
+        : null
     })
-    .text(function(d) { return labels[d.index] })
+    .text(function(d) {
+      return labels[d.index]
+    })
     .style('text-anchor', function(d) {
-      return (d.startAngle+d.endAngle)/2 > Math.PI ? 'end' : null
+      return (d.startAngle + d.endAngle) / 2 > Math.PI ? 'end' : null
     })
     .style('font-family', 'sans-serif')
     .style('font-size', props.moreSettings.fontSize)
@@ -101,54 +133,58 @@ const updateD3Node = (props) => {
     .on('mouseout', function(d) {
       tooltip.style('display', 'none')
     })
-  
-  g.append('g')
+
+  g
+    .append('g')
     .attr('class', 'ribbons')
     .selectAll('path')
-    .data(function(chords) { return chords })
-    .enter().append('path')
+    .data(function(chords) {
+      return chords
+    })
+    .enter()
+    .append('path')
     .attr('d', ribbon)
-    .attr('id', function(d,i) { return 'ribbon' + i })
-    .attr('fill', function(d) { return colors[d.target.index] })
-    .style('stroke', function(d) { return d3.rgb(colors[d.target.index]).darker() })
-    .on('mouseover', function(d,i) {
-      d3.select('#ribbon' + i)
+    .attr('id', function(d, i) {
+      return 'ribbon' + i
+    })
+    .attr('fill', function(d) {
+      return colors[d.target.index]
+    })
+    .style('stroke', function(d) {
+      return d3.rgb(colors[d.target.index]).darker()
+    })
+    .on('mouseover', function(d, i) {
+      d3
+        .select('#ribbon' + i)
         .attr('fill', chroma(colors[d.target.index]).brighten(0.6))
-      d3.select('#arc' + d.target.index)
+      d3
+        .select('#arc' + d.target.index)
         .attr('fill', chroma(colors[d.target.index]).brighten(0.6))
-      d3.select('#text' + d.target.index)
-        .attr('font-weight', 'bold')
-      d3.select('#arc' + d.source.index)
+      d3.select('#text' + d.target.index).attr('font-weight', 'bold')
+      d3
+        .select('#arc' + d.source.index)
         .attr('fill', chroma(colors[d.source.index]).brighten(0.6))
-      d3.select('#text' + d.source.index)
-        .attr('font-weight', 'bold')
+      d3.select('#text' + d.source.index).attr('font-weight', 'bold')
     })
-    .on('mouseout', function(d,i) {
-      d3.select('#ribbon' + i)
-        .attr('fill', colors[d.target.index])
-      d3.select('#arc' + d.target.index)
-        .attr('fill', colors[d.target.index])
-      d3.select('#text' + d.target.index)
-        .attr('font-weight', 'normal')
-      d3.select('#arc' + d.source.index)
-        .attr('fill', colors[d.source.index])
-      d3.select('#text' + d.source.index)
-        .attr('font-weight', 'normal')
+    .on('mouseout', function(d, i) {
+      d3.select('#ribbon' + i).attr('fill', colors[d.target.index])
+      d3.select('#arc' + d.target.index).attr('fill', colors[d.target.index])
+      d3.select('#text' + d.target.index).attr('font-weight', 'normal')
+      d3.select('#arc' + d.source.index).attr('fill', colors[d.source.index])
+      d3.select('#text' + d.source.index).attr('font-weight', 'normal')
     })
-  
-  drawLegend(svg, colorScale, props)
 
-} 
+  drawLegend(svg, colorScale, props)
+}
 
 class ChordDiagram extends Component {
-
   state = {
     mounted: false
   }
 
   componentDidMount() {
     updateD3Node(this.props)
-    this.setState({mounted: true})
+    this.setState({ mounted: true })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -156,13 +192,12 @@ class ChordDiagram extends Component {
   }
 
   render() {
-
-    if (!this.props.dataTypes.includes('item')) return <Info info='no-item' />
+    if (!this.props.dataTypes.includes('item')) return <Info info="no-item" />
 
     return (
-      <div id='chart'>
+      <div id="chart">
         <SVGPanZoom {...this.props}>
-          <svg width={this.props.width} height={this.props.height}></svg>
+          <svg width={this.props.width} height={this.props.height} />
         </SVGPanZoom>
       </div>
     )

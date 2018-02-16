@@ -28,7 +28,7 @@ const y_axis = {
 const y_axis_groups = {
   value: 'y-axis-groups',
   title: 'Values',
-  type: 'number',
+  type: 'number'
 }
 
 const value = {
@@ -148,13 +148,13 @@ const ngroups = {
 const start_time = {
   value: 'start-time',
   title: 'Start time',
-  type: 'time' 
+  type: 'time'
 }
 
 const end_time = {
   value: 'end-time',
   title: 'End time',
-  type: 'time' 
+  type: 'time'
 }
 
 export const moreSettings = {
@@ -244,31 +244,31 @@ export const canvasSettingTitles = {
 }
 
 export const axisSettings = {
- xformat: 'none',
- yformat: 'none',
- format: 'none',
- xprecision: 2,
- yprecision: 2,
- precision: 2,
- xgridlines: true,
- ygridlines: true,
- xticks: 4,
- yticks: 4,
- ticks: 4
+  xformat: 'none',
+  yformat: 'none',
+  format: 'none',
+  xprecision: 2,
+  yprecision: 2,
+  precision: 2,
+  xgridlines: true,
+  ygridlines: true,
+  xticks: 4,
+  yticks: 4,
+  ticks: 4
 }
 
 export const axisSettingTitles = {
- xformat: 'X value format',
- yformat: 'Y value format',
- format: 'Axis value format',
- xprecision: 'X value precision',
- yprecision: 'Y value precision',
- precision: 'Axis value precision',
- xgridlines: 'X grid lines',
- ygridlines: 'Y grid lines',
- xticks: 'X ticks',
- yticks: 'Y ticks',
- ticks: 'Axis ticks'
+  xformat: 'X value format',
+  yformat: 'Y value format',
+  format: 'Axis value format',
+  xprecision: 'X value precision',
+  yprecision: 'Y value precision',
+  precision: 'Axis value precision',
+  xgridlines: 'X grid lines',
+  ygridlines: 'Y grid lines',
+  xticks: 'X ticks',
+  yticks: 'Y ticks',
+  ticks: 'Axis ticks'
 }
 
 // chart classes
@@ -293,10 +293,16 @@ export const chartClasses = [
 
 // information object of all chart types
 export const charts = [
-  { 
+  {
     id: 1.01,
     name: 'Table',
-    moreSettings: ['ignoreCase', 'regex', 'numericRangeFilter', 'timeRangeFilter', 'reasonator']
+    moreSettings: [
+      'ignoreCase',
+      'regex',
+      'numericRangeFilter',
+      'timeRangeFilter',
+      'reasonator'
+    ]
   },
   {
     id: 1.02,
@@ -305,7 +311,16 @@ export const charts = [
     settings: [x_axis, y_axis, label, color, radius],
     defaultShow: [true, true, false, false, false],
     moreSettings: ['fontSize', 'radius', 'color', 'showLegend', 'legendScale'],
-    axisSettings: ['xformat', 'yformat', 'xprecision', 'yprecision', 'xgridlines', 'ygridlines', 'xticks', 'yticks'],
+    axisSettings: [
+      'xformat',
+      'yformat',
+      'xprecision',
+      'yprecision',
+      'xgridlines',
+      'ygridlines',
+      'xticks',
+      'yticks'
+    ],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -328,12 +343,18 @@ export const charts = [
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
-    id: 1.20,
+    id: 1.2,
     name: 'Pie Chart',
     chartClass: 'basic',
     settings: [value, label, color],
     defaultShow: [true, false, false],
-    moreSettings: ['fontSize', 'color', 'innerRadius', 'showLegend', 'legendScale'],
+    moreSettings: [
+      'fontSize',
+      'color',
+      'innerRadius',
+      'showLegend',
+      'legendScale'
+    ],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -347,7 +368,7 @@ export const charts = [
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
-    id: 1.10,
+    id: 1.1,
     name: 'Force-directed Graph',
     chartClass: 'basic',
     settings: [link_from, link_to, label_from, label_to, edge_label, color],
@@ -397,7 +418,14 @@ export const charts = [
     chartClass: 'map',
     settings: [coordinate, color, radius],
     defaultShow: [true, false, false],
-    moreSettings: ['solarSystem', 'baseMap', 'showCircles', 'showMarkers', 'radius', 'color'],
+    moreSettings: [
+      'solarSystem',
+      'baseMap',
+      'showCircles',
+      'showMarkers',
+      'radius',
+      'color'
+    ],
     canvasSettings: ['auto', 'width', 'height']
   },
   {
@@ -406,7 +434,15 @@ export const charts = [
     chartClass: 'map',
     settings: [coordinate, color, radius, label],
     defaultShow: [true, false, false, false],
-    moreSettings: ['map', 'projection', 'fontSize', 'radius', 'color', 'showLegend', 'legendScale'],
+    moreSettings: [
+      'map',
+      'projection',
+      'fontSize',
+      'radius',
+      'color',
+      'showLegend',
+      'legendScale'
+    ],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -440,7 +476,16 @@ export const charts = [
     id: 1.14,
     name: 'Sankey Diagram',
     chartClass: 'more',
-    settings: [link_from, link_to, relation, label_from, label_to, edge_label, color_from, color_to],
+    settings: [
+      link_from,
+      link_to,
+      relation,
+      label_from,
+      label_to,
+      edge_label,
+      color_from,
+      color_to
+    ],
     defaultShow: [true, true, false, false, false, false],
     moreSettings: ['fontSize', 'color', 'nodeWidth', 'nodePadding'],
     canvasSettings: ['auto', 'width', 'height', 'border']
@@ -451,7 +496,14 @@ export const charts = [
     chartClass: 'more',
     settings: [link_from, link_to, color, label_from, label_to],
     defaultShow: [true, true, true, false, false],
-    moreSettings: ['sortRow', 'sortColumn', 'fontSize', 'color', 'showLegend', 'legendScale'],
+    moreSettings: [
+      'sortRow',
+      'sortColumn',
+      'fontSize',
+      'color',
+      'showLegend',
+      'legendScale'
+    ],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -460,7 +512,14 @@ export const charts = [
     chartClass: 'more',
     settings: [start_time, end_time, label, color],
     defaultShow: [true, true, false, false],
-    moreSettings: ['timelineType', 'padding', 'fontSize', 'color', 'showLegend', 'legendScale'],
+    moreSettings: [
+      'timelineType',
+      'padding',
+      'fontSize',
+      'color',
+      'showLegend',
+      'legendScale'
+    ],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -469,7 +528,14 @@ export const charts = [
     chartClass: 'more',
     settings: [texts],
     defaultShow: [true],
-    moreSettings: ['delimiter', 'case', 'fontSizes', 'sizeScale', 'rotation', 'color'],
+    moreSettings: [
+      'delimiter',
+      'case',
+      'fontSizes',
+      'sizeScale',
+      'rotation',
+      'color'
+    ],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
@@ -493,8 +559,8 @@ export const getChartNames = () => {
 
 export function getSettings(chartId, header, data, dataTypes) {
   const chartIndex = charts.map(chart => chart.id).indexOf(chartId)
-  const chartSettings = (chartIndex > 0) ? charts[chartIndex].settings : []
-  const show = (chartIndex > 0) ? charts[chartIndex].defaultShow : []
+  const chartSettings = chartIndex > 0 ? charts[chartIndex].settings : []
+  const show = chartIndex > 0 ? charts[chartIndex].defaultShow : []
 
   const numberIndices = getDataTypeIndices(dataTypes, 'number')
   const itemIndices = getDataTypeIndices(dataTypes, 'item')
@@ -510,22 +576,44 @@ export function getSettings(chartId, header, data, dataTypes) {
     timeIdx = 0
   let defaultSettings = chartSettings.map((setting, index) => {
     let defaultValue = -1
-    if (setting.type === 'number' && numberIndices.length >= 1 && show[index]) { // number
+    if (setting.type === 'number' && numberIndices.length >= 1 && show[index]) {
+      // number
       defaultValue = numberIndices[numIdx]
-      if (numIdx < numberIndices.length-1) numIdx += 1
-    } else if (setting.type === 'item' && itemIndices.length >= 1 && show[index]) { // item
-      defaultValue = itemIndices[itemIdx] 
-      if (itemIdx < itemIndices.length-1) itemIdx += 1
-    } else if (setting.type === 'coordinate' && coordinateIndices.length >= 1 && show[index]) { // coordinate
-      defaultValue = coordinateIndices[coordIdx] 
-      if (coordIdx < coordinateIndices.length-1) coordIdx += 1
-    } else if (setting.type === 'image' && imageIndices.length >= 1 && show[index]) { // coordinate
-      defaultValue = imageIndices[coordIdx] 
-      if (imageIdx < imageIndices.length-1) imageIdx += 1
-    } else if (setting.type === 'time' && timeIndices.length >= 1 && show[index]) { // time
+      if (numIdx < numberIndices.length - 1) numIdx += 1
+    } else if (
+      setting.type === 'item' &&
+      itemIndices.length >= 1 &&
+      show[index]
+    ) {
+      // item
+      defaultValue = itemIndices[itemIdx]
+      if (itemIdx < itemIndices.length - 1) itemIdx += 1
+    } else if (
+      setting.type === 'coordinate' &&
+      coordinateIndices.length >= 1 &&
+      show[index]
+    ) {
+      // coordinate
+      defaultValue = coordinateIndices[coordIdx]
+      if (coordIdx < coordinateIndices.length - 1) coordIdx += 1
+    } else if (
+      setting.type === 'image' &&
+      imageIndices.length >= 1 &&
+      show[index]
+    ) {
+      // coordinate
+      defaultValue = imageIndices[coordIdx]
+      if (imageIdx < imageIndices.length - 1) imageIdx += 1
+    } else if (
+      setting.type === 'time' &&
+      timeIndices.length >= 1 &&
+      show[index]
+    ) {
+      // time
       defaultValue = timeIndices[timeIdx]
-      if (timeIdx < timeIndices.length-1) timeIdx += 1
-    } else if (setting.type === 'slider') { // slider
+      if (timeIdx < timeIndices.length - 1) timeIdx += 1
+    } else if (setting.type === 'slider') {
+      // slider
       defaultValue = setting.defaultValue
     } else if (show[index]) {
       defaultValue = 0
@@ -538,20 +626,23 @@ export function getSettings(chartId, header, data, dataTypes) {
 
   // set default value for all group members
   if (Object.keys(defaultSettings).includes('y-axis-groups')) {
-    [...Array(9).keys()].forEach((_,idx) => {
-      defaultSettings[`y-axis-groups${idx+1}`] = defaultSettings['y-axis-groups']
+    ;[...Array(9).keys()].forEach((_, idx) => {
+      defaultSettings[`y-axis-groups${idx + 1}`] =
+        defaultSettings['y-axis-groups']
     })
   }
- 
+
   // for the settings component
-  const settingsInfo =  chartSettings.map((setting, index) => {
-    let info = { value: setting.value,
+  const settingsInfo = chartSettings.map((setting, index) => {
+    let info = {
+      value: setting.value,
       title: setting.title,
       type: setting.type,
-      props: setting.props }
+      props: setting.props
+    }
     if (setting.type === 'all') {
       info['indices'] = [...Array(header.length).keys()]
-    } else if (setting.type === 'number')  {
+    } else if (setting.type === 'number') {
       info['indices'] = numberIndices
     } else if (setting.type === 'item') {
       info['indices'] = itemIndices

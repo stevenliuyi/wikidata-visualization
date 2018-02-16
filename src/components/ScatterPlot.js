@@ -12,8 +12,8 @@ import Info from './Info'
 
 class ScatterPlot extends Component {
   render() {
-
-    if (!this.props.dataTypes.includes('number')) return <Info info='no-number' />
+    if (!this.props.dataTypes.includes('number'))
+      return <Info info="no-number" />
 
     const [scales, xLabel, yLabel] = getXYScales(this.props)
     const radii = getRadius(this.props)
@@ -21,20 +21,25 @@ class ScatterPlot extends Component {
     const tooltipHTMLs = getTooltipHTML(this.props)
 
     d3.selectAll('.d3ToolTip').remove()
-    var tooltip = d3.select('body').append('div').attr('class', 'd3ToolTip')
+    var tooltip = d3
+      .select('body')
+      .append('div')
+      .attr('class', 'd3ToolTip')
 
-    let selectedData = this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
-      .map((item,i) => ({ id: i, ...item})) // add ids
-      .filter((item) => (item[xLabel] != null) && (item[yLabel] != null)) // remove undefined values
+    let selectedData = this.props.data
+      .filter((item, i) => this.props.rowSelections.includes(i))
+      .map((item, i) => ({ id: i, ...item })) // add ids
+      .filter(item => item[xLabel] != null && item[yLabel] != null) // remove undefined values
 
     // add tooltips
-    d3.selectAll('.circle')
+    d3
+      .selectAll('.circle')
       .data(selectedData)
       .on('mouseover', function(d) {
-        d3.select('#circle'+d.id)
+        d3
+          .select('#circle' + d.id)
           .attr('fill', chroma(colors[d.id]).brighten(0.6))
-        d3.select('#text'+d.id)
-          .attr('font-weight', 'bold')
+        d3.select('#text' + d.id).attr('font-weight', 'bold')
       })
       .on('mousemove', function(d) {
         tooltip
@@ -45,19 +50,18 @@ class ScatterPlot extends Component {
       })
       .on('mouseout', function(d) {
         tooltip.style('display', 'none')
-        d3.select('#circle'+d.id)
-          .attr('fill', colors[d.id])
-        d3.select('#text'+d.id)
-          .attr('font-weight', 'normal')
+        d3.select('#circle' + d.id).attr('fill', colors[d.id])
+        d3.select('#text' + d.id).attr('font-weight', 'normal')
       })
 
-    d3.selectAll('.circleLabel')
+    d3
+      .selectAll('.circleLabel')
       .data(selectedData)
       .on('mouseover', function(d) {
-        d3.select('#circle'+d.id)
+        d3
+          .select('#circle' + d.id)
           .attr('fill', chroma(colors[d.id]).brighten(0.6))
-        d3.select('#text'+d.id)
-          .attr('font-weight', 'bold')
+        d3.select('#text' + d.id).attr('font-weight', 'bold')
       })
       .on('mousemove', function(d) {
         tooltip
@@ -68,10 +72,8 @@ class ScatterPlot extends Component {
       })
       .on('mouseout', function(d) {
         tooltip.style('display', 'none')
-        d3.select('#circle'+d.id)
-          .attr('fill', colors[d.id])
-        d3.select('#text'+d.id)
-          .attr('font-weight', 'normal')
+        d3.select('#circle' + d.id).attr('fill', colors[d.id])
+        d3.select('#text' + d.id).attr('font-weight', 'normal')
       })
 
     // add legend
@@ -80,7 +82,7 @@ class ScatterPlot extends Component {
     drawLegend(svg, colorScale, this.props)
 
     return (
-      <div id='chart'>
+      <div id="chart">
         <SVGPanZoom {...this.props}>
           <svg width={this.props.width} height={this.props.height}>
             <XYAxis {...this.props} {...scales} />
@@ -90,8 +92,14 @@ class ScatterPlot extends Component {
               radii={radii}
               colors={colors}
               {...this.props}
-              {...scales} />
-            <Labels xLabel={xLabel} yLabel={yLabel} {...this.props} {...scales} />
+              {...scales}
+            />
+            <Labels
+              xLabel={xLabel}
+              yLabel={yLabel}
+              {...this.props}
+              {...scales}
+            />
           </svg>
         </SVGPanZoom>
       </div>

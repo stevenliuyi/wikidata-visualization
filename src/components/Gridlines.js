@@ -11,16 +11,17 @@ class Gridlines extends Component {
   }
 
   renderAxis() {
-
     let axis = null
     if (this.props.orient === 'bottom') {
-      axis = d3.axisBottom(this.props.scale)
-        .tickSize(-(this.props.height-this.props.padding*2))
+      axis = d3
+        .axisBottom(this.props.scale)
+        .tickSize(-(this.props.height - this.props.padding * 2))
         .ticks(this.props.axisSettings.xticks)
         .tickFormat('')
     } else if (this.props.orient === 'left') {
-      axis = d3.axisLeft(this.props.scale)
-        .tickSize(-(this.props.width-this.props.padding*3))
+      axis = d3
+        .axisLeft(this.props.scale)
+        .tickSize(-(this.props.width - this.props.padding * 3))
         .ticks(this.props.axisSettings.yticks)
         .tickFormat('')
     }
@@ -30,9 +31,7 @@ class Gridlines extends Component {
 
   render() {
     return (
-      <g className="gridline"
-        ref="axis"
-        transform={this.props.translate} />
+      <g className="gridline" ref="axis" transform={this.props.translate} />
     )
   }
 }

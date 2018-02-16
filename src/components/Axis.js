@@ -12,16 +12,24 @@ class Axis extends Component {
   }
 
   renderAxis() {
-    const xFormat = getFormat(this.props.axisSettings.xformat, this.props.axisSettings.xprecision)
-    const yFormat = getFormat(this.props.axisSettings.yformat, this.props.axisSettings.yprecision)
+    const xFormat = getFormat(
+      this.props.axisSettings.xformat,
+      this.props.axisSettings.xprecision
+    )
+    const yFormat = getFormat(
+      this.props.axisSettings.yformat,
+      this.props.axisSettings.yprecision
+    )
 
     let axis = null
     if (this.props.orient === 'bottom') {
-      axis = d3.axisBottom(this.props.scale)
+      axis = d3
+        .axisBottom(this.props.scale)
         .ticks(this.props.axisSettings.xticks)
         .tickFormat(xFormat)
     } else if (this.props.orient === 'left') {
-      axis = d3.axisLeft(this.props.scale)
+      axis = d3
+        .axisLeft(this.props.scale)
         .ticks(this.props.axisSettings.yticks)
         .tickFormat(yFormat)
     }
@@ -30,11 +38,7 @@ class Axis extends Component {
   }
 
   render() {
-    return (
-      <g className="axis"
-        ref="axis"
-        transform={this.props.translate} />
-    )
+    return <g className="axis" ref="axis" transform={this.props.translate} />
   }
 }
 

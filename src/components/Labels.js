@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-const renderLabels = (props) => {
+const renderLabels = props => {
   return (item, index) => {
     if (item[props.xLabel] == null || item[props.yLabel] == null) return null
     const labelProps = {
@@ -13,11 +13,7 @@ const renderLabels = (props) => {
       key: index
     }
     const label = props.header[props.settings['label']]
-    return (
-      <text {...labelProps}>
-        { item[label] }
-      </text>
-    )
+    return <text {...labelProps}>{item[label]}</text>
   }
 }
 
@@ -25,10 +21,9 @@ class Labels extends Component {
   render() {
     return (
       <g>
-        {
-          this.props.data.filter((item, i) => this.props.rowSelections.includes(i))
-            .map(renderLabels(this.props))
-        }
+        {this.props.data
+          .filter((item, i) => this.props.rowSelections.includes(i))
+          .map(renderLabels(this.props))}
       </g>
     )
   }
