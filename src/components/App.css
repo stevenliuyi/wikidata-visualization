@@ -201,6 +201,10 @@ input[type="text"] {
   -webkit-appearance: none;
 }
 
+input[type="number"] {
+  -webkit-appearance: none;
+}
+
 #data-table input[type="text"]:focus {
   border-color: #337ab7 !important;
   -webkit-appearance: none;
@@ -222,6 +226,22 @@ input[type="text"] {
 .ReactTable .-pagination {
   border: none !important;
   box-shadow: none !important;
+}
+
+.ReactTable .rt-thead.-filters .rt-th {
+  border-right: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+.ReactTable .rt-thead.-filters .rt-th:last-child {
+  border-right: none !important;
+}
+
+.ReactTable .rt-tbody .rt-td {
+  border-right: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+.ReactTable .rt-tbody .rt-td:last-child {
+  border-right: none !important;
 }
 
 .react-datepicker-wrapper input {
