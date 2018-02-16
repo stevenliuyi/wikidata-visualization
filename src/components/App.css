@@ -191,3 +191,76 @@
 .gridline path {
   stroke-width: 0;
 }
+
+#data-table input[type="text"]:focus {
+  border-color: #337ab7 !important;
+  box-shadow: 0 0 0 1px #337ab7;
+}
+
+.ReactTable {
+  border: none !important;
+}
+
+.ReactTable .rt-thead.-header {
+  box-shadow: none !important;
+}
+
+.ReactTable .rt-thead.-filters {
+  border: none !important;
+}
+
+.ReactTable .-pagination {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.react-datepicker-wrapper input {
+  width: 100%;
+}
+
+.react-datepicker__triangle {
+  display: none !important;
+}
+
+.react-datepicker__header__dropdown {
+  margin-top: 5px;
+}
+
+/* react-datepicker uses rem unit in default */
+.react-datepicker {
+  font-size: 12px !important;
+}
+
+.react-datepicker__header {
+  padding-top: 0.8em !important;
+}
+
+.react-datepicker__month {
+  margin: 0.4em 1em !important;
+}
+
+.react-datepicker__day-name, .react-datepicker__day {
+  width: 1.9em !important;
+  line-height: 1.9em !important;
+  margin: 0.166em !important;
+}
+
+.react-datepicker__current-month {
+  font-size: 12px !important;
+}
+
+.react-datepicker__navigation {
+  top: 1em !important;
+  line-height: 1.7em !important;
+  border: 0.45em solid transparent !important;
+}
+
+.react-datepicker__navigation--previous {
+  border-right-color: #ccc !important;
+  left: 1em !important;
+}
+
+.react-datepicker__navigation--next {
+  border-left-color: #ccc !important;
+  right: 1em !important;
+}

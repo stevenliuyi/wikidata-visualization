@@ -5016,6 +5016,10 @@ mkdirp@0.5, mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@
   dependencies:
     minimist "0.0.8"
 
+moment@^2.20.1:
+  version "2.20.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -5542,6 +5546,10 @@ pkg-dir@^2.0.0:
 pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
+
+popper.js@^1.12.5:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.13.0.tgz#e1e7ff65cc43f7cf9cf16f1510a75e81f84f4565"
 
 portfinder@^1.0.9:
   version "1.0.13"
@@ -6106,6 +6114,15 @@ react-d3-radar@^0.2.6:
     d3-voronoi "^1.1.1"
     lodash "^4.17.4"
 
+react-datepicker@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-1.1.0.tgz#af3892384fb6d1dcafc30b48e81cc7fb976806f4"
+  dependencies:
+    classnames "^2.2.5"
+    prop-types "^15.6.0"
+    react-onclickoutside "^6.7.1"
+    react-popper "^0.7.4"
+
 react-dev-utils@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-4.2.1.tgz#9f2763e7bafa1a1b9c52254d2a479deec280f111"
@@ -6210,6 +6227,10 @@ react-on-images-loaded@^2.0.7:
   dependencies:
     classnames "^2.1.2"
 
+react-onclickoutside@^6.7.1:
+  version "6.7.1"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.7.1.tgz#6a5b5b8b4eae6b776259712c89c8a2b36b17be93"
+
 react-overlays@^0.7.4:
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/react-overlays/-/react-overlays-0.7.4.tgz#ef2ec652c3444ab8aa014262b18f662068e56d5c"
@@ -6225,6 +6246,13 @@ react-photo-gallery@^6.0.22:
   resolved "https://registry.yarnpkg.com/react-photo-gallery/-/react-photo-gallery-6.0.22.tgz#733126f9a4c420af8977f868222b074faa0c764a"
   dependencies:
     prop-types "~15.6.0"
+
+react-popper@^0.7.4:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.7.5.tgz#71c25946f291db381231281f6b95729e8b801596"
+  dependencies:
+    popper.js "^1.12.5"
+    prop-types "^15.5.10"
 
 react-scripts@1.0.17:
   version "1.0.17"

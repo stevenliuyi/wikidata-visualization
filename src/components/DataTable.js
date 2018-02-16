@@ -6,6 +6,10 @@ import { Label, OverlayTrigger, Tooltip, Col, Row } from 'react-bootstrap'
 import { getDataTypeIndices } from '../utils/convertData'
 import { getURL } from '../utils/commons'
 import Info from './Info'
+import MdArrowForward from 'react-icons/lib/md/arrow-forward'
+import DatePicker from 'react-datepicker'
+import moment from 'moment'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const CheckboxTable = checkboxHOC(ReactTable)
 
@@ -16,12 +20,20 @@ class DataTable extends Component {
     table: CheckboxTable,
     isCheckboxTable: true,
     numericRangeFilter: false,
-    filtered: []
+    timeRangeFilter: false,
+    filtered: [],
+    starttimes: {},
+    endtimes: {}
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.moreSettings.numericRangeFilter !== this.state.numericRangeFilter) {
       this.setState({ numericRangeFilter: nextProps.moreSettings.numericRangeFilter })
+      // reset filter values
+      this.setState({ filtered: [] })
+    }
+    if (nextProps.moreSettings.timeRangeFilter !== this.state.timeRangeFilter) {
+      this.setState({ timeRangeFilter: nextProps.moreSettings.timeRangeFilter })
       // reset filter values
       this.setState({ filtered: [] })
     }
@@ -198,6 +210,21 @@ class DataTable extends Component {
     return (parseFloat(row[id]) >= fromValue) && (parseFloat(row[id]) <= toValue)
   }
 
+  timeRangeFilterMethod = (filter, row) => {
+    const id = filter.pivotId || filter.id
+    const [startTime, endTime] = filter.value.split('to')
+
+    if (startTime !== 'NULL' && endTime !== 'NULL') {
+      return moment(startTime).isBefore(moment(row[id])) && moment(endTime).isAfter(moment(row[id]))
+    } else if (startTime !== 'NULL') {
+      return moment(startTime).isBefore(moment(row[id]))
+    } else if (endTime !== 'NULL') {
+      return moment(endTime).isAfter(moment(row[id]))
+    } else {
+      return true
+    }
+  }
+
   getRangeString = (value, colIndex, from=true) => {
     let fromValue = (from)
       ? parseFloat(value)
@@ -212,22 +239,50 @@ class DataTable extends Component {
     return `${fromValue}to${toValue}`
   }
 
+  handleTimeRangeChange = (date, colIndex, onChange, from=true) => {
+    const startTime = this.state.starttimes[colIndex]
+    const endTime = this.state.endtimes[colIndex]
+    const fromValue = (from)
+      ? ((date != null) ? date.toISOString() : 'NULL')
+      : ((startTime != null) ? startTime.toISOString() : 'NULL')
+    const toValue = (from)
+      ? ((endTime != null) ? endTime.toISOString() : 'NULL')
+      : ((date != null) ? date.toISOString() : 'NULL')
+
+    if (from) {
+      this.setState(prevState => {
+        let starttimes = prevState.starttimes
+        starttimes[colIndex] = date  
+        return { starttimes }  
+      })
+    } else {
+      this.setState(prevState => {
+        let endtimes = prevState.endtimes
+        endtimes[colIndex] = date  
+        return { endtimes }  
+      })
+    }
+
+    const rangeString = `${fromValue}to${toValue}`
+    onChange(rangeString)
+  }
+
   getFilterMethod = (col) => {
     const colIndex = this.props.header.indexOf(col)
     const dataType = this.props.dataTypes[colIndex]
-    if (dataType !== 'number' || this.props.moreSettings.numericRangeFilter === false) {
-      return undefined // default filter method
-    } else {
+    if (dataType === 'number' && this.props.moreSettings.numericRangeFilter) {
       return this.rangeFilterMethod
+    } else if (dataType === 'time' && this.props.moreSettings.timeRangeFilter) {
+      return this.timeRangeFilterMethod
+    } else {
+      return undefined // default filter method
     }
   }
 
   filterComponent = (col) => {
     const colIndex = this.props.header.indexOf(col)
     const dataType = this.props.dataTypes[colIndex]
-    if (dataType !== 'number' || this.props.moreSettings.numericRangeFilter === false) {
-      return undefined // default filter component
-    } else {
+    if (dataType === 'number' && this.props.moreSettings.numericRangeFilter) {
       let component = ({ filter, onChange }) => (
         <Row>
           <Col sm={5} className='no-padding-right'>
@@ -238,7 +293,7 @@ class DataTable extends Component {
               style={{width: '100%'}}
             />
           </Col>
-          <Col sm={2} className='no-padding'>to</Col>
+          <Col sm={2} className='no-padding'><MdArrowForward /></Col>
           <Col sm={5} className='no-padding-left'>
             <input
               id={`col${colIndex}-to`}
@@ -250,6 +305,51 @@ class DataTable extends Component {
         </Row>
       )
       return component
+    } else if (dataType === 'time' && this.props.moreSettings.timeRangeFilter) {
+      let component = ({ filter, onChange }) => (
+        <Row>
+          <Col sm={5} className='no-padding-right'>
+            <DatePicker
+              selected={this.state.starttimes[colIndex]}
+              onChange={date => this.handleTimeRangeChange(date, colIndex, onChange, true)}
+              dateFormat='YYYY/MM/DD'
+              dateFormatCalendar='MMMM'
+              showYearDropdown
+              yearDropdownItemNumbers={1000}
+              dropdownMode='select'
+              popperModifiers={{
+                preventOverflow: {
+                  enabled: true,
+                  escapeWithReference: false,
+                  boundariesElement: document.getElementsByClassName('ReactTable')[0]
+                }
+              }}
+            />
+          </Col>
+          <Col sm={2} className='no-padding'><MdArrowForward /></Col>
+          <Col sm={5} className='no-padding-left'>
+            <DatePicker
+              selected={this.state.endtimes[colIndex]}
+              onChange={date => this.handleTimeRangeChange(date, colIndex, onChange, false)}
+              dateFormat='YYYY/MM/DD'
+              dateFormatCalendar='MMMM'
+              showYearDropdown
+              yearDropdownItemNumbers={1000}
+              dropdownMode='select'
+              popperModifiers={{
+                preventOverflow: {
+                  enabled: true,
+                  escapeWithReference: false,
+                  boundariesElement: document.getElementsByClassName('ReactTable')[0]
+                }
+              }}
+            />
+          </Col>
+        </Row>
+      ) 
+      return component
+    } else {
+      return undefined // default filter component
     }
   }
 
@@ -283,7 +383,7 @@ class DataTable extends Component {
     }
 
     return (
-      <div>
+      <div id='data-table'>
         { Array.isArray(this.props.data) && this.props.data.length >= 1 &&
           <this.state.table
             ref={(r)=>this.checkboxTable=r}
@@ -307,6 +407,11 @@ class DataTable extends Component {
             className='-striped -highlight'
             pageSizeOptions={[10, 20, 50, 100, 200, 500, 1000]}
             onFilteredChange={filtered => this.setState({ filtered })}
+            getTheadFilterThProps={()=>{ // fix date picker display issue
+              return {
+                style: { overflow: 'inherit' }
+              }
+            }}
             {...checkboxProps}
           />
         }

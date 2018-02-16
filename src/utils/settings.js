@@ -178,6 +178,7 @@ export const moreSettings = {
   regex: false,
   reasonator: false,
   numericRangeFilter: false,
+  timeRangeFilter: false,
   delimiter: ' ',
   case: 'default',
   sizeScale: 'linear',
@@ -213,6 +214,7 @@ export const moreSettingTitles = {
   regex: 'Regex filter',
   reasonator: 'External links',
   numericRangeFilter: 'Numeric range filter',
+  timeRangeFilter: 'Time range filter',
   delimiter: 'Delimiter',
   case: 'Case',
   sizeScale: 'Size scale',
@@ -288,7 +290,7 @@ export const charts = [
   { 
     id: 1.01,
     name: 'Table',
-    moreSettings: ['ignoreCase', 'regex', 'numericRangeFilter', 'reasonator']
+    moreSettings: ['ignoreCase', 'regex', 'numericRangeFilter', 'timeRangeFilter', 'reasonator']
   },
   {
     id: 1.02,
