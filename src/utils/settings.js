@@ -246,23 +246,29 @@ export const canvasSettingTitles = {
 export const axisSettings = {
  xformat: 'none',
  yformat: 'none',
+ format: 'none',
  xprecision: 2,
  yprecision: 2,
+ precision: 2,
  xgridlines: true,
  ygridlines: true,
  xticks: 4,
- yticks: 4
+ yticks: 4,
+ ticks: 4
 }
 
 export const axisSettingTitles = {
  xformat: 'X value format',
  yformat: 'Y value format',
+ format: 'Axis value format',
  xprecision: 'X value precision',
  yprecision: 'Y value precision',
+ precision: 'Axis value precision',
  xgridlines: 'X grid lines',
  ygridlines: 'Y grid lines',
  xticks: 'X ticks',
- yticks: 'Y ticks'
+ yticks: 'Y ticks',
+ ticks: 'Axis ticks'
 }
 
 // chart classes
@@ -337,6 +343,7 @@ export const charts = [
     settings: [axes, y_axis_groups, ngroups],
     defaultShow: [true, true, true],
     moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
+    axisSettings: ['format', 'precision', 'ticks'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {

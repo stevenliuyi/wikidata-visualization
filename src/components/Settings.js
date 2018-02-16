@@ -70,7 +70,7 @@ class Settings extends Component {
             return this.props.onMoreSettingsChange(newSetting)
           }}
           step={1}
-          min={4}
+          min={2}
           max={48} />
       )
     } else if (setting === 'radius') {
@@ -426,7 +426,7 @@ class Settings extends Component {
           min={0}
           max={1} />
       )
-    } else if (setting === 'xformat' || setting === 'yformat') {
+    } else if (setting === 'xformat' || setting === 'yformat' || setting === 'format') {
       return (
         <FormControl
           componentClass="select"
@@ -444,7 +444,7 @@ class Settings extends Component {
           }
         </FormControl>
       )
-    } else if (setting === 'xprecision' || setting === 'yprecision') {
+    } else if (setting === 'xprecision' || setting === 'yprecision' || setting === 'precision') {
       return (
         <ReactBootstrapSlider
           value={this.props.axisSettings[setting]}
@@ -477,7 +477,7 @@ class Settings extends Component {
           }}
         />
       )
-    } else if (setting === 'xticks' || setting === 'yticks') {
+    } else if (setting === 'xticks' || setting === 'yticks' || setting === 'ticks') {
       return (
         <ReactBootstrapSlider
           value={this.props.axisSettings[setting]}

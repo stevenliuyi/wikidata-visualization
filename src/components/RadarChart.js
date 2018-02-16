@@ -5,6 +5,7 @@ import SVGPanZoom from './SVGPanZoom'
 import { drawLegend } from '../utils/draw'
 import Radar from 'react-d3-radar'
 import Info from './Info'
+import { getFormat } from '../utils/format'
 
 class RadarChart extends Component {
 
@@ -29,6 +30,9 @@ class RadarChart extends Component {
             domainMax={maxVal}
             data={data}
             colors={colors}
+            numRings={this.props.axisSettings.ticks}
+            format={getFormat(this.props.axisSettings.format, this.props.axisSettings.precision)}
+            fontSize={this.props.moreSettings.fontSize}
           />
         </SVGPanZoom>
       </div>

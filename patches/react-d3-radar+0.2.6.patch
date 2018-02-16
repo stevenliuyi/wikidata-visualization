@@ -1,17 +1,20 @@
 patch-package
 --- a/node_modules/react-d3-radar/lib/Radar.js
 +++ b/node_modules/react-d3-radar/lib/Radar.js
-@@ -73,7 +73,8 @@ function Radar(props) {
+@@ -73,7 +73,11 @@ function Radar(props) {
        domainMax = props.domainMax,
        style = props.style,
        onHover = props.onHover,
 -      highlighted = props.highlighted;
 +      highlighted = props.highlighted,
-+      colors = props.colors;
++      colors = props.colors,
++      numRings = props.numRings,
++      format = props.format,
++      fontSize = props.fontSize;
  
    var _convertData = convertData(props),
        allPoints = _convertData.allPoints,
-@@ -86,12 +87,12 @@ function Radar(props) {
+@@ -86,12 +90,12 @@ function Radar(props) {
  
    var backgroundScale = scales[data.variables[0].key];
  
@@ -29,3 +32,81 @@ patch-package
  
    var _$partition = _lodash2.default.partition(allPoints, function (_ref4) {
      var setKey = _ref4.setKey;
+@@ -117,6 +121,9 @@ function Radar(props) {
+     radius: radius,
+     highlightedPoint: highlightedPoints.length > 0 ? highlightedPoints[0] : null,
+     regularPoints: regularPoints,
+-    colors: colors
++    colors: colors,
++    numRings: numRings,
++    format: format,
++    fontSize: fontSize
+   });
+ }
+--- a/node_modules/react-d3-radar/lib/RadarAxis.js
++++ b/node_modules/react-d3-radar/lib/RadarAxis.js
+@@ -20,7 +20,7 @@ var defaultRadarAxisStyle = {
+   fontSize: 10,
+   fontFamily: 'sans-serif',
+   textFill: 'black',
+-  axisWidth: 2
++  axisWidth: 1
+ };
+ 
+ function RadarAxis(props) {
+@@ -29,12 +29,13 @@ function RadarAxis(props) {
+       domainMax = props.domainMax,
+       label = props.label,
+       color = props.color,
+-      style = props.style;
++      style = props.style,
++      fontSize = props.fontSize;
+ 
+   var _defaultRadarAxisStyl = _extends({}, defaultRadarAxisStyle, { style: style }),
+       axisOverreach = _defaultRadarAxisStyl.axisOverreach,
+       labelOverreach = _defaultRadarAxisStyl.labelOverreach,
+-      fontSize = _defaultRadarAxisStyl.fontSize,
++      //fontSize = _defaultRadarAxisStyl.fontSize,
+       fontFamily = _defaultRadarAxisStyl.fontFamily,
+       textFill = _defaultRadarAxisStyl.textFill,
+       axisWidth = _defaultRadarAxisStyl.axisWidth;
+--- a/node_modules/react-d3-radar/lib/RadarWrapper.js
++++ b/node_modules/react-d3-radar/lib/RadarWrapper.js
+@@ -120,20 +120,23 @@ var RadarWrapper = function (_Component) {
+           highlightedPoint = _props2.highlightedPoint,
+           regularPoints = _props2.regularPoints,
+           backgroundScale = _props2.backgroundScale,
+-          colors = _props2.colors;
++          colors = _props2.colors,
++          numRings = _props2.numRings,
++          format = _props2.format,
++          fontSize = _props2.fontSize;
+ 
+       var diameter = radius * 2;
+ 
+       var _defaultRadarStyle$st = _extends({}, defaultRadarStyle, style),
+           axisColor = _defaultRadarStyle$st.axisColor,
+-          ringColor = _defaultRadarStyle$st.ringColor,
+-          numRings = _defaultRadarStyle$st.numRings;
++          ringColor = _defaultRadarStyle$st.ringColor;
+ 
+       var innerHeight = height - padding * 2;
+       var innerWidth = width - padding * 2;
+ 
+       var ticks = backgroundScale.ticks(numRings).slice(1);
+-      var tickFormat = backgroundScale.tickFormat(numRings);
++      var tickFormat = format;
++      //var tickFormat = backgroundScale.tickFormat(numRings);
+ 
+       return _react2.default.createElement(
+         'svg',
+@@ -171,7 +174,8 @@ var RadarWrapper = function (_Component) {
+                 offsetAngle: offsetAngles[key],
+                 label: label,
+                 domainMax: domainMax,
+-                color: axisColor
++                color: axisColor,
++                fontSize: fontSize
+               });
+             }),
+             regularPoints.map(function (_ref3) {
