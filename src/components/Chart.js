@@ -168,7 +168,7 @@ class Chart extends Component {
         </Measure>
         {this.state.show &&
           document.getElementsByClassName('info-text').length === 0 && (
-            <Tools {...this.props} />
+            <Tools {...this.props} {...styles} />
           )}
       </div>
     )

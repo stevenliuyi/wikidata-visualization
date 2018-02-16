@@ -488,6 +488,21 @@ class Tools extends Component {
                 <Button onClick={() => this.setState({ show: false })}>
                   Close
                 </Button>
+                <Button
+                  disabled={!this.state.rawGitUrl.startsWith('http')}
+                  onClick={() =>
+                    window.open(
+                      `https://svg-edit.github.io/svgedit/releases/svg-edit-2.8.1/svg-editor.html?dimensions=${
+                        this.props.width
+                      },${this.props.height}&url=${encodeURIComponent(
+                        this.state.rawGitUrl
+                      )}`,
+                      '_blank'
+                    )
+                  }
+                >
+                  Edit online
+                </Button>
                 <Button bsStyle="primary" onClick={this.getImageURL}>
                   Get
                 </Button>
