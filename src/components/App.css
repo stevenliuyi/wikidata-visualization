@@ -101,6 +101,14 @@
   font-size: 12px;
 }
 
+.btn-default {
+  background-image: none !important;
+}
+
+.btn-primary {
+  background-image: none !important;
+}
+
 .site {
   display: flex;
   flex-direction: column;
@@ -203,6 +211,20 @@ input[type="text"] {
 
 input[type="number"] {
   -webkit-appearance: none;
+}
+
+.setting-title {
+  color: #999;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.setting-row {
+  margin-bottom: 8px;
+}
+
+.setting-row:last-child {
+  margin-bottom: 0px;
 }
 
 #data-table input[type="text"]:focus {

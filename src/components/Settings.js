@@ -1,23 +1,15 @@
 import React, { Component } from 'react'
-import {
-  PanelGroup,
-  Panel,
-  Form,
-  FormGroup,
-  FormControl,
-  ControlLabel,
-  Col
-} from 'react-bootstrap'
+import { PanelGroup, Panel, FormControl } from 'react-bootstrap'
 import {
   charts,
   moreSettingTitles,
   canvasSettingTitles,
   axisSettingTitles
 } from '../utils/settings'
+import SettingPanel from './SettingPanel'
+import SettingToggle from './SettingToggle'
 import ReactBootstrapSlider from 'react-bootstrap-slider'
 import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
-import Toggle from 'react-bootstrap-toggle'
-import 'react-bootstrap-toggle/dist/bootstrap2-toggle.css'
 import { colorSchemeNames, getColorScaleFromValues } from '../utils/scales'
 import { mapSettings, mapProjections } from '../utils/maps'
 import { map2Settings } from '../utils/maps2'
@@ -292,16 +284,10 @@ class Settings extends Component {
       setting === 'showLegend'
     ) {
       return (
-        <Toggle
+        <SettingToggle
           active={this.props.moreSettings[setting]}
           on="Show"
           off="Hide"
-          size="sm"
-          height={30}
-          width="100%"
-          onstyle="default"
-          offstyle="default"
-          handlestyle="primary"
           onClick={state => {
             const newSetting = {}
             newSetting[setting] = state
@@ -316,16 +302,10 @@ class Settings extends Component {
       setting === 'timeRangeFilter'
     ) {
       return (
-        <Toggle
+        <SettingToggle
           active={this.props.moreSettings[setting]}
           on="On"
           off="Off"
-          size="sm"
-          height={30}
-          width="100%"
-          onstyle="default"
-          offstyle="default"
-          handlestyle="primary"
           onClick={state => {
             const newSetting = {}
             newSetting[setting] = state
@@ -431,16 +411,10 @@ class Settings extends Component {
       )
     } else if (setting === 'auto' || setting === 'border') {
       return (
-        <Toggle
+        <SettingToggle
           active={this.props.canvasSettings[setting]}
           on="On"
           off="Off"
-          size="sm"
-          height={30}
-          width="100%"
-          onstyle="default"
-          offstyle="default"
-          handlestyle="primary"
           onClick={state => {
             const newSetting = {}
             newSetting[setting] = state
@@ -566,16 +540,10 @@ class Settings extends Component {
       )
     } else if (setting === 'xgridlines' || setting === 'ygridlines') {
       return (
-        <Toggle
+        <SettingToggle
           active={this.props.axisSettings[setting]}
           on="On"
           off="Off"
-          size="sm"
-          height={30}
-          width="100%"
-          onstyle="default"
-          offstyle="default"
-          handlestyle="primary"
           onClick={state => {
             const newSetting = {}
             newSetting[setting] = state
@@ -613,16 +581,122 @@ class Settings extends Component {
       document.getElementsByClassName('show-settings').length === 0
     )
       return null
-    const chartId = charts.map(chart => chart.id).indexOf(this.props.chart)
-    const chartMoreSettings = chartId >= 0 ? charts[chartId].moreSettings : null
-    const chartCanvasSettings =
-      chartId >= 0 ? charts[chartId].canvasSettings : null
-    const chartAxisSettings = chartId >= 0 ? charts[chartId].axisSettings : null
 
     if (this.props.chart >= 2 || this.props.header.length === 0) return null
 
+    const chartId = charts.map(chart => chart.id).indexOf(this.props.chart)
+
     const moreSettingsHeader =
       this.props.chart !== 1.01 ? 'Display options' : 'Options'
+
+    // data options
+    let chartSettingComponents = {}
+    if (
+      Array.isArray(this.props.info) &&
+      Object.keys(this.props.settings).length > 0
+    ) {
+      this.props.info.forEach(setting => {
+        if (setting.type === 'slider') {
+          chartSettingComponents[setting.title] = (
+            <ReactBootstrapSlider
+              value={this.props.settings[setting.value]}
+              slideStop={e => {
+                let new_event = e
+                new_event.target.name = setting.value
+                this.onSettingsChange(new_event)
+              }}
+              {...setting.props}
+            />
+          )
+        } else if (setting.value === 'y-axis-groups') {
+          chartSettingComponents[setting.title] = (
+            <div>
+              {[...Array(this.props.settings.ngroups).keys()].map((_, idx) => (
+                <FormControl
+                  key={idx}
+                  name={idx > 0 ? `${setting.value}${idx}` : setting.value}
+                  componentClass="select"
+                  value={this.props.settings[`${setting.value}${idx}`]}
+                  style={{ marginBottom: '10px' }}
+                  onChange={this.onSettingsChange}
+                >
+                  {Array.isArray(this.props.header) &&
+                    setting.indices.map(index => (
+                      <option value={index} key={index}>
+                        {index === -1 ? 'none' : this.props.header[index]}
+                      </option>
+                    ))}
+                </FormControl>
+              ))}
+            </div>
+          )
+        } else {
+          chartSettingComponents[setting.title] = (
+            <FormControl
+              name={setting.value}
+              componentClass="select"
+              value={this.props.settings[setting.value]}
+              onChange={this.onSettingsChange}
+            >
+              {Array.isArray(this.props.header) &&
+                setting.indices.map(index => (
+                  <option value={index} key={index}>
+                    {index === -1 ? 'none' : this.props.header[index]}
+                  </option>
+                ))}
+            </FormControl>
+          )
+        }
+      })
+    }
+
+    // more options
+    const chartMoreSettings = chartId >= 0 ? charts[chartId].moreSettings : null
+    let chartMoreSettingComponents = {}
+    if (Array.isArray(chartMoreSettings)) {
+      chartMoreSettings.forEach(moreSetting => {
+        if (
+          !this.props.moreSettings.showLegend &&
+          moreSetting.startsWith('legend')
+        )
+          return
+
+        if (
+          this.props.moreSettings.solarSystem !== 'Earth' &&
+          moreSetting === 'baseMap'
+        )
+          return
+
+        chartMoreSettingComponents[
+          moreSettingTitles[moreSetting]
+        ] = this.getMoreSetting(moreSetting, this.props.header)
+      })
+    }
+
+    // axes options
+    const chartAxisSettings = chartId >= 0 ? charts[chartId].axisSettings : null
+    let chartAxisSettingComponents = {}
+    if (Array.isArray(chartAxisSettings)) {
+      chartAxisSettings.forEach(axisSetting => {
+        chartAxisSettingComponents[
+          axisSettingTitles[axisSetting]
+        ] = this.getMoreSetting(axisSetting, this.props.header)
+      })
+    }
+
+    // canvas options
+    const chartCanvasSettings =
+      chartId >= 0 ? charts[chartId].canvasSettings : null
+    let chartCanvasSettingComponents = {}
+    if (Array.isArray(chartCanvasSettings)) {
+      chartCanvasSettings.forEach(canvasSetting => {
+        if (this.props.canvasSettings.auto && canvasSetting === 'width') return
+
+        chartCanvasSettingComponents[
+          canvasSettingTitles[canvasSetting]
+        ] = this.getMoreSetting(canvasSetting, this.props.header)
+      })
+    }
 
     return (
       <PanelGroup
@@ -633,159 +707,25 @@ class Settings extends Component {
         {Array.isArray(this.props.info) &&
           Object.keys(this.props.settings).length > 0 && (
             <Panel header="Data options" eventKey="1" key="1">
-              <Form horizontal>
-                {// data options
-                this.props.info.map((setting, index) => {
-                  return (
-                    <FormGroup key={index}>
-                      <Col componentClass={ControlLabel} sm={4}>
-                        {setting.title}
-                      </Col>
-                      <Col sm={8}>
-                        {setting.type === 'slider' && (
-                          <ReactBootstrapSlider
-                            value={this.props.settings[setting.value]}
-                            slideStop={e => {
-                              let new_event = e
-                              new_event.target.name = setting.value
-                              this.onSettingsChange(new_event)
-                            }}
-                            {...setting.props}
-                          />
-                        )}
-                        {setting.value === 'y-axis-groups' && (
-                          <div>
-                            {[...Array(this.props.settings.ngroups).keys()].map(
-                              (_, idx) => (
-                                <FormControl
-                                  key={idx}
-                                  name={
-                                    idx > 0
-                                      ? `${setting.value}${idx}`
-                                      : setting.value
-                                  }
-                                  componentClass="select"
-                                  value={
-                                    this.props.settings[
-                                      `${setting.value}${idx}`
-                                    ]
-                                  }
-                                  style={{ marginBottom: '10px' }}
-                                  onChange={this.onSettingsChange}
-                                >
-                                  {Array.isArray(this.props.header) &&
-                                    setting.indices.map(index => (
-                                      <option value={index} key={index}>
-                                        {index === -1
-                                          ? 'none'
-                                          : this.props.header[index]}
-                                      </option>
-                                    ))}
-                                </FormControl>
-                              )
-                            )}
-                          </div>
-                        )}
-                        {setting.type !== 'slider' &&
-                          setting.value !== 'y-axis-groups' && (
-                            <FormControl
-                              name={setting.value}
-                              componentClass="select"
-                              value={this.props.settings[setting.value]}
-                              onChange={this.onSettingsChange}
-                            >
-                              {Array.isArray(this.props.header) &&
-                                setting.indices.map(index => (
-                                  <option value={index} key={index}>
-                                    {index === -1
-                                      ? 'none'
-                                      : this.props.header[index]}
-                                  </option>
-                                ))}
-                            </FormControl>
-                          )}
-                      </Col>
-                    </FormGroup>
-                  )
-                })}
-              </Form>
+              <SettingPanel settings={chartSettingComponents} />
             </Panel>
           )}
         {Array.isArray(chartMoreSettings) &&
           chartMoreSettings.length > 0 && (
             <Panel header={moreSettingsHeader} eventKey="2" key="2">
-              <Form horizontal>
-                {// more options
-                chartMoreSettings.map(moreSetting => {
-                  if (
-                    !this.props.moreSettings.showLegend &&
-                    moreSetting.startsWith('legend')
-                  )
-                    return null
-                  if (
-                    this.props.moreSettings.solarSystem !== 'Earth' &&
-                    moreSetting === 'baseMap'
-                  )
-                    return null
-
-                  return (
-                    <FormGroup key={moreSetting}>
-                      <Col componentClass={ControlLabel} sm={4}>
-                        {moreSettingTitles[moreSetting]}
-                      </Col>
-                      <Col sm={8}>
-                        {this.getMoreSetting(moreSetting, this.props.header)}
-                      </Col>
-                    </FormGroup>
-                  )
-                })}
-              </Form>
+              <SettingPanel settings={chartMoreSettingComponents} />
             </Panel>
           )}
         {Array.isArray(chartAxisSettings) &&
           chartAxisSettings.length > 0 && (
             <Panel header="Axes options" eventKey="3" key="3">
-              <Form horizontal>
-                {// canvas options
-                chartAxisSettings.map(axisSetting => {
-                  return (
-                    <FormGroup key={axisSetting}>
-                      <Col componentClass={ControlLabel} sm={4}>
-                        {axisSettingTitles[axisSetting]}
-                      </Col>
-                      <Col sm={8}>
-                        {this.getMoreSetting(axisSetting, this.props.header)}
-                      </Col>
-                    </FormGroup>
-                  )
-                })}
-              </Form>
+              <SettingPanel settings={chartAxisSettingComponents} />
             </Panel>
           )}
         {Array.isArray(chartCanvasSettings) &&
           chartCanvasSettings.length > 0 && (
             <Panel header="Canvas options" eventKey="4" key="4">
-              <Form horizontal>
-                {// canvas options
-                chartCanvasSettings.map(canvasSetting => {
-                  if (
-                    this.props.canvasSettings.auto &&
-                    canvasSetting === 'width'
-                  )
-                    return null
-
-                  return (
-                    <FormGroup key={canvasSetting}>
-                      <Col componentClass={ControlLabel} sm={4}>
-                        {canvasSettingTitles[canvasSetting]}
-                      </Col>
-                      <Col sm={8}>
-                        {this.getMoreSetting(canvasSetting, this.props.header)}
-                      </Col>
-                    </FormGroup>
-                  )
-                })}
-              </Form>
+              <SettingPanel settings={chartCanvasSettingComponents} />
             </Panel>
           )}
       </PanelGroup>
