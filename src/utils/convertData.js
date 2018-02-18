@@ -1,6 +1,7 @@
 // convert the result from Wikidata to objects
 import * as d3 from 'd3'
 import { getColorScaleFromValues, getColors, colorSchemes } from './scales'
+import moment from 'moment'
 
 const numbers = [
   'double',
@@ -146,6 +147,11 @@ export function getMatrix(props) {
     props.rowSelections.includes(i)
   )
 
+  const parseData =
+    props.dataTypes[props.settings['relation']] === 'number'
+      ? parseFloat
+      : d => moment(d).year() + moment(d).dayOfYear() / 366 // convert date to year
+
   const items = [
     ...new Set(
       selectedData
@@ -163,7 +169,7 @@ export function getMatrix(props) {
   selectedData.forEach(item => {
     const fromIndex = items.indexOf(item[from])
     const toIndex = items.indexOf(item[to])
-    matrix[fromIndex][toIndex] += item[relation]
+    matrix[fromIndex][toIndex] += parseData(item[relation])
     if (label) labels[fromIndex] = item[label]
     tooltipHTMLs[fromIndex] = getSingleTooltipHTML(item, props.header)
   })
@@ -273,6 +279,11 @@ export function getGraph(props, link_index = false) {
     props.rowSelections.includes(i)
   )
 
+  const parseData =
+    props.dataTypes[props.settings['relation']] === 'number'
+      ? parseFloat
+      : d => moment(d).year() + moment(d).dayOfYear() / 366 // convert date to year
+
   // nodes
   const items = [
     ...new Set(
@@ -308,7 +319,7 @@ export function getGraph(props, link_index = false) {
         ? items.findIndex(element => element === item[to])
         : item[to],
       edgeLabel: item[edge_label],
-      value: relation != null ? item[relation] : 1
+      value: relation != null ? parseData(item[relation]) : 1
     }))
 
   return { nodes, links }
@@ -322,7 +333,12 @@ export function getValues(props) {
     props.rowSelections.includes(i)
   )
 
-  let values = selectedData.map(item => item[value])
+  const parseData =
+    props.dataTypes[props.settings['value']] === 'number'
+      ? parseFloat
+      : d => moment(d).year() + moment(d).dayOfYear() / 366 // convert date to year
+
+  let values = selectedData.map(item => parseData(item[value]))
   let labels =
     label != null
       ? selectedData.map(
@@ -396,7 +412,14 @@ export function getGroupValues(props) {
     const x_idx = x_values.indexOf(item[x_label])
 
     group_indices.forEach(group_idx => {
-      const val = item[y_labels[group_idx]]
+      const setting =
+        group_idx > 0 ? `y-axis-groups${group_idx}` : 'y-axis-groups'
+      const parseData =
+        props.dataTypes[props.settings[setting]] === 'number'
+          ? parseFloat
+          : d => moment(d).year() + moment(d).dayOfYear() / 366 // convert date to year
+
+      const val = parseData(item[y_labels[group_idx]])
       if (val > 0) y_values[group_idx][x_idx] = val
     })
   })

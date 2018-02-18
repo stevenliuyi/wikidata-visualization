@@ -1,7 +1,7 @@
 export const info = {
   'no-data': 'No data now, please submit a new query!',
   'no-selection': 'Please select rows in the result table for visualization.',
-  'no-number': 'Numeric values are needed for this type of chart.',
+  'no-number': 'Numeric or time values are needed for this type of chart.',
   'no-item': 'Wikidata QIDs are needed for this type of chart.',
   'no-coordinate': 'Coordinates are needed for this type of chart.',
   'no-region':

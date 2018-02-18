@@ -15,7 +15,7 @@ import { colorSchemeNames, getColorScaleFromValues } from '../utils/scales'
 import { mapSettings, mapProjections } from '../utils/maps'
 import { map2Settings } from '../utils/maps2'
 import { baseMapSettings, solarSystemSettings } from '../utils/basemap'
-import { formats } from '../utils/format'
+import { formats, timeFormats } from '../utils/format'
 import * as d3 from 'd3'
 
 class Settings extends Component {
@@ -539,6 +539,24 @@ class Settings extends Component {
           max={10}
         />
       )
+    } else if (setting === 'xtimeprecision' || setting === 'ytimeprecision') {
+      return (
+        <FormControl
+          componentClass="select"
+          value={this.props.axisSettings[setting]}
+          onChange={e => {
+            const newSetting = {}
+            newSetting[setting] = e.target.value
+            return this.props.onAxisSettingsChange(newSetting)
+          }}
+        >
+          {Object.keys(timeFormats).map(format => (
+            <option value={format} key={format}>
+              {format}
+            </option>
+          ))}
+        </FormControl>
+      )
     } else if (setting === 'xgridlines' || setting === 'ygridlines') {
       return (
         <SettingToggle
@@ -679,6 +697,30 @@ class Settings extends Component {
     let chartAxisSettingComponents = {}
     if (Array.isArray(chartAxisSettings)) {
       chartAxisSettings.forEach(axisSetting => {
+        if (
+          this.props.dataTypes[this.props.settings['x-axis']] !== 'number' &&
+          (axisSetting === 'xformat' || axisSetting === 'xprecision')
+        )
+          return
+
+        if (
+          this.props.dataTypes[this.props.settings['y-axis']] !== 'number' &&
+          (axisSetting === 'yformat' || axisSetting === 'yprecision')
+        )
+          return
+
+        if (
+          this.props.dataTypes[this.props.settings['x-axis']] !== 'time' &&
+          axisSetting === 'xtimeprecision'
+        )
+          return
+
+        if (
+          this.props.dataTypes[this.props.settings['y-axis']] !== 'time' &&
+          axisSetting === 'ytimeprecision'
+        )
+          return
+
         chartAxisSettingComponents[
           axisSettingTitles[axisSetting]
         ] = this.getMoreSetting(axisSetting, this.props.header)

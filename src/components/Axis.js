@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getFormat } from '../utils/format'
+import { getFormat, timeFormats } from '../utils/format'
 import * as d3 from 'd3'
 
 class Axis extends Component {
@@ -12,14 +12,20 @@ class Axis extends Component {
   }
 
   renderAxis() {
-    const xFormat = getFormat(
-      this.props.axisSettings.xformat,
-      this.props.axisSettings.xprecision
-    )
-    const yFormat = getFormat(
-      this.props.axisSettings.yformat,
-      this.props.axisSettings.yprecision
-    )
+    const xFormat =
+      this.props.dataTypes[this.props.settings['x-axis']] === 'number'
+        ? getFormat(
+            this.props.axisSettings.xformat,
+            this.props.axisSettings.xprecision
+          )
+        : d3.timeFormat(timeFormats[this.props.axisSettings.xtimeprecision])
+    const yFormat =
+      this.props.dataTypes[this.props.settings['y-axis']] === 'number'
+        ? getFormat(
+            this.props.axisSettings.yformat,
+            this.props.axisSettings.yprecision
+          )
+        : d3.timeFormat(timeFormats[this.props.axisSettings.ytimeprecision])
 
     let axis = null
     if (this.props.orient === 'bottom') {

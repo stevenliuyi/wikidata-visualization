@@ -1,13 +1,23 @@
 import React, { Component } from 'react'
 
 const renderLabels = props => {
+  const parseXData =
+    props.dataTypes[props.settings['x-axis']] === 'number'
+      ? parseFloat
+      : d => new Date(d)
+
+  const parseYData =
+    props.dataTypes[props.settings['y-axis']] === 'number'
+      ? parseFloat
+      : d => new Date(d)
+
   return (item, index) => {
     if (item[props.xLabel] == null || item[props.yLabel] == null) return null
     const labelProps = {
       id: `text${index}`,
       className: 'circleLabel',
-      x: props.xScale(parseFloat(item[props.xLabel])),
-      y: props.yScale(parseFloat(item[props.yLabel])),
+      x: props.xScale(parseXData(item[props.xLabel])),
+      y: props.yScale(parseYData(item[props.yLabel])),
       opacity: 0.7,
       fontSize: props.moreSettings.fontSize,
       key: index

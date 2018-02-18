@@ -12,7 +12,10 @@ import Info from './Info'
 
 class ScatterPlot extends Component {
   render() {
-    if (!this.props.dataTypes.includes('number'))
+    if (
+      !this.props.dataTypes.includes('number') &&
+      !this.props.dataTypes.includes('time')
+    )
       return <Info info="no-number" />
 
     const [scales, xLabel, yLabel] = getXYScales(this.props)

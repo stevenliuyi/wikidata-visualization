@@ -27,3 +27,11 @@ export const formatBCDates = dateString => {
     return dateString
   }
 }
+
+export const timeFormats = {
+  year: '%Y',
+  month: '%b %Y',
+  day: '%b %d',
+  hour: '%H:00',
+  minute: '%H:%S'
+}

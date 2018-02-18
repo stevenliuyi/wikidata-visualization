@@ -9,7 +9,10 @@ import { getFormat } from '../utils/format'
 
 class RadarChart extends Component {
   render() {
-    if (!this.props.dataTypes.includes('number'))
+    if (
+      !this.props.dataTypes.includes('number') &&
+      !this.props.dataTypes.includes('time')
+    )
       return <Info info="no-number" />
 
     const [data, maxVal, colors, colorScale] = getGroupValues(this.props)

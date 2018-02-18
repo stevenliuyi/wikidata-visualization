@@ -147,7 +147,10 @@ class PieChart extends Component {
   }
 
   render() {
-    if (!this.props.dataTypes.includes('number'))
+    if (
+      !this.props.dataTypes.includes('number') &&
+      !this.props.dataTypes.includes('time')
+    )
       return <Info info="no-number" />
 
     return (

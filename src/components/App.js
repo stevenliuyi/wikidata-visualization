@@ -248,6 +248,7 @@ class App extends Component {
                       header={this.state.header}
                       settings={this.state.settings}
                       info={this.state.settingsInfo}
+                      dataTypes={this.state.dataTypes}
                       moreSettings={this.state.moreSettings}
                       canvasSettings={this.state.canvasSettings}
                       axisSettings={this.state.axisSettings}

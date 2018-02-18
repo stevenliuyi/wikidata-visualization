@@ -4,20 +4,46 @@ import * as d3color from 'd3-scale-chromatic'
 export function getXYScales(props) {
   const xLabel = props.header[props.settings['x-axis']]
   const yLabel = props.header[props.settings['y-axis']]
-  const xMin = d3.min(props.data, d => d[xLabel])
-  const yMin = d3.min(props.data, d => d[yLabel])
-  const xMax = d3.max(props.data, d => d[xLabel])
-  const yMax = d3.max(props.data, d => d[yLabel])
 
-  const xScale = d3
-    .scaleLinear()
-    .domain([xMin, xMax])
-    .range([props.padding, props.width - props.padding * 2])
+  const selectedData = props.data.filter((item, i) =>
+    props.rowSelections.includes(i)
+  )
 
-  const yScale = d3
-    .scaleLinear()
-    .domain([yMin, yMax])
-    .range([props.height - props.padding, props.padding])
+  let xMin, xMax, xScale, yMin, yMax, yScale
+
+  if (props.dataTypes[props.settings['x-axis']] === 'number') {
+    xMin = d3.min(selectedData, d => d[xLabel])
+    xMax = d3.max(selectedData, d => d[xLabel])
+    xScale = d3
+      .scaleLinear()
+      .domain([xMin, xMax])
+      .range([props.padding, props.width - props.padding * 2])
+  } else {
+    // time
+    xMin = d3.min(selectedData, d => new Date(Date.parse(d[xLabel])))
+    xMax = d3.max(selectedData, d => new Date(Date.parse(d[xLabel])))
+    xScale = d3
+      .scaleTime()
+      .domain([xMin, xMax])
+      .range([props.padding, props.width - props.padding * 2])
+  }
+
+  if (props.dataTypes[props.settings['y-axis']] === 'number') {
+    yMin = d3.min(selectedData, d => d[yLabel])
+    yMax = d3.max(selectedData, d => d[yLabel])
+    yScale = d3
+      .scaleLinear()
+      .domain([yMin, yMax])
+      .range([props.height - props.padding, props.padding])
+  } else {
+    // time
+    yMin = d3.min(selectedData, d => new Date(Date.parse(d[yLabel])))
+    yMax = d3.max(selectedData, d => new Date(Date.parse(d[yLabel])))
+    yScale = d3
+      .scaleTime()
+      .domain([yMin, yMax])
+      .range([props.height - props.padding, props.padding])
+  }
 
   return [{ xScale, yScale }, xLabel, yLabel]
 }
@@ -32,12 +58,22 @@ export function getRadiusScale(props, minRadius = 3, maxRadius = 30) {
     const selectedData = props.data.filter((item, i) =>
       props.rowSelections.includes(i)
     )
-    const minValue = d3.min(selectedData, d => d[label])
-    const maxValue = d3.max(selectedData, d => d[label])
-    radiusScale = d3
-      .scaleLinear()
-      .domain([minValue, maxValue])
-      .range([minRadius, maxRadius])
+    if (props.dataTypes[props.settings['radius']] === 'number') {
+      const minValue = d3.min(selectedData, d => d[label])
+      const maxValue = d3.max(selectedData, d => d[label])
+      radiusScale = d3
+        .scaleLinear()
+        .domain([minValue, maxValue])
+        .range([minRadius, maxRadius])
+    } else {
+      // time
+      const minValue = d3.min(selectedData, d => new Date(Date.parse(d[label])))
+      const maxValue = d3.max(selectedData, d => new Date(Date.parse(d[label])))
+      radiusScale = d3
+        .scaleTime()
+        .domain([minValue, maxValue])
+        .range([minRadius, maxRadius])
+    }
   }
 
   return radiusScale
@@ -46,9 +82,13 @@ export function getRadiusScale(props, minRadius = 3, maxRadius = 30) {
 export function getRadius(props, minRadius = 3, maxRadius = 30) {
   const label = props.header[props.settings['radius']]
   const radiusScale = getRadiusScale(props, minRadius, maxRadius)
+  const parseData =
+    props.dataTypes[props.settings['radius']] === 'number'
+      ? parseFloat
+      : d => new Date(d)
   const radii = props.data
     .filter((item, i) => props.rowSelections.includes(i))
-    .map(item => radiusScale(item[label]).toString())
+    .map(item => radiusScale(parseData(item[label])).toString())
 
   return radii
 }

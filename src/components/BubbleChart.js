@@ -6,6 +6,7 @@ import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
 import { drawLegend } from '../utils/draw'
 import Info from './Info'
+import moment from 'moment'
 
 // bubble chart d3 references
 // https://bl.ocks.org/mbostock/4063269
@@ -43,15 +44,22 @@ const updateD3Node = props => {
     })
   data = data.filter(d => d[props.header[props.settings['radius']]] != null)
 
+  const parseData =
+    props.dataTypes[props.settings['radius']] === 'number'
+      ? parseFloat
+      : d => moment(d).year() + moment(d).dayOfYear() / 366 // convert date to year
+
   // use maximum radius to scale the radii to avoid bubble overlap issue for very small values
-  const maxRadius = Math.max(
-    ...data.map(d => d[props.header[props.settings['radius']]])
-  )
+  const maxRadius =
+    props.dataTypes[props.settings['radius']] === 'number'
+      ? Math.max(...data.map(d => d[props.header[props.settings['radius']]]))
+      : 1
+
   //bubbles needs very specific format, convert data to this.
   var nodes = d3
     .hierarchy({ children: data })
     .sum(function(d) {
-      return d[props.header[props.settings['radius']]] / maxRadius
+      return parseData(d[props.header[props.settings['radius']]]) / maxRadius
     })
     .sort(function(a, b) {
       return b.value - a.value
@@ -166,7 +174,10 @@ class BubbleChart extends Component {
   }
 
   render() {
-    if (!this.props.dataTypes.includes('number'))
+    if (
+      !this.props.dataTypes.includes('number') &&
+      !this.props.dataTypes.includes('time')
+    )
       return <Info info="no-number" />
 
     return (

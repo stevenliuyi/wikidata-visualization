@@ -250,6 +250,8 @@ export const axisSettings = {
   xprecision: 2,
   yprecision: 2,
   precision: 2,
+  xtimeprecision: 'year',
+  ytimeprecision: 'year',
   xgridlines: true,
   ygridlines: true,
   xticks: 4,
@@ -264,6 +266,8 @@ export const axisSettingTitles = {
   xprecision: 'X value precision',
   yprecision: 'Y value precision',
   precision: 'Axis value precision',
+  xtimeprecision: 'X time precision',
+  ytimeprecision: 'Y time precision',
   xgridlines: 'X grid lines',
   ygridlines: 'Y grid lines',
   xticks: 'X ticks',
@@ -313,9 +317,11 @@ export const charts = [
     moreSettings: ['fontSize', 'radius', 'color', 'showLegend', 'legendScale'],
     axisSettings: [
       'xformat',
-      'yformat',
       'xprecision',
+      'xtimeprecision',
+      'yformat',
       'yprecision',
+      'ytimeprecision',
       'xgridlines',
       'ygridlines',
       'xticks',
@@ -562,11 +568,12 @@ export function getSettings(chartId, header, data, dataTypes) {
   const chartSettings = chartIndex > 0 ? charts[chartIndex].settings : []
   const show = chartIndex > 0 ? charts[chartIndex].defaultShow : []
 
-  const numberIndices = getDataTypeIndices(dataTypes, 'number')
+  let numberIndices = getDataTypeIndices(dataTypes, 'number')
   const itemIndices = getDataTypeIndices(dataTypes, 'item')
   const coordinateIndices = getDataTypeIndices(dataTypes, 'coordinate')
   const imageIndices = getDataTypeIndices(dataTypes, 'image')
   const timeIndices = getDataTypeIndices(dataTypes, 'time')
+  numberIndices = numberIndices.concat(timeIndices) // conbime number and time types
 
   // default settings
   let numIdx = 0,
@@ -601,7 +608,7 @@ export function getSettings(chartId, header, data, dataTypes) {
       imageIndices.length >= 1 &&
       show[index]
     ) {
-      // coordinate
+      // image
       defaultValue = imageIndices[coordIdx]
       if (imageIdx < imageIndices.length - 1) imageIdx += 1
     } else if (
