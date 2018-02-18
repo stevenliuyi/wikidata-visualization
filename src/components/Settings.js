@@ -9,6 +9,7 @@ import {
 import SettingPanel from './SettingPanel'
 import SettingToggle from './SettingToggle'
 import ReactBootstrapSlider from 'react-bootstrap-slider'
+import ReactBootstrapRangeSlider from './ReactBootstrapRangeSlider'
 import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
 import { colorSchemeNames, getColorScaleFromValues } from '../utils/scales'
 import { mapSettings, mapProjections } from '../utils/maps'
@@ -82,7 +83,7 @@ class Settings extends Component {
       )
     } else if (setting === 'radius') {
       return (
-        <ReactBootstrapSlider
+        <ReactBootstrapRangeSlider
           value={this.props.moreSettings.radius}
           slideStop={e =>
             this.props.onMoreSettingsChange({ radius: e.target.value })
@@ -384,7 +385,7 @@ class Settings extends Component {
       )
     } else if (setting === 'fontSizes') {
       return (
-        <ReactBootstrapSlider
+        <ReactBootstrapRangeSlider
           value={this.props.moreSettings.fontSizes}
           slideStop={e =>
             this.props.onMoreSettingsChange({ fontSizes: e.target.value })
