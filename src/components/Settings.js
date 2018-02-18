@@ -464,6 +464,9 @@ class Settings extends Component {
           <option value="stacked" key="stacked">
             stacked
           </option>
+          <option value="100-stacked" key="100-stacked">
+            100% stacked
+          </option>
           <option value="grouped" key="grouped">
             grouped
           </option>
@@ -697,29 +700,26 @@ class Settings extends Component {
     let chartAxisSettingComponents = {}
     if (Array.isArray(chartAxisSettings)) {
       chartAxisSettings.forEach(axisSetting => {
+        const x_label = this.props.dataTypes[this.props.settings['x-axis']]
+        const y_label = this.props.dataTypes[this.props.settings['y-axis']]
+
         if (
-          this.props.dataTypes[this.props.settings['x-axis']] !== 'number' &&
+          x_label !== 'number' &&
+          this.props.chart === 1.02 &&
           (axisSetting === 'xformat' || axisSetting === 'xprecision')
         )
           return
 
         if (
-          this.props.dataTypes[this.props.settings['y-axis']] !== 'number' &&
+          y_label !== 'number' &&
+          this.props.chart === 1.02 &&
           (axisSetting === 'yformat' || axisSetting === 'yprecision')
         )
           return
 
-        if (
-          this.props.dataTypes[this.props.settings['x-axis']] !== 'time' &&
-          axisSetting === 'xtimeprecision'
-        )
-          return
+        if (x_label !== 'time' && axisSetting === 'xtimeprecision') return
 
-        if (
-          this.props.dataTypes[this.props.settings['y-axis']] !== 'time' &&
-          axisSetting === 'ytimeprecision'
-        )
-          return
+        if (y_label !== 'time' && axisSetting === 'ytimeprecision') return
 
         chartAxisSettingComponents[
           axisSettingTitles[axisSetting]

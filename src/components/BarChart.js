@@ -10,6 +10,9 @@ import { getFormat } from '../utils/format'
 // bar chart d3 references
 // http://bl.ocks.org/mbostock/3943967
 const updateD3Node = (props, transition) => {
+  // bar type
+  const value = d3.select('#bartype-select').property('value')
+
   d3.selectAll('.d3ToolTip').remove()
   var tooltip = d3
     .select('body')
@@ -30,6 +33,11 @@ const updateD3Node = (props, transition) => {
   // Each yz[i] is an array of m non-negative numbers representing a y-value for xz[i].
   // The y01z array has the same structure as yz, but with stacked [y₀, y₁] instead of y.
   var [xz, yz, colors, colorScale, tooltipHTMLs] = getGroupValues(props)
+  // calculate percentages for 100% stacked bar chart
+  const ysum = yz.reduce((acc, cur) => acc.map((num, i) => num + cur[i]))
+  if (value === '100-stacked')
+    yz = yz.map(yarray => yarray.map((num, i) => num / ysum[i]))
+
   var n = yz.length,
     y01z = d3.stack().keys(d3.range(n))(d3.transpose(yz)),
     yMax = d3.max(yz, function(y) {
@@ -137,7 +145,6 @@ const updateD3Node = (props, transition) => {
     })
 
   if (document.getElementById('bartype-select') == null) return
-  const value = d3.select('#bartype-select').property('value')
   if (transition) {
     if (value === 'grouped') transitionGrouped()
     else transitionStacked()
