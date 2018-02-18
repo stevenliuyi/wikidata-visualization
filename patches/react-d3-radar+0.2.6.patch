@@ -43,6 +43,7 @@ patch-package
 +    fontSize: fontSize
    });
  }
+\ No newline at end of file
 --- a/node_modules/react-d3-radar/lib/RadarAxis.js
 +++ b/node_modules/react-d3-radar/lib/RadarAxis.js
 @@ -20,7 +20,7 @@ var defaultRadarAxisStyle = {
@@ -54,13 +55,14 @@ patch-package
  };
  
  function RadarAxis(props) {
-@@ -29,12 +29,13 @@ function RadarAxis(props) {
+@@ -29,12 +29,14 @@ function RadarAxis(props) {
        domainMax = props.domainMax,
        label = props.label,
        color = props.color,
 -      style = props.style;
 +      style = props.style,
-+      fontSize = props.fontSize;
++      fontSize = props.fontSize,
++      index = props.index;
  
    var _defaultRadarAxisStyl = _extends({}, defaultRadarAxisStyle, { style: style }),
        axisOverreach = _defaultRadarAxisStyl.axisOverreach,
@@ -70,6 +72,42 @@ patch-package
        fontFamily = _defaultRadarAxisStyl.fontFamily,
        textFill = _defaultRadarAxisStyl.textFill,
        axisWidth = _defaultRadarAxisStyl.axisWidth;
+@@ -55,6 +57,8 @@ function RadarAxis(props) {
+     _react2.default.createElement(
+       'text',
+       {
++        id: 'text' + index,
++        className: 'text',
+         x: scale(domainMax * labelOverreach) * xFactor,
+         y: scale(domainMax * labelOverreach) * yFactor,
+         fontSize: fontSize,
+--- a/node_modules/react-d3-radar/lib/RadarCircle.js
++++ b/node_modules/react-d3-radar/lib/RadarCircle.js
+@@ -24,11 +24,11 @@ var defaultCircleStyle = {
+   selectedFillOpacity: 0.5,
+   inactiveFillOpacity: 0.2,
+   selectedStrokeOpacity: 1.0,
+-  inactiveStrokeOpacity: 0.7,
++  inactiveStrokeOpacity: 1.0,
+   pointRadius: 3,
+   selectedPointFill: 'white',
+   selectedPointOpacity: 1.0,
+-  inactivePointOpacity: 0.7
++  inactivePointOpacity: 1.0
+ };
+ 
+ function RadarCircle(props) {
+@@ -67,8 +67,9 @@ function RadarCircle(props) {
+       stroke: color,
+       strokeOpacity: isSelected ? selectedStrokeOpacity : inactiveStrokeOpacity
+     }),
+-    points.map(function (point) {
++    points.map(function (point, index) {
+       return _react2.default.createElement('circle', {
++        className: 'circle circle' + index,
+         key: point.key,
+         r: pointRadius,
+         fill: point.variableKey === selectedVariableKey ? selectedPointFill : color,
 --- a/node_modules/react-d3-radar/lib/RadarWrapper.js
 +++ b/node_modules/react-d3-radar/lib/RadarWrapper.js
 @@ -120,20 +120,23 @@ var RadarWrapper = function (_Component) {
@@ -100,7 +138,19 @@ patch-package
  
        return _react2.default.createElement(
          'svg',
-@@ -171,7 +174,8 @@ var RadarWrapper = function (_Component) {
+@@ -161,17 +164,19 @@ var RadarWrapper = function (_Component) {
+               color: ringColor,
+               format: tickFormat
+             }),
+-            variables.map(function (_ref2) {
++            variables.map(function (_ref2, index) {
+               var key = _ref2.key,
+                   label = _ref2.label;
+ 
+               return _react2.default.createElement(_RadarAxis2.default, {
++                index: index,
+                 key: key,
+                 scale: scales[key],
                  offsetAngle: offsetAngles[key],
                  label: label,
                  domainMax: domainMax,

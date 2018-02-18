@@ -6,8 +6,73 @@ import { drawLegend } from '../utils/draw'
 import Radar from 'react-d3-radar'
 import Info from './Info'
 import { getFormat } from '../utils/format'
+import chroma from 'chroma-js'
 
 class RadarChart extends Component {
+  componentDidUpdate() {
+    const tooltipHTMLs = getGroupValues(this.props)[4]
+
+    var tooltip = d3.select('.d3ToolTip')
+
+    d3
+      .selectAll('.circle')
+      .on('mouseover', function() {
+        const id = d3
+          .select(this)
+          .attr('class')
+          .slice(13)
+        const color = d3.select(this).attr('fill')
+        d3.select(this).attr('fill', chroma(color).brighten(0.6))
+        d3.select('#text' + id).attr('font-weight', 'bold')
+      })
+      .on('mousemove', function() {
+        const id = parseInt(
+          d3
+            .select(this)
+            .attr('class')
+            .slice(13),
+          10
+        )
+        tooltip
+          .style('left', d3.event.pageX + 10 + 'px')
+          .style('top', d3.event.pageY + 10 + 'px')
+          .style('display', 'inline-block')
+          .html(tooltipHTMLs[id])
+      })
+      .on('mouseout', function() {
+        tooltip.style('display', 'none')
+        const id = d3
+          .select(this)
+          .attr('class')
+          .slice(13)
+        const color = d3.select(this).attr('fill')
+        d3.select(this).attr('fill', chroma(color).darken(0.6))
+        d3.select('#text' + id).attr('font-weight', 'normal')
+      })
+
+    d3
+      .selectAll('.text')
+      .on('mousemove', function() {
+        const id = parseInt(
+          d3
+            .select(this)
+            .attr('id')
+            .slice(4),
+          10
+        )
+        tooltip
+          .style('left', d3.event.pageX + 10 + 'px')
+          .style('top', d3.event.pageY + 10 + 'px')
+          .style('display', 'inline-block')
+          .html(tooltipHTMLs[id])
+        d3.select(this).attr('font-weight', 'bold')
+      })
+      .on('mouseout', function() {
+        tooltip.style('display', 'none')
+        d3.select(this).attr('font-weight', 'normal')
+      })
+  }
+
   render() {
     if (
       !this.props.dataTypes.includes('number') &&
@@ -21,6 +86,12 @@ class RadarChart extends Component {
 
     d3.selectAll('.legendCells').remove()
     drawLegend(d3.select('#chart').select('svg'), colorScale, this.props)
+
+    d3.selectAll('.d3ToolTip').remove()
+    d3
+      .select('body')
+      .append('div')
+      .attr('class', 'd3ToolTip')
 
     return (
       <div id="chart">

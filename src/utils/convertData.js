@@ -480,7 +480,7 @@ export function getGroupValues(props) {
     })
     const maxVal = Math.max(...[].concat.apply([], y_values))
 
-    return [data, maxVal, colors, colorScale]
+    return [data, maxVal, colors, colorScale, tooltipHTMLs]
   }
 }
 
