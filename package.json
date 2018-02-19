@@ -12,6 +12,7 @@
     "d3": "^4.13.0",
     "d3-scale-chromatic": "^1.1.1",
     "d3-svg-legend": "^2.25.4",
+    "flag-icon-css": "^2.9.0",
     "github-api": "^3.0.0",
     "google-maps": "^3.2.1",
     "jquery": "^3.2.1",

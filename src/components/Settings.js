@@ -21,6 +21,7 @@ import { formats, timeFormats } from '../utils/format'
 import * as d3 from 'd3'
 import $ from 'jquery'
 import ReactDOMServer from 'react-dom/server'
+import 'flag-icon-css/css/flag-icon.min.css'
 
 class Settings extends Component {
   state = {
@@ -143,7 +144,8 @@ class Settings extends Component {
         </div>
       )
     } else if (setting === 'map' || setting === 'map2') {
-      const maps = Object.keys(setting === 'map' ? mapSettings : map2Settings)
+      const mapsetting = setting === 'map' ? mapSettings : map2Settings
+      const maps = Object.keys(mapsetting)
       let world = [],
         continents = [],
         countries = []
@@ -166,6 +168,20 @@ class Settings extends Component {
           countries.push(m)
         }
       })
+
+      const regionTemplate = region => {
+        if (mapsetting[region.text] == null) return region.text
+        if (mapsetting[region.text].code == null) {
+          return region.text
+        } else {
+          // add country flag
+          return $(
+            `<span><span class='flag-icon flag-icon-${
+              mapsetting[region.text].code
+            }' /> ${region.text}</span>`
+          )
+        }
+      }
 
       return (
         <Select2
@@ -190,6 +206,8 @@ class Settings extends Component {
             return this.props.onMoreSettingsChange(newSetting)
           }}
           options={{
+            templateResult: region => regionTemplate(region),
+            templateSelection: region => regionTemplate(region),
             width: '100%'
           }}
         />

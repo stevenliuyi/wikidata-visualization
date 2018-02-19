@@ -517,7 +517,8 @@ export const map2Settings = {
     translate: [1.35, 1.6],
     center: [-105, 65],
     scale0: 300,
-    rotation: [0, 0, 0]
+    rotation: [0, 0, 0],
+    code: 'ca'
   },
   'China (Mainland)': {
     names: ChinaNames,
@@ -528,7 +529,8 @@ export const map2Settings = {
     translate: [-0.65, 1.25],
     center: [105, 40],
     scale0: 600,
-    rotation: [0, 0, 0]
+    rotation: [0, 0, 0],
+    code: 'cn'
   },
   France: {
     names: FranceNames,
@@ -539,7 +541,8 @@ export const map2Settings = {
     translate: [0.4, 3.9],
     center: [2, 46],
     scale0: 1800,
-    rotation: [0, 0, 0]
+    rotation: [0, 0, 0],
+    code: 'fr'
   },
   Germany: {
     names: GermanyNames,
@@ -550,7 +553,8 @@ export const map2Settings = {
     translate: [0.1, 4.9],
     center: [10, 51],
     scale0: 2000,
-    rotation: [0, 0, 0]
+    rotation: [0, 0, 0],
+    code: 'de'
   },
   India: {
     names: IndiaNames,
@@ -561,7 +565,8 @@ export const map2Settings = {
     translate: [-0.8, 1.2],
     center: [80, 22],
     scale0: 1000,
-    rotation: [0, 0, 0]
+    rotation: [0, 0, 0],
+    code: 'in'
   },
   Japan: {
     names: JapanNames,
@@ -572,7 +577,8 @@ export const map2Settings = {
     translate: [-4, 2.8],
     center: [140, 38],
     scale0: 1800,
-    rotation: [0, 0, 0]
+    rotation: [0, 0, 0],
+    code: 'jp'
   },
   'United States': {
     names: USNames,
@@ -583,7 +589,8 @@ export const map2Settings = {
     translate: [1.7, 1.2],
     center: [-95, 40],
     scale0: 700,
-    rotation: [0, 0, 0]
+    rotation: [0, 0, 0],
+    code: 'us'
   }
 }
 
