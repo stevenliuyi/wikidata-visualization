@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { PanelGroup, Panel, FormControl } from 'react-bootstrap'
+import { PanelGroup, Panel } from 'react-bootstrap'
 import {
   charts,
   moreSettingTitles,
@@ -8,6 +8,8 @@ import {
 } from '../utils/settings'
 import SettingPanel from './SettingPanel'
 import SettingToggle from './SettingToggle'
+import Select2 from 'react-select2-wrapper'
+import 'react-select2-wrapper/css/select2.min.css'
 import ReactBootstrapSlider from 'react-bootstrap-slider'
 import ReactBootstrapRangeSlider from './ReactBootstrapRangeSlider'
 import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
@@ -104,19 +106,16 @@ class Settings extends Component {
 
       return (
         <div>
-          <FormControl
-            componentClass="select"
+          <Select2
             value={this.props.moreSettings.color}
+            data={colorSchemeNames}
             onChange={e =>
               this.props.onMoreSettingsChange({ color: e.target.value })
             }
-          >
-            {colorSchemeNames.map(colorSchemeName => (
-              <option value={colorSchemeName} key={colorSchemeName}>
-                {colorSchemeName}
-              </option>
-            ))}
-          </FormControl>
+            options={{
+              width: '100%'
+            }}
+          />
           {/* generating color palettte  */}
           <div className="color-palette">
             {sampleColors.map(color => (
@@ -126,40 +125,77 @@ class Settings extends Component {
         </div>
       )
     } else if (setting === 'map' || setting === 'map2') {
+      const maps = Object.keys(setting === 'map' ? mapSettings : map2Settings)
+      let world = [],
+        continents = [],
+        countries = []
+
+      maps.forEach(m => {
+        if (m.startsWith('World')) {
+          world.push(m)
+        } else if (
+          [
+            'Africa',
+            'Asia',
+            'Europe',
+            'North America',
+            'Oceania',
+            'South America'
+          ].includes(m)
+        ) {
+          continents.push(m)
+        } else {
+          countries.push(m)
+        }
+      })
+
       return (
-        <FormControl
-          componentClass="select"
+        <Select2
           value={this.props.moreSettings[setting]}
+          data={[
+            {
+              text: 'world',
+              children: world
+            },
+            {
+              text: 'continents',
+              children: continents
+            },
+            {
+              text: 'countries & regions',
+              children: countries
+            }
+          ].filter(r => r.children.length > 0)}
           onChange={e => {
             const newSetting = {}
             newSetting[setting] = e.target.value
             return this.props.onMoreSettingsChange(newSetting)
           }}
-        >
-          {Object.keys(setting === 'map' ? mapSettings : map2Settings).map(
-            region => (
-              <option value={region} key={region}>
-                {region}
-              </option>
-            )
-          )}
-        </FormControl>
+          options={{
+            name: 'tttt',
+            width: '100%'
+          }}
+        />
       )
     } else if (setting === 'projection') {
+      const projections = mapProjections.map(proj => proj.projection)
+      const titles = mapProjections.map(proj => proj.title)
+      const projectionRenderText = projection =>
+        titles[projections.indexOf(projection.text)]
       return (
-        <FormControl
-          componentClass="select"
+        <Select2
           value={this.props.moreSettings.projection}
+          data={projections}
           onChange={e =>
             this.props.onMoreSettingsChange({ projection: e.target.value })
           }
-        >
-          {mapProjections.map(proj => (
-            <option value={proj.projection} key={proj.projection}>
-              {proj.title}
-            </option>
-          ))}
-        </FormControl>
+          options={{
+            minimumResultsForSearch: -1,
+            templateResult: projectionRenderText,
+            templateSelection: projectionRenderText,
+            width: '100%'
+          }}
+        />
       )
     } else if (setting === 'strength') {
       return (
@@ -223,60 +259,49 @@ class Settings extends Component {
       )
     } else if (setting === 'sortRow' || setting === 'sortColumn') {
       return (
-        <FormControl
-          componentClass="select"
+        <Select2
           value={this.props.moreSettings[setting]}
+          data={['none', ...header]}
           onChange={e => {
             const newSetting = {}
             newSetting[setting] = e.target.value
             return this.props.onMoreSettingsChange(newSetting)
           }}
-        >
-          <option value="none" key="none">
-            none
-          </option>
-          {header.map(h => (
-            <option value={h} key={h}>
-              {h}
-            </option>
-          ))}
-        </FormControl>
+          options={{
+            minimumResultsForSearch: -1,
+            width: '100%'
+          }}
+        />
       )
     } else if (setting === 'baseMap') {
       return (
-        <FormControl
-          componentClass="select"
+        <Select2
           value={this.props.moreSettings[setting]}
+          data={Object.keys(baseMapSettings)}
           onChange={e => {
             const newSetting = {}
             newSetting[setting] = e.target.value
             return this.props.onMoreSettingsChange(newSetting)
           }}
-        >
-          {Object.keys(baseMapSettings).map(map => (
-            <option value={map} key={map}>
-              {map}
-            </option>
-          ))}
-        </FormControl>
+          options={{
+            width: '100%'
+          }}
+        />
       )
     } else if (setting === 'solarSystem') {
       return (
-        <FormControl
-          componentClass="select"
+        <Select2
           value={this.props.moreSettings[setting]}
+          data={Object.keys(solarSystemSettings)}
           onChange={e => {
             const newSetting = {}
             newSetting[setting] = e.target.value
             return this.props.onMoreSettingsChange(newSetting)
           }}
-        >
-          {Object.keys(solarSystemSettings).map(map => (
-            <option value={map} key={map}>
-              {map}
-            </option>
-          ))}
-        </FormControl>
+          options={{
+            width: '100%'
+          }}
+        />
       )
     } else if (
       setting === 'showCircles' ||
@@ -316,73 +341,57 @@ class Settings extends Component {
         />
       )
     } else if (setting === 'delimiter') {
+      const delimiterTexts = {
+        '[NONE]': 'none',
+        ' ': 'space',
+        ',': 'comma (,)',
+        ';': 'semicolon (;)',
+        '.': 'dot (.)',
+        Chinese: 'Chinese tokenizer',
+        Japanese: 'Japanese tokenizer'
+      }
       return (
-        <FormControl
-          componentClass="select"
+        <Select2
           value={this.props.moreSettings['delimiter']}
+          data={['[NONE]', ' ', ',', ';', '.', 'Chinese', 'Japanese']}
           onChange={e =>
             this.props.onMoreSettingsChange({ delimiter: e.target.value })
           }
-        >
-          <option value="[NONE]" key="none">
-            none
-          </option>
-          <option value=" " key="space">
-            space
-          </option>
-          <option value="," key="comma">
-            comma (,)
-          </option>
-          <option value=";" key="semi-colon">
-            semi-colon (;)
-          </option>
-          <option value="." key="dot">
-            dot (.)
-          </option>
-          <option value="Chinese" key="Chinese">
-            Chinese tokenizer
-          </option>
-          <option value="Japanese" key="Japanese">
-            Japanese tokenizer
-          </option>
-        </FormControl>
+          options={{
+            minimumResultsForSearch: -1,
+            templateResult: d => delimiterTexts[d.text],
+            templateSelection: d => delimiterTexts[d.text],
+            width: '100%'
+          }}
+        />
       )
     } else if (setting === 'case') {
       return (
-        <FormControl
-          componentClass="select"
+        <Select2
           value={this.props.moreSettings['case']}
+          data={['default', 'lower case', 'upper case']}
           onChange={e =>
             this.props.onMoreSettingsChange({ case: e.target.value })
           }
-        >
-          <option value="default" key="default">
-            default
-          </option>
-          <option value="lower case" key="lower case">
-            lower case
-          </option>
-          <option value="upper case" key="upper case">
-            upper case
-          </option>
-        </FormControl>
+          options={{
+            minimumResultsForSearch: -1,
+            width: '100%'
+          }}
+        />
       )
     } else if (setting === 'sizeScale') {
       return (
-        <FormControl
-          componentClass="select"
+        <Select2
           value={this.props.moreSettings['sizeScale']}
+          data={['linear', 'log']}
           onChange={e =>
             this.props.onMoreSettingsChange({ sizeScale: e.target.value })
           }
-        >
-          <option value="linear" key="linear">
-            linear
-          </option>
-          <option value="log" key="log">
-            log
-          </option>
-        </FormControl>
+          options={{
+            minimumResultsForSearch: -1,
+            width: '100%'
+          }}
+        />
       )
     } else if (setting === 'fontSizes') {
       return (
@@ -454,41 +463,33 @@ class Settings extends Component {
       )
     } else if (setting === 'barType') {
       return (
-        <FormControl
-          id="bartype-select"
-          componentClass="select"
-          value={this.props.moreSettings['barType']}
-          onChange={e =>
-            this.props.onMoreSettingsChange({ barType: e.target.value })
-          }
-        >
-          <option value="stacked" key="stacked">
-            stacked
-          </option>
-          <option value="100-stacked" key="100-stacked">
-            100% stacked
-          </option>
-          <option value="grouped" key="grouped">
-            grouped
-          </option>
-        </FormControl>
+        <div id="bartype-select">
+          <Select2
+            value={this.props.moreSettings['barType']}
+            data={['stacked', '100% stacked', 'grouped']}
+            onChange={e =>
+              this.props.onMoreSettingsChange({ barType: e.target.value })
+            }
+            options={{
+              minimumResultsForSearch: -1,
+              width: '100%'
+            }}
+          />
+        </div>
       )
     } else if (setting === 'timelineType') {
       return (
-        <FormControl
-          componentClass="select"
+        <Select2
           value={this.props.moreSettings['timelineType']}
+          data={['separated', 'grouped']}
           onChange={e =>
             this.props.onMoreSettingsChange({ timelineType: e.target.value })
           }
-        >
-          <option value="separate" key="separate">
-            separate
-          </option>
-          <option value="grouped" key="grouped">
-            grouped
-          </option>
-        </FormControl>
+          options={{
+            minimumResultsForSearch: -1,
+            width: '100%'
+          }}
+        />
       )
     } else if (setting === 'innerRadius') {
       return (
@@ -508,21 +509,19 @@ class Settings extends Component {
       setting === 'format'
     ) {
       return (
-        <FormControl
-          componentClass="select"
+        <Select2
           value={this.props.axisSettings[setting]}
+          data={Object.keys(formats)}
           onChange={e => {
             const newSetting = {}
             newSetting[setting] = e.target.value
             return this.props.onAxisSettingsChange(newSetting)
           }}
-        >
-          {Object.keys(formats).map(format => (
-            <option value={format} key={format}>
-              {format}
-            </option>
-          ))}
-        </FormControl>
+          options={{
+            minimumResultsForSearch: -1,
+            width: '100%'
+          }}
+        />
       )
     } else if (
       setting === 'xprecision' ||
@@ -545,21 +544,19 @@ class Settings extends Component {
       )
     } else if (setting === 'xtimeprecision' || setting === 'ytimeprecision') {
       return (
-        <FormControl
-          componentClass="select"
+        <Select2
           value={this.props.axisSettings[setting]}
+          data={Object.keys(timeFormats)}
           onChange={e => {
             const newSetting = {}
             newSetting[setting] = e.target.value
             return this.props.onAxisSettingsChange(newSetting)
           }}
-        >
-          {Object.keys(timeFormats).map(format => (
-            <option value={format} key={format}>
-              {format}
-            </option>
-          ))}
-        </FormControl>
+          options={{
+            minimumResultsForSearch: -1,
+            width: '100%'
+          }}
+        />
       )
     } else if (setting === 'xgridlines' || setting === 'ygridlines') {
       return (
@@ -635,39 +632,56 @@ class Settings extends Component {
           chartSettingComponents[setting.title] = (
             <div>
               {[...Array(this.props.settings.ngroups).keys()].map((_, idx) => (
-                <FormControl
-                  key={idx}
-                  name={idx > 0 ? `${setting.value}${idx}` : setting.value}
-                  componentClass="select"
-                  value={this.props.settings[`${setting.value}${idx}`]}
-                  style={{ marginBottom: '10px' }}
-                  onChange={this.onSettingsChange}
-                >
-                  {Array.isArray(this.props.header) &&
-                    setting.indices.map(index => (
-                      <option value={index} key={index}>
-                        {index === -1 ? 'none' : this.props.header[index]}
-                      </option>
-                    ))}
-                </FormControl>
+                <div style={{ marginBottom: '10px' }}>
+                  <Select2
+                    value={
+                      this.props.settings[
+                        idx > 0 ? `${setting.value}${idx}` : setting.value
+                      ]
+                    }
+                    data={setting.indices}
+                    onChange={e => {
+                      let new_event = e
+                      new_event.target.name =
+                        idx > 0 ? `${setting.value}${idx}` : setting.value
+                      this.onSettingsChange(new_event)
+                    }}
+                    options={{
+                      minimumResultsForSearch: -1,
+                      templateResult: index =>
+                        index.text === '-1'
+                          ? 'none'
+                          : this.props.header[index.text],
+                      templateSelection: index =>
+                        index.text === '-1'
+                          ? 'none'
+                          : this.props.header[index.text],
+                      width: '100%'
+                    }}
+                  />
+                </div>
               ))}
             </div>
           )
         } else {
           chartSettingComponents[setting.title] = (
-            <FormControl
-              name={setting.value}
-              componentClass="select"
+            <Select2
               value={this.props.settings[setting.value]}
-              onChange={this.onSettingsChange}
-            >
-              {Array.isArray(this.props.header) &&
-                setting.indices.map(index => (
-                  <option value={index} key={index}>
-                    {index === -1 ? 'none' : this.props.header[index]}
-                  </option>
-                ))}
-            </FormControl>
+              data={setting.indices}
+              onChange={e => {
+                let new_event = e
+                new_event.target.name = setting.value
+                this.onSettingsChange(new_event)
+              }}
+              options={{
+                minimumResultsForSearch: -1,
+                templateResult: index =>
+                  index.text === '-1' ? 'none' : this.props.header[index.text],
+                templateSelection: index =>
+                  index.text === '-1' ? 'none' : this.props.header[index.text],
+                width: '100%'
+              }}
+            />
           )
         }
       })

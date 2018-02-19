@@ -11,7 +11,10 @@ import { getFormat } from '../utils/format'
 // http://bl.ocks.org/mbostock/3943967
 const updateD3Node = (props, transition) => {
   // bar type
-  const value = d3.select('#bartype-select').property('value')
+  const value = d3
+    .select('#bartype-select')
+    .select('select')
+    .property('value')
 
   d3.selectAll('.d3ToolTip').remove()
   var tooltip = d3
@@ -35,7 +38,7 @@ const updateD3Node = (props, transition) => {
   var [xz, yz, colors, colorScale, tooltipHTMLs] = getGroupValues(props)
   // calculate percentages for 100% stacked bar chart
   const ysum = yz.reduce((acc, cur) => acc.map((num, i) => num + cur[i]))
-  if (value === '100-stacked')
+  if (value === '100% stacked')
     yz = yz.map(yarray => yarray.map((num, i) => num / ysum[i]))
 
   var n = yz.length,

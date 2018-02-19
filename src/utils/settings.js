@@ -169,8 +169,8 @@ export const moreSettings = {
   iterations: 20,
   nodeWidth: 16,
   nodePadding: 5,
-  sortRow: '',
-  sortColumn: '',
+  sortRow: 'none',
+  sortColumn: 'none',
   baseMap: 'OpenStreetMap',
   showCircles: true,
   showMarkers: false,
@@ -190,7 +190,7 @@ export const moreSettings = {
   solarSystem: 'Earth',
   barType: 'stacked',
   innerRadius: 0.6,
-  timelineType: 'separate',
+  timelineType: 'separated',
   padding: 10
 }
 

@@ -25,8 +25,8 @@ const updateD3Node = props => {
   var timeline = d3Timeline()
 
   let negativeHeight = false
-  if (props.moreSettings.timelineType === 'separate') {
-    // separate
+  if (props.moreSettings.timelineType === 'separated') {
+    // separated
     timeline = d3Timeline()
       .size([props.width - 120, singleHeight - padding])
       .extent([minDate, maxDate])

@@ -227,6 +227,19 @@ input[type="number"] {
   margin-bottom: 0px;
 }
 
+.setting-row .btn-default {
+  border-color: #aaa !important; 
+}
+
+.setting-row .btn-sm {
+  font-size: 14px !important;
+}
+
+/* overwrite select2 box height */
+.select2-container .select2-selection--single {
+  height: 30px !important; 
+}
+
 #data-table input[type="text"]:focus {
   border-color: #337ab7 !important;
   -webkit-appearance: none;
