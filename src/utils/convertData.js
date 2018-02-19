@@ -2,6 +2,7 @@
 import * as d3 from 'd3'
 import { getColorScaleFromValues, getColors, colorSchemes } from './scales'
 import moment from 'moment'
+import toposort from 'toposort'
 
 const numbers = [
   'double',
@@ -86,16 +87,8 @@ export function getTreeRoot(props) {
   const label = props.header[props.settings['label']]
   const color = props.header[props.settings['color']]
 
-  // root
-  let relationships = [
-    {
-      id: props.data[props.rowSelections[0]][from],
-      parent: '',
-      label: label ? props.data[props.rowSelections[0]][label] : '',
-      color: color ? props.data[props.rowSelections[0]][color] : ''
-    }
-  ]
-  let ids = [props.data[props.rowSelections[0]][from]]
+  let relationships = []
+  let ids = []
 
   const selectedData = props.data.filter((item, i) =>
     props.rowSelections.includes(i)
@@ -119,6 +112,22 @@ export function getTreeRoot(props) {
         ids.push(item[to])
       }
     }
+  })
+
+  // use toposort to find the root node
+  let sorted
+  try {
+    sorted = toposort(relationships.map(r => [r.parent, r.id]))
+  } catch (err) {
+    return null
+  }
+
+  // add root node
+  relationships.push({
+    id: sorted[0],
+    parent: '',
+    label: label ? selectedData[allFromIds.indexOf(sorted[0])][label] : '',
+    color: color ? selectedData[allFromIds.indexOf(sorted[0])][color] : ''
   })
 
   try {
