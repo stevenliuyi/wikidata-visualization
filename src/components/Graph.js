@@ -39,6 +39,7 @@ const updateD3Node = props => {
       .attr('orient', 'auto')
       .attr('markerWidth', 6)
       .attr('markerHeight', 6)
+      .attr('markerUnits', 'userSpaceOnUse')
       .attr('xoverflow', 'visible')
       .append('svg:path')
       .attr('d', 'M 0,-2 L 5 ,0 L 0,2')
@@ -90,6 +91,7 @@ const updateD3Node = props => {
     .on('mouseover', function(d, i) {
       d3.select('#link' + i).attr('stroke', '#337ab7')
       d3.select('#link' + i).attr('stroke-width', '3')
+      d3.select('#link' + i).attr('marker-end', 'none')
       d3.select('#edgelabel' + i).attr('font-weight', 'bold')
 
       d3
@@ -113,6 +115,7 @@ const updateD3Node = props => {
       tooltip.style('display', 'none')
       d3.select('#link' + i).attr('stroke', '#999')
       d3.select('#link' + i).attr('stroke-width', '1.5')
+      d3.select('#link' + i).attr('marker-end', 'url(#arrowhead)')
       d3.select('#edgelabel' + i).attr('font-weight', 'normal')
 
       d3
