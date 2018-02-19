@@ -19,6 +19,8 @@ import { map2Settings } from '../utils/maps2'
 import { baseMapSettings, solarSystemSettings } from '../utils/basemap'
 import { formats, timeFormats } from '../utils/format'
 import * as d3 from 'd3'
+import $ from 'jquery'
+import ReactDOMServer from 'react-dom/server'
 
 class Settings extends Component {
   state = {
@@ -98,11 +100,31 @@ class Settings extends Component {
     } else if (setting === 'color') {
       // for color palette
       const values = [...Array(10).keys()].map(v => v / 9)
-      const sampleColorScale = getColorScaleFromValues(
-        values,
-        this.props.moreSettings.color
-      )
-      const sampleColors = values.map(v => sampleColorScale(v))
+
+      const sampleColorTemplate = (colors, withText = true) => {
+        if (!colorSchemeNames.includes(colors.text)) return ''
+        const sampleColorScale = getColorScaleFromValues(values, colors.text)
+        const sampleColors = values.map(v => sampleColorScale(v))
+        // generating color pallette
+        let sampleColorsElement = (
+          <div className="color-palette">
+            {sampleColors.map(color => (
+              <div style={{ backgroundColor: color }} key={color} />
+            ))}
+          </div>
+        )
+        if (withText)
+          sampleColorsElement = (
+            <div style={{ height: '36px' }}>
+              <div className="color-palette-text">{colors.text}</div>
+              {sampleColorsElement}
+            </div>
+          )
+        const sampleColorsString = ReactDOMServer.renderToString(
+          sampleColorsElement
+        )
+        return $(sampleColorsString)
+      }
 
       return (
         <div>
@@ -113,15 +135,11 @@ class Settings extends Component {
               this.props.onMoreSettingsChange({ color: e.target.value })
             }
             options={{
+              templateResult: colors => sampleColorTemplate(colors),
+              templateSelection: colors => sampleColorTemplate(colors, false),
               width: '100%'
             }}
           />
-          {/* generating color palettte  */}
-          <div className="color-palette">
-            {sampleColors.map(color => (
-              <div style={{ backgroundColor: color }} key={color} />
-            ))}
-          </div>
         </div>
       )
     } else if (setting === 'map' || setting === 'map2') {
@@ -172,7 +190,6 @@ class Settings extends Component {
             return this.props.onMoreSettingsChange(newSetting)
           }}
           options={{
-            name: 'tttt',
             width: '100%'
           }}
         />
