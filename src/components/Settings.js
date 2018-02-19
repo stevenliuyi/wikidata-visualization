@@ -282,7 +282,8 @@ class Settings extends Component {
       setting === 'showCircles' ||
       setting === 'showMarkers' ||
       setting === 'reasonator' ||
-      setting === 'showLegend'
+      setting === 'showLegend' ||
+      setting === 'showArrows'
     ) {
       return (
         <SettingToggle

@@ -105,7 +105,7 @@ const color_to = {
 
 const edge_label = {
   value: 'edge_label',
-  title: 'Edge Label',
+  title: 'Edge label',
   type: 'all'
 }
 
@@ -174,6 +174,7 @@ export const moreSettings = {
   baseMap: 'OpenStreetMap',
   showCircles: true,
   showMarkers: false,
+  showArrows: false,
   ignoreCase: true,
   regex: false,
   reasonator: false,
@@ -210,6 +211,7 @@ export const moreSettingTitles = {
   baseMap: 'Base map',
   showCircles: 'Circles',
   showMarkers: 'Markers',
+  showArrows: 'Arrows',
   ignoreCase: 'Ignore case',
   regex: 'Regex filter',
   reasonator: 'External links',
@@ -218,7 +220,7 @@ export const moreSettingTitles = {
   delimiter: 'Delimiter',
   case: 'Case',
   sizeScale: 'Size scale',
-  fontSizes: 'Font Sizes',
+  fontSizes: 'Font sizes',
   showLegend: 'Legend',
   legendScale: 'Legend size',
   rotation: 'Max rotation',
@@ -379,7 +381,7 @@ export const charts = [
     chartClass: 'basic',
     settings: [link_from, link_to, label_from, label_to, edge_label, color_from, color_to],
     defaultShow: [true, true, false, false, false, false, false],
-    moreSettings: ['strength', 'fontSize', 'edgeFontSize', 'color'],
+    moreSettings: ['strength', 'showArrows', 'fontSize', 'edgeFontSize', 'color'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
