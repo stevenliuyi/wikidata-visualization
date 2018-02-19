@@ -110,6 +110,7 @@ export function getTreeRoot(props) {
       if (!ids.includes(item[to]) && allFromIds.indexOf(item[to]) >= 0) {
         relationships.push({
           id: item[to],
+          index: index,
           parent: item[from],
           label: label ? selectedData[allFromIds.indexOf(item[to])][label] : '',
           color: color ? selectedData[allFromIds.indexOf(item[to])][color] : '',
@@ -291,7 +292,7 @@ export function getGraph(props, link_index = false) {
         .concat(selectedData.map(item => item[to]))
     )
   ]
-  const nodes = items.map(q => ({ id: q }))
+  const nodes = items.map((q, idx) => ({ id: q, index: idx }))
 
   // add labels to nodes
   selectedData.forEach(item => {
@@ -301,8 +302,8 @@ export function getGraph(props, link_index = false) {
     nodes[fromIndex]['label'] = item[label_from] ? item[label_from] : ''
     nodes[toIndex]['color'] = item[color_to] ? item[color_to] : null
     nodes[fromIndex]['color'] = item[color_from] ? item[color_from] : null
-    nodes[toIndex]['tooltipHTML'] = getSingleTooltipHTML(item, props.header)
-    nodes[fromIndex]['tooltipHTML'] = getSingleTooltipHTML(item, props.header)
+    //nodes[toIndex]['tooltipHTML'] = getSingleTooltipHTML(item, props.header)
+    //nodes[fromIndex]['tooltipHTML'] = getSingleTooltipHTML(item, props.header)
   })
 
   // links
@@ -317,7 +318,8 @@ export function getGraph(props, link_index = false) {
         ? items.findIndex(element => element === item[to])
         : item[to],
       edgeLabel: item[edge_label],
-      value: relation != null ? parseData(item[relation]) : 1
+      value: relation != null ? parseData(item[relation]) : 1,
+      tooltipHTML: getSingleTooltipHTML(item, props.header)
     }))
 
   return { nodes, links }

@@ -379,9 +379,23 @@ export const charts = [
     id: 1.1,
     name: 'Force-directed Graph',
     chartClass: 'basic',
-    settings: [link_from, link_to, label_from, label_to, edge_label, color_from, color_to],
+    settings: [
+      link_from,
+      link_to,
+      label_from,
+      label_to,
+      edge_label,
+      color_from,
+      color_to
+    ],
     defaultShow: [true, true, false, false, false, false, false],
-    moreSettings: ['strength', 'showArrows', 'fontSize', 'edgeFontSize', 'color'],
+    moreSettings: [
+      'strength',
+      'showArrows',
+      'fontSize',
+      'edgeFontSize',
+      'color'
+    ],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {

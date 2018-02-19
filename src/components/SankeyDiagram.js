@@ -77,16 +77,45 @@ const updateD3Node = props => {
       return Math.max(1, d.dy)
     })
     .style('stroke-opacity', 0.5)
-    .on('mouseover', function(d) {
-      if (d.index != null) {
-        highlight('str' + d.index)
-      }
-    })
-    .on('mouseout', function(d) {
-      highlight(null)
-    })
     .sort(function(a, b) {
       return b.dy - a.dy
+    })
+    .on('mouseover', function(d) {
+      const color = d3.select('.str' + d.index).style('stroke')
+      d3.select('.str' + d.index).style('stroke', chroma(color).brighten(0.6))
+
+      d3
+        .select('#rect' + d.source.index)
+        .attr('fill', chroma(colorScale(d.source.color)).brighten(0.6))
+      d3.select('#text' + d.source.index).attr('font-weight', 'bold')
+
+      d3
+        .select('#rect' + d.target.index)
+        .attr('fill', chroma(colorScale(d.target.color)).brighten(0.6))
+      d3.select('#text' + d.target.index).attr('font-weight', 'bold')
+    })
+    .on('mousemove', function(d) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(d.tooltipHTML)
+    })
+    .on('mouseout', function(d) {
+      tooltip.style('display', 'none')
+
+      const color = d3.select('.str' + d.index).style('stroke')
+      d3.select('.str' + d.index).style('stroke', chroma(color).darken(0.6))
+
+      d3
+        .select('#rect' + d.source.index)
+        .attr('fill', colorScale(d.source.color))
+      d3.select('#text' + d.source.index).attr('font-weight', 'normal')
+
+      d3
+        .select('#rect' + d.target.index)
+        .attr('fill', colorScale(d.target.color))
+      d3.select('#text' + d.target.index).attr('font-weight', 'normal')
     })
 
   // add the link titles
@@ -122,15 +151,7 @@ const updateD3Node = props => {
         .attr('fill', chroma(colorScale(d.color)).brighten(0.6))
       d3.select('#text' + i).attr('font-weight', 'bold')
     })
-    .on('mousemove', function(d) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(d.tooltipHTML)
-    })
     .on('mouseout', function(d, i) {
-      tooltip.style('display', 'none')
       d3.select('#rect' + i).attr('fill', colorScale(d.color))
       d3.select('#text' + i).attr('font-weight', 'normal')
     })
@@ -157,7 +178,7 @@ const updateD3Node = props => {
   // add in the title for the nodes
   node
     .append('text')
-    .attr('text', function(d, i) {
+    .attr('id', function(d, i) {
       return 'text' + i
     })
     .attr('x', -6)
@@ -193,10 +214,10 @@ const updateD3Node = props => {
     link.attr('d', path)
   }
 
-  function highlight(connection) {
-    if (connection == null) d3.selectAll('.link').classed('active', false)
-    else d3.selectAll('.link.' + connection).classed('active', true)
-  }
+  //function highlight(connection) {
+  //  if (connection == null) d3.selectAll('.link').classed('active', false)
+  //  else d3.selectAll('.link.' + connection).classed('active', true)
+  //}
 
   return 'ok'
 }

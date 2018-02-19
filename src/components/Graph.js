@@ -68,11 +68,63 @@ const updateD3Node = props => {
     .data(graph.links)
     .enter()
     .append('line')
+    .attr('id', function(d, i) {
+      return 'link' + i
+    })
     .attr('class', 'link')
-    .attr('stroke-width', '1')
+    .attr('stroke-width', '1.5')
     .attr('stroke-opacity', '0.7')
     .attr('stroke', '#999')
     .attr('marker-end', 'url(#arrowhead)')
+
+  // for tooltips
+  var link2 = svg
+    .selectAll('.link2')
+    .data(graph.links)
+    .enter()
+    .append('line')
+    .attr('class', 'link2')
+    .attr('stroke-width', '8')
+    .attr('stroke-opacity', '0')
+    .attr('stroke', '#999')
+    .on('mouseover', function(d, i) {
+      d3.select('#link' + i).attr('stroke', '#337ab7')
+      d3.select('#link' + i).attr('stroke-width', '3')
+      d3.select('#edgelabel' + i).attr('font-weight', 'bold')
+
+      d3
+        .select('#circle' + d.source.index)
+        .attr('fill', chroma(colorScale(d.source.color)).brighten(0.6))
+      d3.select('#text' + d.source.index).attr('font-weight', 'bold')
+
+      d3
+        .select('#circle' + d.target.index)
+        .attr('fill', chroma(colorScale(d.target.color)).brighten(0.6))
+      d3.select('#text' + d.target.index).attr('font-weight', 'bold')
+    })
+    .on('mousemove', function(d) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(d.tooltipHTML)
+    })
+    .on('mouseout', function(d, i) {
+      tooltip.style('display', 'none')
+      d3.select('#link' + i).attr('stroke', '#999')
+      d3.select('#link' + i).attr('stroke-width', '1.5')
+      d3.select('#edgelabel' + i).attr('font-weight', 'normal')
+
+      d3
+        .select('#circle' + d.source.index)
+        .attr('fill', colorScale(d.source.color))
+      d3.select('#text' + d.source.index).attr('font-weight', 'normal')
+
+      d3
+        .select('#circle' + d.target.index)
+        .attr('fill', colorScale(d.target.color))
+      d3.select('#text' + d.target.index).attr('font-weight', 'normal')
+    })
 
   var edgepaths = svg
     .selectAll('.edgepath')
@@ -92,6 +144,9 @@ const updateD3Node = props => {
     .data(graph.links)
     .enter()
     .append('text')
+    .attr('id', function(d, i) {
+      return 'edgelabel' + i
+    })
     .style('pointer-events', 'none')
     .attr('class', 'edgelabel')
     .attr('id', function(d, i) {
@@ -133,15 +188,7 @@ const updateD3Node = props => {
         .attr('fill', chroma(colorScale(d.color)).brighten(0.6))
       d3.select('#text' + i).attr('font-weight', 'bold')
     })
-    .on('mousemove', function(d) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(d.tooltipHTML)
-    })
     .on('mouseout', function(d, i) {
-      tooltip.style('display', 'none')
       d3.select('#circle' + i).attr('fill', colorScale(d.color))
       d3.select('#text' + i).attr('font-weight', 'normal')
     })
@@ -177,6 +224,20 @@ const updateD3Node = props => {
 
   function ticked() {
     link
+      .attr('x1', function(d) {
+        return d.source.x
+      })
+      .attr('y1', function(d) {
+        return d.source.y
+      })
+      .attr('x2', function(d) {
+        return d.target.x
+      })
+      .attr('y2', function(d) {
+        return d.target.y
+      })
+
+    link2
       .attr('x1', function(d) {
         return d.source.x
       })

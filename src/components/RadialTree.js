@@ -77,12 +77,65 @@ const updateD3Node = props => {
     .data(root.links())
     .enter()
     .append('path')
+    .attr('id', function(d, i) {
+      return 'link' + i
+    })
     .attr('class', 'link')
     .style('fill', 'none')
-    .style('stroke', '#555')
-    .style('stroke-opacity', '0.5')
+    .style('stroke', '#999')
+    .style('stroke-opacity', '0.7')
     .style('stroke-width', '1.5')
     .attr('d', diagonal)
+
+  // for tooltips
+  svg
+    .selectAll('.link2')
+    .data(root.links())
+    .enter()
+    .append('path')
+    .attr('class', 'link2')
+    .style('fill', 'none')
+    .style('stroke', '#999')
+    .style('stroke-opacity', '0')
+    .style('stroke-width', '8')
+    .attr('d', diagonal)
+    .on('mouseover', function(d, i) {
+      d3.select('#link' + i).style('stroke', '#337ab7')
+      d3.select('#link' + i).style('stroke-width', '3')
+
+      d3
+        .select('#circle' + d.source.data.index)
+        .attr('fill', chroma(colorScale(d.source.data.color)).brighten(0.6))
+      d3.select('#text' + d.source.data.index).attr('font-weight', 'bold')
+
+      d3
+        .select('#circle' + d.target.data.index)
+        .attr('fill', chroma(colorScale(d.target.data.color)).brighten(0.6))
+      d3.select('#text' + d.target.data.index).attr('font-weight', 'bold')
+    })
+    .on('mousemove', function(d) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(d.target.data.tooltipHTML)
+    })
+    .on('mouseout', function(d, i) {
+      tooltip.style('display', 'none')
+
+      d3.select('#link' + i).style('stroke', '#999')
+      d3.select('#link' + i).style('stroke-width', '1.5')
+
+      d3
+        .select('#circle' + d.source.data.index)
+        .attr('fill', colorScale(d.source.data.color))
+      d3.select('#text' + d.source.data.index).attr('font-weight', 'normal')
+
+      d3
+        .select('#circle' + d.target.data.index)
+        .attr('fill', colorScale(d.target.data.color))
+      d3.select('#text' + d.target.data.index).attr('font-weight', 'normal')
+    })
 
   // define node
   var node = svg
@@ -94,43 +147,33 @@ const updateD3Node = props => {
     .attr('transform', function(d) {
       return 'translate(' + radialPoint(d.x, d.y) + ')'
     })
-    .on('mouseover', function(d, i) {
+    .on('mouseover', function(d) {
       d3
-        .select('#circle' + i)
+        .select('#circle' + d.data.index)
         .attr('fill', chroma(colorScale(d.data.color)).brighten(0.6))
-      d3.select('#text' + i).attr('font-weight', 'bold')
+      d3.select('#text' + d.data.index).attr('font-weight', 'bold')
     })
-    .on('mouseout', function(d, i) {
-      d3.select('#circle' + i).attr('fill', colorScale(d.data.color))
-      d3.select('#text' + i).attr('font-weight', 'normal')
+    .on('mouseout', function(d) {
+      d3.select('#circle' + d.data.index).attr('fill', colorScale(d.data.color))
+      d3.select('#text' + d.data.index).attr('font-weight', 'normal')
     })
 
   // add circles
   node
     .append('circle')
-    .attr('id', function(d, i) {
-      return 'circle' + i
+    .attr('id', function(d) {
+      return 'circle' + d.data.index
     })
     .attr('r', 4)
     .attr('fill', function(d) {
       return colorScale(d.data.color)
     })
-    .on('mousemove', function(d) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(d.data.tooltipHTML)
-    })
-    .on('mouseout', function(d) {
-      tooltip.style('display', 'none')
-    })
 
   // add labels
   node
     .append('text')
-    .attr('id', function(d, i) {
-      return 'text' + i
+    .attr('id', function(d) {
+      return 'text' + d.data.index
     })
     .attr('dy', '0.3em')
     .attr('x', function(d) {
@@ -152,16 +195,6 @@ const updateD3Node = props => {
     })
     .text(function(d) {
       return d.data.label
-    })
-    .on('mousemove', function(d) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(d.data.tooltipHTML)
-    })
-    .on('mouseout', function(d) {
-      tooltip.style('display', 'none')
     })
 
   drawLegend(svg, colorScale, props)
