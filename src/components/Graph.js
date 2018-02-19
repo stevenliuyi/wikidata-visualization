@@ -10,8 +10,8 @@ import Info from './Info'
 // https://bl.ocks.org/mbostock/4062045
 // https://bl.ocks.org/fancellu/2c782394602a93921faff74e594d1bb1
 const updateD3Node = props => {
-  var colorScale = getColorScale(props)
   var graph = getGraph(props)
+  var colorScale = getColorScale(props, graph.nodes)
 
   d3.selectAll('.d3ToolTip').remove()
   var tooltip = d3

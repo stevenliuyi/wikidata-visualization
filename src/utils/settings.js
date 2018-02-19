@@ -81,25 +81,25 @@ const coordinate = {
 
 const label_from = {
   value: 'label_from',
-  title: 'Labels',
+  title: 'Label 1',
   type: 'all'
 }
 
 const label_to = {
   value: 'label_to',
-  title: '',
+  title: 'Label 2',
   type: 'all'
 }
 
 const color_from = {
   value: 'color_from',
-  title: 'Colors',
+  title: 'Color 1',
   type: 'all'
 }
 
 const color_to = {
   value: 'color_to',
-  title: '',
+  title: 'Color 2',
   type: 'all'
 }
 
@@ -377,8 +377,8 @@ export const charts = [
     id: 1.1,
     name: 'Force-directed Graph',
     chartClass: 'basic',
-    settings: [link_from, link_to, label_from, label_to, edge_label, color],
-    defaultShow: [true, true, false, false, false, false],
+    settings: [link_from, link_to, label_from, label_to, edge_label, color_from, color_to],
+    defaultShow: [true, true, false, false, false, false, false],
     moreSettings: ['strength', 'fontSize', 'edgeFontSize', 'color'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
