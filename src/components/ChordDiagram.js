@@ -193,6 +193,11 @@ class ChordDiagram extends Component {
 
   render() {
     if (!this.props.dataTypes.includes('item')) return <Info info="no-item" />
+    if (
+      !this.props.dataTypes.includes('number') &&
+      !this.props.dataTypes.includes('time')
+    )
+      return <Info info="no-number" />
 
     return (
       <div id="chart">
