@@ -16,6 +16,7 @@ import chroma from 'chroma-js'
 import FaPlus from 'react-icons/lib/fa/plus'
 import FaMinus from 'react-icons/lib/fa/minus'
 import Info from './Info'
+import * as d3Geo from 'd3-geo'
 
 const wrapperStyles = {
   width: '100%',
@@ -111,7 +112,11 @@ class Map extends Component {
             height: this.props.height
           }}
         >
-          <ZoomableGroup center={this.state.center} zoom={this.state.zoom}>
+          <ZoomableGroup
+            center={this.state.center}
+            zoom={this.state.zoom}
+            ref={node => (this.zoomableGroup = node)}
+          >
             <Geographies geography={json_filename} disableOptimization>
               {(geographies, projection) =>
                 geographies.map(
@@ -146,6 +151,69 @@ class Map extends Component {
                 )
               }
             </Geographies>
+            <g>
+              {// links between coordinates
+              this.zoomableGroup != null &&
+                this.props.data
+                  .filter((item, i) => this.props.rowSelections.includes(i))
+                  .map((item, i) => {
+                    if (
+                      item[
+                        this.props.header[
+                          this.props.settings['coordinate_from']
+                        ]
+                      ] != null &&
+                      item[
+                        this.props.header[this.props.settings['coordinate_to']]
+                      ] != null
+                    ) {
+                      const coordinate_from = item[
+                        this.props.header[
+                          this.props.settings['coordinate_from']
+                        ]
+                      ]
+                        .split(', ')
+                        .map(parseFloat)
+                      const coordinate_to = item[
+                        this.props.header[this.props.settings['coordinate_to']]
+                      ]
+                        .split(', ')
+                        .map(parseFloat)
+                      const projection = this.zoomableGroup.props.projection()
+                      const path = d3Geo.geoPath().projection(projection)
+                      return (
+                        <g key={i}>
+                          {this.props.moreSettings.lineType === 'geodesic' && (
+                            <path
+                              d={path({
+                                type: 'LineString',
+                                coordinates: [coordinate_from, coordinate_to]
+                              })}
+                              fill="transparent"
+                              stroke="#999"
+                              strokeOpacity={0.5}
+                              strokeWidth={this.props.moreSettings.lineWidth}
+                              pointerEvents="none"
+                            />
+                          )}
+                          {this.props.moreSettings.lineType ===
+                            'straight line' && (
+                            <line
+                              x1={projection(coordinate_from)[0]}
+                              y1={projection(coordinate_from)[1]}
+                              x2={projection(coordinate_to)[0]}
+                              y2={projection(coordinate_to)[1]}
+                              stroke="#999"
+                              strokeOpacity={0.5}
+                              strokeWidth={this.props.moreSettings.lineWidth}
+                            />
+                          )}
+                        </g>
+                      )
+                    }
+                    return null
+                  })}
+            </g>
             <Markers>
               {this.props.data
                 .filter((item, i) => this.props.rowSelections.includes(i))

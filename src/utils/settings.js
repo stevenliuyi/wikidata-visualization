@@ -472,8 +472,15 @@ export const charts = [
     id: 1.09,
     name: 'Simple Map',
     chartClass: 'map',
-    settings: [coordinate, color, radius, label],
-    defaultShow: [true, false, false, false],
+    settings: [
+      coordinate,
+      color,
+      radius,
+      label,
+      coordinate_from,
+      coordinate_to
+    ],
+    defaultShow: [true, false, false, false, false, false],
     moreSettings: [
       'map',
       'projection',
@@ -481,7 +488,9 @@ export const charts = [
       'radius',
       'color',
       'showLegend',
-      'legendScale'
+      'legendScale',
+      'lineType',
+      'lineWidth'
     ],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
