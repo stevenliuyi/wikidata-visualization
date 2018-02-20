@@ -81,13 +81,13 @@ const coordinate = {
 
 const coordinate_from = {
   value: 'coordinate_from',
-  title: 'From coordinate',
+  title: 'Link from coordinate',
   type: 'coordinate'
 }
 
 const coordinate_to = {
   value: 'coordinate_to',
-  title: 'To coordinate',
+  title: 'Link to coordinate',
   type: 'coordinate'
 }
 

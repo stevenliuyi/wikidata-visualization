@@ -1,7 +1,7 @@
 import { Path } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet-arc'
-import arc from 'leaflet-arc/node_modules/arc'
+import arc from 'arc'
 
 /**
  * transform l.latlng to {x, y} object

@@ -180,6 +180,10 @@ aproba@^1.0.3:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
 
+arc@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/arc/-/arc-0.1.0.tgz#00a4132036cfb33869c7f219ef78287a1fa92c75"
+
 "arc@git+https://github.com/springmeyer/arc.js.git#b005df058b010d1c7aaf3aa451516d41294dac0e":
   version "0.1.0"
   resolved "git+https://github.com/springmeyer/arc.js.git#b005df058b010d1c7aaf3aa451516d41294dac0e"
