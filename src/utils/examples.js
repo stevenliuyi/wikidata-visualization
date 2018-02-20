@@ -81,6 +81,10 @@ export const examples = [
   {
     title: 'Heads of state and government during the World War II',
     filename: 'wwii-heads.rq'
+  },
+  {
+    title: 'Sister cities between capitals of Asia and Africa countries',
+    filename: 'asia-africa-sister-cities.rq'
   }
 ]
 

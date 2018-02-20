@@ -1,11 +1,19 @@
 import React, { Component } from 'react'
-import { Map, Marker, CircleMarker, Tooltip, FeatureGroup } from 'react-leaflet'
+import {
+  Map,
+  Marker,
+  CircleMarker,
+  Tooltip,
+  FeatureGroup,
+  Polyline
+} from 'react-leaflet'
 import Leaflet, { latLngBounds } from 'leaflet'
 import Basemap from './Basemap'
 import { getRadius, getColors } from '../utils/scales'
 import { getTooltipHTML } from '../utils/convertData'
 import 'leaflet/dist/leaflet.css'
 import Info from './Info'
+import Arc from './Arc'
 
 Leaflet.Icon.Default.imagePath =
   '//cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/images/'
@@ -130,7 +138,8 @@ class LeafletMap extends Component {
             solarSystem={this.props.moreSettings.solarSystem}
             basemap={this.props.moreSettings.baseMap}
           />
-          {this.props.data
+          {// coordinates
+          this.props.data
             .filter((item, i) => this.props.rowSelections.includes(i))
             .map((item, i) => {
               if (
@@ -180,6 +189,64 @@ class LeafletMap extends Component {
                         </CircleMarker>
                       )}
                     </FeatureGroup>
+                  )
+                }
+              }
+              return null
+            })}
+          {// linkes between coordinates
+          this.props.data
+            .filter((item, i) => this.props.rowSelections.includes(i))
+            .map((item, i) => {
+              if (
+                item[
+                  this.props.header[this.props.settings['coordinate_from']]
+                ] != null &&
+                item[this.props.header[this.props.settings['coordinate_to']]] !=
+                  null
+              ) {
+                let coord_from = item[
+                  this.props.header[this.props.settings['coordinate_from']]
+                ]
+                  .split(', ')
+                  .map(parseFloat)
+                  .reverse()
+
+                let coord_to = item[
+                  this.props.header[this.props.settings['coordinate_to']]
+                ]
+                  .split(', ')
+                  .map(parseFloat)
+                  .reverse()
+
+                coord_from = this.convertCoord(coord_from)
+                coord_to = this.convertCoord(coord_to)
+
+                if (coord_from.length === 2 && coord_to.length === 2) {
+                  if (
+                    coord_from[0] === coord_to[0] &&
+                    coord_from[1] === coord_to[1]
+                  )
+                    return null
+                  return this.props.moreSettings.lineType === 'geodesic' ? (
+                    <Arc
+                      key={i}
+                      position={{ from: coord_from, to: coord_to }}
+                      options={{
+                        color: '#999',
+                        weight: this.props.moreSettings.lineWidth,
+                        opacity: 0.5,
+                        vertices: 100,
+                        offset: 10
+                      }}
+                    />
+                  ) : (
+                    <Polyline
+                      positions={[coord_from, coord_to]}
+                      color="#999"
+                      weight={this.props.moreSettings.lineWidth}
+                      opacity={0.5}
+                    />
                   )
                 }
               }

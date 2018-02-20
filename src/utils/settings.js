@@ -79,6 +79,18 @@ const coordinate = {
   type: 'coordinate'
 }
 
+const coordinate_from = {
+  value: 'coordinate_from',
+  title: 'From coordinate',
+  type: 'coordinate'
+}
+
+const coordinate_to = {
+  value: 'coordinate_to',
+  title: 'To coordinate',
+  type: 'coordinate'
+}
+
 const label_from = {
   value: 'label_from',
   title: 'Label 1',
@@ -191,7 +203,9 @@ export const moreSettings = {
   barType: 'stacked',
   innerRadius: 0.6,
   timelineType: 'separated',
-  padding: 10
+  padding: 10,
+  lineType: 'geodesic',
+  lineWidth: 1.5
 }
 
 export const moreSettingTitles = {
@@ -228,7 +242,9 @@ export const moreSettingTitles = {
   barType: 'Bar type',
   innerRadius: 'Inner radius',
   timelineType: 'Timeline type',
-  padding: 'Padding'
+  padding: 'Padding',
+  lineType: 'Line type',
+  lineWidth: 'Line width'
 }
 
 export const canvasSettings = {
@@ -438,15 +454,17 @@ export const charts = [
     id: 1.16,
     name: 'Map',
     chartClass: 'map',
-    settings: [coordinate, color, radius],
-    defaultShow: [true, false, false],
+    settings: [coordinate, color, radius, coordinate_from, coordinate_to],
+    defaultShow: [true, false, false, false, false],
     moreSettings: [
       'solarSystem',
       'baseMap',
       'showCircles',
       'showMarkers',
       'radius',
-      'color'
+      'color',
+      'lineType',
+      'lineWidth'
     ],
     canvasSettings: ['auto', 'width', 'height']
   },

@@ -357,6 +357,32 @@ class Settings extends Component {
           }}
         />
       )
+    } else if (setting === 'lineType') {
+      return (
+        <Select2
+          value={this.props.moreSettings['lineType']}
+          data={['geodesic', 'straight line']}
+          onChange={e =>
+            this.props.onMoreSettingsChange({ lineType: e.target.value })
+          }
+          options={{
+            minimumResultsForSearch: -1,
+            width: '100%'
+          }}
+        />
+      )
+    } else if (setting === 'lineWidth') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings.lineWidth}
+          slideStop={e =>
+            this.props.onMoreSettingsChange({ lineWidth: e.target.value })
+          }
+          step={1}
+          min={1}
+          max={10}
+        />
+      )
     } else if (
       setting === 'ignoreCase' ||
       setting === 'regex' ||
