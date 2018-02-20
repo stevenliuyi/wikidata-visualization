@@ -11,6 +11,13 @@ import { getFormat } from '../utils/format'
 // http://bl.ocks.org/mbostock/3943967
 const updateD3Node = (props, transition) => {
   // bar type
+  if (
+    d3
+      .select('#bartype-select')
+      .select('select')
+      .empty()
+  )
+    return
   const value = d3
     .select('#bartype-select')
     .select('select')
