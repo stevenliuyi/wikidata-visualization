@@ -156,6 +156,7 @@ class LeafletMap extends Component {
           <Basemap
             solarSystem={this.props.moreSettings.solarSystem}
             basemap={this.props.moreSettings.baseMap}
+            highRes={this.props.moreSettings.mapResolution}
           />
           {// coordinates
           this.props.data

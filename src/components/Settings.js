@@ -345,6 +345,19 @@ class Settings extends Component {
           }}
         />
       )
+    } else if (setting === 'mapResolution') {
+      return (
+        <SettingToggle
+          active={this.props.moreSettings[setting]}
+          on="High"
+          off="Low"
+          onClick={state => {
+            const newSetting = {}
+            newSetting[setting] = state
+            this.props.onMoreSettingsChange(newSetting)
+          }}
+        />
+      )
     } else if (
       setting === 'showCircles' ||
       setting === 'showMarkers' ||
@@ -781,6 +794,15 @@ class Settings extends Component {
           moreSetting === 'baseMap'
         )
           return
+
+        if (moreSetting === 'mapResolution') {
+          if (this.props.moreSettings.solarSystem === 'Earth') return
+          if (
+            solarSystemSettings[this.props.moreSettings.solarSystem]
+              .lowres_filename == null
+          )
+            return
+        }
 
         chartMoreSettingComponents[
           moreSettingTitles[moreSetting]

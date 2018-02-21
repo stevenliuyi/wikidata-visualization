@@ -90,8 +90,8 @@ class ChoroplethMap extends Component {
 
     const json_filename =
       process.env.NODE_ENV === 'development'
-        ? `/maps/${settings.filename}`
-        : `/wikidata-visualization/maps/${settings.filename}`
+        ? `/maps/json/${settings.filename}`
+        : `/wikidata-visualization/maps/json/${settings.filename}`
 
     return (
       <div style={wrapperStyles}>

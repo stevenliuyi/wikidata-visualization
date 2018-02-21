@@ -10,8 +10,8 @@ import Info from './Info'
 
 const getTopoJsonFileName = props =>
   process.env.NODE_ENV === 'development'
-    ? `/maps/${map2Settings[props.moreSettings.map2].filename}`
-    : `/wikidata-visualization/maps/${
+    ? `/maps/json/${map2Settings[props.moreSettings.map2].filename}`
+    : `/wikidata-visualization/maps/json/${
         map2Settings[props.moreSettings.map2].filename
       }`
 

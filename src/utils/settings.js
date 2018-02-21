@@ -200,6 +200,7 @@ export const moreSettings = {
   legendScale: 1,
   rotation: 0,
   solarSystem: 'Earth',
+  mapResolution: false,
   barType: 'stacked',
   innerRadius: 0.6,
   timelineType: 'separated',
@@ -239,6 +240,7 @@ export const moreSettingTitles = {
   legendScale: 'Legend size',
   rotation: 'Max rotation',
   solarSystem: 'Solar system',
+  mapResolution: 'Map resolution',
   barType: 'Bar type',
   innerRadius: 'Inner radius',
   timelineType: 'Timeline type',
@@ -459,6 +461,7 @@ export const charts = [
     moreSettings: [
       'solarSystem',
       'baseMap',
+      'mapResolution',
       'showCircles',
       'showMarkers',
       'radius',

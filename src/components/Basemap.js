@@ -19,6 +19,13 @@ class Basemap extends Component {
   }
 
   render() {
+    let mapFilename
+    if (this.state.solarSystem !== 'Earth')
+      mapFilename =
+        this.props.highRes ||
+        solarSystemSettings[this.state.solarSystem].lowres_filename == null
+          ? solarSystemSettings[this.state.solarSystem].filename
+          : solarSystemSettings[this.state.solarSystem].lowres_filename
     return (
       <div>
         {this.state.solarSystem !== 'Earth' && (
@@ -26,10 +33,8 @@ class Basemap extends Component {
             bounds={solarSystemSettings[this.state.solarSystem].bounds}
             url={
               process.env.NODE_ENV === 'development'
-                ? solarSystemSettings[this.state.solarSystem].url
-                : `/wikidata-visualization${
-                    solarSystemSettings[this.state.solarSystem].url
-                  }`
+                ? `/maps/images/${mapFilename}`
+                : `/wikidata-visualization/maps/images/${mapFilename}`
             }
           />
         )}

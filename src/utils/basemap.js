@@ -1,81 +1,92 @@
 export const solarSystemSettings = {
   Earth: null,
   Moon: {
-    url: '/maps/Moonmap_from_clementine_data.png',
+    filename: 'Moonmap_from_clementine_data.png',
     bounds: [[-90, -180], [90, 180]],
     attribution: 'image by the Clementine mission',
     attribution_url: 'http://solarviews.com/cap/moon/moonmap.htm'
   },
   Mercury: {
-    url: '/maps/Mercury.png',
+    filename: 'Mercury.png',
+    lowres_filename: 'Mercury_lowres.png',
     bounds: [[-90, -180], [90, 180]],
     attribution: 'image by the MESSENGER mission',
     attribution_url:
       'http://messenger.jhuapl.edu/Explore/Images.html#global-mosaics'
   },
   Venus: {
-    url: '/maps/Venus.jpg',
+    filename: 'Venus.jpg',
+    lowres_filename: 'Venus_lowres.jpg',
     bounds: [[-90, -120], [90, 240]],
     attribution: 'image by the Magellan mission',
     attribution_url: 'http://solarviews.com/cap/venus/venmap.htm'
   },
   Mars: {
-    url: '/maps/Mars.jpg',
+    filename: 'Mars.jpg',
+    lowres_filename: 'Mars_lowres.jpg',
     bounds: [[-90, -180], [90, 180]],
     attribution: 'image by the Viking mission',
     attribution_url:
       'https://astrogeology.usgs.gov/search/details/Mars/Viking/MDIM21/Mars_Viking_MDIM21_ClrMosaic_global_232m/cub'
   },
   Pluto: {
-    url: '/maps/Pluto.jpg',
+    filename: 'Pluto.jpg',
+    lowres_filename: 'Pluto_lowres.jpg',
     bounds: [[-90, 0], [90, 360]],
     attribution: 'image by the New Horizons mission',
     attribution_url: 'https://snowfall-the-cat.deviantart.com/'
   },
   Ceres: {
-    url: '/maps/Ceres.jpg',
+    filename: 'Ceres.jpg',
+    lowres_filename: 'Ceres_lowres.jpg',
     bounds: [[-90, 0], [90, 360]],
     attribution: 'image by the Dawn mission',
     attribution_url: 'https://photojournal.jpl.nasa.gov/catalog/PIA20354'
   },
   Io: {
-    url: '/maps/Io.jpg',
+    filename: 'Io.jpg',
     bounds: [[-90, -180], [90, 180]],
     attribution: 'image by the Galileo/Voyager missions',
     attribution_url: 'http://solarviews.com/cap/jup/iocyl2.htm'
   },
   Enceladus: {
-    url: '/maps/Enceladus.jpg',
+    filename: 'Enceladus.jpg',
+    lowres_filename: 'Enceladus_lowres.jpg',
     bounds: [[-90, 0], [90, 360]],
     attribution: 'image by the Cassini mission',
     attribution_url: 'https://photojournal.jpl.nasa.gov/catalog/PIA18435'
   },
   Tethys: {
-    url: '/maps/Tethys.jpg',
+    filename: 'Tethys.jpg',
+    lowres_filename: 'Tethys_lowres.jpg',
     bounds: [[-90, 0], [90, 360]],
     attribution: 'image by the Cassini mission',
     attribution_url: 'https://photojournal.jpl.nasa.gov/catalog/PIA18439'
   },
   Dione: {
-    url: '/maps/Dione.jpg',
+    filename: 'Dione.jpg',
+    lowres_filename: 'Tethys_lowres.jpg',
     bounds: [[-90, -180], [90, 180]],
     attribution: 'image by the Cassini mission',
     attribution_url: 'https://photojournal.jpl.nasa.gov/catalog/PIA08413'
   },
   Rhea: {
-    url: '/maps/Rhea.jpg',
+    filename: 'Rhea.jpg',
+    lowres_filename: 'Rhea_lowres.jpg',
     bounds: [[-90, 0], [90, 360]],
     attribution: 'image by the Cassini mission',
     attribution_url: 'https://photojournal.jpl.nasa.gov/catalog/PIA18438'
   },
   Titan: {
-    url: '/maps/Titan.jpg',
+    filename: 'Titan.png',
+    lowres_filename: 'Titan_lowres.png',
     bounds: [[-90, 0], [90, 360]],
     attribution: 'image by the Cassini mission',
     attribution_url: 'https://photojournal.jpl.nasa.gov/catalog/PIA19658'
   },
   Triton: {
-    url: '/maps/Triton.jpg',
+    filename: 'Triton.jpg',
+    lowres_filename: 'Triton_lowres.jpg',
     bounds: [[-90, -180], [90, 180]],
     attribution: 'image by the Voyager mission',
     attribution_url: 'https://photojournal.jpl.nasa.gov/catalog/PIA18668'
