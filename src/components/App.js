@@ -214,114 +214,116 @@ class App extends Component {
           <TopNavBar handleChartSelect={this.handleChartSelect} />
           <Grid>
             <Row>
-              <Col
-                sm={this.state.editorFullScreen ? 12 : 4}
-                className={!this.state.showSide ? 'hide-side' : ''}
-              >
-                <Row className="padding-5">
-                  <Measure
-                    bounds
-                    onResize={contentRect =>
-                      this.setState({ editorWidth: contentRect.bounds.width })
-                    }
-                  >
-                    {({ measureRef }) => (
-                      <div ref={measureRef}>
-                        <Query
-                          onSubmit={this.getSPARQLResult}
-                          onChangeEditorSize={this.changeEditorSize}
-                          onCancel={() => this.state.timingPromise.cancel()}
-                          onHide={this.toggleSide}
-                          status={this.state.status}
-                          numResults={this.state.numResults}
-                          exampleIndex={this.state.exampleIndex}
-                          width={this.state.editorWidth}
-                          editorFullScreen={this.state.editorFullScreen}
-                          chartId={this.state.chart}
-                        />
-                      </div>
-                    )}
-                  </Measure>
-                </Row>
-                {!this.state.editorFullScreen && (
+              <ErrorBoundary>
+                <Col
+                  sm={this.state.editorFullScreen ? 12 : 4}
+                  className={!this.state.showSide ? 'hide-side' : ''}
+                >
                   <Row className="padding-5">
-                    <Settings
-                      header={this.state.header}
-                      settings={this.state.settings}
-                      info={this.state.settingsInfo}
-                      dataTypes={this.state.dataTypes}
-                      moreSettings={this.state.moreSettings}
-                      canvasSettings={this.state.canvasSettings}
-                      axisSettings={this.state.axisSettings}
-                      chart={this.state.chart}
-                      onChange={this.setSettings}
-                      onMoreSettingsChange={this.handleMoreSettingsChange}
-                      onCanvasSettingsChange={this.handleCanvasSettingsChange}
-                      onAxisSettingsChange={this.handleAxisSettingsChange}
-                    />
-                  </Row>
-                )}
-              </Col>
-              {!this.state.editorFullScreen && (
-                <Col sm={this.state.showSide ? 8 : 12}>
-                  {this.state.chart < 2 && (
-                    <Navs
-                      currentChartId={this.state.chart}
-                      handleChartSelect={this.handleChartSelect}
-                      showSide={this.state.showSide}
-                    />
-                  )}
-                  <ErrorBoundary>
-                    {this.state.chart === 1.01 && (
-                      <DataTable
-                        data={this.state.data}
-                        header={this.state.header}
-                        dataTypes={this.state.dataTypes}
-                        selection={this.state.rowSelections}
-                        updateSelection={this.updateRowSelections}
-                        moreSettings={this.state.moreSettings}
-                      />
-                    )}
-
-                    {this.state.chart > 1.01 &&
-                      this.state.chart < 2 &&
-                      this.state.chart !== 1.12 && (
-                        <Chart
-                          chartId={this.state.chart}
-                          data={this.state.data}
-                          rowSelections={this.state.rowSelections}
-                          header={this.state.header}
-                          dataTypes={this.state.dataTypes}
-                          settings={this.state.settings}
-                          moreSettings={this.state.moreSettings}
-                          canvasSettings={this.state.canvasSettings}
-                          onCanvasSettingsChange={
-                            this.handleCanvasSettingsChange
-                          }
-                          axisSettings={this.state.axisSettings}
-                          onAxisSettingsChange={this.handleAxisSettingsChange}
-                          viewer={this.state.viewer}
-                          onViewerChange={viewer => this.setState({ viewer })}
-                          updateFitBoundsFcn={this.updateFitBoundsFcn}
-                          fitBounds={this.state.fitBounds}
-                        />
+                    <Measure
+                      bounds
+                      onResize={contentRect =>
+                        this.setState({ editorWidth: contentRect.bounds.width })
+                      }
+                    >
+                      {({ measureRef }) => (
+                        <div ref={measureRef}>
+                          <Query
+                            onSubmit={this.getSPARQLResult}
+                            onChangeEditorSize={this.changeEditorSize}
+                            onCancel={() => this.state.timingPromise.cancel()}
+                            onHide={this.toggleSide}
+                            status={this.state.status}
+                            numResults={this.state.numResults}
+                            exampleIndex={this.state.exampleIndex}
+                            width={this.state.editorWidth}
+                            editorFullScreen={this.state.editorFullScreen}
+                            chartId={this.state.chart}
+                          />
+                        </div>
                       )}
-                    {this.state.chart === 1.12 && (
-                      <ImageGallery
-                        data={this.state.data}
-                        dataTypes={this.state.dataTypes}
-                        rowSelections={this.state.rowSelections}
+                    </Measure>
+                  </Row>
+                  {!this.state.editorFullScreen && (
+                    <Row className="padding-5">
+                      <Settings
                         header={this.state.header}
                         settings={this.state.settings}
+                        info={this.state.settingsInfo}
+                        dataTypes={this.state.dataTypes}
+                        moreSettings={this.state.moreSettings}
+                        canvasSettings={this.state.canvasSettings}
+                        axisSettings={this.state.axisSettings}
+                        chart={this.state.chart}
+                        onChange={this.setSettings}
+                        onMoreSettingsChange={this.handleMoreSettingsChange}
+                        onCanvasSettingsChange={this.handleCanvasSettingsChange}
+                        onAxisSettingsChange={this.handleAxisSettingsChange}
+                      />
+                    </Row>
+                  )}
+                </Col>
+                {!this.state.editorFullScreen && (
+                  <Col sm={this.state.showSide ? 8 : 12}>
+                    {this.state.chart < 2 && (
+                      <Navs
+                        currentChartId={this.state.chart}
+                        handleChartSelect={this.handleChartSelect}
+                        showSide={this.state.showSide}
                       />
                     )}
+                    <ErrorBoundary>
+                      {this.state.chart === 1.01 && (
+                        <DataTable
+                          data={this.state.data}
+                          header={this.state.header}
+                          dataTypes={this.state.dataTypes}
+                          selection={this.state.rowSelections}
+                          updateSelection={this.updateRowSelections}
+                          moreSettings={this.state.moreSettings}
+                        />
+                      )}
 
-                    {this.state.chart === 2 && ( // examples
-                      <Examples onSelect={this.handleExampleSelect} />
-                    )}
-                  </ErrorBoundary>
-                </Col>
-              )}
+                      {this.state.chart > 1.01 &&
+                        this.state.chart < 2 &&
+                        this.state.chart !== 1.12 && (
+                          <Chart
+                            chartId={this.state.chart}
+                            data={this.state.data}
+                            rowSelections={this.state.rowSelections}
+                            header={this.state.header}
+                            dataTypes={this.state.dataTypes}
+                            settings={this.state.settings}
+                            moreSettings={this.state.moreSettings}
+                            canvasSettings={this.state.canvasSettings}
+                            onCanvasSettingsChange={
+                              this.handleCanvasSettingsChange
+                            }
+                            axisSettings={this.state.axisSettings}
+                            onAxisSettingsChange={this.handleAxisSettingsChange}
+                            viewer={this.state.viewer}
+                            onViewerChange={viewer => this.setState({ viewer })}
+                            updateFitBoundsFcn={this.updateFitBoundsFcn}
+                            fitBounds={this.state.fitBounds}
+                          />
+                        )}
+                      {this.state.chart === 1.12 && (
+                        <ImageGallery
+                          data={this.state.data}
+                          dataTypes={this.state.dataTypes}
+                          rowSelections={this.state.rowSelections}
+                          header={this.state.header}
+                          settings={this.state.settings}
+                        />
+                      )}
+
+                      {this.state.chart === 2 && ( // examples
+                        <Examples onSelect={this.handleExampleSelect} />
+                      )}
+                    </ErrorBoundary>
+                  </Col>
+                )}
+              </ErrorBoundary>
             </Row>
           </Grid>
         </div>
