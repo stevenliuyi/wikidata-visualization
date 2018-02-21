@@ -10,6 +10,7 @@ import SettingPanel from './SettingPanel'
 import SettingToggle from './SettingToggle'
 import Select2 from 'react-select2-wrapper'
 import 'react-select2-wrapper/css/select2.min.css'
+import 'select2-bootstrap-theme/dist/select2-bootstrap.min.css'
 import ReactBootstrapSlider from 'react-bootstrap-slider'
 import ReactBootstrapRangeSlider from './ReactBootstrapRangeSlider'
 import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
@@ -138,7 +139,8 @@ class Settings extends Component {
             options={{
               templateResult: colors => sampleColorTemplate(colors),
               templateSelection: colors => sampleColorTemplate(colors, false),
-              width: '100%'
+              width: '100%',
+              theme: 'bootstrap'
             }}
           />
         </div>
@@ -208,7 +210,8 @@ class Settings extends Component {
           options={{
             templateResult: region => regionTemplate(region),
             templateSelection: region => regionTemplate(region),
-            width: '100%'
+            width: '100%',
+            theme: 'bootstrap'
           }}
         />
       )
@@ -228,7 +231,8 @@ class Settings extends Component {
             minimumResultsForSearch: -1,
             templateResult: projectionRenderText,
             templateSelection: projectionRenderText,
-            width: '100%'
+            width: '100%',
+            theme: 'bootstrap'
           }}
         />
       )
@@ -304,7 +308,8 @@ class Settings extends Component {
           }}
           options={{
             minimumResultsForSearch: -1,
-            width: '100%'
+            width: '100%',
+            theme: 'bootstrap'
           }}
         />
       )
@@ -319,7 +324,8 @@ class Settings extends Component {
             return this.props.onMoreSettingsChange(newSetting)
           }}
           options={{
-            width: '100%'
+            width: '100%',
+            theme: 'bootstrap'
           }}
         />
       )
@@ -334,7 +340,8 @@ class Settings extends Component {
             return this.props.onMoreSettingsChange(newSetting)
           }}
           options={{
-            width: '100%'
+            width: '100%',
+            theme: 'bootstrap'
           }}
         />
       )
@@ -367,7 +374,8 @@ class Settings extends Component {
           }
           options={{
             minimumResultsForSearch: -1,
-            width: '100%'
+            width: '100%',
+            theme: 'bootstrap'
           }}
         />
       )
@@ -422,7 +430,8 @@ class Settings extends Component {
             minimumResultsForSearch: -1,
             templateResult: d => delimiterTexts[d.text],
             templateSelection: d => delimiterTexts[d.text],
-            width: '100%'
+            width: '100%',
+            theme: 'bootstrap'
           }}
         />
       )
@@ -436,7 +445,8 @@ class Settings extends Component {
           }
           options={{
             minimumResultsForSearch: -1,
-            width: '100%'
+            width: '100%',
+            theme: 'bootstrap'
           }}
         />
       )
@@ -450,7 +460,8 @@ class Settings extends Component {
           }
           options={{
             minimumResultsForSearch: -1,
-            width: '100%'
+            width: '100%',
+            theme: 'bootstrap'
           }}
         />
       )
@@ -533,7 +544,8 @@ class Settings extends Component {
             }
             options={{
               minimumResultsForSearch: -1,
-              width: '100%'
+              width: '100%',
+              theme: 'bootstrap'
             }}
           />
         </div>
@@ -548,7 +560,8 @@ class Settings extends Component {
           }
           options={{
             minimumResultsForSearch: -1,
-            width: '100%'
+            width: '100%',
+            theme: 'bootstrap'
           }}
         />
       )
@@ -580,7 +593,8 @@ class Settings extends Component {
           }}
           options={{
             minimumResultsForSearch: -1,
-            width: '100%'
+            width: '100%',
+            theme: 'bootstrap'
           }}
         />
       )
@@ -615,7 +629,8 @@ class Settings extends Component {
           }}
           options={{
             minimumResultsForSearch: -1,
-            width: '100%'
+            width: '100%',
+            theme: 'bootstrap'
           }}
         />
       )
@@ -717,7 +732,8 @@ class Settings extends Component {
                         index.text === '-1'
                           ? 'none'
                           : this.props.header[index.text],
-                      width: '100%'
+                      width: '100%',
+                      theme: 'bootstrap'
                     }}
                   />
                 </div>
@@ -740,7 +756,8 @@ class Settings extends Component {
                   index.text === '-1' ? 'none' : this.props.header[index.text],
                 templateSelection: index =>
                   index.text === '-1' ? 'none' : this.props.header[index.text],
-                width: '100%'
+                width: '100%',
+                theme: 'bootstrap'
               }}
             />
           )
