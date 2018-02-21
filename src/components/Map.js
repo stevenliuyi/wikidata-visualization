@@ -85,6 +85,16 @@ class Map extends Component {
       var svg = d3.select('.rsm-svg')
       drawLegend(svg, this.state.colorScale, this.props)
     }
+
+    // path hover behavior
+    d3
+      .selectAll('.coord-path')
+      .on('mouseover', function() {
+        d3.select(this).attr('stroke', '#337ab7')
+      })
+      .on('mouseout', function() {
+        d3.select(this).attr('stroke', '#999')
+      })
   }
 
   handleZoomIn() {
@@ -196,6 +206,7 @@ class Map extends Component {
                         <g key={i}>
                           {this.props.moreSettings.lineType === 'geodesic' && (
                             <path
+                              className="coord-path"
                               d={path({
                                 type: 'LineString',
                                 coordinates: [coordinate_from, coordinate_to]
@@ -204,12 +215,13 @@ class Map extends Component {
                               stroke="#999"
                               strokeOpacity={0.5}
                               strokeWidth={this.props.moreSettings.lineWidth}
-                              pointerEvents="none"
+                              pointerEvents="visibleStroke"
                             />
                           )}
                           {this.props.moreSettings.lineType ===
                             'straight line' && (
                             <line
+                              className="coord-path"
                               x1={projection(coordinate_from)[0]}
                               y1={projection(coordinate_from)[1]}
                               x2={projection(coordinate_to)[0]}

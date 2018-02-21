@@ -225,6 +225,8 @@ input[type="number"] {
   color: #999;
   font-size: 12px;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .setting-row {

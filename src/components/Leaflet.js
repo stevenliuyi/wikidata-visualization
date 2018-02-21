@@ -259,6 +259,8 @@ class LeafletMap extends Component {
                         vertices: 100,
                         offset: 10
                       }}
+                      onMouseover={e => e.target.setStyle({ color: '#337ab7' })}
+                      onMouseout={e => e.target.setStyle({ color: '#999' })}
                     />
                   ) : (
                     <Polyline
@@ -266,6 +268,8 @@ class LeafletMap extends Component {
                       color="#999"
                       weight={this.props.moreSettings.lineWidth}
                       opacity={0.5}
+                      onMouseover={e => e.target.setStyle({ color: '#337ab7' })}
+                      onMouseout={e => e.target.setStyle({ color: '#999' })}
                     />
                   )
                 }
