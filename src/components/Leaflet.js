@@ -11,9 +11,11 @@ import Leaflet, { latLngBounds } from 'leaflet'
 import Basemap from './Basemap'
 import { getRadius, getColors } from '../utils/scales'
 import { getTooltipHTML } from '../utils/convertData'
+import { drawLegend } from '../utils/draw'
 import 'leaflet/dist/leaflet.css'
 import Info from './Info'
 import Arc from './Arc'
+import * as d3 from 'd3'
 
 Leaflet.Icon.Default.imagePath =
   '//cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/images/'
@@ -46,6 +48,17 @@ class LeafletMap extends Component {
     if (document.getElementsByClassName('info-text').length !== 0) return
 
     this.refs.map.leafletElement.invalidateSize(false)
+
+    // show legends
+    const colorScale = getColors(this.props, true)[1]
+    d3.selectAll('.d3ToolTip').remove()
+    d3
+      .select('body')
+      .append('div')
+      .attr('class', 'd3ToolTip')
+    d3.selectAll('.legendCells').remove()
+    let svg = d3.select('#map-legend').select('svg')
+    drawLegend(svg, colorScale, this.props)
   }
 
   componentDidMount() {
@@ -123,6 +136,12 @@ class LeafletMap extends Component {
 
     return (
       <div>
+        <div
+          id="map-legend"
+          style={{ position: 'absolute', zIndex: 1000, pointerEvents: 'none' }}
+        >
+          <svg width={this.props.width} height={this.props.height} />
+        </div>
         <Map
           ref="map"
           crs={

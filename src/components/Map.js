@@ -12,6 +12,7 @@ import { getRadius, getColors } from '../utils/scales'
 import { mapSettings } from '../utils/maps'
 import * as d3 from 'd3'
 import { getTooltipHTML } from '../utils/convertData'
+import { drawLegend } from '../utils/draw'
 import chroma from 'chroma-js'
 import FaPlus from 'react-icons/lib/fa/plus'
 import FaMinus from 'react-icons/lib/fa/minus'
@@ -27,20 +28,23 @@ class Map extends Component {
   state = {
     center: [0, 20],
     zoom: 1,
-    colors: []
+    colors: [],
+    colorScale: null
   }
 
   componentWillMount() {
     this.handleZoomIn = this.handleZoomIn.bind(this)
     this.handleZoomOut = this.handleZoomOut.bind(this)
-    this.setState({ colors: getColors(this.props) })
+    const [colors, colorScale] = getColors(this.props, true)
+    this.setState({ colors, colorScale })
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({ center: mapSettings[nextProps.moreSettings.map].center })
     this.setState({ center: [100, 90] })
     this.setState({ center: mapSettings[nextProps.moreSettings.map].center })
-    this.setState({ colors: getColors(nextProps) })
+    const [colors, colorScale] = getColors(nextProps, true)
+    this.setState({ colors, colorScale })
     this.setState({
       zoom: Math.min(nextProps.width / 980, nextProps.height / 551)
     })
@@ -74,6 +78,13 @@ class Map extends Component {
         d3.select('#circle' + i).attr('fill', colors[i])
         d3.select('#text' + i).attr('font-weight', 'normal')
       })
+
+    // show legend
+    if (this.state.colorScale != null) {
+      d3.selectAll('.legendCells').remove()
+      var svg = d3.select('.rsm-svg')
+      drawLegend(svg, this.state.colorScale, this.props)
+    }
   }
 
   handleZoomIn() {

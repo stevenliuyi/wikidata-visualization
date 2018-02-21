@@ -39,6 +39,7 @@ export const drawLegend = (svg, colorScale, props) => {
     svg = svg
       .select('.legendCells')
       .attr('transform', `scale(${props.moreSettings.legendScale})`)
+      .style('pointer-events', 'auto')
       .call(d3.drag().on('drag', dragged))
       .on('mousemove', function(d) {
         d3

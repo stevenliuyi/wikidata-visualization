@@ -9,6 +9,7 @@ import { Button, ButtonGroup } from 'react-bootstrap'
 import { getColors } from '../utils/scales'
 import { map2Settings } from '../utils/maps2'
 import { getTooltipHTML } from '../utils/convertData'
+import { drawLegend } from '../utils/draw'
 import chroma from 'chroma-js'
 import * as d3 from 'd3'
 import FaPlus from 'react-icons/lib/fa/plus'
@@ -26,6 +27,7 @@ class ChoroplethMap extends Component {
     center: [0, 20],
     zoom: 1,
     colors: [],
+    colorScale: null,
     tooltipHTMLs: []
   }
 
@@ -41,9 +43,18 @@ class ChoroplethMap extends Component {
     this.setState({
       zoom: Math.min(nextProps.width / 980, nextProps.height / 551)
     })
-    const colors = getColors(nextProps)
+    const [colors, colorScale] = getColors(nextProps, true)
     const tooltipHTMLs = getTooltipHTML(nextProps)
-    this.setState({ colors, tooltipHTMLs })
+    this.setState({ colors, colorScale, tooltipHTMLs })
+  }
+
+  componentDidUpdate() {
+    // show legend
+    if (this.state.colorScale != null) {
+      d3.selectAll('.legendCells').remove()
+      var svg = d3.select('.rsm-svg')
+      drawLegend(svg, this.state.colorScale, this.props)
+    }
   }
 
   handleZoomIn() {

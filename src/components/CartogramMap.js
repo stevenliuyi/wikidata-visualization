@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import * as d3 from 'd3'
 import { getColors } from '../utils/scales'
 import { getTooltipHTML } from '../utils/convertData'
+import { drawLegend } from '../utils/draw'
 import { geoMercator } from 'd3-geo'
 import { map2Settings, existRegionItems } from '../utils/maps2'
 import Cartogram from 'cartogram-chart/dist/cartogram-chart.js'
@@ -175,6 +176,12 @@ class CartogramMap extends Component {
     } else {
       if (this.state.chart != null) this.setState({ chart: null })
     }
+
+    // show legend
+    const colorScale = getColors(this.props, true)[1]
+    d3.selectAll('.legendCells').remove()
+    var svg = d3.select('.cartogram')
+    drawLegend(svg, colorScale, this.props)
   }
 
   render() {

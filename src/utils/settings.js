@@ -464,7 +464,9 @@ export const charts = [
       'radius',
       'color',
       'lineType',
-      'lineWidth'
+      'lineWidth',
+      'showLegend',
+      'legendScale'
     ],
     canvasSettings: ['auto', 'width', 'height']
   },
@@ -509,7 +511,7 @@ export const charts = [
     chartClass: 'map',
     settings: [region, area, color],
     defaultShow: [true, true, false],
-    moreSettings: ['map2', 'iterations', 'color'],
+    moreSettings: ['map2', 'iterations', 'color', 'showLegend', 'legendScale'],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
