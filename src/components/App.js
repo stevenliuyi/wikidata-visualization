@@ -22,6 +22,7 @@ import {
 import Measure from 'react-measure'
 import ImageGallery from './Gallery'
 import Promise from 'bluebird'
+import ErrorBoundary from './ErrorBoundary'
 
 class App extends Component {
   state = {
@@ -270,51 +271,55 @@ class App extends Component {
                       showSide={this.state.showSide}
                     />
                   )}
-                  {this.state.chart === 1.01 && (
-                    <DataTable
-                      data={this.state.data}
-                      header={this.state.header}
-                      dataTypes={this.state.dataTypes}
-                      selection={this.state.rowSelections}
-                      updateSelection={this.updateRowSelections}
-                      moreSettings={this.state.moreSettings}
-                    />
-                  )}
-
-                  {this.state.chart > 1.01 &&
-                    this.state.chart < 2 &&
-                    this.state.chart !== 1.12 && (
-                      <Chart
-                        chartId={this.state.chart}
+                  <ErrorBoundary>
+                    {this.state.chart === 1.01 && (
+                      <DataTable
                         data={this.state.data}
-                        rowSelections={this.state.rowSelections}
                         header={this.state.header}
                         dataTypes={this.state.dataTypes}
-                        settings={this.state.settings}
+                        selection={this.state.rowSelections}
+                        updateSelection={this.updateRowSelections}
                         moreSettings={this.state.moreSettings}
-                        canvasSettings={this.state.canvasSettings}
-                        onCanvasSettingsChange={this.handleCanvasSettingsChange}
-                        axisSettings={this.state.axisSettings}
-                        onAxisSettingsChange={this.handleAxisSettingsChange}
-                        viewer={this.state.viewer}
-                        onViewerChange={viewer => this.setState({ viewer })}
-                        updateFitBoundsFcn={this.updateFitBoundsFcn}
-                        fitBounds={this.state.fitBounds}
                       />
                     )}
-                  {this.state.chart === 1.12 && (
-                    <ImageGallery
-                      data={this.state.data}
-                      dataTypes={this.state.dataTypes}
-                      rowSelections={this.state.rowSelections}
-                      header={this.state.header}
-                      settings={this.state.settings}
-                    />
-                  )}
 
-                  {this.state.chart === 2 && ( // examples
-                    <Examples onSelect={this.handleExampleSelect} />
-                  )}
+                    {this.state.chart > 1.01 &&
+                      this.state.chart < 2 &&
+                      this.state.chart !== 1.12 && (
+                        <Chart
+                          chartId={this.state.chart}
+                          data={this.state.data}
+                          rowSelections={this.state.rowSelections}
+                          header={this.state.header}
+                          dataTypes={this.state.dataTypes}
+                          settings={this.state.settings}
+                          moreSettings={this.state.moreSettings}
+                          canvasSettings={this.state.canvasSettings}
+                          onCanvasSettingsChange={
+                            this.handleCanvasSettingsChange
+                          }
+                          axisSettings={this.state.axisSettings}
+                          onAxisSettingsChange={this.handleAxisSettingsChange}
+                          viewer={this.state.viewer}
+                          onViewerChange={viewer => this.setState({ viewer })}
+                          updateFitBoundsFcn={this.updateFitBoundsFcn}
+                          fitBounds={this.state.fitBounds}
+                        />
+                      )}
+                    {this.state.chart === 1.12 && (
+                      <ImageGallery
+                        data={this.state.data}
+                        dataTypes={this.state.dataTypes}
+                        rowSelections={this.state.rowSelections}
+                        header={this.state.header}
+                        settings={this.state.settings}
+                      />
+                    )}
+
+                    {this.state.chart === 2 && ( // examples
+                      <Examples onSelect={this.handleExampleSelect} />
+                    )}
+                  </ErrorBoundary>
                 </Col>
               )}
             </Row>
