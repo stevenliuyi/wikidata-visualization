@@ -15,6 +15,7 @@ import { drawLegend } from '../utils/draw'
 import 'leaflet/dist/leaflet.css'
 import Info from './Info'
 import Arc from './Arc'
+import DivIcon from 'react-leaflet-div-icon'
 import * as d3 from 'd3'
 
 Leaflet.Icon.Default.imagePath =
@@ -174,6 +175,8 @@ class LeafletMap extends Component {
                   .reverse()
 
                 coord = this.convertCoord(coord)
+                const label =
+                  item[this.props.header[this.props.settings['label']]]
 
                 if (coord.length === 2) {
                   return (
@@ -207,6 +210,19 @@ class LeafletMap extends Component {
                             />
                           </Tooltip>
                         </CircleMarker>
+                      )}
+                      {label != null && (
+                        <DivIcon position={coord}>
+                          <div
+                            style={{
+                              transform: 'translate(0, -15px)',
+                              fontSize: this.props.moreSettings.fontSize,
+                              whiteSpace: 'nowrap'
+                            }}
+                          >
+                            {label}
+                          </div>
+                        </DivIcon>
                       )}
                     </FeatureGroup>
                   )

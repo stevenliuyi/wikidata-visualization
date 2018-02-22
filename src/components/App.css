@@ -335,3 +335,9 @@ input[type="number"] {
   border-left-color: #ccc !important;
   right: 1em !important;
 }
+
+.leaflet-div-icon {
+  background-color: transparent !important;
+  border: none !important;
+  width: 300px !important;
+}

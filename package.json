@@ -37,6 +37,7 @@
     "react-icons": "^2.2.7",
     "react-images": "^0.5.14",
     "react-leaflet": "^1.8.0",
+    "react-leaflet-div-icon": "^1.1.0",
     "react-leaflet-google": "^3.2.1",
     "react-measure": "^2.0.2",
     "react-on-images-loaded": "^2.0.7",
