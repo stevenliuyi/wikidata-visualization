@@ -176,7 +176,8 @@ class Heatmap extends Component {
   }
 
   render() {
-    if (!this.props.dataTypes.includes('item')) return <Info info="no-item" />
+    if (!this.props.dataTypes.includes('item'))
+      return <Info info="no-item" text="heat map" />
 
     return (
       <div id="chart">

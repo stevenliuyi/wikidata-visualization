@@ -127,7 +127,7 @@ class LeafletMap extends Component {
 
   render() {
     if (!this.props.dataTypes.includes('coordinate'))
-      return <Info info="no-coordinate" />
+      return <Info info="no-coordinate" text="map" />
 
     const bounds = this.getBounds(this.props)
 

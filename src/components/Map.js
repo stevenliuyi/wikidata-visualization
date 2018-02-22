@@ -119,7 +119,7 @@ class Map extends Component {
 
   render() {
     if (!this.props.dataTypes.includes('coordinate'))
-      return <Info info="no-coordinate" />
+      return <Info info="no-coordinate" text="map" />
 
     const radii = getRadius(this.props)
 

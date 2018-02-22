@@ -178,7 +178,7 @@ class BubbleChart extends Component {
       !this.props.dataTypes.includes('number') &&
       !this.props.dataTypes.includes('time')
     )
-      return <Info info="no-number" />
+      return <Info info="no-number" text="bubble chart" />
 
     return (
       <div id="chart">

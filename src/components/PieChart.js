@@ -151,7 +151,7 @@ class PieChart extends Component {
       !this.props.dataTypes.includes('number') &&
       !this.props.dataTypes.includes('time')
     )
-      return <Info info="no-number" />
+      return <Info info="no-number" text="pie chart" />
 
     return (
       <div id="chart">

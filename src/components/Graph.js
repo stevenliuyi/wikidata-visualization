@@ -322,7 +322,8 @@ class Graph extends Component {
   }
 
   render() {
-    if (!this.props.dataTypes.includes('item')) return <Info info="no-item" />
+    if (!this.props.dataTypes.includes('item'))
+      return <Info info="no-item" text="force-directed graph" />
 
     return (
       <div id="chart">

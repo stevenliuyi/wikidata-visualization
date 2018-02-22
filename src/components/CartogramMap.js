@@ -186,9 +186,9 @@ class CartogramMap extends Component {
 
   render() {
     if (!this.props.dataTypes.includes('coordinate'))
-      return <Info info="no-coordinate" />
+      return <Info info="no-coordinate" text="cartogram map" />
     if (!this.props.dataTypes.includes('number'))
-      return <Info info="no-number" />
+      return <Info info="no-number" text="cartogram map" />
     if (!existRegionItems(this.props))
       return (
         <Info

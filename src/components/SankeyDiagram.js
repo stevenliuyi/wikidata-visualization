@@ -241,7 +241,10 @@ class SankeyDiagram extends Component {
   }
 
   render() {
-    if (!this.props.dataTypes.includes('item')) return <Info info="no-item" />
+    if (!this.props.dataTypes.includes('item'))
+      return <Info info="no-item" text="sankey diagram" />
+    if (this.props.settings['link-from'] === this.props.settings['link-to'])
+      return <Info info="self-pointing" showSettings={true} />
 
     return (
       <div id="chart">

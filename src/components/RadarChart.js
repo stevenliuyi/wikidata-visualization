@@ -78,7 +78,7 @@ class RadarChart extends Component {
       !this.props.dataTypes.includes('number') &&
       !this.props.dataTypes.includes('time')
     )
-      return <Info info="no-number" />
+      return <Info info="no-number" text="radar chart" />
 
     const [data, maxVal, colors, colorScale] = getGroupValues(this.props)
 

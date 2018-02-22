@@ -16,7 +16,7 @@ class ScatterPlot extends Component {
       !this.props.dataTypes.includes('number') &&
       !this.props.dataTypes.includes('time')
     )
-      return <Info info="no-number" />
+      return <Info info="no-number" text="scatter chart" />
 
     const [scales, xLabel, yLabel] = getXYScales(this.props)
     const radii = getRadius(this.props)
