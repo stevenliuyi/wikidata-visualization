@@ -649,5 +649,6 @@ export const mapProjections = [
   { projection: 'eckert4', title: 'Eckert IV' },
   { projection: 'winkel3', title: 'Winkel tripel' },
   { projection: 'mercator', title: 'Mercator' },
-  { projection: 'miller', title: 'Miller Cylindrical' }
+  { projection: 'miller', title: 'Miller Cylindrical' },
+  { projection: 'orthographic', title: 'Orthographic (Globe)' }
 ]

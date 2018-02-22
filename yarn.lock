@@ -1591,8 +1591,8 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
     delayed-stream "~1.0.0"
 
 commander@2:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.13.0.tgz#6964bca67685df7c1f1430c584f07d7597885b9c"
+  version "2.14.1"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.14.1.tgz#2235123e37af8ca3c65df45b026dbd357b01b9aa"
 
 commander@2.11.0:
   version "2.11.0"
@@ -6373,9 +6373,9 @@ react-select2-wrapper@^1.0.4-beta6:
     select2 "^4.0.0"
     shallow-equal-fuzzy "^0.0.2"
 
-react-simple-maps@^0.10.1:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/react-simple-maps/-/react-simple-maps-0.10.1.tgz#4d884ac24a55c327a86076113f3890e61c92906a"
+react-simple-maps@^0.11:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/react-simple-maps/-/react-simple-maps-0.11.0.tgz#395c3656758da8b24b77fb08ca5de5fd699bf163"
   dependencies:
     d3-geo "1.6.3"
     d3-geo-projection "1.2.2"

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {
   ComposableMap,
   ZoomableGroup,
+  ZoomableGlobe,
   Geographies,
   Geography,
   Markers,
@@ -121,6 +122,11 @@ class Map extends Component {
             mapSettings[this.props.moreSettings.map].filename
           }`
 
+    const Zoomable =
+      this.props.moreSettings.projection !== 'orthographic'
+        ? ZoomableGroup
+        : ZoomableGlobe
+
     return (
       <div style={wrapperStyles}>
         <ComposableMap
@@ -136,7 +142,7 @@ class Map extends Component {
             height: this.props.height
           }}
         >
-          <ZoomableGroup
+          <Zoomable
             center={this.state.center}
             zoom={this.state.zoom}
             ref={node => (this.zoomableGroup = node)}
@@ -203,7 +209,7 @@ class Map extends Component {
                       ]
                         .split(', ')
                         .map(parseFloat)
-                      const projection = this.zoomableGroup.props.projection()
+                      const projection = this.zoomableGroup.props.projection
                       const path = d3Geo.geoPath().projection(projection)
                       return (
                         <g key={i}>
@@ -293,7 +299,7 @@ class Map extends Component {
                   return null
                 })}
             </Markers>
-          </ZoomableGroup>
+          </Zoomable>
         </ComposableMap>
         {/*
         <ButtonGroup className="zoom-button">
