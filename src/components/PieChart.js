@@ -44,7 +44,7 @@ const updateD3Node = (props, transition) => {
   var path = d3
     .arc()
     .outerRadius(radius)
-    .innerRadius(radius * props.moreSettings.innerRadius)
+    .innerRadius(radius * props.moreSettings.innerRadius * 0.01)
 
   var arc = g
     .selectAll('.arc')

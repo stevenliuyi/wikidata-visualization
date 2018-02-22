@@ -170,7 +170,7 @@ const end_time = {
 }
 
 export const moreSettings = {
-  fontSize: 10,
+  fontSize: '8pt',
   radius: [5, 40],
   color: 'Spectral',
   map: 'World',
@@ -202,12 +202,12 @@ export const moreSettings = {
   solarSystem: 'Earth',
   mapResolution: false,
   barType: 'stacked',
-  innerRadius: 0.7,
+  innerRadius: 70,
   timelineType: 'separated',
   padding: 10,
   lineType: 'geodesic',
   lineWidth: 1.5,
-  padAngle: 0.05
+  padAngle: 5
 }
 
 export const moreSettingTitles = {

@@ -76,15 +76,16 @@ class Settings extends Component {
     if (setting === 'fontSize' || setting === 'edgeFontSize') {
       return (
         <ReactBootstrapSlider
-          value={this.props.moreSettings[setting]}
+          value={parseInt(this.props.moreSettings[setting], 10)}
           slideStop={e => {
             const newSetting = {}
-            newSetting[setting] = e.target.value
+            newSetting[setting] = `${e.target.value}pt`
             return this.props.onMoreSettingsChange(newSetting)
           }}
           step={1}
           min={2}
           max={48}
+          formatter={v => `${v}pt`}
         />
       )
     } else if (setting === 'radius') {
@@ -258,6 +259,7 @@ class Settings extends Component {
           step={1}
           min={1}
           max={150}
+          formatter={v => `${v} steps`}
         />
       )
     } else if (setting === 'nodeWidth') {
@@ -303,9 +305,10 @@ class Settings extends Component {
           slideStop={e =>
             this.props.onMoreSettingsChange({ padAngle: e.target.value })
           }
-          step={0.01}
+          step={1}
           min={0}
-          max={0.5}
+          max={50}
+          formatter={v => `${v}% outer radius`}
         />
       )
     } else if (setting === 'sortRow' || setting === 'sortColumn') {
@@ -542,6 +545,7 @@ class Settings extends Component {
           step={0.1}
           min={0.1}
           max={3}
+          formatter={v => `× ${v}`}
         />
       )
     } else if (setting === 'rotation') {
@@ -556,6 +560,7 @@ class Settings extends Component {
           step={1}
           min={0}
           max={90}
+          formatter={v => `${v}°`}
         />
       )
     } else if (setting === 'barType') {
@@ -597,9 +602,10 @@ class Settings extends Component {
           slideStop={e =>
             this.props.onMoreSettingsChange({ innerRadius: e.target.value })
           }
-          step={0.05}
+          step={5}
           min={0}
-          max={1}
+          max={100}
+          formatter={v => `${v}% outer radius`}
         />
       )
     } else if (

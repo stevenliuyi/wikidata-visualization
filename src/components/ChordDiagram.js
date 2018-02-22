@@ -26,14 +26,14 @@ const updateD3Node = props => {
     .attr('height', props.height)
 
   var outerRadius = Math.min(props.width, props.height) * 0.5 - 40,
-    innerRadius = outerRadius * props.moreSettings.innerRadius
+    innerRadius = outerRadius * props.moreSettings.innerRadius * 0.01
 
   // make sure the radius is positive
   if (innerRadius <= 0) return null
 
   var chord = d3
     .chord()
-    .padAngle(props.moreSettings.padAngle)
+    .padAngle(props.moreSettings.padAngle * 0.01)
     .sortSubgroups(d3.descending)
 
   var arc = d3
