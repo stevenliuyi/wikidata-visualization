@@ -202,11 +202,12 @@ export const moreSettings = {
   solarSystem: 'Earth',
   mapResolution: false,
   barType: 'stacked',
-  innerRadius: 0.6,
+  innerRadius: 0.7,
   timelineType: 'separated',
   padding: 10,
   lineType: 'geodesic',
-  lineWidth: 1.5
+  lineWidth: 1.5,
+  padAngle: 0.05
 }
 
 export const moreSettingTitles = {
@@ -246,7 +247,8 @@ export const moreSettingTitles = {
   timelineType: 'Timeline type',
   padding: 'Padding',
   lineType: 'Line type',
-  lineWidth: 'Line width'
+  lineWidth: 'Line width',
+  padAngle: 'Padding angle'
 }
 
 export const canvasSettings = {
@@ -531,7 +533,14 @@ export const charts = [
     chartClass: 'more',
     settings: [link_from, link_to, relation, label],
     defaultShow: [true, true, true, false],
-    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
+    moreSettings: [
+      'fontSize',
+      'color',
+      'innerRadius',
+      'padAngle',
+      'showLegend',
+      'legendScale'
+    ],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {

@@ -296,6 +296,18 @@ class Settings extends Component {
           max={50}
         />
       )
+    } else if (setting === 'padAngle') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings.padAngle}
+          slideStop={e =>
+            this.props.onMoreSettingsChange({ padAngle: e.target.value })
+          }
+          step={0.01}
+          min={0}
+          max={0.5}
+        />
+      )
     } else if (setting === 'sortRow' || setting === 'sortColumn') {
       return (
         <Select2
