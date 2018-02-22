@@ -617,6 +617,7 @@ export function getTimeData(props) {
   )
 
   let [colors, colorScale] = getColors(props, true)
+  let tooltipHTMLs = getTooltipHTML(props)
   let invalid_indices = []
 
   let data = []
@@ -650,7 +651,7 @@ export function getTimeData(props) {
 
   colors = colors.filter((_, i) => !invalid_indices.includes(i))
   colorLabels = colorLabels.filter((_, i) => !invalid_indices.includes(i))
-  //tooltipHTMLs = tooltipHTMLs.filter((_, i) => !invalid_indices.includes(i))
+  tooltipHTMLs = tooltipHTMLs.filter((_, i) => !invalid_indices.includes(i))
 
   if (typeof colorScale.range === 'function') {
     const newDomain = colorScale
@@ -661,5 +662,5 @@ export function getTimeData(props) {
       .domain(newDomain)
   }
 
-  return [data, minDate, maxDate, colors, colorScale]
+  return [data, minDate, maxDate, colors, colorScale, tooltipHTMLs]
 }

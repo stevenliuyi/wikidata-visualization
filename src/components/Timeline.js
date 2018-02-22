@@ -5,10 +5,24 @@ import SVGPanZoom from './SVGPanZoom'
 import { drawLegend } from '../utils/draw'
 import { d3Timeline } from '../utils/timeline'
 import Info from './Info'
+import chroma from 'chroma-js'
 
 // timeline reference: http://bl.ocks.org/denisemauldin/e6da337734f855c2a89666afb11dc329
 const updateD3Node = props => {
-  const [data, minDate, maxDate, colors, colorScale] = getTimeData(props)
+  const [
+    data,
+    minDate,
+    maxDate,
+    colors,
+    colorScale,
+    tooltipHTMLs
+  ] = getTimeData(props)
+
+  d3.selectAll('.d3ToolTip').remove()
+  var tooltip = d3
+    .select('body')
+    .append('div')
+    .attr('class', 'd3ToolTip')
 
   var svg = d3.select('#chart')
 
@@ -50,6 +64,7 @@ const updateD3Node = props => {
         .data(band)
         .enter()
         .append('rect')
+        .attr('id', 'rect' + i)
         .attr('class', 'rect')
         .attr('rx', 2)
         .attr('x', function(d) {
@@ -67,14 +82,47 @@ const updateD3Node = props => {
         .attr('fill', function(d) {
           return colors[i]
         })
+        .on('mouseover', function(d) {
+          d3.select('#rect' + i).attr('fill', chroma(colors[i]).brighten(0.6))
+          d3.select('#text' + i).attr('font-weight', 'bold')
+        })
+        .on('mousemove', function(d) {
+          tooltip
+            .style('left', d3.event.pageX + 10 + 'px')
+            .style('top', d3.event.pageY + 10 + 'px')
+            .style('display', 'inline-block')
+            .html(tooltipHTMLs[i])
+        })
+        .on('mouseout', function(d) {
+          tooltip.style('display', 'none')
+          d3.select('#rect' + i).attr('fill', colors[i])
+          d3.select('#text' + i).attr('font-weight', 'normal')
+        })
 
       svg
         .append('text')
+        .attr('id', 'text' + i)
         .text(period.label)
         .attr('y', padding + singleHeight * 0.5 + i * singleHeight)
         .attr('x', 20)
         .attr('alignment-baseline', 'middle')
         .style('font-size', props.moreSettings.fontSize)
+        .on('mouseover', function(d) {
+          d3.select('#rect' + i).attr('fill', chroma(colors[i]).brighten(0.6))
+          d3.select('#text' + i).attr('font-weight', 'bold')
+        })
+        .on('mousemove', function(d) {
+          tooltip
+            .style('left', d3.event.pageX + 10 + 'px')
+            .style('top', d3.event.pageY + 10 + 'px')
+            .style('display', 'inline-block')
+            .html(tooltipHTMLs[i])
+        })
+        .on('mouseout', function(d) {
+          tooltip.style('display', 'none')
+          d3.select('#rect' + i).attr('fill', colors[i])
+          d3.select('#text' + i).attr('font-weight', 'normal')
+        })
     })
   } else {
     // grouped
@@ -100,6 +148,9 @@ const updateD3Node = props => {
 
     g
       .append('rect')
+      .attr('id', function(d, i) {
+        return 'rect' + i
+      })
       .attr('class', 'rect')
       .attr('rx', 2)
       .attr('x', function(d) {
@@ -117,9 +168,28 @@ const updateD3Node = props => {
       .attr('fill', function(d, i) {
         return colors[i]
       })
+      .on('mouseover', function(d, i) {
+        d3.select('#rect' + i).attr('fill', chroma(colors[i]).brighten(0.6))
+        d3.select('#text' + i).attr('font-weight', 'bold')
+      })
+      .on('mousemove', function(d, i) {
+        tooltip
+          .style('left', d3.event.pageX + 10 + 'px')
+          .style('top', d3.event.pageY + 10 + 'px')
+          .style('display', 'inline-block')
+          .html(tooltipHTMLs[i])
+      })
+      .on('mouseout', function(d, i) {
+        tooltip.style('display', 'none')
+        d3.select('#rect' + i).attr('fill', colors[i])
+        d3.select('#text' + i).attr('font-weight', 'normal')
+      })
 
     g
       .append('text')
+      .attr('id', function(d, i) {
+        return 'text' + i
+      })
       .text(function(d) {
         return d.label
       })
@@ -131,6 +201,22 @@ const updateD3Node = props => {
       })
       .attr('alignment-baseline', 'middle')
       .style('font-size', props.moreSettings.fontSize)
+      .on('mouseover', function(d, i) {
+        d3.select('#rect' + i).attr('fill', chroma(colors[i]).brighten(0.6))
+        d3.select('#text' + i).attr('font-weight', 'bold')
+      })
+      .on('mousemove', function(d, i) {
+        tooltip
+          .style('left', d3.event.pageX + 10 + 'px')
+          .style('top', d3.event.pageY + 10 + 'px')
+          .style('display', 'inline-block')
+          .html(tooltipHTMLs[i])
+      })
+      .on('mouseout', function(d, i) {
+        tooltip.style('display', 'none')
+        d3.select('#rect' + i).attr('fill', colors[i])
+        d3.select('#text' + i).attr('font-weight', 'normal')
+      })
   }
 
   if (colorScale != null) drawLegend(svg, colorScale, props)
