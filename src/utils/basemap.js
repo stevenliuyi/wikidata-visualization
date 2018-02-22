@@ -124,7 +124,8 @@ export const baseMapSettings = {
     attribution_url: 'http://stamen.com',
     overlay: {
       url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png',
-      name: 'Annotations'
+      name: 'Annotations',
+      checked: true
     }
   },
   'Stamen Watercolor': {
@@ -165,7 +166,8 @@ export const baseMapSettings = {
     overlay: {
       url:
         'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
-      name: 'Annotations'
+      name: 'Annotations',
+      checked: true
     }
   },
   'CartoDB Dark': {
@@ -176,34 +178,61 @@ export const baseMapSettings = {
     overlay: {
       url:
         'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png',
-      name: 'Annotations'
+      name: 'Annotations',
+      checked: true
     }
   },
   TianDiTu: {
     url: 'http://t0.tianditu.cn/DataServer?T=vec_w&X={x}&Y={y}&L={z}',
-    attribution: 'data by <b>TianDiTu</b>',
+    attribution: 'data by <b>TianDiTu</b> (天地图)',
     attribution_url: 'http://www.tianditu.com',
     overlay: {
       url: 'http://t0.tianditu.cn/DataServer?T=cva_w&X={x}&Y={y}&L={z}',
-      name: 'Annotations'
+      name: 'Annotations',
+      checked: true
     }
   },
   'TianDiTu Satellite': {
     url: 'http://t0.tianditu.cn/DataServer?T=img_w&X={x}&Y={y}&L={z}',
-    attribution: 'data by <b>TianDiTu</b>',
+    attribution: 'data by <b>TianDiTu</b> (天地图)',
     attribution_url: 'http://www.tianditu.com',
     overlay: {
       url: 'http://t0.tianditu.cn/DataServer?T=cia_w&X={x}&Y={y}&L={z}',
-      name: 'Annotations'
+      name: 'Annotations',
+      checked: true
     }
   },
   'TianDiTu Terrain': {
     url: 'http://t0.tianditu.cn/DataServer?T=ter_w&X={x}&Y={y}&L={z}',
-    attribution: 'data by <b>TianDiTu</b>',
+    attribution: 'data by <b>TianDiTu</b> (天地图)',
     attribution_url: 'http://www.tianditu.com',
     overlay: {
       url: 'http://t0.tianditu.cn/DataServer?T=cta_w&X={x}&Y={y}&L={z}',
-      name: 'Annotations'
+      name: 'Annotations',
+      checked: true
     }
+  },
+  'Kokudo Chiriin': {
+    url: 'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',
+    attribution: 'data by <b>Kokudo Chiriin</b> (国土地理院)',
+    attribution_url:
+      'http://www.gsi.go.jp/kikakuchousei/kikakuchousei40182.html',
+    overlay: {
+      url: 'https://cyberjapandata.gsi.go.jp/xyz/english/{z}/{x}/{y}.png',
+      name: 'English',
+      checked: false
+    }
+  },
+  'Kokudo Chiriin Pale': {
+    url: 'https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',
+    attribution: 'data by <b>Kokudo Chiriin</b> (国土地理院)',
+    attribution_url:
+      'http://www.gsi.go.jp/kikakuchousei/kikakuchousei40182.html'
+  },
+  'Kokudo Chiriin Satellite': {
+    url: 'https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg',
+    attribution: 'data by <b>Kokudo Chiriin</b> (国土地理院)',
+    attribution_url:
+      'http://www.gsi.go.jp/kikakuchousei/kikakuchousei40182.html'
   }
 }

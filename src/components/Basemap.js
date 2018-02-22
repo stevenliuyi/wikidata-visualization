@@ -50,29 +50,20 @@ class Basemap extends Component {
 
             {!this.state.basemap.startsWith('Google') &&
               baseMapSettings[this.state.basemap].overlay == null && (
-                <TileLayer
-                  attribution={baseMapSettings[this.state.basemap].attribution}
-                  url={baseMapSettings[this.state.basemap].url}
-                />
+                <TileLayer url={baseMapSettings[this.state.basemap].url} />
               )}
 
             {!this.state.basemap.startsWith('Google') &&
               baseMapSettings[this.state.basemap].overlay != null && (
                 <LayersControl position="topright">
-                  <TileLayer
-                    attribution={
-                      baseMapSettings[this.state.basemap].attribution
-                    }
-                    url={baseMapSettings[this.state.basemap].url}
-                  />
+                  <TileLayer url={baseMapSettings[this.state.basemap].url} />
                   <Overlay
-                    checked
+                    checked={
+                      baseMapSettings[this.state.basemap].overlay.checked
+                    }
                     name={baseMapSettings[this.state.basemap].overlay.name}
                   >
                     <TileLayer
-                      attribution={
-                        baseMapSettings[this.state.basemap].attribution
-                      }
                       url={baseMapSettings[this.state.basemap].overlay.url}
                     />
                   </Overlay>

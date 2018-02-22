@@ -120,7 +120,7 @@ class Tools extends Component {
         {this.props.chartId === 1.17 &&
           this.props.moreSettings.delimiter === 'Chinese' && (
             <OverlayTrigger
-              placement="bottom"
+              placement="top"
               overlay={
                 <Tooltip id="chinese-segement-info">
                   Chinese word segementation powered by segmentit
@@ -143,7 +143,7 @@ class Tools extends Component {
         {this.props.chartId === 1.17 &&
           this.props.moreSettings.delimiter === 'Japanese' && (
             <OverlayTrigger
-              placement="bottom"
+              placement="top"
               overlay={
                 <Tooltip id="japanese-segement-info">
                   Japanese word segementation powered by TinySegmenter
@@ -166,7 +166,7 @@ class Tools extends Component {
         {this.props.chartId === 1.16 &&
           this.props.moreSettings.solarSystem === 'Earth' && (
             <OverlayTrigger
-              placement="bottom"
+              placement="top"
               overlay={
                 <Tooltip id="leaflet-info">
                   <div
@@ -197,7 +197,7 @@ class Tools extends Component {
         {this.props.chartId === 1.16 &&
           this.props.moreSettings.solarSystem !== 'Earth' && (
             <OverlayTrigger
-              placement="bottom"
+              placement="top"
               overlay={
                 <Tooltip id="leaflet-info">
                   <div
@@ -228,7 +228,7 @@ class Tools extends Component {
         {this.props.chartId !== 1.16 && (
           <div>
             <OverlayTrigger
-              placement="bottom"
+              placement="top"
               overlay={<Tooltip id="get-image-url">get SVG URL</Tooltip>}
             >
               <MdInsertLink
@@ -239,7 +239,7 @@ class Tools extends Component {
             </OverlayTrigger>
             {'  '}
             <OverlayTrigger
-              placement="bottom"
+              placement="top"
               overlay={<Tooltip id="download-image">download</Tooltip>}
             >
               <MdFileDownload
@@ -250,7 +250,7 @@ class Tools extends Component {
             </OverlayTrigger>
             {!noViewerRefreshCharts.includes(this.props.chartId) && (
               <OverlayTrigger
-                placement="bottom"
+                placement="top"
                 overlay={<Tooltip id="get-image-url">reset view</Tooltip>}
               >
                 <MdRefresh
@@ -265,7 +265,7 @@ class Tools extends Component {
 
         {this.props.chartId === 1.16 && (
           <OverlayTrigger
-            placement="bottom"
+            placement="top"
             overlay={<Tooltip id="fit-markers">fit markers</Tooltip>}
           >
             <MdCropFree
