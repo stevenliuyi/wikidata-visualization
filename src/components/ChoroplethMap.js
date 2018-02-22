@@ -5,11 +5,14 @@ import {
   Geographies,
   Geography
 } from 'react-simple-maps'
+import { Button, ButtonGroup } from 'react-bootstrap'
 import { getColors } from '../utils/scales'
 import { map2Settings } from '../utils/maps2'
 import { getTooltipHTML } from '../utils/convertData'
 import { drawLegend } from '../utils/draw'
 import chroma from 'chroma-js'
+import FaPlus from 'react-icons/lib/fa/plus'
+import FaMinus from 'react-icons/lib/fa/minus'
 import * as d3 from 'd3'
 import Info from './Info'
 import { existRegionItems } from '../utils/maps2'
@@ -58,7 +61,12 @@ class ChoroplethMap extends Component {
     const zoom = d3.zoom().on('zoom', () => {
       this.setState({ zoom: d3.event.transform.k })
     })
-    svg.call(zoom).on('mousedown.zoom', null)
+    svg
+      .call(zoom)
+      .on('mousedown.zoom', null)
+      .on('touchstart.zoom', null)
+      .on('touchmove.zoom', null)
+      .on('touchend.zoom', null)
   }
 
   handleZoomIn() {
@@ -171,16 +179,17 @@ class ChoroplethMap extends Component {
             </Geographies>
           </ZoomableGroup>
         </ComposableMap>
-        {/*
-        <ButtonGroup className="zoom-button">
-          <Button onClick={this.handleZoomOut}>
-            <FaMinus size={12} />
-          </Button>
-          <Button onClick={this.handleZoomIn}>
-            <FaPlus size={12} />
-          </Button>
-        </ButtonGroup>
-        */}
+        {// add zoom buttons on touch screens as a workaround
+        ('ontouchstart' in window || navigator.msMaxTouchPoints) && (
+          <ButtonGroup className="zoom-button">
+            <Button onClick={this.handleZoomOut}>
+              <FaMinus size={12} />
+            </Button>
+            <Button onClick={this.handleZoomIn}>
+              <FaPlus size={12} />
+            </Button>
+          </ButtonGroup>
+        )}
       </div>
     )
   }
