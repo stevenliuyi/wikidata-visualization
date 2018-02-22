@@ -207,7 +207,9 @@ export const moreSettings = {
   padding: 10,
   lineType: 'geodesic',
   lineWidth: 1.5,
-  padAngle: 5
+  padAngle: 5,
+  numOfColumns: 1,
+  effect: 'no effect'
 }
 
 export const moreSettingTitles = {
@@ -248,7 +250,9 @@ export const moreSettingTitles = {
   padding: 'Padding',
   lineType: 'Line type',
   lineWidth: 'Line width',
-  padAngle: 'Padding angle'
+  padAngle: 'Padding angle',
+  numOfColumns: 'Number of columns',
+  effect: 'Image effect'
 }
 
 export const canvasSettings = {
@@ -615,7 +619,7 @@ export const charts = [
     chartClass: 'more',
     settings: [image, label],
     defaultShow: [true, false],
-    moreSettings: [],
+    moreSettings: ['numOfColumns', 'effect'],
     canvasSettings: []
   }
 ]

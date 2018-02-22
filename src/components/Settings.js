@@ -697,6 +697,34 @@ class Settings extends Component {
           max={20}
         />
       )
+    } else if (setting === 'numOfColumns') {
+      return (
+        <ReactBootstrapRangeSlider
+          value={this.props.moreSettings.numOfColumns}
+          slideStop={e =>
+            this.props.onMoreSettingsChange({ numOfColumns: e.target.value })
+          }
+          step={1}
+          min={1}
+          max={8}
+          formatter={v => (v === 1 ? 'auto' : v)}
+        />
+      )
+    } else if (setting === 'effect') {
+      return (
+        <Select2
+          value={this.props.moreSettings['effect']}
+          data={['no effect', 'grayscale', 'sepia', 'invert']}
+          onChange={e =>
+            this.props.onMoreSettingsChange({ effect: e.target.value })
+          }
+          options={{
+            minimumResultsForSearch: -1,
+            width: '100%',
+            theme: 'bootstrap'
+          }}
+        />
+      )
     } else {
       return null
     }

@@ -54,10 +54,10 @@ class ImageGallery extends Component {
       .slice(0, 100) // only load the first 100 images
     this.setState({ imgInfo })
 
-    if (this.state.photos.length > 1) this.handleImagesLoaded(imgInfo)
+    if (this.state.photos.length > 1) this.handleImagesLoaded(imgInfo, props)
   }
 
-  handleImagesLoaded(info) {
+  handleImagesLoaded(info, props) {
     const imgInfo = info != null ? info : this.state.imgInfo
     let photos = [],
       lightbox_photos = []
@@ -71,7 +71,8 @@ class ImageGallery extends Component {
           caption: img.caption,
           showcaption: img.showCaption.toString(),
           tooltip: img.tooltip,
-          tooltiphtml: img.tooltipHTML
+          tooltiphtml: img.tooltipHTML,
+          effect: props.moreSettings.effect
         })
       if (imgElement.naturalWidth > 0)
         lightbox_photos.push({
@@ -119,7 +120,9 @@ class ImageGallery extends Component {
 
     return (
       <div>
-        <OnImagesLoaded onLoaded={this.handleImagesLoaded}>
+        <OnImagesLoaded
+          onLoaded={info => this.handleImagesLoaded(info, this.props)}
+        >
           {this.state.imgInfo.map((img, i) => (
             <img
               id={`img${i}`}
@@ -136,21 +139,26 @@ class ImageGallery extends Component {
             this.setState({ width: contentRect.bounds.width })
           }
         >
-          {// change number of columns dynamically
-          ({ measureRef }) => {
+          {({ measureRef }) => {
             if (this.state.width < 1) {
               return <div ref={measureRef} />
             }
             let columns = 1
-            if (this.state.width >= 384) {
-              columns = 2
+            if (this.props.moreSettings.numOfColumns === 1) {
+              // change number of columns dynamically
+              if (this.state.width >= 384) {
+                columns = 2
+              }
+              if (this.state.width >= 512) {
+                columns = 3
+              }
+              if (this.state.width >= 768) {
+                columns = 4
+              }
+            } else {
+              columns = this.props.moreSettings.numOfColumns
             }
-            if (this.state.width >= 512) {
-              columns = 3
-            }
-            if (this.state.width >= 768) {
-              columns = 4
-            }
+
             return (
               <div ref={measureRef}>
                 <Gallery

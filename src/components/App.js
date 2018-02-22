@@ -314,6 +314,7 @@ class App extends Component {
                           rowSelections={this.state.rowSelections}
                           header={this.state.header}
                           settings={this.state.settings}
+                          moreSettings={this.state.moreSettings}
                         />
                       )}
 
