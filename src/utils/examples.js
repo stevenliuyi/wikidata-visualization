@@ -85,6 +85,10 @@ export const examples = [
   {
     title: 'Sister cities between capitals of Asia and Africa countries',
     filename: 'asia-africa-sister-cities.rq'
+  },
+  {
+    title: 'Phylogeny of dinosaurs',
+    filename: 'dinosaur-phylogeny.rq'
   }
 ]
 
