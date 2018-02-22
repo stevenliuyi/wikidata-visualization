@@ -173,7 +173,7 @@ export function getMatrix(props) {
   let matrix = items.map(item => items.map(item => 0))
 
   const labels = Array(items.length).fill('')
-  const tooltipHTMLs = Array(items.length).fill('')
+  let tooltipHTMLs = JSON.parse(JSON.stringify(matrix)) // deep copy
 
   // fill data into the matrix
   selectedData.forEach(item => {
@@ -181,7 +181,7 @@ export function getMatrix(props) {
     const toIndex = items.indexOf(item[to])
     matrix[fromIndex][toIndex] += parseData(item[relation])
     if (label) labels[fromIndex] = item[label]
-    tooltipHTMLs[fromIndex] = getSingleTooltipHTML(item, props.header)
+    tooltipHTMLs[fromIndex][toIndex] = getSingleTooltipHTML(item, props.header)
   })
 
   let colorScale = getColorScaleFromValues(items, props.moreSettings.color)

@@ -83,16 +83,6 @@ const updateD3Node = props => {
       return d3.rgb(colors[d.index]).darker()
     })
     .attr('d', arc)
-    .on('mousemove', function(d) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(tooltipHTMLs[d.index])
-    })
-    .on('mouseout', function(d, i) {
-      tooltip.style('display', 'none')
-    })
 
   group
     .append('g')
@@ -123,16 +113,6 @@ const updateD3Node = props => {
     })
     .style('font-family', 'sans-serif')
     .style('font-size', props.moreSettings.fontSize)
-    .on('mousemove', function(d) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(tooltipHTMLs[d.index])
-    })
-    .on('mouseout', function(d) {
-      tooltip.style('display', 'none')
-    })
 
   g
     .append('g')
@@ -166,12 +146,21 @@ const updateD3Node = props => {
         .attr('fill', chroma(colors[d.source.index]).brighten(0.6))
       d3.select('#text' + d.source.index).attr('font-weight', 'bold')
     })
+    .on('mousemove', function(d) {
+      tooltip
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY + 10 + 'px')
+        .style('display', 'inline-block')
+        .html(tooltipHTMLs[d.source.index][d.target.index])
+    })
     .on('mouseout', function(d, i) {
       d3.select('#ribbon' + i).attr('fill', colors[d.target.index])
       d3.select('#arc' + d.target.index).attr('fill', colors[d.target.index])
       d3.select('#text' + d.target.index).attr('font-weight', 'normal')
       d3.select('#arc' + d.source.index).attr('fill', colors[d.source.index])
       d3.select('#text' + d.source.index).attr('font-weight', 'normal')
+
+      tooltip.style('display', 'none')
     })
 
   drawLegend(svg, colorScale, props)
