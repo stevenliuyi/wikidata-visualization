@@ -505,6 +505,7 @@ export function getSingleTooltipHTML(item, header) {
       return `<span><b>${header}</b> ${value}</span>`
     })
     .join('<br />')
+    .replace(/display="block"/, 'display="inline"') // inline math formula
 }
 
 export function getTooltipHTML(props) {
