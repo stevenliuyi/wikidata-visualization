@@ -26,6 +26,10 @@ class DataTable extends Component {
     endtimes: {}
   }
 
+  componentDidMount() {
+    this.renderFormula()
+  }
+
   componentDidUpdate() {
     this.renderFormula()
   }
