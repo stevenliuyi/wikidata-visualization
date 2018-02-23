@@ -142,14 +142,19 @@ class Query extends Component {
           </Resizable>
         </FormGroup>
         <Row>
-          <Col xs={12} sm={9}>
+          <Col xs={12} sm={9} className="no-padding-right">
             <Button
               bsStyle="primary"
               onClick={() => this.props.onSubmit(this.state.code)}
             >
               Submit
             </Button>{' '}
-            <span className="grey-text padding-5">{this.showStatus()}</span>
+            <span
+              className="grey-text padding-5-left"
+              style={{ whiteSpace: 'nowrap' }}
+            >
+              {this.showStatus()}
+            </span>
             {this.props.status === 'waiting' && (
               <OverlayTrigger
                 placement="bottom"
@@ -164,7 +169,7 @@ class Query extends Component {
               </OverlayTrigger>
             )}
           </Col>
-          <Col xsHidden sm={3} className="align-right">
+          <Col xsHidden sm={3} className="no-padding-left align-right">
             {!this.props.editorFullScreen &&
               this.props.chartId < 2 && (
                 <FaAngleDoubleLeft
