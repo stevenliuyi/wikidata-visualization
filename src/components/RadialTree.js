@@ -4,7 +4,7 @@ import { getTreeRoot } from '../utils/convertData'
 import { getColorScale } from '../utils/scales'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
-import { drawLegend } from '../utils/draw'
+import { drawLegend, drawTooltip, updateTooltip } from '../utils/draw'
 import Info from './Info'
 
 // radial tree d3 reference: https://bl.ocks.org/mbostock/4063550
@@ -113,12 +113,11 @@ const updateD3Node = props => {
         .attr('fill', chroma(colorScale(d.target.data.color)).brighten(0.6))
       d3.select('#text' + d.target.data.index).attr('font-weight', 'bold')
     })
-    .on('mousemove', function(d) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(d.target.data.tooltipHTML)
+    .on('mouseover', function(d) {
+      drawTooltip(d.target.data.tooltipHTML)
+    })
+    .on('mousemove', function() {
+      updateTooltip()
     })
     .on('mouseout', function(d, i) {
       tooltip.style('display', 'none')

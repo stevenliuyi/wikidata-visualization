@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { getValues } from '../utils/convertData'
 import * as d3 from 'd3'
 import SVGPanZoom from './SVGPanZoom'
-import { drawLegend } from '../utils/draw'
+import { drawLegend, drawTooltip, updateTooltip } from '../utils/draw'
 import chroma from 'chroma-js'
 import Info from './Info'
 
@@ -65,13 +65,10 @@ const updateD3Node = (props, transition) => {
     .on('mouseover', function(d, i) {
       d3.select('#path' + i).attr('fill', chroma(colors[i]).brighten(0.6))
       d3.select('#text' + i).attr('font-weight', 'bold')
+      drawTooltip(tooltipHTMLs[i])
     })
-    .on('mousemove', function(d, i) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(tooltipHTMLs[i])
+    .on('mousemove', function() {
+      updateTooltip()
     })
     .on('mouseout', function(d, i) {
       tooltip.style('display', 'none')
@@ -108,13 +105,10 @@ const updateD3Node = (props, transition) => {
     .on('mouseover', function(d, i) {
       d3.select('#path' + i).attr('fill', chroma(colors[i]).brighten(0.6))
       d3.select('#text' + i).attr('font-weight', 'bold')
+      drawTooltip(tooltipHTMLs[i])
     })
-    .on('mousemove', function(d, i) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(tooltipHTMLs[i])
+    .on('mousemove', function() {
+      updateTooltip()
     })
     .on('mouseout', function(d, i) {
       tooltip.style('display', 'none')

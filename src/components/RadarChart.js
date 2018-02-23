@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { getGroupValues } from '../utils/convertData'
 import * as d3 from 'd3'
 import SVGPanZoom from './SVGPanZoom'
-import { drawLegend } from '../utils/draw'
+import { drawLegend, drawTooltip, updateTooltip } from '../utils/draw'
 import Radar from 'react-d3-radar'
 import Info from './Info'
 import { getFormat } from '../utils/format'
@@ -24,20 +24,10 @@ class RadarChart extends Component {
         const color = d3.select(this).attr('fill')
         d3.select(this).attr('fill', chroma(color).brighten(0.6))
         d3.select('#text' + id).attr('font-weight', 'bold')
+        drawTooltip(tooltipHTMLs[parseInt(id, 10)])
       })
       .on('mousemove', function() {
-        const id = parseInt(
-          d3
-            .select(this)
-            .attr('class')
-            .slice(13),
-          10
-        )
-        tooltip
-          .style('left', d3.event.pageX + 10 + 'px')
-          .style('top', d3.event.pageY + 10 + 'px')
-          .style('display', 'inline-block')
-          .html(tooltipHTMLs[id])
+        updateTooltip()
       })
       .on('mouseout', function() {
         tooltip.style('display', 'none')
@@ -52,7 +42,7 @@ class RadarChart extends Component {
 
     d3
       .selectAll('.text')
-      .on('mousemove', function() {
+      .on('mouseover', function() {
         const id = parseInt(
           d3
             .select(this)
@@ -60,12 +50,11 @@ class RadarChart extends Component {
             .slice(4),
           10
         )
-        tooltip
-          .style('left', d3.event.pageX + 10 + 'px')
-          .style('top', d3.event.pageY + 10 + 'px')
-          .style('display', 'inline-block')
-          .html(tooltipHTMLs[id])
+        drawTooltip(tooltipHTMLs[id])
         d3.select(this).attr('font-weight', 'bold')
+      })
+      .on('mousemove', function() {
+        updateTooltip()
       })
       .on('mouseout', function() {
         tooltip.style('display', 'none')

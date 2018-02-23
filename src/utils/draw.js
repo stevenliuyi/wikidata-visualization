@@ -15,6 +15,32 @@ export const drawBorder = (svg, width, height, x = 0, y = 0) => {
     .style('stroke-width', 2)
 }
 
+// draw tooltip
+export const drawTooltip = (tooltipHTML, event = null) => {
+  if (tooltipHTML == null) return
+
+  const tooltip = d3.selectAll('.d3ToolTip')
+  const currentEvent = event == null ? d3.event : event
+
+  tooltip
+    .style('left', currentEvent.pageX + 10 + 'px')
+    .style('top', currentEvent.pageY + 10 + 'px')
+    .style('max-width', '300px')
+    .style('display', 'inline-block')
+    .html(tooltipHTML)
+  if (window.MathJax != null)
+    window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, tooltip.node()])
+}
+
+export const updateTooltip = (event = null) => {
+  const tooltip = d3.selectAll('.d3ToolTip')
+  const currentEvent = event == null ? d3.event : event
+
+  tooltip
+    .style('left', currentEvent.pageX + 10 + 'px')
+    .style('top', currentEvent.pageY + 10 + 'px')
+}
+
 // draw legend
 export const drawLegend = (svg, colorScale, props) => {
   if (!props.moreSettings.showLegend) return null

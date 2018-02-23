@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
+import { drawTooltip, updateTooltip } from '../utils/draw'
 
 const imgStyle = {
   cursor: 'pointer',
@@ -34,12 +35,9 @@ class Image extends Component {
             WebkitFilter: filter
           }}
           onClick={e => onClick(e, { index, photo })}
-          onMouseMove={e => {
-            photo.tooltip
-              .style('left', e.pageX + 10 + 'px')
-              .style('top', e.pageY + 10 + 'px')
-              .style('display', 'inline-block')
-              .html(photo.tooltiphtml)
+          onMouseOver={e => {
+            drawTooltip(photo.tooltiphtml, e)
+
             d3
               .select(e.target)
               .style(
@@ -50,6 +48,9 @@ class Image extends Component {
                 'filter',
                 `${filter !== 'none' ? filter : ''} brightness(120%)`
               )
+          }}
+          onMouseMove={e => {
+            updateTooltip(e)
           }}
           onMouseOut={e => {
             photo.tooltip.style('display', 'none')

@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 import { getMatrix } from '../utils/convertData'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
-import { drawLegend } from '../utils/draw'
+import { drawLegend, drawTooltip, updateTooltip } from '../utils/draw'
 import Info from './Info'
 
 // chord diagram d3 reference: https://bl.ocks.org/mbostock/4062006
@@ -146,12 +146,11 @@ const updateD3Node = props => {
         .attr('fill', chroma(colors[d.source.index]).brighten(0.6))
       d3.select('#text' + d.source.index).attr('font-weight', 'bold')
     })
-    .on('mousemove', function(d) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(tooltipHTMLs[d.source.index][d.target.index])
+    .on('mouseover', function(d) {
+      drawTooltip(tooltipHTMLs[d.source.index][d.target.index])
+    })
+    .on('mousemove', function() {
+      updateTooltip()
     })
     .on('mouseout', function(d, i) {
       d3.select('#ribbon' + i).attr('fill', colors[d.target.index])

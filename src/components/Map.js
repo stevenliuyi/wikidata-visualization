@@ -13,7 +13,7 @@ import { getRadius, getColors } from '../utils/scales'
 import { mapSettings } from '../utils/maps'
 import * as d3 from 'd3'
 import { getTooltipHTML } from '../utils/convertData'
-import { drawLegend } from '../utils/draw'
+import { drawLegend, drawTooltip, updateTooltip } from '../utils/draw'
 import chroma from 'chroma-js'
 import FaPlus from 'react-icons/lib/fa/plus'
 import FaMinus from 'react-icons/lib/fa/minus'
@@ -66,13 +66,10 @@ class Map extends Component {
       .on('mouseover', function(d, i) {
         d3.select('#circle' + i).attr('fill', chroma(colors[i]).brighten(0.6))
         d3.select('#text' + i).attr('font-weight', 'bold')
+        drawTooltip(tooltipHTMLs[i])
       })
-      .on('mousemove', function(d, i) {
-        tooltip
-          .style('left', d3.event.pageX + 10 + 'px')
-          .style('top', d3.event.pageY + 10 + 'px')
-          .style('display', 'inline-block')
-          .html(tooltipHTMLs[i])
+      .on('mousemove', function() {
+        updateTooltip()
       })
       .on('mouseout', function(d, i) {
         tooltip.style('display', 'none')

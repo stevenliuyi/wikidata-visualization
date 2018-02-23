@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 import { getMatrix2 } from '../utils/convertData'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
-import { drawLegend } from '../utils/draw'
+import { drawLegend, drawTooltip, updateTooltip } from '../utils/draw'
 import Info from './Info'
 
 // heat matrix d3 references:
@@ -108,12 +108,7 @@ const updateD3Node = props => {
       .on('mouseover', mouseover)
       .on('mouseout', mouseout)
       .on('mousemove', function(d) {
-        if (d.tooltipHTML != null)
-          tooltip
-            .style('left', d3.event.pageX + 10 + 'px')
-            .style('top', d3.event.pageY + 10 + 'px')
-            .style('display', 'inline-block')
-            .html(d.tooltipHTML)
+        updateTooltip()
       })
   }
 
@@ -140,6 +135,8 @@ const updateD3Node = props => {
         return i === p.row
       })
       .attr('fill', chroma(p.color).brighten(0.6))
+
+    drawTooltip(p.tooltipHTML)
   }
 
   function mouseout(p, j) {

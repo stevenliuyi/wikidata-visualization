@@ -4,7 +4,7 @@ import { getTooltipHTML } from '../utils/convertData'
 import * as d3 from 'd3'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
-import { drawLegend } from '../utils/draw'
+import { drawLegend, drawTooltip, updateTooltip } from '../utils/draw'
 import Info from './Info'
 import moment from 'moment'
 
@@ -105,12 +105,11 @@ const updateD3Node = props => {
     .attr('fill', function(d) {
       return colorScale(d.data[props.header[props.settings['color']]])
     })
+    .on('mouseover', function(d) {
+      drawTooltip(tooltipHTML[d.data.id])
+    })
     .on('mousemove', function(d) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(tooltipHTML[d.data.id])
+      updateTooltip()
     })
     .on('mouseout', function(d) {
       tooltip.style('display', 'none')
@@ -145,12 +144,11 @@ const updateD3Node = props => {
     .style('font-family', 'sans-serif')
     .style('font-size', props.moreSettings.fontSize)
     .style('text-anchor', 'middle')
+    .on('mouseover', function(d) {
+      drawTooltip(tooltipHTML[d.data.id])
+    })
     .on('mousemove', function(d) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(tooltipHTML[d.data.id])
+      updateTooltip()
     })
     .on('mouseout', function(d) {
       tooltip.style('display', 'none')

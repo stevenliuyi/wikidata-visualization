@@ -7,6 +7,7 @@ import { d3Sankey } from '../utils/sankey'
 import toposort from 'toposort'
 import chroma from 'chroma-js'
 import Info from './Info'
+import { drawTooltip, updateTooltip } from '../utils/draw'
 
 // Sankey diagram d3 reference: https://bl.ocks.org/ebendennis/07c361ea822d99872adffea9c7ccf19b
 const updateD3Node = props => {
@@ -93,13 +94,10 @@ const updateD3Node = props => {
         .select('#rect' + d.target.index)
         .attr('fill', chroma(colorScale(d.target.color)).brighten(0.6))
       d3.select('#text' + d.target.index).attr('font-weight', 'bold')
+      drawTooltip(d.tooltipHTML)
     })
-    .on('mousemove', function(d) {
-      tooltip
-        .style('left', d3.event.pageX + 10 + 'px')
-        .style('top', d3.event.pageY + 10 + 'px')
-        .style('display', 'inline-block')
-        .html(d.tooltipHTML)
+    .on('mousemove', function() {
+      updateTooltip()
     })
     .on('mouseout', function(d) {
       tooltip.style('display', 'none')

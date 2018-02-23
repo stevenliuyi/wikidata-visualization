@@ -10,7 +10,7 @@ import { Button, ButtonGroup } from 'react-bootstrap'
 import { getColors } from '../utils/scales'
 import { map2Settings } from '../utils/maps2'
 import { getTooltipHTML } from '../utils/convertData'
-import { drawLegend } from '../utils/draw'
+import { drawLegend, drawTooltip, updateTooltip } from '../utils/draw'
 import chroma from 'chroma-js'
 import FaPlus from 'react-icons/lib/fa/plus'
 import FaMinus from 'react-icons/lib/fa/minus'
@@ -166,14 +166,17 @@ class ChoroplethMap extends Component {
                           outline: 'none'
                         }
                       }}
+                      onMouseEnter={(feature, e) => {
+                        drawTooltip(tooltipHTML, e)
+                      }}
                       onMouseMove={(feature, e) => {
-                        if (tooltipHTML != null) {
-                          tooltip
-                            .style('left', e.pageX - 10 + 'px')
-                            .style('top', e.pageY - 10 + 'px')
-                            .style('display', 'inline-block')
-                            .html(tooltipHTML)
-                        }
+                        // fix the issue that onMouseEnter of next object is trigged before onMouseLeave of current object
+                        if (
+                          tooltipHTML != null &&
+                          tooltip.style('display') === 'none'
+                        )
+                          tooltip.style('display', 'inline-block')
+                        updateTooltip(e)
                       }}
                       onMouseLeave={() => {
                         tooltip.style('display', 'none')

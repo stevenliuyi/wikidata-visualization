@@ -10,6 +10,7 @@ import MdArrowForward from 'react-icons/lib/md/arrow-forward'
 import TimePicker from './TimePicker'
 import moment from 'moment'
 import { formatBCDates } from '../utils/format'
+import * as d3 from 'd3'
 
 const CheckboxTable = checkboxHOC(ReactTable)
 
@@ -23,6 +24,18 @@ class DataTable extends Component {
     filtered: [],
     starttimes: {},
     endtimes: {}
+  }
+
+  componentDidUpdate() {
+    // render math formulas
+    if (window.MathJax != null)
+      d3.selectAll('.formula').call(function() {
+        window.MathJax.Hub.Queue([
+          'Typeset',
+          window.MathJax.Hub,
+          d3.select(this).node()
+        ])
+      })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -114,6 +127,15 @@ class DataTable extends Component {
       return row.value != null
         ? moment(formatBCDates(row.value)).format('ll')
         : ''
+    } else if (dataType === 'formula') {
+      return row.value != null ? (
+        <div
+          className="formula"
+          dangerouslySetInnerHTML={{ __html: row.value }}
+        />
+      ) : (
+        ''
+      )
     } else {
       return row.value
     }

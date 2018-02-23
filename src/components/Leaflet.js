@@ -60,6 +60,16 @@ class LeafletMap extends Component {
     d3.selectAll('.legendCells').remove()
     let svg = d3.select('#map-legend').select('svg')
     drawLegend(svg, colorScale, this.props)
+
+    // render math formulas in tooltip
+    if (this.props.dataTypes.includes('formula') && window.MathJax != null)
+      d3.selectAll('.map-tooltip').call(function() {
+        window.MathJax.Hub.Queue([
+          'Typeset',
+          window.MathJax.Hub,
+          d3.select(this).node()
+        ])
+      })
   }
 
   componentDidMount() {
@@ -204,6 +214,7 @@ class LeafletMap extends Component {
                         >
                           <Tooltip>
                             <div
+                              className="map-tooltip"
                               dangerouslySetInnerHTML={{
                                 __html: tooltipHTMLs[i]
                               }}

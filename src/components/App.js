@@ -23,6 +23,7 @@ import Measure from 'react-measure'
 import ImageGallery from './Gallery'
 import Promise from 'bluebird'
 import ErrorBoundary from './ErrorBoundary'
+import Script from 'react-load-script'
 
 class App extends Component {
   state = {
@@ -331,6 +332,7 @@ class App extends Component {
         <footer className="footer text-muted">
           Steven Liu&nbsp;&nbsp;2018
         </footer>
+        <Script url="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_HTMLorMML" />
       </div>
     )
   }

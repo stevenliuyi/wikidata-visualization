@@ -51,6 +51,8 @@ function convertValue(value) {
     value['datatype'] === 'http://www.w3.org/2001/XMLSchema#dateTime'
   ) {
     return [value['value'], 'time']
+  } else if (value['datatype'] === 'http://www.w3.org/1998/Math/MathML') {
+    return [value['value'], 'formula']
   } else {
     return [value['value'], 'string']
   }
