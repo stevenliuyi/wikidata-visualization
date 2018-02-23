@@ -1,0 +1,24 @@
+# Phylogeny of dinosaurs
+
+SELECT ?taxonItem ?taxon ?taxonRank ?childTaxonItem ?childTaxon
+WHERE
+{
+  VALUES ?undefined { UNDEF } .
+  SERVICE gas:service {
+    gas:program gas:gasClass "com.bigdata.rdf.graph.analytics.SSSP" ;
+                gas:in wd:Q430 ; # dinosaur
+                gas:traversalDirection "Reverse" ;
+                gas:out ?taxonItem ;
+                gas:out1 ?depth ;
+                gas:maxIterations 5 ;
+                gas:linkType wdt:P171 .
+  }
+  OPTIONAL { ?childTaxonItem wdt:P171 ?taxonItem . }
+  OPTIONAL { ?taxonItem wdt:P105 ?taxonRankItem . }
+  BIND( IF (BOUND(?childTaxonItem), ?childTaxonItem, ?undefined)  AS ?childTaxonItem) .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en" .
+                           ?taxonItem rdfs:label ?taxon .
+                           ?childTaxonItem rdfs:label ?childTaxon .
+                           ?taxonRankItem rdfs:label ?taxonRank . }
+}
+ORDER BY ?depth
