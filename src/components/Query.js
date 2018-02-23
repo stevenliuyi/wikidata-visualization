@@ -17,6 +17,8 @@ import 'brace/theme/tomorrow'
 import 'brace/ext/language_tools'
 import Resizable from 're-resizable'
 import { keywords, snippets } from '../utils/sparql'
+import { PulseLoader } from 'react-spinners'
+import * as d3 from 'd3'
 
 class Query extends Component {
   state = {
@@ -24,6 +26,12 @@ class Query extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // update loading icon
+    d3
+      .select('#query-text')
+      .select('div')
+      .style('display', nextProps.status === 'waiting' ? 'inline' : 'none')
+
     // udpate width
     if (nextProps.width !== this.props.width) {
       this.resizable.setState({ width: nextProps.width }, () => {
@@ -77,17 +85,17 @@ class Query extends Component {
 
   showStatus = () => {
     if (this.props.status === 'waiting') {
-      return 'Querying...'
+      return 'Querying'
     } else if (this.props.status === 'done') {
-      return `${this.props.numResults} results found!`
+      return `${this.props.numResults} results found`
     } else if (this.props.status === 'error') {
-      return 'Error encountered while querying!'
+      return 'Error encountered while querying'
     } else if (this.props.status === 'empty') {
-      return 'No result found!'
+      return 'No result found'
     } else if (this.props.status === 'timeout') {
-      return 'Query timeout!'
+      return 'Query timeout'
     } else if (this.props.status === 'cancelled') {
-      return 'Query is cancelled!'
+      return 'Query is cancelled'
     }
   }
 
@@ -150,10 +158,12 @@ class Query extends Component {
               Submit
             </Button>{' '}
             <span
+              id="query-text"
               className="grey-text padding-5-left"
               style={{ whiteSpace: 'nowrap' }}
             >
               {this.showStatus()}
+              <PulseLoader color={'#999'} size={4} loading={true} />
             </span>
             {this.props.status === 'waiting' && (
               <OverlayTrigger
@@ -162,14 +172,21 @@ class Query extends Component {
                   <Tooltip id="cancel-tooltip">cancel this query</Tooltip>
                 }
               >
-                <FaClose
-                  className="clickable-icon"
-                  onClick={() => this.props.onCancel()}
-                />
+                <span style={{ marginLeft: '5px' }}>
+                  <FaClose
+                    className="clickable-icon"
+                    color="#999"
+                    onClick={() => this.props.onCancel()}
+                  />
+                </span>
               </OverlayTrigger>
             )}
           </Col>
-          <Col xsHidden sm={3} className="no-padding-left align-right">
+          <Col
+            xsHidden
+            sm={3}
+            className="no-padding-left padding-5-top align-right"
+          >
             {!this.props.editorFullScreen &&
               this.props.chartId < 2 && (
                 <FaAngleDoubleLeft
