@@ -145,8 +145,6 @@ const updateD3Node = props => {
         .select('#arc' + d.source.index)
         .attr('fill', chroma(colors[d.source.index]).brighten(0.6))
       d3.select('#text' + d.source.index).attr('font-weight', 'bold')
-    })
-    .on('mouseover', function(d) {
       drawTooltip(tooltipHTMLs[d.source.index][d.target.index])
     })
     .on('mousemove', function() {

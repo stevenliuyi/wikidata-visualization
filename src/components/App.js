@@ -332,7 +332,7 @@ class App extends Component {
         <footer className="footer text-muted">
           Steven Liu&nbsp;&nbsp;2018
         </footer>
-        <Script url="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_HTMLorMML" />
+        <Script url="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=MML_HTMLorMML" />
       </div>
     )
   }

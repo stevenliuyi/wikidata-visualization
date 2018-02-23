@@ -134,8 +134,6 @@ const updateD3Node = (props, transition) => {
           })
       })
       d3.select('#text' + i).attr('font-weight', 'bold')
-    })
-    .on('mouseover', function(d, i) {
       drawTooltip(tooltipHTMLs[i])
     })
     .on('mousemove', function() {

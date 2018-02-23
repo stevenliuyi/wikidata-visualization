@@ -27,15 +27,7 @@ class DataTable extends Component {
   }
 
   componentDidUpdate() {
-    // render math formulas
-    if (window.MathJax != null)
-      d3.selectAll('.formula').call(function() {
-        window.MathJax.Hub.Queue([
-          'Typeset',
-          window.MathJax.Hub,
-          d3.select(this).node()
-        ])
-      })
+    this.renderFormula()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -56,6 +48,18 @@ class DataTable extends Component {
       // reset filter values
       this.setState({ filtered: [] })
     }
+  }
+
+  // render math formulas
+  renderFormula() {
+    if (window.MathJax != null)
+      d3.selectAll('.formula').call(function() {
+        window.MathJax.Hub.Queue([
+          'Typeset',
+          window.MathJax.Hub,
+          d3.select(this).node()
+        ])
+      })
   }
 
   toggleTable = () => {
@@ -473,6 +477,7 @@ class DataTable extends Component {
               className="-striped -highlight"
               pageSizeOptions={[10, 20, 50, 100, 200, 500, 1000]}
               onFilteredChange={filtered => this.setState({ filtered })}
+              onPageChange={this.renderFormula}
               getTheadFilterThProps={() => {
                 // fix date picker display issue
                 return {

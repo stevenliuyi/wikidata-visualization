@@ -93,8 +93,6 @@ const updateD3Node = props => {
         .select('#circle' + d.target.data.index)
         .attr('fill', chroma(colorScale(d.target.data.color)).brighten(0.6))
       d3.select('#text' + d.target.data.index).attr('font-weight', 'bold')
-    })
-    .on('mouseover', function(d) {
       drawTooltip(d.target.data.tooltipHTML)
     })
     .on('mousemove', function() {
