@@ -519,7 +519,14 @@ export const charts = [
     chartClass: 'map',
     settings: [region, color],
     defaultShow: [true, false],
-    moreSettings: ['map2', 'fontSize', 'color', 'showLegend', 'legendScale'],
+    moreSettings: [
+      'map2',
+      'projection',
+      'fontSize',
+      'color',
+      'showLegend',
+      'legendScale'
+    ],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {

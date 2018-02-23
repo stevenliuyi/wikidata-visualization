@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {
   ComposableMap,
   ZoomableGroup,
+  ZoomableGlobe,
   Geographies,
   Geography
 } from 'react-simple-maps'
@@ -105,10 +106,15 @@ class ChoroplethMap extends Component {
         ? `/maps/json/${settings.filename}`
         : `/wikidata-visualization/maps/json/${settings.filename}`
 
+    const Zoomable =
+      this.props.moreSettings.projection !== 'orthographic'
+        ? ZoomableGroup
+        : ZoomableGlobe
+
     return (
       <div style={wrapperStyles}>
         <ComposableMap
-          projection="mercator"
+          projection={this.props.moreSettings.projection}
           projectionConfig={{
             scale: settings.scale0,
             rotation: settings.rotation
@@ -120,7 +126,7 @@ class ChoroplethMap extends Component {
             height: this.props.height
           }}
         >
-          <ZoomableGroup center={this.state.center} zoom={this.state.zoom}>
+          <Zoomable center={this.state.center} zoom={this.state.zoom}>
             <Geographies geography={json_filename} disableOptimization>
               {(geographies, projection) =>
                 geographies.map((geography, i) => {
@@ -135,7 +141,7 @@ class ChoroplethMap extends Component {
                       settings.names[geography.properties[settings.namekey]]
                     )
                   ]
-                  return (
+                  return geography.properties.CONTINENT !== 'Antarctica' ? (
                     <Geography
                       key={i}
                       geography={geography}
@@ -173,11 +179,11 @@ class ChoroplethMap extends Component {
                         tooltip.style('display', 'none')
                       }}
                     />
-                  )
+                  ) : null
                 })
               }
             </Geographies>
-          </ZoomableGroup>
+          </Zoomable>
         </ComposableMap>
         {// add zoom buttons on touch screens as a workaround
         ('ontouchstart' in window || navigator.msMaxTouchPoints) && (
