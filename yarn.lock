@@ -6391,6 +6391,16 @@ react-spinners@^0.2.5:
     react-emotion "^8.0.6"
     recompose "0.26.0"
 
+react-spinners@^0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/react-spinners/-/react-spinners-0.2.6.tgz#15ba678d07636c3cf760563b0efb7b2566f465cb"
+  dependencies:
+    babel-plugin-emotion "^8.0.6"
+    emotion "^8.0.8"
+    prop-types "^15.5.10"
+    react-emotion "^8.0.6"
+    recompose "0.26.0"
+
 react-svg-pan-zoom@^2.14.1:
   version "2.14.1"
   resolved "https://registry.yarnpkg.com/react-svg-pan-zoom/-/react-svg-pan-zoom-2.14.1.tgz#d9a8200c57ab64b1a0b44404f817331f25d52b30"

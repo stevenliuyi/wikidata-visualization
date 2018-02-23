@@ -40,6 +40,11 @@
   cursor: pointer;
 }
 
+.clip-loader {
+  vertical-align: -webkit-baseline-middle;
+  margin-right: 10px;
+}
+
 .grey-text {
   color: grey;
 }

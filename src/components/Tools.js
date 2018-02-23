@@ -24,9 +24,10 @@ import {
 import ReactBootstrapSlider from 'react-bootstrap-slider'
 import 'bootstrap-slider/dist/css/bootstrap-slider.min.css'
 import GitHub from 'github-api'
-import { getTinyURL } from '../utils/api'
+import { getGooglURL } from '../utils/api'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { baseMapSettings, solarSystemSettings } from '../utils/basemap'
+import { ClipLoader } from 'react-spinners'
 
 class Tools extends Component {
   state = {
@@ -38,7 +39,8 @@ class Tools extends Component {
     gistUrl: '',
     rawGitUrl: '',
     tinyUrl: '',
-    copyMessage: 'copy'
+    copyMessage: 'copy',
+    started: false
   }
 
   getSvgNode = () => {
@@ -60,6 +62,7 @@ class Tools extends Component {
   }
 
   getImageURL = () => {
+    this.setState({ started: true })
     const gh = new GitHub()
     let gist = gh.getGist()
     let data = {
@@ -80,7 +83,9 @@ class Tools extends Component {
         gistUrl,
         rawGitUrl
       })
-      getTinyURL(rawGitUrl).then(tinyUrl => this.setState({ tinyUrl }))
+      getGooglURL(rawGitUrl)
+        .then(tinyUrl => this.setState({ tinyUrl }))
+        .then(() => this.setState({ started: false }))
     })
   }
 
@@ -475,18 +480,25 @@ class Tools extends Component {
           <Modal.Footer>
             {this.state.mode === 'download' && (
               <div>
-                <Button onClick={() => this.setState({ show: false })}>
-                  Close
-                </Button>
                 <Button bsStyle="primary" onClick={this.saveImage}>
                   Download
+                </Button>
+                <Button onClick={() => this.setState({ show: false })}>
+                  Close
                 </Button>
               </div>
             )}
             {this.state.mode === 'url' && (
               <div>
-                <Button onClick={() => this.setState({ show: false })}>
-                  Close
+                <span className="clip-loader">
+                  <ClipLoader
+                    color={'#337ab7'}
+                    loading={this.state.started}
+                    size={20}
+                  />
+                </span>
+                <Button bsStyle="primary" onClick={this.getImageURL}>
+                  Get
                 </Button>
                 <Button
                   disabled={!this.state.rawGitUrl.startsWith('http')}
@@ -503,8 +515,8 @@ class Tools extends Component {
                 >
                   Edit online
                 </Button>
-                <Button bsStyle="primary" onClick={this.getImageURL}>
-                  Get
+                <Button onClick={() => this.setState({ show: false })}>
+                  Close
                 </Button>
               </div>
             )}
