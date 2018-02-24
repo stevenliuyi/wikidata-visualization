@@ -29,6 +29,7 @@ class Map extends Component {
   state = {
     center: [0, 20],
     zoom: 1,
+    baseZoom: 1,
     colors: [],
     colorScale: null
   }
@@ -42,16 +43,26 @@ class Map extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({ center: mapSettings[nextProps.moreSettings.map].center })
-    this.setState({ center: [100, 90] })
-    this.setState({ center: mapSettings[nextProps.moreSettings.map].center })
     const [colors, colorScale] = getColors(nextProps, true)
     this.setState({ colors, colorScale })
     this.setState({
-      zoom: Math.min(nextProps.width / 980, nextProps.height / 551)
+      zoom: Math.min(nextProps.width / 980, nextProps.height / 551),
+      baseZoom: Math.min(nextProps.width / 980, nextProps.height / 551)
     })
+
+    // zoom
+    d3
+      .select('.rsm-svg')
+      .call(this.zoom)
+      .on('mousedown.zoom', null)
+      .on('touchstart.zoom', null)
+      .on('touchmove.zoom', null)
+      .on('touchend.zoom', null)
   }
 
   componentDidUpdate() {
+    if (d3.event != null) return
+
     const tooltipHTMLs = getTooltipHTML(this.props)
 
     d3.selectAll('.d3ToolTip').remove()
@@ -93,18 +104,11 @@ class Map extends Component {
       .on('mouseout', function() {
         d3.select(this).attr('stroke', '#999')
       })
-
-    // zoom
-    const zoom = d3.zoom().on('zoom', () => {
-      this.setState({ zoom: d3.event.transform.k })
-    })
-    svg
-      .call(zoom)
-      .on('mousedown.zoom', null)
-      .on('touchstart.zoom', null)
-      .on('touchmove.zoom', null)
-      .on('touchend.zoom', null)
   }
+
+  zoom = d3.zoom().on('zoom', () => {
+    this.setState({ zoom: d3.event.transform.k * this.state.baseZoom })
+  })
 
   handleZoomIn() {
     this.setState({ zoom: this.state.zoom * 2 })

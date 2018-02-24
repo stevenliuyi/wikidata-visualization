@@ -27,6 +27,7 @@ class ChoroplethMap extends Component {
   state = {
     center: [0, 20],
     zoom: 1,
+    baseZoom: 1,
     colors: [],
     colorScale: null,
     tooltipHTMLs: []
@@ -39,17 +40,27 @@ class ChoroplethMap extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({ center: map2Settings[nextProps.moreSettings.map2].center })
-    this.setState({ center: [100, 90] })
-    this.setState({ center: map2Settings[nextProps.moreSettings.map2].center })
     this.setState({
-      zoom: Math.min(nextProps.width / 980, nextProps.height / 551)
+      zoom: Math.min(nextProps.width / 980, nextProps.height / 551),
+      baseZoom: Math.min(nextProps.width / 980, nextProps.height / 551)
     })
     const [colors, colorScale] = getColors(nextProps, true)
     const tooltipHTMLs = getTooltipHTML(nextProps)
     this.setState({ colors, colorScale, tooltipHTMLs })
+
+    // zoom
+    d3
+      .select('.rsm-svg')
+      .call(this.zoom)
+      .on('mousedown.zoom', null)
+      .on('touchstart.zoom', null)
+      .on('touchmove.zoom', null)
+      .on('touchend.zoom', null)
   }
 
   componentDidUpdate() {
+    if (d3.event != null) return // zooming
+
     var svg = d3.select('.rsm-svg')
 
     // show legend
@@ -57,18 +68,11 @@ class ChoroplethMap extends Component {
       d3.selectAll('.legendCells').remove()
       drawLegend(svg, this.state.colorScale, this.props)
     }
-
-    // zoom
-    const zoom = d3.zoom().on('zoom', () => {
-      this.setState({ zoom: d3.event.transform.k })
-    })
-    svg
-      .call(zoom)
-      .on('mousedown.zoom', null)
-      .on('touchstart.zoom', null)
-      .on('touchmove.zoom', null)
-      .on('touchend.zoom', null)
   }
+
+  zoom = d3.zoom().on('zoom', () => {
+    this.setState({ zoom: d3.event.transform.k * this.state.baseZoom })
+  })
 
   handleZoomIn() {
     this.setState({ zoom: this.state.zoom * 2 })

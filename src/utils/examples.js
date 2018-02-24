@@ -91,7 +91,8 @@ export const examples = [
     filename: 'dinosaur-phylogeny.rq'
   },
   {
-    title: 'Dimensionless quantities in fluid mechanics that involving viscosity',
+    title:
+      'Dimensionless quantities in fluid mechanics that involving viscosity',
     filename: 'viscosity-dimensionless-number.rq'
   }
 ]
