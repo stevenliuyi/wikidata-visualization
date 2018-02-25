@@ -144,6 +144,12 @@ class DataTable extends Component {
       ) : (
         ''
       )
+    } else if (dataType === 'url') {
+      return (
+        <a target="_blank" href={row.value}>
+          {row.value}
+        </a>
+      )
     } else {
       return row.value
     }

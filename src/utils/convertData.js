@@ -53,6 +53,8 @@ function convertValue(value) {
     return [value['value'], 'time']
   } else if (value['datatype'] === 'http://www.w3.org/1998/Math/MathML') {
     return [value['value'], 'formula']
+  } else if (value.type === 'uri') {
+    return [value['value'], 'url']
   } else {
     return [value['value'], 'string']
   }
