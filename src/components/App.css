@@ -27,6 +27,15 @@
   to { transform: rotate(360deg); }
 }
 
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+#logo {
+  margin-right: 8px;
+}
+
 .ace_editor {
   border: 1px solid #ddd;
   margin-top: -5px;

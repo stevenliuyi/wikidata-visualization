@@ -1,13 +1,19 @@
 import React, { Component } from 'react'
 import { Navbar, Nav, NavItem } from 'react-bootstrap'
 import GoMarkGithub from 'react-icons/lib/go/mark-github'
+import Logo from './Logo'
 
 class TopNavBar extends Component {
   render() {
     return (
       <Navbar>
         <Navbar.Header>
-          <Navbar.Brand>Wikidata Visualization</Navbar.Brand>
+          <Navbar.Brand>
+            <span id="logo">
+              <Logo size={24} />
+            </span>
+            <span>Wikidata Visualization</span>
+          </Navbar.Brand>
         </Navbar.Header>
         <Nav>
           <NavItem
