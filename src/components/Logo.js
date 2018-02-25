@@ -1,13 +1,43 @@
 import React, { Component } from 'react'
+import * as d3 from 'd3'
 
 class Logo extends Component {
+  state = {
+    rotating: false
+  }
+
+  logoAnimation() {
+    d3
+      .select('#logo-svg')
+      .transition()
+      .duration(2000)
+      .attrTween('transform', () =>
+        d3.interpolateString(`rotate(0,0,0)`, `rotate(360,0, 0)`)
+      )
+      .on('end', () => {
+        if (this.state.rotating) this.logoAnimation()
+      })
+  }
+
+  componentDidMount() {
+    d3
+      .select('.navbar-brand')
+      .on('mouseenter', () => {
+        this.logoAnimation()
+        this.setState({ rotating: true })
+      })
+      .on('mouseleave', () => {
+        this.setState({ rotating: false })
+      })
+  }
+
   render() {
     const radius = this.props.size * 0.5
     const innerRadius = radius * 0.7
     const margin = this.props.size * 0.08
 
     return (
-      <svg width={this.props.size} height={this.props.size}>
+      <svg id="logo-svg" width={this.props.size} height={this.props.size}>
         <defs>
           <clipPath id="clip-left">
             <path
