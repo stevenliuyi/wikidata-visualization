@@ -94,6 +94,14 @@ export const examples = [
     title:
       'Dimensionless quantities in fluid mechanics that involving viscosity',
     filename: 'viscosity-dimensionless-number.rq'
+  },
+  {
+    title: 'Popes that have offsprings',
+    filename: 'pope-offsprings.rq'
+  },
+  {
+    title: 'Sorting algorithms',
+    filename: 'sorting-algorithm.rq'
   }
 ]
 
