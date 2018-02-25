@@ -7,9 +7,11 @@ import {
   OverlayTrigger,
   Tooltip
 } from 'react-bootstrap'
-import MdAspectRatio from 'react-icons/lib/md/aspect-ratio'
 import FaClose from 'react-icons/lib/fa/close'
-import FaAngleDoubleLeft from 'react-icons/lib/fa/angle-double-left'
+import GoChevronUp from 'react-icons/lib/go/chevron-up'
+import GoChevronDown from 'react-icons/lib/go/chevron-down'
+import GoChevronLeft from 'react-icons/lib/go/chevron-left'
+import GoChevronRight from 'react-icons/lib/go/chevron-right'
 import { readExample } from '../utils/examples'
 import AceEditor from 'react-ace'
 import 'brace/mode/sparql'
@@ -20,9 +22,13 @@ import { keywords, snippets } from '../utils/sparql'
 import { PulseLoader } from 'react-spinners'
 import * as d3 from 'd3'
 
+const minHeight = 40
+const defaultHeight = 300
+
 class Query extends Component {
   state = {
-    code: ''
+    code: '',
+    height: defaultHeight
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,6 +45,10 @@ class Query extends Component {
       })
     }
     this.receiveExampleCode(nextProps.exampleIndex)
+  }
+
+  componentDidUpdate() {
+    this.onEditorResize()
   }
 
   myCompleter = {
@@ -111,9 +121,14 @@ class Query extends Component {
             ref={c => {
               this.resizable = c
             }}
-            defaultSize={{ width: '100%', height: 300 }}
-            minHeight="50"
+            defaultSize={{ width: '100%', height: defaultHeight }}
+            size={{ height: this.state.height }}
+            minHeight={minHeight}
             onResize={this.onEditorResize}
+            onResizeStop={(e, direction, ref, d) => {
+              console.log('test')
+              this.setState({ height: this.state.height + d.height })
+            }}
             enable={{
               top: false,
               right: false,
@@ -167,7 +182,7 @@ class Query extends Component {
             </span>
             {this.props.status === 'waiting' && (
               <OverlayTrigger
-                placement="bottom"
+                placement="top"
                 overlay={
                   <Tooltip id="cancel-tooltip">cancel this query</Tooltip>
                 }
@@ -189,17 +204,73 @@ class Query extends Component {
           >
             {!this.props.editorFullScreen &&
               this.props.chartId < 2 && (
-                <FaAngleDoubleLeft
-                  className="clickable-icon"
-                  onClick={() => this.props.onHide()}
-                  size={18}
-                />
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip id="hide-editor">hide editor</Tooltip>}
+                >
+                  <GoChevronLeft
+                    className="clickable-icon query-icon"
+                    onClick={() => this.props.onHide()}
+                    size={20}
+                  />
+                </OverlayTrigger>
               )}
-            <MdAspectRatio
-              className="clickable-icon"
-              onClick={this.props.onChangeEditorSize}
-              size={18}
-            />
+            {this.state.height !== minHeight &&
+              !this.props.editorFullScreen &&
+              this.props.chartId < 2 && (
+                <OverlayTrigger
+                  placement="top"
+                  overlay={
+                    <Tooltip id="minimize-editor">minimize editor</Tooltip>
+                  }
+                >
+                  <GoChevronUp
+                    className="clickable-icon query-icon"
+                    onClick={() => this.setState({ height: minHeight })}
+                    size={20}
+                  />
+                </OverlayTrigger>
+              )}
+            {this.state.height === minHeight && (
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="restore-editor">restore editor size</Tooltip>
+                }
+              >
+                <GoChevronDown
+                  className="clickable-icon query-icon"
+                  onClick={() => this.setState({ height: defaultHeight })}
+                  size={20}
+                />
+              </OverlayTrigger>
+            )}
+            {!this.props.editorFullScreen && (
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip id="expand-editor">expand editor</Tooltip>}
+              >
+                <GoChevronRight
+                  className="clickable-icon query-icon"
+                  onClick={this.props.onChangeEditorSize}
+                  size={20}
+                />
+              </OverlayTrigger>
+            )}
+            {this.props.editorFullScreen && (
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="collapse-editor">collapse editor</Tooltip>
+                }
+              >
+                <GoChevronLeft
+                  className="clickable-icon query-icon"
+                  onClick={this.props.onChangeEditorSize}
+                  size={20}
+                />
+              </OverlayTrigger>
+            )}
           </Col>
         </Row>
       </form>

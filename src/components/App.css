@@ -47,6 +47,16 @@
 
 .clickable-icon {
   cursor: pointer;
+  color: #999;
+}
+
+.clickable-icon:hover {
+  color: #337ab7;
+}
+
+.query-icon {
+  margin-left: -2px;
+  margin-right: -2px;
 }
 
 .clip-loader {
