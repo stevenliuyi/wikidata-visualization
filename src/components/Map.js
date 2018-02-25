@@ -137,7 +137,7 @@ class Map extends Component {
         : ZoomableGlobe
 
     return (
-      <div style={wrapperStyles}>
+      <div id="chart" style={wrapperStyles}>
         <ComposableMap
           projection={this.props.moreSettings.projection}
           projectionConfig={{
