@@ -488,6 +488,8 @@ class DataTable extends Component {
               pageSizeOptions={[10, 20, 50, 100, 200, 500, 1000]}
               onFilteredChange={filtered => this.setState({ filtered })}
               onPageChange={this.renderFormula}
+              onPageSizeChange={this.renderFormula}
+              onSortedChange={this.renderFormula}
               getTheadFilterThProps={() => {
                 // fix date picker display issue
                 return {
