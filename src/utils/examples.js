@@ -102,6 +102,10 @@ export const examples = [
   {
     title: 'Sorting algorithms',
     filename: 'sorting-algorithm.rq'
+  },
+  {
+    title: 'Universities within 1km from a city hall',
+    filename: 'university-city-hall.rq'
   }
 ]
 

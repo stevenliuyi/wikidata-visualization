@@ -22,7 +22,7 @@ class Examples extends Component {
   render() {
     return (
       <ReactTable
-        data={examples}
+        data={examples.sort((a, b) => a.title.localeCompare(b.title))}
         sortable={false}
         filterable
         columns={[{ Header: 'Wikidata Query Examples', accessor: 'title' }]}
