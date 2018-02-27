@@ -29,6 +29,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { baseMapSettings, solarSystemSettings } from '../utils/basemap'
 import { ClipLoader } from 'react-spinners'
 
+const iconSize = 32
 class Tools extends Component {
   state = {
     show: false,
@@ -121,7 +122,7 @@ class Tools extends Component {
     const noViewerRefreshCharts = [1.09, 1.11, 1.13]
 
     return (
-      <div>
+      <div style={{ marginRight: '10px' }}>
         {this.props.chartId === 1.17 &&
           this.props.moreSettings.delimiter === 'Chinese' && (
             <OverlayTrigger
@@ -133,14 +134,14 @@ class Tools extends Component {
               }
             >
               <MdInfo
-                size={20}
+                size={iconSize}
                 onClick={() =>
                   window.open(
                     'https://github.com/linonetwo/segmentit',
                     '_blank'
                   )
                 }
-                className="clickable-icon pull-right"
+                className="clickable-icon toolbar-icon pull-right"
               />
             </OverlayTrigger>
           )}
@@ -156,14 +157,14 @@ class Tools extends Component {
               }
             >
               <MdInfo
-                size={20}
+                size={iconSize}
                 onClick={() =>
                   window.open(
                     'https://github.com/leungwensen/tiny-segmenter',
                     '_blank'
                   )
                 }
-                className="clickable-icon pull-right"
+                className="clickable-icon toolbar-icon pull-right"
               />
             </OverlayTrigger>
           )}
@@ -186,7 +187,7 @@ class Tools extends Component {
               }
             >
               <MdInfo
-                size={20}
+                size={iconSize}
                 onClick={() =>
                   window.open(
                     baseMapSettings[this.props.moreSettings.baseMap]
@@ -194,7 +195,7 @@ class Tools extends Component {
                     '_blank'
                   )
                 }
-                className="clickable-icon pull-right"
+                className="clickable-icon toolbar-icon pull-right"
               />
             </OverlayTrigger>
           )}
@@ -217,7 +218,7 @@ class Tools extends Component {
               }
             >
               <MdInfo
-                size={20}
+                size={iconSize}
                 onClick={() =>
                   window.open(
                     solarSystemSettings[this.props.moreSettings.solarSystem]
@@ -225,7 +226,7 @@ class Tools extends Component {
                     '_blank'
                   )
                 }
-                className="clickable-icon pull-right"
+                className="clickable-icon toolbar-icon pull-right"
               />
             </OverlayTrigger>
           )}
@@ -237,9 +238,9 @@ class Tools extends Component {
               overlay={<Tooltip id="get-image-url">get SVG URL</Tooltip>}
             >
               <MdInsertLink
-                size={20}
+                size={iconSize}
                 onClick={() => this.setState({ show: true, mode: 'url' })}
-                className="clickable-icon pull-right"
+                className="clickable-icon toolbar-icon pull-right"
               />
             </OverlayTrigger>
             {'  '}
@@ -248,9 +249,9 @@ class Tools extends Component {
               overlay={<Tooltip id="download-image">download</Tooltip>}
             >
               <MdFileDownload
-                size={20}
+                size={iconSize}
                 onClick={() => this.setState({ show: true, mode: 'download' })}
-                className="clickable-icon pull-right"
+                className="clickable-icon toolbar-icon pull-right"
               />
             </OverlayTrigger>
             {!noViewerRefreshCharts.includes(this.props.chartId) && (
@@ -259,9 +260,9 @@ class Tools extends Component {
                 overlay={<Tooltip id="get-image-url">reset view</Tooltip>}
               >
                 <MdRefresh
-                  size={20}
+                  size={iconSize}
                   onClick={() => this.props.viewer.reset()}
-                  className="clickable-icon pull-right"
+                  className="clickable-icon toolbar-icon pull-right"
                 />
               </OverlayTrigger>
             )}
@@ -274,9 +275,9 @@ class Tools extends Component {
             overlay={<Tooltip id="fit-markers">fit markers</Tooltip>}
           >
             <MdCropFree
-              size={20}
+              size={iconSize}
               onClick={this.props.fitBounds}
-              className="clickable-icon pull-right"
+              className="clickable-icon toolbar-icon pull-right"
             />
           </OverlayTrigger>
         )}
@@ -494,7 +495,7 @@ class Tools extends Component {
                   <ClipLoader
                     color={'#337ab7'}
                     loading={this.state.started}
-                    size={20}
+                    size={iconSize}
                   />
                 </span>
                 <Button bsStyle="primary" onClick={this.getImageURL}>

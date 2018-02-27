@@ -126,7 +126,6 @@ class Query extends Component {
             minHeight={minHeight}
             onResize={this.onEditorResize}
             onResizeStop={(e, direction, ref, d) => {
-              console.log('test')
               this.setState({ height: this.state.height + d.height })
             }}
             enable={{

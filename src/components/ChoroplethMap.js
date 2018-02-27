@@ -20,7 +20,8 @@ import { existRegionItems } from '../utils/maps2'
 
 const wrapperStyles = {
   width: '100%',
-  margin: '0 auto'
+  margin: '0 auto',
+  marginBottom: '-5px' // make the border consistent with other charts
 }
 
 class ChoroplethMap extends Component {

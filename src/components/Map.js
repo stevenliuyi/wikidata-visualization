@@ -22,7 +22,8 @@ import * as d3Geo from 'd3-geo'
 
 const wrapperStyles = {
   width: '100%',
-  margin: '0 auto'
+  margin: '0 auto',
+  marginBottom: '-5px' // make the border consistent with other charts
 }
 
 class Map extends Component {

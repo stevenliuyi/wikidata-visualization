@@ -59,6 +59,10 @@
   margin-right: -2px;
 }
 
+.toolbar-icon {
+  padding: 5px 2px 2px 2px;
+}
+
 .clip-loader {
   vertical-align: -webkit-baseline-middle;
   margin-right: 10px;
