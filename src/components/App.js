@@ -9,6 +9,7 @@ import Chart from './Chart'
 import DataTable from './DataTable'
 import Navs from './Navs'
 import Examples from './Examples'
+import About from './About'
 import TopNavBar from './TopNavBar'
 import * as WikidataAPI from '../utils/api'
 import { convertData } from '../utils/convertData'
@@ -322,6 +323,9 @@ class App extends Component {
                       {this.state.chart === 2 && ( // examples
                         <Examples onSelect={this.handleExampleSelect} />
                       )}
+
+                      {this.state.chart === 3 && <About /> // about page
+                      }
                     </ErrorBoundary>
                   </Col>
                 )}

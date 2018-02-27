@@ -7,8 +7,10 @@ class Logo extends Component {
   }
 
   logoAnimation() {
+    const id = this.props.id != null ? this.props.id : 'logo-svg'
+
     d3
-      .select('#logo-svg')
+      .select(`#${id}`)
       .transition()
       .duration(2000)
       .attrTween('transform', () =>
@@ -21,7 +23,7 @@ class Logo extends Component {
 
   componentDidMount() {
     d3
-      .select('.navbar-brand')
+      .select(this.props.id != null ? `#${this.props.id}` : '.navbar-brand')
       .on('mouseenter', () => {
         this.logoAnimation()
         this.setState({ rotating: true })
@@ -32,21 +34,23 @@ class Logo extends Component {
   }
 
   render() {
+    const id = this.props.id != null ? this.props.id : 'logo-svg'
+
     const radius = this.props.size * 0.5
     const innerRadius = radius * 0.7
     const margin = this.props.size * 0.08
 
     return (
-      <svg id="logo-svg" width={this.props.size} height={this.props.size}>
+      <svg id={id} width={this.props.size} height={this.props.size}>
         <defs>
-          <clipPath id="clip-left">
+          <clipPath id={`${id}-clip-left`}>
             <path
               d={`M0 ${Math.sqrt(2) * 0.5 * margin} L${radius -
                 Math.sqrt(2) * 0.5 * margin} ${radius} L0 ${2 * radius -
                 Math.sqrt(2) * 0.5 * margin}`}
             />
           </clipPath>
-          <clipPath id="clip-bottom">
+          <clipPath id={`${id}-clip-bottom`}>
             <path
               d={`M${Math.sqrt(2) * 0.5 * margin} ${2 *
                 radius} L${radius} ${radius +
@@ -54,7 +58,7 @@ class Logo extends Component {
                 Math.sqrt(2) * 0.5 * margin} ${2 * radius}`}
             />
           </clipPath>
-          <clipPath id="clip-right">
+          <clipPath id={`${id}-clip-right`}>
             <path
               d={`M${2 * radius} ${2 * radius -
                 Math.sqrt(2) * 0.5 * margin} L${radius +
@@ -62,7 +66,7 @@ class Logo extends Component {
                 radius} ${Math.sqrt(2) * 0.5 * margin}`}
             />
           </clipPath>
-          <clipPath id="clip-top">
+          <clipPath id={`${id}-clip-top`}>
             <path
               d={`M${2 * radius -
                 Math.sqrt(2) * 0.5 * margin} 0 L${radius} ${radius -
@@ -82,7 +86,7 @@ class Logo extends Component {
             Math.sqrt(2) * 0.5 * innerRadius} ${radius -
             Math.sqrt(2) * 0.5 * innerRadius}`}
           fill="rgb(153,0,0)"
-          clipPath="url(#clip-left)"
+          clipPath={`url(#${id}-clip-left)`}
         />
         {/* bottom arc */}
         <path
@@ -96,7 +100,7 @@ class Logo extends Component {
             Math.sqrt(2) * 0.5 * innerRadius} ${radius +
             Math.sqrt(2) * 0.5 * innerRadius}`}
           fill="rgb(51,153,102)"
-          clipPath="url(#clip-bottom)"
+          clipPath={`url(#${id}-clip-bottom)`}
         />
         {/* right arc */}
         <path
@@ -110,7 +114,7 @@ class Logo extends Component {
             Math.sqrt(2) * 0.5 * innerRadius} ${radius +
             Math.sqrt(2) * 0.5 * innerRadius}`}
           fill="rgb(0,102,153)"
-          clipPath="url(#clip-right)"
+          clipPath={`url(#${id}-clip-right)`}
         />
         {/* top arc */}
         <path
@@ -124,7 +128,7 @@ class Logo extends Component {
             Math.sqrt(2) * 0.5 * innerRadius} ${radius -
             Math.sqrt(2) * 0.5 * innerRadius}`}
           fill="rgb(51,153,102)"
-          clipPath="url(#clip-top)"
+          clipPath={`url(#${id}-clip-top)`}
         />
       </svg>
     )

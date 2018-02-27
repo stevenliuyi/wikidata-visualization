@@ -28,6 +28,12 @@ class TopNavBar extends Component {
           >
             Query Examples
           </NavItem>
+          <NavItem
+            eventKey={3}
+            onSelect={() => this.props.handleChartSelect(3)}
+          >
+            About
+          </NavItem>
         </Nav>
         <Nav pullRight>
           <NavItem href="https://github.com/stevenliuyi/wikidata-visualization">
