@@ -1,0 +1,17 @@
+# Sorting algorithms
+
+SELECT
+?algorithmItem ?algorithm ?inventor
+(YEAR(?timeOfInvention) AS ?yearOfInvention)
+?worstCasePerformance ?bestCasePerformance ?averagePerformance
+WHERE {
+  ?algorithmItem wdt:P31 wd:Q181593 . # sorting algorithm
+  OPTIONAL { ?algorithmItem wdt:P61 ?inventorItem . }
+  OPTIONAL { ?algorithmItem p:P61/pq:P575 ?timeOfInvention . }
+  OPTIONAL { ?algorithmItem wdt:P3752 ?worstCasePerformance . }
+  OPTIONAL { ?algorithmItem wdt:P3753 ?bestCasePerformance . }
+  OPTIONAL { ?algorithmItem wdt:P3754 ?averagePerformance . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                           ?algorithmItem rdfs:label ?algorithm .
+                           ?inventorItem rdfs:label ?inventor . }
+}

@@ -1,0 +1,19 @@
+# Universities within 1km from a city hall
+
+SELECT
+?universityItem ?university ?universityLoc ?cityHallItem ?cityHall ?cityHallLoc ?dist
+WHERE {
+  ?cityHallItem wdt:P31 wd:Q543654 ; # city hall
+                wdt:P625 ?cityHallLoc .
+  ?universityItem wdt:P31 wd:Q3918 . # university
+  SERVICE wikibase:around { 
+      ?universityItem wdt:P625 ?universityLoc . 
+      bd:serviceParam wikibase:center ?cityHallLoc . 
+      bd:serviceParam wikibase:radius "1" . 
+  }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                           ?cityHallItem rdfs:label ?cityHall .
+                           ?universityItem rdfs:label ?university . }
+  BIND(geof:distance(?universityLoc, ?cityHallLoc) as ?dist) 
+}
+ORDER BY ?dist
