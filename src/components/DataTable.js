@@ -82,7 +82,7 @@ class DataTable extends Component {
         <div>
           <a
             target="_blank"
-            href={`https://www.wikidata.org/wiki/${row.value}`}
+            href={`https://www.wikidata.org/entity/${row.value}`}
           >
             {row.value}
           </a>
