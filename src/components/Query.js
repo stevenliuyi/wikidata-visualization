@@ -12,6 +12,9 @@ import GoChevronUp from 'react-icons/lib/go/chevron-up'
 import GoChevronDown from 'react-icons/lib/go/chevron-down'
 import GoChevronLeft from 'react-icons/lib/go/chevron-left'
 import GoChevronRight from 'react-icons/lib/go/chevron-right'
+import GoLinkExternal from 'react-icons/lib/go/link-external'
+import GoX from 'react-icons/lib/go/x'
+import GoSync from 'react-icons/lib/go/sync'
 import { readExample } from '../utils/examples'
 import AceEditor from 'react-ace'
 import 'brace/mode/sparql'
@@ -24,7 +27,7 @@ import * as d3 from 'd3'
 
 const minHeight = 40
 const defaultHeight = 300
-
+const defaultSPARQL = '# Enter a Wikidata SPARQL query here'
 class Query extends Component {
   state = {
     code: '',
@@ -82,7 +85,7 @@ class Query extends Component {
   receiveExampleCode = index => {
     if (index >= 0) {
       readExample(index).then(sparql => {
-        this.setState({ code: sparql })
+        this.updateCode(sparql)
       })
     }
   }
@@ -91,6 +94,8 @@ class Query extends Component {
     this.setState({
       code: newCode
     })
+    if (newCode !== '' && newCode !== defaultSPARQL)
+      localStorage.setItem('wikidata-query', newCode)
   }
 
   showStatus = () => {
@@ -150,9 +155,7 @@ class Query extends Component {
               showPrintMargin={false}
               tabSize={2}
               onChange={this.updateCode}
-              onBeforeLoad={() =>
-                this.updateCode('# Enter a Wikidata SPARQL query here')
-              }
+              onBeforeLoad={() => this.updateCode(defaultSPARQL)}
               onLoad={_editor => {
                 // Remove warning message on console:
                 // Automatically scrolling cursor into view after selection change this will be disabled in the next version set editor.$blockScrolling = Infinity to disable this message
@@ -266,6 +269,60 @@ class Query extends Component {
                 <GoChevronLeft
                   className="clickable-icon query-icon"
                   onClick={this.props.onChangeEditorSize}
+                  size={20}
+                />
+              </OverlayTrigger>
+            )}
+            {this.props.editorFullScreen && (
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip id="clear-editor">clear editor</Tooltip>}
+              >
+                <GoX
+                  className="clickable-icon"
+                  onClick={() => {
+                    this.setState({ code: '' })
+                    this.refs.aceEditor.editor.focus()
+                  }}
+                  size={20}
+                />
+              </OverlayTrigger>
+            )}
+            {this.props.editorFullScreen && (
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="restore-query">restore previous query</Tooltip>
+                }
+              >
+                <GoSync
+                  className="clickable-icon"
+                  onClick={() => {
+                    this.setState({
+                      code: localStorage.getItem('wikidata-query')
+                    })
+                  }}
+                  size={20}
+                />
+              </OverlayTrigger>
+            )}
+            {this.props.editorFullScreen && (
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="wdqs">open in Wikidata Query Service</Tooltip>
+                }
+              >
+                <GoLinkExternal
+                  className="clickable-icon"
+                  onClick={() => {
+                    window.open(
+                      `https://query.wikidata.org/#${encodeURIComponent(
+                        this.state.code
+                      )}`,
+                      '_blank'
+                    )
+                  }}
                   size={20}
                 />
               </OverlayTrigger>

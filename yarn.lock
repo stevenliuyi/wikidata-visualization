@@ -6377,7 +6377,7 @@ react-select2-wrapper@^1.0.4-beta6:
     select2 "^4.0.0"
     shallow-equal-fuzzy "^0.0.2"
 
-react-simple-maps@^0.11:
+react-simple-maps@^0.11.1:
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/react-simple-maps/-/react-simple-maps-0.11.1.tgz#df62a1b847fcbd8bb84902cce94493c3a37e96bb"
   dependencies:
