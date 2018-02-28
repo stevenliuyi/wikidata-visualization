@@ -34,6 +34,7 @@
     "react-datepicker": "^1.1.0",
     "react-dom": "^16.2.0",
     "react-faux-dom": "^4.1.0",
+    "react-ga": "^2.4.1",
     "react-icons": "^2.2.7",
     "react-images": "^0.5.14",
     "react-leaflet": "^1.8.0",

@@ -25,6 +25,7 @@ import ImageGallery from './Gallery'
 import Promise from 'bluebird'
 import ErrorBoundary from './ErrorBoundary'
 import Script from 'react-load-script'
+import ReactGA from 'react-ga'
 
 class App extends Component {
   state = {
@@ -58,6 +59,10 @@ class App extends Component {
     Promise.config({
       cancellation: true // enable Promise cancellation
     })
+
+    // Google Analytics
+    ReactGA.initialize('UA-114935948-1')
+    ReactGA.pageview(window.location.pathname + window.location.search)
   }
 
   handleChartSelect = selected => {
