@@ -27,6 +27,16 @@ class Gridlines extends Component {
     }
     let node = this.refs.axis
     d3.select(node).call(axis)
+
+    d3
+      .selectAll('.gridline line')
+      .style('stroke', '#ddd')
+      .style('stroke-opacity', 0.7)
+      .style('shape-rendering', 'crispEdges')
+
+    d3.selectAll('.gridline path').style('stroke-width', 0)
+
+    d3.selectAll('.axis path').style('display', 'none')
   }
 
   render() {

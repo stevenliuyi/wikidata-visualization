@@ -239,20 +239,6 @@
   display: none;
 }
 
-.gridline line {
-  stroke: #ddd;
-  stroke-opacity: 0.7;
-  shape-rendering: crispEdges;
-}
-
-.gridline path {
-  stroke-width: 0;
-}
-
-.axis path {
-  display: none;
-}
-
 /* fix display issue on iOS */
 input[type="text"] {
   -webkit-appearance: none;

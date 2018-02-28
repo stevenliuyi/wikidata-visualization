@@ -181,6 +181,17 @@ const updateD3Node = (props, transition) => {
     .attr('dy', '-.3em')
     .attr('transform', 'rotate(-90)')
 
+  // update styles for axis and gridlines
+  d3
+    .selectAll('.gridline line')
+    .style('stroke', '#ddd')
+    .style('stroke-opacity', 0.7)
+    .style('shape-rendering', 'crispEdges')
+
+  d3.selectAll('.gridline path').style('stroke-width', 0)
+
+  d3.selectAll('.axis path').style('display', 'none')
+
   drawLegend(svg, colorScale, props)
 
   function transitionGrouped() {
