@@ -21,7 +21,7 @@ const updateD3Node = props => {
 
   svg = svg.select('g')
   svg.selectAll('*').remove()
-  svg = svg
+  var g = svg
     .append('g')
     .attr('width', props.width)
     .attr('height', props.height)
@@ -72,7 +72,7 @@ const updateD3Node = props => {
   }
 
   // define link between nodes
-  svg
+  g
     .selectAll('.link')
     .data(root.links())
     .enter()
@@ -88,7 +88,7 @@ const updateD3Node = props => {
     .attr('d', diagonal)
 
   // for tooltips
-  svg
+  g
     .selectAll('.link2')
     .data(root.links())
     .enter()
@@ -135,7 +135,7 @@ const updateD3Node = props => {
     })
 
   // define node
-  var node = svg
+  var node = g
     .selectAll('.node')
     .data(root.descendants())
     .enter()

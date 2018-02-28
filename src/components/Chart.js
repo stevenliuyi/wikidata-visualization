@@ -18,6 +18,7 @@ import BarChart from './BarChart'
 import RadarChart from './RadarChart'
 import PieChart from './PieChart'
 import Timeline from './Timeline'
+import CirclePacking from './CirclePacking'
 import Border from './Border'
 import Info from './Info'
 import { charts } from '../utils/settings'
@@ -162,6 +163,10 @@ class Chart extends Component {
               {this.state.show &&
                 this.props.chartId === 1.21 && (
                   <Timeline {...this.props} {...styles} />
+                )}
+              {this.state.show &&
+                this.props.chartId === 1.22 && (
+                  <CirclePacking {...this.props} {...styles} />
                 )}
             </div>
           )}

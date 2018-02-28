@@ -90,6 +90,7 @@ export function getTreeRoot(props) {
   const to = props.header[props.settings['link-to']]
   const label = props.header[props.settings['label']]
   const color = props.header[props.settings['color']]
+  const radius = props.header[props.settings['radius']]
 
   let relationships = []
   let ids = []
@@ -111,6 +112,9 @@ export function getTreeRoot(props) {
           parent: item[from],
           label: label ? selectedData[allFromIds.indexOf(item[to])][label] : '',
           color: color ? selectedData[allFromIds.indexOf(item[to])][color] : '',
+          radius: radius
+            ? selectedData[allFromIds.indexOf(item[to])][radius]
+            : 1,
           tooltipHTML: getSingleTooltipHTML(item, props.header)
         })
         ids.push(item[to])

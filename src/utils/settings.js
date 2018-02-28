@@ -459,6 +459,15 @@ export const charts = [
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
+    id: 1.22,
+    name: 'Circle  Packing',
+    chartClass: 'tree',
+    settings: [link_from, link_to, radius, label, color],
+    defaultShow: [true, true, false, false],
+    moreSettings: ['fontSize', 'color', 'showLegend', 'legendScale'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
+  },
+  {
     id: 1.16,
     name: 'Map',
     chartClass: 'map',

@@ -10,7 +10,7 @@ SPARQL is a SQL-like query language for the Semantic Web, which is used by the [
 
 SPARQL query examples are provided for users to explore, and you can find more examples [here](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples) on the Wikidata website.
 
-## Charts
+### Charts
 The following chart types are available:
 - Basic charts
   - Scatter Chart
@@ -24,6 +24,7 @@ The following chart types are available:
   - Cluster
   - Radial Tree
   - Radial Cluster
+  - Circle Packing
 - Maps
   - Map
   - Simple Map
