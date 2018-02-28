@@ -4,11 +4,17 @@ import { getTreeRoot } from '../utils/convertData'
 import { getColorScale } from '../utils/scales'
 import SVGPanZoom from './SVGPanZoom'
 import chroma from 'chroma-js'
-import { drawLegend } from '../utils/draw'
+import { drawLegend, drawTooltip, updateTooltip } from '../utils/draw'
 import Info from './Info'
 
 // zoomable circle packing d3 reference: https://bl.ocks.org/mbostock/7607535
 const updateD3Node = props => {
+  d3.selectAll('.d3ToolTip').remove()
+  var tooltip = d3
+    .select('body')
+    .append('div')
+    .attr('class', 'd3ToolTip')
+
   var colorScale = getColorScale(props)
   var setColor = props.header[props.settings['color']] == null ? false : true
 
@@ -38,7 +44,7 @@ const updateD3Node = props => {
   var colorDepth = d3
     .scaleLinear()
     .domain([0, root.height])
-    .range(['#aaa', '#fff'])
+    .range(['#eee', '#999'])
 
   root = root
     .sum(function(d) {
@@ -63,6 +69,9 @@ const updateD3Node = props => {
     .data(nodes)
     .enter()
     .append('circle')
+    .attr('id', function(d, i) {
+      return 'circle' + i
+    })
     .style('fill', function(d) {
       return setColor ? colorScale(d.data.color) : colorDepth(d.depth)
     })
@@ -88,12 +97,25 @@ const updateD3Node = props => {
       const { startX, startY, endX, endY } = props.viewer.getValue()
       if (startX !== endX || startY !== endY) dragged = true
     })
+    .on('touchstart', function() {
+      dragged = false
+    })
+    .on('touchmove', function(d) {
+      dragged = true
+    })
+    .on('touchend', function(d) {
+      if (dragged) return
+      if (focus !== d) zoom(d)
+    })
 
   g
     .selectAll('text')
     .data(nodes)
     .enter()
     .append('text')
+    .attr('id', function(d, i) {
+      return 'text' + i
+    })
     .style('text-anchor', 'middle')
     .style(
       'text-shadow',
@@ -113,7 +135,40 @@ const updateD3Node = props => {
       return d.data.label
     })
 
-  var node = g.selectAll('circle,text')
+  var node = g
+    .selectAll('circle,text')
+    .on('mouseover', function(d, i) {
+      d3
+        .select('#circle' + i)
+        .style('fill', function(d) {
+          const originalColor = setColor
+            ? colorScale(d.data.color)
+            : colorDepth(d.depth)
+          return chroma(originalColor).brighten(0.6)
+        })
+        .style('stroke-width', '1')
+        .style('stroke', '#999')
+      drawTooltip(d.data.tooltipHTML)
+    })
+    .on('mousemove', function() {
+      updateTooltip()
+    })
+    .on('mouseout', function(d, i) {
+      d3
+        .select('#circle' + i)
+        .style('fill', function(d) {
+          return setColor ? colorScale(d.data.color) : colorDepth(d.depth)
+        })
+        .style('stroke-width', function(d) {
+          return setColor ? 1 : 0
+        })
+        .style('stroke', function(d) {
+          return setColor
+            ? chroma(colorScale(d.data.color)).brighten(1)
+            : '#fff'
+        })
+      tooltip.style('display', 'none')
+    })
 
   g.on('click', function() {
     zoom(root)
@@ -123,6 +178,7 @@ const updateD3Node = props => {
   drawLegend(svg, colorScale, props)
 
   function zoom(d) {
+    props.viewer.reset()
     focus = d
     var transition = d3
       .transition()
