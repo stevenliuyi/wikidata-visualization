@@ -399,7 +399,7 @@ export function getValues(props) {
   return [data, colors, colorScale, tooltipHTMLs]
 }
 
-export function getGroupValues(props) {
+export function getGroupValues(props, uniqueXValues = true) {
   let x_label = ''
   if (props.chartId === 1.18) {
     // bar chart
@@ -407,7 +407,11 @@ export function getGroupValues(props) {
   } else if (props.chartId === 1.19) {
     // radar chart
     x_label = props.header[props.settings['axes']]
+  } else if (props.chartId === 1.23) {
+    // pie chart map
+    x_label = props.header[props.settings['label']]
   }
+
   const ngroups = props.settings['ngroups']
   const group_indices = [...Array(ngroups).keys()]
   const y_labels = group_indices.map(group_idx => {
@@ -419,14 +423,21 @@ export function getGroupValues(props) {
   const selectedData = props.data.filter((item, i) =>
     props.rowSelections.includes(i)
   )
-  let x_values = [...new Set(selectedData.map(item => item[x_label]))]
+  let x_values
+  if (uniqueXValues) {
+    // unique values
+    x_values = [...new Set(selectedData.map(item => item[x_label]))]
+  } else {
+    // allow duplicate values
+    x_values = selectedData.map(item => item[x_label])
+  }
 
   // initialized values
   let y_values = group_indices.map(i => Array(x_values.length).fill(0))
 
   // fill values
-  selectedData.forEach(item => {
-    const x_idx = x_values.indexOf(item[x_label])
+  selectedData.forEach((item, i) => {
+    const x_idx = uniqueXValues ? x_values.indexOf(item[x_label]) : i
 
     group_indices.forEach(group_idx => {
       const setting =
@@ -443,26 +454,28 @@ export function getGroupValues(props) {
 
   // remove all zero values
   let zero_indices = []
-  x_values.forEach((_, x_idx) => {
-    if (
-      group_indices
-        .map(group_idx => y_values[group_idx][x_idx])
-        .reduce((a, b) => a + b, 0) === 0
-    ) {
-      zero_indices.push(x_idx)
-    }
-  })
-  x_values = x_values.filter((_, x_idx) => !zero_indices.includes(x_idx))
-  y_values.forEach((_, group_idx) => {
-    y_values[group_idx] = y_values[group_idx].filter(
-      (_, x_idx) => !zero_indices.includes(x_idx)
-    )
-  })
+  if (uniqueXValues) {
+    x_values.forEach((_, x_idx) => {
+      if (
+        group_indices
+          .map(group_idx => y_values[group_idx][x_idx])
+          .reduce((a, b) => a + b, 0) === 0
+      ) {
+        zero_indices.push(x_idx)
+      }
+    })
+    x_values = x_values.filter((_, x_idx) => !zero_indices.includes(x_idx))
+    y_values.forEach((_, group_idx) => {
+      y_values[group_idx] = y_values[group_idx].filter(
+        (_, x_idx) => !zero_indices.includes(x_idx)
+      )
+    })
+  }
 
   // tooltips
   let tooltipHTMLs = x_values.map(val => '')
-  selectedData.forEach(item => {
-    const x_idx = x_values.indexOf(item[x_label])
+  selectedData.forEach((item, i) => {
+    const x_idx = uniqueXValues ? x_values.indexOf(item[x_label]) : i
     tooltipHTMLs[x_idx] = getSingleTooltipHTML(item, props.header)
   })
 
@@ -498,6 +511,9 @@ export function getGroupValues(props) {
     const maxVal = Math.max(...[].concat.apply([], y_values))
 
     return [data, maxVal, colors, colorScale, tooltipHTMLs]
+  } else if (props.chartId === 1.23) {
+    // pie chart map
+    return [x_values, y_values, y_labels, tooltipHTMLs]
   }
 }
 

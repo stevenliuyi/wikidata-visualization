@@ -30,6 +30,7 @@ The following chart types are available:
   - Simple Map
   - Choropleth
   - Cartogram
+  - Pie Chart Map
 - More charts
   - Chord diagram
   - Sankey diagram

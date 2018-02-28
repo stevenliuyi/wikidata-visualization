@@ -378,7 +378,8 @@ class Settings extends Component {
       setting === 'showMarkers' ||
       setting === 'reasonator' ||
       setting === 'showLegend' ||
-      setting === 'showArrows'
+      setting === 'showArrows' ||
+      setting === 'showLabels'
     ) {
       return (
         <SettingToggle
@@ -593,6 +594,18 @@ class Settings extends Component {
             width: '100%',
             theme: 'bootstrap'
           }}
+        />
+      )
+    } else if (setting === 'outerRadius') {
+      return (
+        <ReactBootstrapSlider
+          value={this.props.moreSettings.outerRadius}
+          slideStop={e =>
+            this.props.onMoreSettingsChange({ outerRadius: e.target.value })
+          }
+          step={1}
+          min={2}
+          max={100}
         />
       )
     } else if (setting === 'innerRadius') {

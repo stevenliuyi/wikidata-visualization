@@ -202,6 +202,7 @@ export const moreSettings = {
   solarSystem: 'Earth',
   mapResolution: false,
   barType: 'stacked',
+  outerRadius: 15,
   innerRadius: 70,
   timelineType: 'separated',
   padding: 10,
@@ -209,7 +210,8 @@ export const moreSettings = {
   lineWidth: 1.5,
   padAngle: 5,
   numOfColumns: 1,
-  effect: 'no effect'
+  effect: 'no effect',
+  showLabels: false
 }
 
 export const moreSettingTitles = {
@@ -245,6 +247,7 @@ export const moreSettingTitles = {
   solarSystem: 'Solar system',
   mapResolution: 'Map resolution',
   barType: 'Bar type',
+  outerRadius: 'Radius',
   innerRadius: 'Inner radius',
   timelineType: 'Timeline type',
   padding: 'Padding',
@@ -252,7 +255,8 @@ export const moreSettingTitles = {
   lineWidth: 'Line width',
   padAngle: 'Padding angle',
   numOfColumns: 'Number of columns',
-  effect: 'Image effect'
+  effect: 'Image effect',
+  showLabels: 'Pie chart labels'
 }
 
 export const canvasSettings = {
@@ -545,6 +549,25 @@ export const charts = [
     settings: [region, area, color],
     defaultShow: [true, true, false],
     moreSettings: ['map2', 'iterations', 'color', 'showLegend', 'legendScale'],
+    canvasSettings: ['auto', 'width', 'height', 'border']
+  },
+  {
+    id: 1.23,
+    name: 'Pie Chart Map',
+    chartClass: 'map',
+    settings: [coordinate, y_axis_groups, ngroups, label],
+    defaultShow: [true, true, true, false],
+    moreSettings: [
+      'map',
+      'projection',
+      'fontSize',
+      'color',
+      'outerRadius',
+      'innerRadius',
+      'showLabels',
+      'showLegend',
+      'legendScale'
+    ],
     canvasSettings: ['auto', 'width', 'height', 'border']
   },
   {
