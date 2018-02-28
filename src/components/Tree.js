@@ -184,8 +184,11 @@ class Tree extends Component {
   render() {
     if (!this.props.dataTypes.includes('item'))
       return <Info info="no-item" text={this.props.treeType} />
-    if (getTreeRoot(this.props) == null)
-      return <Info info="tree-error" showSettings={true} />
+
+    const root = getTreeRoot(this.props)
+    if (root == null) return <Info info="tree-error" showSettings={true} />
+    else if (root.height === 0)
+      return <Info info="single-node" showSettings={true} />
 
     return (
       <div id="chart">

@@ -8,6 +8,7 @@ export const info = {
   'no-image': 'Images are needed for generating gallery.',
   'no-time': 'Time values are needed for generating timeline.',
   'tree-error': 'Cannot generate tree from the data provided.',
+  'single-node': 'The generated tree only contains a single node.',
   'sankey-error':
     'Cannot generate Sankey diagram because the graph is not acyclic.',
   'negative-height':

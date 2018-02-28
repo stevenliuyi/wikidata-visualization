@@ -129,7 +129,13 @@ class PieChartMap extends Component {
 
   render() {
     if (!this.props.dataTypes.includes('coordinate'))
-      return <Info info="no-coordinate" text="map" />
+      return <Info info="no-coordinate" text="pie chart map" />
+
+    if (
+      !this.props.dataTypes.includes('number') &&
+      !this.props.dataTypes.includes('time')
+    )
+      return <Info info="no-number" text="pie chart map" />
 
     const json_filename =
       process.env.NODE_ENV === 'development'
