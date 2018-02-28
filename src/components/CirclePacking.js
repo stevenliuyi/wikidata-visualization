@@ -56,6 +56,8 @@ const updateD3Node = props => {
   var focus = root,
     nodes = pack(root).descendants(),
     view
+
+  var dragged
   var circle = g
     .selectAll('circle')
     .data(nodes)
@@ -75,8 +77,16 @@ const updateD3Node = props => {
       return d.children ? 'auto' : 'none'
     })
     .on('click', function(d) {
-      if (focus !== d) zoom(d)
       d3.event.stopPropagation()
+      if (dragged) return
+      if (focus !== d) zoom(d)
+    })
+    .on('mousedown', function() {
+      dragged = false
+    })
+    .on('mouseup', function() {
+      const { startX, startY, endX, endY } = props.viewer.getValue()
+      if (startX !== endX || startY !== endY) dragged = true
     })
 
   g
@@ -113,7 +123,7 @@ const updateD3Node = props => {
   drawLegend(svg, colorScale, props)
 
   function zoom(d) {
-    var focus = d
+    focus = d
     var transition = d3
       .transition()
       .duration(d3.event.altKey ? 7500 : 750)
