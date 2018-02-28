@@ -8,13 +8,13 @@ import {
   Tooltip
 } from 'react-bootstrap'
 import FaClose from 'react-icons/lib/fa/close'
-import GoChevronUp from 'react-icons/lib/go/chevron-up'
-import GoChevronDown from 'react-icons/lib/go/chevron-down'
-import GoChevronLeft from 'react-icons/lib/go/chevron-left'
-import GoChevronRight from 'react-icons/lib/go/chevron-right'
-import GoLinkExternal from 'react-icons/lib/go/link-external'
-import GoX from 'react-icons/lib/go/x'
-import GoSync from 'react-icons/lib/go/sync'
+import MdClear from 'react-icons/lib/md/clear'
+import MdKeyboardArrowDown from 'react-icons/lib/md/keyboard-arrow-down'
+import MdKeyboardArrowUp from 'react-icons/lib/md/keyboard-arrow-up'
+import MdKeyboardArrowLeft from 'react-icons/lib/md/keyboard-arrow-left'
+import MdKeyboardArrowRight from 'react-icons/lib/md/keyboard-arrow-right'
+import MdLaunch from 'react-icons/lib/md/launch'
+import MdRestore from 'react-icons/lib/md/restore'
 import { readExample } from '../utils/examples'
 import AceEditor from 'react-ace'
 import 'brace/mode/sparql'
@@ -210,10 +210,10 @@ class Query extends Component {
                   placement="top"
                   overlay={<Tooltip id="hide-editor">hide editor</Tooltip>}
                 >
-                  <GoChevronLeft
+                  <MdKeyboardArrowLeft
                     className="clickable-icon query-icon"
                     onClick={() => this.props.onHide()}
-                    size={20}
+                    size={22}
                   />
                 </OverlayTrigger>
               )}
@@ -226,10 +226,10 @@ class Query extends Component {
                     <Tooltip id="minimize-editor">minimize editor</Tooltip>
                   }
                 >
-                  <GoChevronUp
+                  <MdKeyboardArrowUp
                     className="clickable-icon query-icon"
                     onClick={() => this.setState({ height: minHeight })}
-                    size={20}
+                    size={22}
                   />
                 </OverlayTrigger>
               )}
@@ -240,10 +240,10 @@ class Query extends Component {
                   <Tooltip id="restore-editor">restore editor size</Tooltip>
                 }
               >
-                <GoChevronDown
+                <MdKeyboardArrowDown
                   className="clickable-icon query-icon"
                   onClick={() => this.setState({ height: defaultHeight })}
-                  size={20}
+                  size={22}
                 />
               </OverlayTrigger>
             )}
@@ -252,10 +252,10 @@ class Query extends Component {
                 placement="top"
                 overlay={<Tooltip id="expand-editor">expand editor</Tooltip>}
               >
-                <GoChevronRight
+                <MdKeyboardArrowRight
                   className="clickable-icon query-icon"
                   onClick={this.props.onChangeEditorSize}
-                  size={20}
+                  size={22}
                 />
               </OverlayTrigger>
             )}
@@ -266,10 +266,10 @@ class Query extends Component {
                   <Tooltip id="collapse-editor">collapse editor</Tooltip>
                 }
               >
-                <GoChevronLeft
+                <MdKeyboardArrowLeft
                   className="clickable-icon query-icon"
                   onClick={this.props.onChangeEditorSize}
-                  size={20}
+                  size={22}
                 />
               </OverlayTrigger>
             )}
@@ -278,13 +278,13 @@ class Query extends Component {
                 placement="top"
                 overlay={<Tooltip id="clear-editor">clear editor</Tooltip>}
               >
-                <GoX
-                  className="clickable-icon"
+                <MdClear
+                  className="clickable-icon query-icon-fullscreen"
                   onClick={() => {
                     this.setState({ code: '' })
                     this.refs.aceEditor.editor.focus()
                   }}
-                  size={20}
+                  size={18}
                 />
               </OverlayTrigger>
             )}
@@ -295,14 +295,14 @@ class Query extends Component {
                   <Tooltip id="restore-query">restore previous query</Tooltip>
                 }
               >
-                <GoSync
-                  className="clickable-icon"
+                <MdRestore
+                  className="clickable-icon query-icon-fullscreen"
                   onClick={() => {
                     this.setState({
                       code: localStorage.getItem('wikidata-query')
                     })
                   }}
-                  size={20}
+                  size={18}
                 />
               </OverlayTrigger>
             )}
@@ -313,8 +313,8 @@ class Query extends Component {
                   <Tooltip id="wdqs">open in Wikidata Query Service</Tooltip>
                 }
               >
-                <GoLinkExternal
-                  className="clickable-icon"
+                <MdLaunch
+                  className="clickable-icon query-icon-fullscreen"
                   onClick={() => {
                     window.open(
                       `https://query.wikidata.org/#${encodeURIComponent(
@@ -323,7 +323,7 @@ class Query extends Component {
                       '_blank'
                     )
                   }}
-                  size={20}
+                  size={18}
                 />
               </OverlayTrigger>
             )}

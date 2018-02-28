@@ -55,8 +55,13 @@
 }
 
 .query-icon {
-  margin-left: -2px;
-  margin-right: -2px;
+  margin-left: -3px;
+  margin-right: -3px;
+}
+
+.query-icon-fullscreen {
+  margin-left: 3px;
+  margin-right: 3px;
 }
 
 .toolbar-icon {
