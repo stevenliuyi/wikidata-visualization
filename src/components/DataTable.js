@@ -150,6 +150,14 @@ class DataTable extends Component {
           {row.value}
         </a>
       )
+    } else if (dataType === 'commons' && row.value != null) {
+      return (
+        <a target="_blank" href={row.value}>
+          {decodeURIComponent(
+            row.value.slice(row.value.match(/Special:FilePath/).index + 17)
+          )}
+        </a>
+      )
     } else {
       return row.value
     }

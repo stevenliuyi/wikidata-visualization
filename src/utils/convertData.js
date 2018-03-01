@@ -20,9 +20,12 @@ const numbers = [
   'nonPositiveInteger',
   'negativeInteger'
 ]
+
 const numberTypes = numbers.map(
   type => `http://www.w3.org/2001/XMLSchema#${type}`
 )
+
+const imageExtensions = ['jpg', 'jpeg', 'png', 'gif']
 
 // return converted value and data type associated with this value
 function convertValue(value) {
@@ -44,9 +47,18 @@ function convertValue(value) {
   } else if (
     value['value'].startsWith(
       'http://commons.wikimedia.org/wiki/Special:FilePath'
+    ) &&
+    imageExtensions.includes(
+      value['value'].slice(value['value'].match(/\.[^.]*$/).index + 1)
     )
   ) {
     return [value['value'], 'image']
+  } else if (
+    value['value'].startsWith(
+      'http://commons.wikimedia.org/wiki/Special:FilePath'
+    )
+  ) {
+    return [value['value'], 'commons']
   } else if (
     value['datatype'] === 'http://www.w3.org/2001/XMLSchema#dateTime'
   ) {
