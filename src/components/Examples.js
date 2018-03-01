@@ -1,10 +1,26 @@
 import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-import { examples } from '../utils/examples'
+import { examples, readExample } from '../utils/examples'
 import MdSearch from 'react-icons/lib/md/search'
 
 class Examples extends Component {
+  state = {
+    examples: []
+  }
+
+  componentDidMount() {
+    examples.forEach((example, idx) => {
+      readExample(idx).then(queryExamples => {
+        this.setState((prevState, props) => {
+          return {
+            examples: [...this.state.examples, queryExamples.toLowerCase()]
+          }
+        })
+      })
+    })
+  }
+
   filterComponent = ({ filter, onChange }) => (
     <div className="pull-right">
       <div style={{ position: 'absolute', marginLeft: '3px' }}>
@@ -57,7 +73,10 @@ class Examples extends Component {
           return row[id] !== undefined
             ? String(row[id])
                 .toLowerCase()
-                .includes(filter.value.toLowerCase())
+                .includes(filter.value.toLowerCase()) ||
+                this.state.examples[
+                  examples.map(ex => ex.title).indexOf(row[id])
+                ].includes(filter.value.toLowerCase())
             : true
         }}
         getTrProps={this.getTrProps}
