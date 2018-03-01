@@ -106,6 +106,14 @@ export const examples = [
   {
     title: 'Universities within 1km from a city hall',
     filename: 'university-city-hall.rq'
+  },
+  {
+    title: 'Spouses of Kings of the Joseon Dynasty',
+    filename: 'joseon-king-spouses.rq'
+  },
+  {
+    title: 'Women married to both father and son',
+    filename: 'father-son-marriages.rq'
   }
 ]
 

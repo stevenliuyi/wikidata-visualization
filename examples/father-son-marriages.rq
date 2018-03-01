@@ -1,0 +1,20 @@
+# Women married to both father and son
+
+SELECT
+?womanItem ?woman ?country ?dateOfBirth ?dateOfDeath
+?spouse1Item ?spouse1 ?spouse2Item ?spouse2
+WHERE {
+  ?womanItem wdt:P31 wd:Q5 ; # human
+             wdt:P21 wd:Q6581072 ; # female
+             wdt:P26 ?spouse1Item ;
+             wdt:P26 ?spouse2Item .
+  ?spouse1Item wdt:P40 ?spouse2Item .
+  OPTIONAL { ?womanItem wdt:P27 ?countryItem . }
+  OPTIONAL { ?womanItem wdt:P569 ?dateOfBirth . }
+  OPTIONAL { ?womanItem wdt:P570 ?dateOfDeath . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                           ?womanItem rdfs:label ?woman .
+                           ?spouse1Item rdfs:label ?spouse1 .
+                           ?spouse2Item rdfs:label ?spouse2 .
+                           ?countryItem rdfs:label ?country }
+}

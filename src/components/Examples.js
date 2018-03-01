@@ -70,14 +70,22 @@ class Examples extends Component {
         defaultPageSize={10}
         defaultFilterMethod={(filter, row, column) => {
           const id = filter.pivotId || filter.id
-          return row[id] !== undefined
-            ? String(row[id])
-                .toLowerCase()
-                .includes(filter.value.toLowerCase()) ||
-                this.state.examples[
-                  examples.map(ex => ex.title).indexOf(row[id])
-                ].includes(filter.value.toLowerCase())
-            : true
+          if (this.state.examples.length === 0) {
+            return row[id] !== undefined
+              ? String(row[id])
+                  .toLowerCase()
+                  .includes(filter.value.toLowerCase())
+              : true
+          } else {
+            return row[id] !== undefined
+              ? String(row[id])
+                  .toLowerCase()
+                  .includes(filter.value.toLowerCase()) ||
+                  this.state.examples[
+                    examples.map(ex => ex.title).indexOf(row[id])
+                  ].includes(filter.value.toLowerCase())
+              : true
+          }
         }}
         getTrProps={this.getTrProps}
         className="-highlight"
