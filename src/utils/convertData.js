@@ -49,7 +49,9 @@ function convertValue(value) {
       'http://commons.wikimedia.org/wiki/Special:FilePath'
     ) &&
     imageExtensions.includes(
-      value['value'].slice(value['value'].match(/\.[^.]*$/).index + 1)
+      value['value']
+        .slice(value['value'].match(/\.[^.]*$/).index + 1)
+        .toLowerCase()
     )
   ) {
     return [value['value'], 'image']
@@ -529,12 +531,18 @@ export function getGroupValues(props, uniqueXValues = true) {
   }
 }
 
+export function getCommonsFileName(url) {
+  return decodeURIComponent(url.slice(url.match(/Special:FilePath/).index + 17))
+}
+
 export function getSingleTooltipHTML(item, header) {
   return header
     .map(header => {
       const value =
         item[header] != null
-          ? item[header]
+          ? item[header].includes('Special:FilePath')
+            ? getCommonsFileName(item[header])
+            : item[header]
           : '<span class="text-muted">(no data)</span>'
       return `<span><b>${header}</b> ${value}</span>`
     })

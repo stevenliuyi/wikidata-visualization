@@ -3,7 +3,7 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import checkboxHOC from 'react-table/lib/hoc/selectTable'
 import { Label, OverlayTrigger, Tooltip, Col, Row } from 'react-bootstrap'
-import { getDataTypeIndices } from '../utils/convertData'
+import { getDataTypeIndices, getCommonsFileName } from '../utils/convertData'
 import { getURL } from '../utils/commons'
 import Info from './Info'
 import MdArrowForward from 'react-icons/lib/md/arrow-forward'
@@ -153,9 +153,7 @@ class DataTable extends Component {
     } else if (dataType === 'commons' && row.value != null) {
       return (
         <a target="_blank" href={row.value}>
-          {decodeURIComponent(
-            row.value.slice(row.value.match(/Special:FilePath/).index + 17)
-          )}
+          {getCommonsFileName(row.value)}
         </a>
       )
     } else {
