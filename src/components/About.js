@@ -12,7 +12,9 @@ class About extends Component {
     return (
       <Row>
         <Col sm={12}>
-          <h2>Wikidata Visualization</h2>
+          <h2>
+            <span className="app-name text-muted">Wikidata Visualization</span>
+          </h2>
         </Col>
         <Col sm={8} xs={12} className="text-muted">
           <p>

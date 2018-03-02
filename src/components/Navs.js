@@ -27,11 +27,12 @@ class Navs extends Component {
       >
         {!this.props.showSide && (
           <NavItem eventKey={0} key={0}>
-            <GoChevronRight size={16} />Editor
+            <GoChevronRight size={16} />{' '}
+            <span className="app-titles">Editor</span>
           </NavItem>
         )}
         <NavItem eventKey={charts[0].id} key={charts[0].id}>
-          {icons[0]} {charts[0].name}
+          {icons[0]} <span className="app-titles">{charts[0].name}</span>
         </NavItem>
         {chartClasses.map((chartClass, index) => {
           return (
@@ -41,7 +42,8 @@ class Navs extends Component {
               id={index}
               title={
                 <span>
-                  {icons[index + 1]} {chartClass.name}
+                  {icons[index + 1]}{' '}
+                  <span className="app-titles">{chartClass.name}</span>
                 </span>
               }
             >

@@ -62,7 +62,11 @@ class Examples extends Component {
         filterable
         columns={[
           {
-            Header: () => <h4>Wikidata Query Examples</h4>,
+            Header: () => (
+              <h4>
+                <span className="app-titles">Wikidata Query Examples</span>
+              </h4>
+            ),
             accessor: 'title',
             Filter: this.filterComponent
           }

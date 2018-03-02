@@ -12,7 +12,7 @@ class TopNavBar extends Component {
             <span id="logo">
               <Logo size={24} />
             </span>
-            <span>Wikidata Visualization</span>
+            <span className="app-name">Wikidata Visualization</span>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
@@ -22,19 +22,19 @@ class TopNavBar extends Component {
               eventKey={1}
               onSelect={() => this.props.handleChartSelect(1)}
             >
-              Charts
+              <span className="app-titles">Chart</span>
             </NavItem>
             <NavItem
               eventKey={2}
               onSelect={() => this.props.handleChartSelect(2)}
             >
-              Query Examples
+              <span className="app-titles">Query Examples</span>
             </NavItem>
             <NavItem
               eventKey={3}
               onSelect={() => this.props.handleChartSelect(3)}
             >
-              About
+              <span className="app-titles">About</span>
             </NavItem>
           </Nav>
           <Nav pullRight>
