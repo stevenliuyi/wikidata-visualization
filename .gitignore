@@ -22,3 +22,6 @@ yarn-error.log*
 
 # temporary files
 *.sw*
+
+# SSH private key
+id_rsa
