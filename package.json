@@ -55,7 +55,8 @@
     "select2-bootstrap-theme": "^0.1.0-beta.10",
     "tiny-segmenter": "^0.2.0",
     "toposort": "^1.0.6",
-    "victory": "^0.25.6"
+    "victory": "^0.25.6",
+    "webfontloader": "^1.6.28"
   },
   "scripts": {
     "predeploy": "yarn run build",
