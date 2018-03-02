@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ssh -i ~/.ssh/id_rsa stevenliuyi@login.tools.wmflabs.org << EOF
+ssh -tt -i ~/.ssh/id_rsa stevenliuyi@login.tools.wmflabs.org << EOF
   become dataviz
   webservice stop
   rm -rf ./wikidata-visualization
@@ -10,5 +10,6 @@ ssh -i ~/.ssh/id_rsa stevenliuyi@login.tools.wmflabs.org << EOF
   mv ./wikidata-visualization/* ./public_html
   rm -rf ./wikidata-visualization
   webservice start
+  exit
   exit
 EOF
