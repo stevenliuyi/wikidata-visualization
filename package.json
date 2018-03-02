@@ -66,6 +66,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "prepare": "patch-package",
+    "deploy-ghpages": "./node_modules/.bin/gh-pages -d build -b gh-pages -r https://$GITHUB_TOKEN@github.com/stevenliuyi/wikidata-visualization.git",
     "build-wmflabs": "PUBLIC_URL=/dataviz react-scripts build", 
     "deploy-wmflabs": "./node_modules/.bin/gh-pages -d build -b wmflabs -r https://$GITHUB_TOKEN@github.com/stevenliuyi/wikidata-visualization.git"
   },

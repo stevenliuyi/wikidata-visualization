@@ -8,18 +8,9 @@ branches:
 
 script:
   - yarn run build
-
-deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  keep-history: true
-  local-dir: build
-  committer-from-gh: true
-  on:
-    branch: master
-
-after_success:
+  - yarn run deploy-ghpages
+  - git reset --hard
+  - yarn install
   - yarn run build-wmflabs
   - yarn run deploy-wmflabs
 
