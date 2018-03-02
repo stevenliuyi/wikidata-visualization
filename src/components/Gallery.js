@@ -3,7 +3,7 @@ import Gallery from 'react-photo-gallery'
 import Lightbox from 'react-images'
 import OnImagesLoaded from 'react-on-images-loaded'
 import Measure from 'react-measure'
-import { getURL } from '../utils/commons'
+import { getURL, getCommonsURL } from '../utils/commons'
 import { getSingleTooltipHTML } from '../utils/convertData'
 import Image from './Image'
 import * as d3 from 'd3'
@@ -45,7 +45,7 @@ class ImageGallery extends Component {
       .filter((item, i) => props.rowSelections.includes(i))
       .filter(item => item[imageLabel] != null)
       .map(item => ({
-        src: item[imageLabel],
+        src: getCommonsURL(item[imageLabel]),
         caption: item[props.header[props.settings.label]],
         showCaption: props.header[props.settings.label] != null,
         tooltip: tooltip,

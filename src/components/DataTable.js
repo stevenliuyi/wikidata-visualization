@@ -3,8 +3,8 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import checkboxHOC from 'react-table/lib/hoc/selectTable'
 import { Label, OverlayTrigger, Tooltip, Col, Row } from 'react-bootstrap'
-import { getDataTypeIndices, getCommonsFileName } from '../utils/convertData'
-import { getURL } from '../utils/commons'
+import { getDataTypeIndices, getCoordArray } from '../utils/convertData'
+import { getURL, getCommonsURL } from '../utils/commons'
 import Info from './Info'
 import MdArrowForward from 'react-icons/lib/md/arrow-forward'
 import TimePicker from './TimePicker'
@@ -127,8 +127,12 @@ class DataTable extends Component {
       )
     } else if (dataType === 'image' && row.value != null) {
       return (
-        <a target="_blank" href={row.value}>
-          <img src={getURL(row.value, '50px')} width={48} alt="" />
+        <a target="_blank" href={getCommonsURL(row.value)}>
+          <img
+            src={getURL(getCommonsURL(row.value), '50px')}
+            width={48}
+            alt=""
+          />
         </a>
       )
     } else if (dataType === 'time') {
@@ -152,8 +156,8 @@ class DataTable extends Component {
       )
     } else if (dataType === 'commons' && row.value != null) {
       return (
-        <a target="_blank" href={row.value}>
-          {getCommonsFileName(row.value)}
+        <a target="_blank" href={getCommonsURL(row.value)}>
+          {row.value}
         </a>
       )
     } else {
@@ -169,9 +173,7 @@ class DataTable extends Component {
       coordIndices
         .filter(index => item[this.props.header[index]] != null)
         .forEach(index => {
-          const [coordX, coordY] = item[this.props.header[index]]
-            .split(', ')
-            .map(parseFloat)
+          const [coordX, coordY] = getCoordArray(item[this.props.header[index]])
           item[`${this.props.header[index]} (Lon)`] = coordX
           item[`${this.props.header[index]} (Lat)`] = coordY
         })

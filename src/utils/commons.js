@@ -13,3 +13,13 @@ export const getURL = (source, width) => {
 
   return thumb_source
 }
+
+export const getCommonsFileName = url => {
+  return decodeURIComponent(url.slice(url.match(/Special:FilePath/).index + 17))
+}
+
+export const getCommonsURL = filename => {
+  return `http://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(
+    filename
+  )}`
+}

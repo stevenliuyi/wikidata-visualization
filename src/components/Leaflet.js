@@ -10,7 +10,7 @@ import {
 import Leaflet, { latLngBounds } from 'leaflet'
 import Basemap from './Basemap'
 import { getRadius, getColors } from '../utils/scales'
-import { getTooltipHTML } from '../utils/convertData'
+import { getTooltipHTML, getCoordArray } from '../utils/convertData'
 import { drawLegend } from '../utils/draw'
 import 'leaflet/dist/leaflet.css'
 import Info from './Info'
@@ -114,10 +114,9 @@ class LeafletMap extends Component {
       .filter((item, i) => props.rowSelections.includes(i))
       .filter(item => item[props.header[props.settings['coordinate']]] != null)
       .map((item, i) =>
-        item[props.header[props.settings['coordinate']]]
-          .split(', ')
-          .map(parseFloat)
-          .reverse()
+        getCoordArray(
+          item[props.header[props.settings['coordinate']]]
+        ).reverse()
       )
       .map(coord => this.convertCoord(coord))
 
@@ -177,12 +176,9 @@ class LeafletMap extends Component {
                 item[this.props.header[this.props.settings['coordinate']]] !=
                 null
               ) {
-                let coord = item[
-                  this.props.header[this.props.settings['coordinate']]
-                ]
-                  .split(', ')
-                  .map(parseFloat)
-                  .reverse()
+                let coord = getCoordArray(
+                  item[this.props.header[this.props.settings['coordinate']]]
+                ).reverse()
 
                 coord = this.convertCoord(coord)
                 const label =
@@ -252,19 +248,15 @@ class LeafletMap extends Component {
                 item[this.props.header[this.props.settings['coordinate_to']]] !=
                   null
               ) {
-                let coord_from = item[
-                  this.props.header[this.props.settings['coordinate_from']]
-                ]
-                  .split(', ')
-                  .map(parseFloat)
-                  .reverse()
+                let coord_from = getCoordArray(
+                  item[
+                    this.props.header[this.props.settings['coordinate_from']]
+                  ]
+                ).reverse()
 
-                let coord_to = item[
-                  this.props.header[this.props.settings['coordinate_to']]
-                ]
-                  .split(', ')
-                  .map(parseFloat)
-                  .reverse()
+                let coord_to = getCoordArray(
+                  item[this.props.header[this.props.settings['coordinate_to']]]
+                ).reverse()
 
                 coord_from = this.convertCoord(coord_from)
                 coord_to = this.convertCoord(coord_to)

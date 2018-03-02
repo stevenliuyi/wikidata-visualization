@@ -12,7 +12,7 @@ import { Button, ButtonGroup } from 'react-bootstrap'
 import { getRadius, getColors } from '../utils/scales'
 import { mapSettings } from '../utils/maps'
 import * as d3 from 'd3'
-import { getTooltipHTML } from '../utils/convertData'
+import { getTooltipHTML, getCoordArray } from '../utils/convertData'
 import { drawLegend, drawTooltip, updateTooltip } from '../utils/draw'
 import chroma from 'chroma-js'
 import FaPlus from 'react-icons/lib/fa/plus'
@@ -207,18 +207,20 @@ class Map extends Component {
                         this.props.header[this.props.settings['coordinate_to']]
                       ] != null
                     ) {
-                      const coordinate_from = item[
-                        this.props.header[
-                          this.props.settings['coordinate_from']
+                      const coordinate_from = getCoordArray(
+                        item[
+                          this.props.header[
+                            this.props.settings['coordinate_from']
+                          ]
                         ]
-                      ]
-                        .split(', ')
-                        .map(parseFloat)
-                      const coordinate_to = item[
-                        this.props.header[this.props.settings['coordinate_to']]
-                      ]
-                        .split(', ')
-                        .map(parseFloat)
+                      )
+                      const coordinate_to = getCoordArray(
+                        item[
+                          this.props.header[
+                            this.props.settings['coordinate_to']
+                          ]
+                        ]
+                      )
                       const projection = this.zoomableGroup.props.projection
                       const path = d3Geo.geoPath().projection(projection)
                       return (
@@ -269,11 +271,13 @@ class Map extends Component {
                       <Marker
                         key={i}
                         marker={{
-                          coordinates: item[
-                            this.props.header[this.props.settings['coordinate']]
-                          ]
-                            .split(', ')
-                            .map(parseFloat)
+                          coordinates: getCoordArray(
+                            item[
+                              this.props.header[
+                                this.props.settings['coordinate']
+                              ]
+                            ]
+                          )
                         }}
                       >
                         <circle

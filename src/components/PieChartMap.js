@@ -12,7 +12,7 @@ import { Button, ButtonGroup } from 'react-bootstrap'
 import { getColorScaleFromValues } from '../utils/scales'
 import { mapSettings } from '../utils/maps'
 import * as d3 from 'd3'
-import { getGroupValues } from '../utils/convertData'
+import { getGroupValues, getCoordArray } from '../utils/convertData'
 import { drawLegend, drawTooltip, updateTooltip } from '../utils/draw'
 import chroma from 'chroma-js'
 import FaPlus from 'react-icons/lib/fa/plus'
@@ -219,11 +219,13 @@ class PieChartMap extends Component {
                       <Marker
                         key={i}
                         marker={{
-                          coordinates: item[
-                            this.props.header[this.props.settings['coordinate']]
-                          ]
-                            .split(', ')
-                            .map(parseFloat)
+                          coordinates: getCoordArray(
+                            item[
+                              this.props.header[
+                                this.props.settings['coordinate']
+                              ]
+                            ]
+                          )
                         }}
                       >
                         <g

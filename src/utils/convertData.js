@@ -1,6 +1,7 @@
 // convert the result from Wikidata to objects
 import * as d3 from 'd3'
 import { getColorScaleFromValues, getColors, colorSchemes } from './scales'
+import { getCommonsFileName } from './commons'
 import moment from 'moment'
 import toposort from 'toposort'
 
@@ -38,10 +39,10 @@ function convertValue(value) {
   ) {
     // for non-Earth coordinates, the entity is present before point
     return [
-      value['value']
+      `(${value['value']
         .slice(value['value'].indexOf('Point') + 6, -1)
         .split(' ')
-        .join(', '),
+        .join(', ')})`,
       'coordinate'
     ] // coordinate
   } else if (
@@ -54,13 +55,13 @@ function convertValue(value) {
         .toLowerCase()
     )
   ) {
-    return [value['value'], 'image']
+    return [getCommonsFileName(value['value']), 'image']
   } else if (
     value['value'].startsWith(
       'http://commons.wikimedia.org/wiki/Special:FilePath'
     )
   ) {
-    return [value['value'], 'commons']
+    return [getCommonsFileName(value['value']), 'commons']
   } else if (
     value['datatype'] === 'http://www.w3.org/2001/XMLSchema#dateTime'
   ) {
@@ -531,18 +532,12 @@ export function getGroupValues(props, uniqueXValues = true) {
   }
 }
 
-export function getCommonsFileName(url) {
-  return decodeURIComponent(url.slice(url.match(/Special:FilePath/).index + 17))
-}
-
 export function getSingleTooltipHTML(item, header) {
   return header
     .map(header => {
       const value =
         item[header] != null
-          ? String(item[header]).includes('Special:FilePath')
-            ? getCommonsFileName(item[header])
-            : item[header]
+          ? item[header]
           : '<span class="text-muted">(no data)</span>'
       return `<span><b>${header}</b> ${value}</span>`
     })
@@ -708,4 +703,11 @@ export function getTimeData(props) {
   }
 
   return [data, minDate, maxDate, colors, colorScale, tooltipHTMLs]
+}
+
+export function getCoordArray(coordString) {
+  return coordString
+    .slice(1, -1)
+    .split(', ')
+    .map(parseFloat)
 }
