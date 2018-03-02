@@ -141,7 +141,6 @@ const updateD3Node = props => {
     .text(function(d) {
       return d.data[props.header[props.settings['label']]]
     })
-    .style('font-family', 'sans-serif')
     .style('font-size', props.moreSettings.fontSize)
     .style('text-anchor', 'middle')
     .on('mouseover', function(d) {

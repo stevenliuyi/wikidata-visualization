@@ -34,7 +34,6 @@ const updateD3Node = props => {
       'transform',
       'translate(' + props.width / 2 + ',' + props.height / 2 + ')'
     )
-    .attr('font-family', 'sans-serif')
     .attr('font-size', props.moreSettings.fontSize)
 
   // convert data to d3 hierarchy format

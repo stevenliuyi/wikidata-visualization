@@ -30,7 +30,6 @@ const updateD3Node = props => {
       'transform',
       'translate(' + props.width / 2 + ',' + props.height / 2 + ')'
     )
-    .attr('font-family', 'sans-serif')
     .attr('font-size', props.moreSettings.fontSize)
 
   var radius = Math.min(props.width, props.height) / 2 * 0.8

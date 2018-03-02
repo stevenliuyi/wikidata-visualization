@@ -291,7 +291,6 @@ class Map extends Component {
                           textAnchor="middle"
                           y={-5}
                           style={{
-                            fontFamily: 'sans-serif',
                             fill: 'black',
                             opacity: '0,7',
                             fontSize: this.props.moreSettings.fontSize

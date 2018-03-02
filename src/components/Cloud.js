@@ -41,7 +41,7 @@ class Cloud extends Component {
           height={this.props.height}
           fontSizeMapper={word => word.fontSize}
           rotate={rotate}
-          font="sans-serif"
+          font="Source Sans Pro"
           colors={colors} // colors are supported through a patch
         />
       </div>

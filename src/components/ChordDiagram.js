@@ -111,7 +111,6 @@ const updateD3Node = props => {
     .style('text-anchor', function(d) {
       return (d.startAngle + d.endAngle) / 2 > Math.PI ? 'end' : null
     })
-    .style('font-family', 'sans-serif')
     .style('font-size', props.moreSettings.fontSize)
 
   g

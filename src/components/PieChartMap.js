@@ -267,7 +267,6 @@ class PieChartMap extends Component {
                             0.5 * parseInt(this.props.moreSettings.fontSize, 10)
                           }
                           style={{
-                            fontFamily: 'sans-serif',
                             fill: 'black',
                             fontSize: this.props.moreSettings.fontSize
                           }}
