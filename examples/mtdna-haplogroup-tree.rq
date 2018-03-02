@@ -1,0 +1,23 @@
+# Phylogenetic tree of human mtDNA haplogroups
+
+SELECT ?haplogroupItem ?haplogroup ?descendantItem ?descendant ?timeOfOrigin ?placeOfOrigin
+WHERE
+{
+  SERVICE gas:service {
+    gas:program gas:gasClass "com.bigdata.rdf.graph.analytics.SSSP" ;
+                gas:in wd:Q221674 ; # mitochondrial Eve
+                gas:traversalDirection "Forward" ;
+                gas:out ?haplogroupItem ;
+                gas:out1 ?depth ;
+                gas:maxIterations 20 ;
+                gas:linkType wdt:P156 . # followed by
+  }
+  OPTIONAL { ?haplogroupItem wdt:P156 ?descendantItem . }
+  OPTIONAL { ?haplogroupItem wdt:P569 ?timeOfOrigin . }
+  OPTIONAL { ?haplogroupItem wdt:P19 ?placeOfOriginItem . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en" .
+                           ?haplogroupItem rdfs:label ?haplogroup . 
+                           ?descendantItem rdfs:label ?descendant .
+                           ?placeOfOriginItem rdfs:label ?placeOfOrigin . }
+}
+ORDER BY ?depth

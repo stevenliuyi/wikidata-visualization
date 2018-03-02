@@ -1,0 +1,19 @@
+# Number of marriages between European countries
+
+SELECT ?countryItem ?country ?spouseCountryItem ?spouseCountry
+       (COUNT(*) AS ?numOfMarriages)
+WHERE
+{
+  ?personItem wdt:P27 ?countryItem ;
+              wdt:P26/wdt:P27 ?spouseCountryItem .
+  ?countryItem wdt:P31 wd:Q6256 ; # country
+               wdt:P30 wd:Q46 . # Europe
+  ?spouseCountryItem wdt:P31 wd:Q6256 ;
+                     wdt:P30 wd:Q46 .
+  FILTER (?countryItem != ?spouseCountryItem) .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en" .
+                           ?countryItem rdfs:label ?country .
+                           ?spouseCountryItem rdfs:label ?spouseCountry . }
+}
+GROUP BY ?countryItem ?country ?spouseCountryItem ?spouseCountry
+ORDER BY DESC(?numOfMarriages)

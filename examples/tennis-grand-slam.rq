@@ -1,0 +1,29 @@
+# Tennis Career Grand Slam
+
+SELECT ?playerItem ?player ?format ?gender ?dateOfBirth ?yearInductedITHF
+WHERE {
+  ?playerItem wdt:P21 ?genderItem ;
+              wdt:P569 ?dateOfBirth .
+  OPTIONAL { ?playerItem p:P166 [ ps:P166 wd:Q52454 ;
+                                  pq:P585 ?timeInductedITHF ] . } # International Tennis Hall of Fame
+  BIND ( YEAR(?timeInductedITHF) AS ?yearInductedITHF ) .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                           ?playerItem rdfs:label ?player .
+                           ?formatItem rdfs:label ?format .
+                           ?genderItem rdfs:label ?gender . }
+  {
+    SELECT ?playerItem ?formatItem (COUNT(?grandSlamItem) AS ?numOfGrandSlams)
+    WHERE {
+      SELECT DISTINCT ?formatItem ?playerItem ?grandSlamItem
+      WHERE {
+        VALUES ?formatItem { wd:Q16893072 wd:Q16893403 wd:Q17299700 wd:Q17299348 wd:Q16629853 }
+        ?matchItem wdt:P361/wdt:P31 ?grandSlamItem ;
+                   wdt:P1346 ?playerItem ;
+                   wdt:P31 ?formatItem .
+        ?grandSlamItem wdt:P361 wd:Q102113 . # Grand Slam of tennis
+      }
+    }
+    GROUP BY ?playerItem ?formatItem
+    HAVING (?numOfGrandSlams = 4)
+  }
+}

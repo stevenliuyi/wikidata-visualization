@@ -1,0 +1,16 @@
+# Sister cities between capitals of Asia and Africa countries
+
+SELECT DISTINCT ?cityItem ?city ?country ?cityCoord ?sisterCityItem ?sisterCity ?sisterCountry ?sisterCityCoord WHERE {
+  ?cityItem wdt:P190 ?sisterCityItem ;
+            wdt:P1376 ?countryItem ; # capital
+            wdt:P625 ?cityCoord .
+  ?sisterCityItem wdt:P1376 ?sisterCountryItem ;
+                  wdt:P625 ?sisterCityCoord .
+  ?countryItem wdt:P30 wd:Q48 . # Asia
+  ?sisterCountryItem wdt:P30 wd:Q15 . # Africa
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                           ?cityItem rdfs:label ?city .
+                           ?sisterCityItem rdfs:label ?sisterCity .
+                           ?countryItem rdfs:label ?country .
+                           ?sisterCountryItem rdfs:label ?sisterCountry . }
+}

@@ -1,0 +1,33 @@
+# Party and State Leaders of China
+
+SELECT
+?personItem ?personName ?englishName
+(SAMPLE(?image) AS ?image)
+(GROUP_CONCAT(DISTINCT ?position; SEPARATOR='、') AS ?positions)
+(SAMPLE(?dateOfBirth) AS ?dateOfBirth)
+(SAMPLE(?placeOfBirth) AS ?placeOfBirth)
+(SAMPLE(?ancestralHome) AS ?ancestralHome)
+(MAX(?rank) AS ?rank)
+WHERE {
+  ?personItem p:P39 ?positionStatement .
+  ?positionStatement ps:P39 ?positionItem ;
+                     pq:P580 ?startTime .
+  FILTER NOT EXISTS { ?positionStatement pq:P582 ?endTime } . # current position
+  ?positionItem wdt:P279 ?rankItem .
+  FILTER ( ?rankItem = wd:Q30945753 || ?rankItem = wd:Q46403368 ) . # national & sub-national leader of China
+  OPTIONAL { ?personItem wdt:P18 ?image . }
+  OPTIONAL { ?personItem wdt:P569 ?dateOfBirth . }
+  OPTIONAL { ?personItem wdt:P19 ?placeOfBirthItem . }
+  OPTIONAL { ?personItem wdt:P66 ?ancestralHomeItem . }
+  OPTIONAL { ?personItem rdfs:label ?personName .
+             FILTER (LANG(?personName) = 'zh') . }
+  OPTIONAL { ?personItem rdfs:label ?englishName .
+             FILTER (LANG(?englishName) = 'en') . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language 'zh' .
+                           ?placeOfBirthItem rdfs:label ?placeOfBirth .
+                           ?ancestralHomeItem rdfs:label ?ancestralHome .
+                           ?positionItem rdfs:label ?position .
+                           ?rankItem rdfs:label ?rank . }
+}
+GROUP BY ?personItem ?personName ?englishName
+ORDER BY DESC(?rank)

@@ -1,0 +1,20 @@
+# 20th-century earthquakes
+
+SELECT
+?earthquakeItem ?earthquake ?coord ?year
+(xsd:integer(?mercalliScaleString) AS ?mercalliScale) 
+?numOfDeath
+WHERE {
+  ?earthquakeItem wdt:P31 wd:Q7944 .
+  OPTIONAL { ?earthquakeItem wdt:P625 ?coord . }
+  OPTIONAL { ?earthquakeItem wdt:P585 ?time . }
+  OPTIONAL { ?earthquakeItem wdt:P1120 ?numOfDeath . }
+  OPTIONAL { ?earthquakeItem wdt:P2784 [ p:P361 [ps:P361 wd:Q170350 ; # Mercalli intensity scale
+                                                 pq:P1545 ?mercalliScaleString ] ] . }
+  BIND (YEAR(?time) AS ?year) .
+  FILTER (?year >= 1900 && ?year < 2000) .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                           ?earthquakeItem rdfs:label ?earthquake . }
+}
+ORDER BY DESC(?mercalliScale)
+
