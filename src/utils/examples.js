@@ -121,6 +121,6 @@ export const readExample = index => {
   const filename =
     process.env.NODE_ENV === 'development'
       ? `/examples/${examples[index]['filename']}`
-      : `/wikidata-visualization/examples/${examples[index]['filename']}`
+      : `${process.env.PUBLIC_URL}/examples/${examples[index]['filename']}`
   return fetch(filename).then(res => res.text())
 }

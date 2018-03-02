@@ -2,6 +2,10 @@ language: node_js
 node_js:
   - "node"
 
+branches:
+  only:
+    - master
+
 script:
   - yarn run build
 
@@ -14,6 +18,10 @@ deploy:
   committer-from-gh: true
   on:
     branch: master
+
+after_success:
+  - yarn run build-wmflabs
+  - yarn run deploy-wmflabs
 
 notifications:
   email: false

@@ -109,7 +109,7 @@ class ChoroplethMap extends Component {
     const json_filename =
       process.env.NODE_ENV === 'development'
         ? `/maps/json/${settings.filename}`
-        : `/wikidata-visualization/maps/json/${settings.filename}`
+        : `${process.env.PUBLIC_URL}/maps/json/${settings.filename}`
 
     const Zoomable =
       this.props.moreSettings.projection !== 'orthographic'

@@ -540,7 +540,7 @@ export function getSingleTooltipHTML(item, header) {
     .map(header => {
       const value =
         item[header] != null
-          ? item[header].includes('Special:FilePath')
+          ? String(item[header]).includes('Special:FilePath')
             ? getCommonsFileName(item[header])
             : item[header]
           : '<span class="text-muted">(no data)</span>'

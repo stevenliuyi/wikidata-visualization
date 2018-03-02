@@ -34,7 +34,7 @@ class Basemap extends Component {
             url={
               process.env.NODE_ENV === 'development'
                 ? `/maps/images/${mapFilename}`
-                : `/wikidata-visualization/maps/images/${mapFilename}`
+                : `${process.env.PUBLIC_URL}/maps/images/${mapFilename}`
             }
           />
         )}

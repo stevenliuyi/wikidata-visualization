@@ -128,7 +128,7 @@ class Map extends Component {
     const json_filename =
       process.env.NODE_ENV === 'development'
         ? `/maps/json/${mapSettings[this.props.moreSettings.map].filename}`
-        : `/wikidata-visualization/maps/json/${
+        : `${process.env.PUBLIC_URL}/maps/json/${
             mapSettings[this.props.moreSettings.map].filename
           }`
 

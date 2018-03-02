@@ -62,10 +62,12 @@
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "PUBLIC_URL=/wikidata-visualization react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "prepare": "patch-package"
+    "prepare": "patch-package",
+    "build-wmflabs": "PUBLIC_URL=/dataviz react-scripts build", 
+    "deploy-wmflabs": "./node_modules/.bin/gh-pages -d build -b wmflabs -r https://$GITHUB_TOKEN@github.com/stevenliuyi/wikidata-visualization.git"
   },
   "devDependencies": {
     "eslint": "^4.14.0",
