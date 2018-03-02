@@ -9,6 +9,7 @@ branches:
 script:
   - yarn run build
   - yarn run deploy-ghpages
+  - rm -rf *
   - git reset --hard
   - yarn install
   - yarn run build-wmflabs
