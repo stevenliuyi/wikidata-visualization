@@ -1,0 +1,23 @@
+# Spouses of Kings of the Joseon Dynasty
+
+SELECT
+?spouseItem ?englishName ?koreanName ?image ?dateOfBirth ?dateOfDeath ?kingItem ?kingEnglishName ?kingKoreanName ?isPosthumousKing
+WHERE {
+  ?spouseItem wdt:P26 ?kingItem .
+  ?kingItem p:P39 ?kingStatement .
+  ?kingStatement ps:P39 wd:Q22304810 . # King of Joseon Dynasty
+  OPTIONAL { ?kingStatement pq:P459 ?posthumous . }
+  BIND (IF(BOUND(?posthumous), true, false) AS ?isPosthumousKing) .
+  
+  OPTIONAL { ?spouseItem wdt:P18 ?image . }
+  OPTIONAL { ?spouseItem wdt:P569 ?dateOfBirth . }
+  OPTIONAL { ?spouseItem wdt:P569 ?dateOfDeath . }
+  OPTIONAL { ?spouseItem rdfs:label ?englishName .
+             FILTER( LANG(?englishName) = 'en' ) . }
+  OPTIONAL { ?spouseItem rdfs:label ?koreanName .
+             FILTER( LANG(?koreanName) = 'ko' ) . }
+  OPTIONAL { ?kingItem rdfs:label ?kingEnglishName .
+             FILTER( LANG(?kingEnglishName) = 'en' ) . }
+  OPTIONAL { ?kingItem rdfs:label ?kingKoreanName .
+             FILTER( LANG(?kingKoreanName) = 'ko' ) . }
+}
