@@ -28,6 +28,8 @@ import { getGooglURL } from '../utils/api'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { baseMapSettings, solarSystemSettings } from '../utils/basemap'
 import { ClipLoader } from 'react-spinners'
+import { mapSettings } from '../utils/maps'
+import { map2Settings } from '../utils/maps2'
 
 const iconSize = 32
 class Tools extends Component {
@@ -119,8 +121,6 @@ class Tools extends Component {
   }
 
   render() {
-    const noViewerRefreshCharts = [1.09, 1.11, 1.13]
-
     return (
       <div style={{ marginRight: '10px' }}>
         {this.props.chartId === 1.17 &&
@@ -254,18 +254,44 @@ class Tools extends Component {
                 className="clickable-icon toolbar-icon pull-right"
               />
             </OverlayTrigger>
-            {!noViewerRefreshCharts.includes(this.props.chartId) && (
-              <OverlayTrigger
-                placement="top"
-                overlay={<Tooltip id="get-image-url">reset view</Tooltip>}
-              >
-                <MdRefresh
-                  size={iconSize}
-                  onClick={() => this.props.viewer.reset()}
-                  className="clickable-icon toolbar-icon pull-right"
-                />
-              </OverlayTrigger>
-            )}
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip id="get-image-url">reset view</Tooltip>}
+            >
+              <MdRefresh
+                size={iconSize}
+                onClick={() => {
+                  if ([1.09, 1.23].includes(this.props.chartId)) {
+                    // simple map & pie chart map
+                    this.props.viewer.setState({
+                      center: mapSettings[this.props.moreSettings.map].center,
+                      zoom: Math.min(
+                        this.props.width / 980,
+                        this.props.height / 551
+                      )
+                    })
+                  } else if (this.props.chartId === 1.13) {
+                    // choropleth map
+                    this.props.viewer.setState({
+                      center: map2Settings[this.props.moreSettings.map2].center,
+                      zoom: Math.min(
+                        this.props.width / 980,
+                        this.props.height / 551
+                      )
+                    })
+                  } else if (this.props.chartId === 1.11) {
+                    // cartogram map
+                    d3
+                      .select('.cartogram')
+                      .selectAll('path')
+                      .attr('transform', 'translate(0) scale(1)')
+                  } else {
+                    this.props.viewer.reset()
+                  }
+                }}
+                className="clickable-icon toolbar-icon pull-right"
+              />
+            </OverlayTrigger>
           </div>
         )}
 

@@ -60,6 +60,8 @@ class ChoroplethMap extends Component {
   }
 
   componentDidUpdate() {
+    if (this !== this.props.viewer) this.props.onViewerChange(this)
+
     if (d3.event != null) return // zooming
 
     var svg = d3.select('.rsm-svg')
@@ -131,7 +133,11 @@ class ChoroplethMap extends Component {
             height: this.props.height
           }}
         >
-          <Zoomable center={this.state.center} zoom={this.state.zoom}>
+          <Zoomable
+            center={this.state.center}
+            zoom={this.state.zoom}
+            onMoveEnd={newCenter => this.setState({ center: newCenter })}
+          >
             <Geographies geography={json_filename} disableOptimization>
               {(geographies, projection) =>
                 geographies.map((geography, i) => {

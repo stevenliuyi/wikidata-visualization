@@ -71,6 +71,8 @@ class PieChartMap extends Component {
   }
 
   componentDidUpdate() {
+    if (this !== this.props.viewer) this.props.onViewerChange(this)
+
     if (d3.event != null) return
 
     d3.selectAll('.d3ToolTip').remove()
@@ -170,6 +172,7 @@ class PieChartMap extends Component {
           <Zoomable
             center={this.state.center}
             zoom={this.state.zoom}
+            onMoveEnd={newCenter => this.setState({ center: newCenter })}
             ref={node => (this.zoomableGroup = node)}
           >
             <Geographies geography={json_filename} disableOptimization>
