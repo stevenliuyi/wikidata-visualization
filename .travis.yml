@@ -1,0 +1,33 @@
+language: node_js
+node_js:
+  - node
+
+branches:
+  only:
+    - master
+
+script:
+  - yarn run build
+  - yarn run deploy-ghpages
+  - rm -rf *
+  - git reset --hard
+  - yarn install
+  - yarn run build-wmflabs
+  - cp .travis.yml build/
+  - yarn run deploy-wmflabs
+
+after_success:
+  - openssl aes-256-cbc -K $encrypted_8b60d75085ca_key -iv $encrypted_8b60d75085ca_iv
+    -in ./travis/id_rsa.enc -out ./travis/id_rsa -d
+  - chmod 600 ./travis/id_rsa
+  - mv ./travis/id_rsa ~/.ssh/id_rsa
+  - mv ./travis/id_rsa.pub ~/.ssh/id_rsa.pub
+  - chmod 700 ./travis/deploy.sh
+  - ./travis/deploy.sh
+
+addons:
+  ssh_known_hosts: login.tools.wmflabs.org
+
+notifications:
+  email: false
+
