@@ -361,8 +361,8 @@ class DataTable extends Component {
   }
 
   getFilterMethod = col => {
-    const colIndex = this.props.header.indexOf(col)
-    const dataType = this.props.dataTypes[colIndex]
+    const dataType = this.getDataType(col)
+
     if (dataType === 'number' && this.props.moreSettings.numericRangeFilter) {
       return this.rangeFilterMethod
     } else if (dataType === 'time' && this.props.moreSettings.timeRangeFilter) {
@@ -373,8 +373,8 @@ class DataTable extends Component {
   }
 
   filterComponent = col => {
-    const colIndex = this.props.header.indexOf(col)
-    const dataType = this.props.dataTypes[colIndex]
+    const [dataType, colIndex] = this.getDataType(col, true)
+
     if (dataType === 'number' && this.props.moreSettings.numericRangeFilter) {
       let component = ({ filter, onChange }) => (
         <Row>
@@ -447,13 +447,28 @@ class DataTable extends Component {
   }
 
   getSortMethod = col => {
-    const colIndex = this.props.header.indexOf(col)
-    const dataType = this.props.dataTypes[colIndex]
+    const dataType = this.getDataType(col)
+
     if (dataType !== 'item') {
       return undefined // default sort method
     } else {
       return this.itemSortMethod
     }
+  }
+
+  getDataType = (col, returnColIndex = false) => {
+    let colIndex = this.props.header.indexOf(col)
+    let dataType = this.props.dataTypes[colIndex]
+
+    // coordinates are shown in two columns, numbers in both columns are treated as numeric values
+    if (col.endsWith(' (Lon)') || col.endsWith(' (Lat)')) {
+      colIndex = `${this.props.header.indexOf(col.slice(0, -6))}${col.slice(
+        -5
+      )}`
+      dataType = 'number'
+    }
+
+    return returnColIndex ? [dataType, colIndex] : dataType
   }
 
   render() {
