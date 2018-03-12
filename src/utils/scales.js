@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
 import * as d3color from 'd3-scale-chromatic'
+import { formatBCDates } from '../utils/format'
 
 export function getXYScales(props) {
   const xLabel = props.header[props.settings['x-axis']]
@@ -20,8 +21,14 @@ export function getXYScales(props) {
       .range([props.padding, props.width - props.padding * 2])
   } else {
     // time
-    xMin = d3.min(selectedData, d => new Date(Date.parse(d[xLabel])))
-    xMax = d3.max(selectedData, d => new Date(Date.parse(d[xLabel])))
+    xMin = d3.min(
+      selectedData,
+      d => new Date(Date.parse(formatBCDates(d[xLabel])))
+    )
+    xMax = d3.max(
+      selectedData,
+      d => new Date(Date.parse(formatBCDates(d[xLabel])))
+    )
     xScale = d3
       .scaleTime()
       .domain([xMin, xMax])
@@ -37,8 +44,14 @@ export function getXYScales(props) {
       .range([props.height - props.padding, props.padding])
   } else {
     // time
-    yMin = d3.min(selectedData, d => new Date(Date.parse(d[yLabel])))
-    yMax = d3.max(selectedData, d => new Date(Date.parse(d[yLabel])))
+    yMin = d3.min(
+      selectedData,
+      d => new Date(Date.parse(formatBCDates(d[yLabel])))
+    )
+    yMax = d3.max(
+      selectedData,
+      d => new Date(Date.parse(formatBCDates(d[yLabel])))
+    )
     yScale = d3
       .scaleTime()
       .domain([yMin, yMax])
@@ -67,8 +80,14 @@ export function getRadiusScale(props, minRadius = 3, maxRadius = 30) {
         .range([minRadius, maxRadius])
     } else {
       // time
-      const minValue = d3.min(selectedData, d => new Date(Date.parse(d[label])))
-      const maxValue = d3.max(selectedData, d => new Date(Date.parse(d[label])))
+      const minValue = d3.min(
+        selectedData,
+        d => new Date(Date.parse(formatBCDates(d[label])))
+      )
+      const maxValue = d3.max(
+        selectedData,
+        d => new Date(Date.parse(formatBCDates(d[label])))
+      )
       radiusScale = d3
         .scaleTime()
         .domain([minValue, maxValue])
@@ -211,6 +230,30 @@ export function getColorScale(props, nodes = null) {
       colorScale = d3
         .scaleSequential(colorSchemes[schemeName])
         .domain([minValue, maxValue])
+    } else if (
+      (props.dataTypes[props.settings['color']] === 'time' && nodes == null) ||
+      (nodes != null &&
+        new Date(nodes[0]['color']) !== 'Invalid Date' &&
+        !isNaN(new Date(nodes[0]['color'])))
+    ) {
+      // time values
+      const minValue = d3.min(
+        selectedData,
+        d =>
+          new Date(
+            Date.parse(formatBCDates(nodes == null ? d[label] : d['color']))
+          )
+      )
+      const maxValue = d3.max(
+        selectedData,
+        d =>
+          new Date(
+            Date.parse(formatBCDates(nodes == null ? d[label] : d['color']))
+          )
+      )
+      colorScale = d3
+        .scaleSequential(colorSchemes[schemeName])
+        .domain([minValue, maxValue])
     } else {
       // non-numeric values
       const values =
@@ -246,7 +289,11 @@ export function getColors(props, returnScale = false) {
     .map(
       item =>
         item[label] != null || props.settings['color'] === -1
-          ? colorScale(item[label])
+          ? colorScale(
+              props.dataTypes[props.settings['color']] === 'time'
+                ? Date.parse(formatBCDates(item[label]))
+                : item[label]
+            )
           : '#eceff1'
     )
 

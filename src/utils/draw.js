@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import { parseSvg } from 'd3-interpolate/src/transform/parse'
 import { legendColor } from 'd3-svg-legend'
+import moment from 'moment'
 
 // draw border
 export const drawBorder = (svg, width, height, x = 0, y = 0) => {
@@ -49,7 +50,6 @@ export const drawLegend = (svg, colorScale, props) => {
     var legend = legendColor()
       .cells(8)
       .labelOffset(5)
-      .labelFormat('.1e')
       .shapeWidth(12)
       .shapeHeight(12)
       .scale(colorScale)
@@ -85,6 +85,14 @@ export const drawLegend = (svg, colorScale, props) => {
       .style('font-size', '10px')
       .style('font-weight', 'normal')
 
+    // set label formatter for time values
+    svg.selectAll('text').text(function() {
+      return props.dataTypes[props.settings['color']] !== 'time'
+        ? d3.select(this).text()
+        : moment(new Date(parseInt(d3.select(this).text(), 10))).format(
+            'YYYY-MM-DD'
+          )
+    })
     function dragged(d) {
       d3.select('.d3ToolTip').style('display', 'none')
       const t = parseSvg(d3.select('.legendCells').attr('transform'))
