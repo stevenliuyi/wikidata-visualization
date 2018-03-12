@@ -1,6 +1,8 @@
 # Sister cities between capitals of Asia and Africa countries
 
-SELECT DISTINCT ?cityItem ?city ?country ?cityCoord ?sisterCityItem ?sisterCity ?sisterCountry ?sisterCityCoord WHERE {
+SELECT DISTINCT
+?cityItem ?city ?country ?cityCoord ?sisterCityItem ?sisterCity ?sisterCountry ?sisterCityCoord
+WHERE {
   ?cityItem wdt:P190 ?sisterCityItem ;
             wdt:P1376 ?countryItem ; # capital
             wdt:P625 ?cityCoord .

@@ -1,7 +1,8 @@
 # Number of marriages between European countries
 
-SELECT ?countryItem ?country ?spouseCountryItem ?spouseCountry
-       (COUNT(*) AS ?numOfMarriages)
+SELECT
+?countryItem ?country ?spouseCountryItem ?spouseCountry
+(COUNT(*) AS ?numOfMarriages)
 WHERE
 {
   ?personItem wdt:P27 ?countryItem ;

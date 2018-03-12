@@ -1,6 +1,7 @@
 # Popes that have offsprings
 
-SELECT ?popeItem ?pope ?image ?startTime ?endTime ?ordinal ?childItem ?child
+SELECT
+?popeItem ?pope ?image ?startTime ?endTime ?ordinal ?childItem ?child
 WHERE {
   ?popeItem p:P39 ?positionStatement ;
             wdt:P40 ?childItem .

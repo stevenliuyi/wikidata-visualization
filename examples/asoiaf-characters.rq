@@ -1,6 +1,7 @@
 # A Song of Ice and Fire character relationships
 
-SELECT DISTINCT ?personItem ?personName ?gender ?family ?relativeItem ?relativeName ?relativeType
+SELECT DISTINCT
+?personItem ?personName ?gender ?family ?relativeItem ?relativeName ?relativeType
 WHERE {
   VALUES ?relativeProp { wdt:P22 wdt:P25 wdt:P3373 wdt:P26 wdt:P451 wdt:P40 }
   ?personItem wdt:P31 wd:Q20086260 ;

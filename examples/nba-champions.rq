@@ -1,0 +1,16 @@
+# NBA teams with the most championships
+
+SELECT
+?teamItem ?team
+(COUNT(?finalItem) AS ?numOfChampions)
+(YEAR(?founded) AS ?founded)
+WHERE
+{
+  ?finalItem wdt:P31 wd:Q842375 ; # NBA Finals
+             wdt:P1346 ?teamItem .
+  OPTIONAL { ?teamItem wdt:P571 ?founded . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                          ?teamItem rdfs:label ?team . }
+}
+GROUP BY ?teamItem ?team ?founded
+ORDER BY DESC(?numOfChampions)

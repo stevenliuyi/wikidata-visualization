@@ -1,6 +1,8 @@
 # Craters on the Moon named after French people
 
-SELECT ?craterItem ?crater ?image ?namedAfterItem ?namedAfter ?coord ?diameterInKM ?depthInM WHERE {
+SELECT
+?craterItem ?crater ?image ?namedAfterItem ?namedAfter ?coord ?diameterInKM ?depthInM
+WHERE {
   ?craterItem wdt:P31 wd:Q55818 ; # impact crater
               wdt:P376 wd:Q405 ; # Moon
               wdt:P138 ?namedAfterItem .
@@ -9,7 +11,8 @@ SELECT ?craterItem ?crater ?image ?namedAfterItem ?namedAfter ?coord ?diameterIn
   OPTIONAL { ?craterItem wdt:P625 ?coord . }
   OPTIONAL { ?craterItem wdt:P2386 ?diameterInKM . }
   OPTIONAL { ?craterItem wdt:P4511 ?depthInM . }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
-                           ?craterItem rdfs:label ?crater .
-                           ?namedAfterItem rdfs:label ?namedAfter . }
+  OPTIONAL { ?craterItem rdfs:label ?crater .
+             FILTER( LANG(?crater) = "en" ) . }
+  OPTIONAL { ?namedAfterItem rdfs:label ?namedAfter .
+             FILTER( LANG(?namedAfter) = "fr" ) . }
 }
