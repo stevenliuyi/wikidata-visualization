@@ -19,9 +19,13 @@ class About extends Component {
         <Col sm={8} xs={12} className="text-muted">
           <p>
             This web app provides various easy-to-configure tools for
-            visualizing Wikidata SPARQL query results. The app is created by
-            React, and the visualization tools are mainly build on top of D3.js,
-            but a few other JavaScript libraries (e.g. Leaflet) are also used.
+            visualizing{' '}
+            <a href="https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service">
+              Wikidata SPARQL query results
+            </a>. The tools are mainly build on top of{' '}
+            <a href="https://d3js.org/">D3.js</a>, but a few other JavaScript
+            libraries (e.g. <a href="http://leafletjs.com/">Leaflet</a>) are
+            also used.
           </p>
 
           <p>
@@ -34,7 +38,7 @@ class About extends Component {
           </p>
 
           <p>
-            The app is hosted on{' '}
+            The source code is available on{' '}
             <a href="https://github.com/stevenliuyi/wikidata-visualization">
               Github
             </a>. If you encounter any problem, you can contact me on Github or{' '}
