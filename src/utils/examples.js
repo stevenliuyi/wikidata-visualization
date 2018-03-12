@@ -116,6 +116,10 @@ export const examples = [
   {
     title: 'NBA teams with the most championships',
     filename: 'nba-champions.rq'
+  },
+  {
+    title: 'German people honored by Google Doodle',
+    filename: 'google-doodle-germany.rq'
   }
 ]
 

@@ -1,0 +1,20 @@
+# German people honored by Google Doodle
+
+SELECT
+?personItem ?personName ?image ?googleDoodle
+(REPLACE(?formatterURL, "\\$1", ?googleDoodle) AS ?googleDoodleLink)
+?gender ?dateOfBirth ?dateOfDeath
+WHERE
+{
+  ?personItem wdt:P31 wd:Q5 ; # human
+              wdt:P27 wd:Q183 ; # Germany
+              wdt:P4431 ?googleDoodle .
+  OPTIONAL { ?personItem wdt:P18 ?image . }
+  OPTIONAL { ?personItem wdt:P21 [ rdfs:label ?gender ] . 
+             FILTER ( LANG(?gender) = "en" ) . }
+  OPTIONAL { ?personItem wdt:P569 ?dateOfBirth . }
+  OPTIONAL { ?personItem wdt:P570 ?dateOfDeath . }
+  wd:P4431 wdt:P1630 ?formatterURL .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "de".
+                           ?personItem rdfs:label ?personName . }
+}

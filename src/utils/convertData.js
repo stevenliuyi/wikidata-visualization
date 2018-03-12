@@ -70,6 +70,8 @@ function convertValue(value) {
     return [value['value'], 'formula']
   } else if (value.type === 'uri') {
     return [value['value'], 'url']
+  } else if (value['value'].startsWith('http')) {
+    return [value['value'], 'url']
   } else {
     return [value['value'], 'string']
   }
