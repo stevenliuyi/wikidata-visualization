@@ -1,0 +1,9 @@
+{
+    "name" : "dataviz",
+    "title" : "Wikidata Visualization",
+    "description" : "visualization tools for Wikidata SPARQL queries",
+    "url" : "https://tools.wmflabs.org/dataviz",
+    "keywords" : "wikidata, visualization",
+    "author" : "Steven Liu",
+    "repository" : "https://github.com/stevenliuyi/wikidata-visualization"
+}
