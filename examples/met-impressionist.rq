@@ -1,6 +1,8 @@
 # Impressionist and post-impressionist paintings in the Metropolitan Museum of Art
 
-SELECT DISTINCT ?paintingItem ?paintingName ?image ?artistItem ?artistName ?year ?accessionNumber WHERE {
+SELECT DISTINCT
+?paintingItem ?paintingName ?image ?artistItem ?artistName ?year ?accessionNumber
+WHERE {
   VALUES ?movementItem { wd:Q40415 wd:Q166713 } . # impressionism and post-impressionism
   ?paintingItem wdt:P31 wd:Q3305213 ; # painting
             wdt:P195 wd:Q160236 ; # MET collection

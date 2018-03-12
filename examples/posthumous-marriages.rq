@@ -1,14 +1,16 @@
 # Posthumous marriages
 
-SELECT ?personItem ?personName ?spouseItem ?spouseName ?dateOfDeath ?dateOfMarriage WHERE {
- ?personItem wdt:P31 wd:Q5 ;
-         p:P570/psv:P570 [ wikibase:timeValue ?dateOfDeath ;
-                           wikibase:timePrecision ?dateOfDeathPrecison ] ;
-         p:P26 [ ps:P26 ?spouseItem ;
-                 pq:P580 ?dateOfMarriage ] .
+SELECT
+?personItem ?personName ?spouseItem ?spouseName ?dateOfDeath ?dateOfMarriage
+WHERE {
+  ?personItem wdt:P31 wd:Q5 ;
+              p:P570/psv:P570 [ wikibase:timeValue ?dateOfDeath ;
+                                wikibase:timePrecision ?dateOfDeathPrecison ] ;
+              p:P26 [ ps:P26 ?spouseItem ;
+                      pq:P580 ?dateOfMarriage ] .
   FILTER ( (?dateOfDeathPrecison = 11 && ?dateOfMarriage > ?dateOfDeath) ||
            (?dateOfDeathPrecison = 9 && YEAR(?dateOfMarriage) > YEAR(?dateOfDeath)) ) .
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". 
                            ?personItem rdfs:label ?personName .
-                           ?spouseItem rdfs:label ?spouseName }
+                           ?spouseItem rdfs:label ?spouseName . }
 }

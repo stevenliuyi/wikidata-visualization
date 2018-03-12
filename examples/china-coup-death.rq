@@ -1,6 +1,9 @@
 # People died in coups in Chinese history
 
-SELECT DISTINCT ?personItem ?personName ?coupName ?yearOfDeath WHERE {
+SELECT DISTINCT
+?personItem ?personName ?englishName
+?coupItem ?coupName ?coupEnglishName ?yearOfDeath
+WHERE {
   ?personItem wdt:P31 wd:Q5 ;
           p:P1196 [ pq:P805 ?coupItem ] .
   ?coupItem wdt:P31 wd:Q45382 ; # Coup d'état
@@ -9,7 +12,12 @@ SELECT DISTINCT ?personItem ?personName ?coupName ?yearOfDeath WHERE {
   UNION { ?countryItem wdt:P2596 wd:Q29520 } .
   OPTIONAL { ?personItem wdt:P570 ?dateOfDeath } .
   BIND( YEAR(?dateOfDeath) AS ?yearOfDeath ) .
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "zh".
-                           ?personItem rdfs:label ?personName .
-                           ?coupItem rdfs:label ?coupName }
+  OPTIONAL { ?personItem rdfs:label ?personName .
+             FILTER (LANG(?personName) = "zh") . }
+  OPTIONAL { ?personItem rdfs:label ?englishName .
+             FILTER (LANG(?englishName) = "en") . }
+  OPTIONAL { ?coupItem rdfs:label ?coupName .
+             FILTER (LANG(?coupName) = "zh") . }
+  OPTIONAL { ?coupItem rdfs:label ?coupEnglishName .
+             FILTER (LANG(?coupEnglishName) = "en") . }
 }

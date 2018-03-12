@@ -22,7 +22,7 @@ class TopNavBar extends Component {
               eventKey={1}
               onSelect={() => this.props.handleChartSelect(1)}
             >
-              <span className="app-titles">Chart</span>
+              <span className="app-titles">Charts</span>
             </NavItem>
             <NavItem
               eventKey={2}

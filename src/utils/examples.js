@@ -1,7 +1,6 @@
 export const examples = [
   {
-    title:
-      'Country comparison - number of Nobel laureates per capita and GDP per capita',
+    title: 'Number of Nobel laureates and GDP by country',
     filename: 'country-nobel-gdp.rq'
   },
   {
@@ -21,12 +20,11 @@ export const examples = [
     filename: 'academy-award-family.rq'
   },
   {
-    title:
-      'Number of National Historical and Cultural Sites in each province of China',
+    title: 'National Historical and Cultural Sites by province of China',
     filename: 'china-province-sites.rq'
   },
   {
-    title: 'Phylogenetic tree of human mtDNA haplogroups',
+    title: 'Phylogeny of human mtDNA haplogroups',
     filename: 'mtdna-haplogroup-tree.rq'
   },
   {

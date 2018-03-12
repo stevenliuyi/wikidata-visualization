@@ -1,6 +1,9 @@
 # Descendants of Genghis Khan
 
-SELECT ?personItem ?personName ?gender ?childItem ?childName ?CBDB ?depth
+SELECT
+?personItem ?englishName ?chineseName ?mongolianName ?gender
+?childItem ?childEnglishName ?childChineseName ?childMongolianName
+?CBDB ?depth
 WHERE
 {
   SERVICE gas:service {
@@ -12,12 +15,22 @@ WHERE
                 gas:maxIterations 5 ;
                 gas:linkType wdt:P40 .
   }
-  OPTIONAL { ?personItem wdt:P40 ?childItem . }
-  OPTIONAL { ?personItem wdt:P21 ?genderItem . }
+  OPTIONAL { ?personItem rdfs:label ?englishName .
+             FILTER( LANG(?englishName) = "en" ) . }
+  OPTIONAL { ?personItem rdfs:label ?chineseName .
+             FILTER( LANG(?chineseName) = "zh" ) . }
+  OPTIONAL { ?personItem rdfs:label ?mongolianName .
+             FILTER( LANG(?mongolianName) = "mn" ) . }
+  OPTIONAL { ?personItem wdt:P40 ?childItem .
+    OPTIONAL { ?childItem rdfs:label ?childEnglishName .
+               FILTER( LANG(?childEnglishName) = "en" ) . }
+    OPTIONAL { ?childItem rdfs:label ?childChineseName .
+               FILTER( LANG(?childChineseName) = "zh" ) . }
+    OPTIONAL { ?childItem rdfs:label ?childMongolianName .
+               FILTER( LANG(?childMongolianName) = "mn" ) . }
+  }
+  OPTIONAL { ?personItem wdt:P21 [ rdfs:label ?gender ] .
+             FILTER( LANG(?gender) = "en" ) . }
   OPTIONAL { ?personItem wdt:P497 ?CBDB . }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "zh,en" .
-                           ?personItem rdfs:label ?personName .
-                           ?genderItem rdfs:label ?gender .
-                           ?childItem rdfs:label ?childName }
 }
 ORDER BY ?depth
