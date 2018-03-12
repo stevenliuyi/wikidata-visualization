@@ -254,44 +254,47 @@ class Tools extends Component {
                 className="clickable-icon toolbar-icon pull-right"
               />
             </OverlayTrigger>
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip id="get-image-url">reset view</Tooltip>}
-            >
-              <MdRefresh
-                size={iconSize}
-                onClick={() => {
-                  if ([1.09, 1.23].includes(this.props.chartId)) {
-                    // simple map & pie chart map
-                    this.props.viewer.setState({
-                      center: mapSettings[this.props.moreSettings.map].center,
-                      zoom: Math.min(
-                        this.props.width / 980,
-                        this.props.height / 551
-                      )
-                    })
-                  } else if (this.props.chartId === 1.13) {
-                    // choropleth map
-                    this.props.viewer.setState({
-                      center: map2Settings[this.props.moreSettings.map2].center,
-                      zoom: Math.min(
-                        this.props.width / 980,
-                        this.props.height / 551
-                      )
-                    })
-                  } else if (this.props.chartId === 1.11) {
-                    // cartogram map
-                    d3
-                      .select('.cartogram')
-                      .selectAll('path')
-                      .attr('transform', 'translate(0) scale(1)')
-                  } else {
-                    this.props.viewer.reset()
-                  }
-                }}
-                className="clickable-icon toolbar-icon pull-right"
-              />
-            </OverlayTrigger>
+            {this.props.chartId !== 1.17 && (
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip id="reset-view">reset view</Tooltip>}
+              >
+                <MdRefresh
+                  size={iconSize}
+                  onClick={() => {
+                    if ([1.09, 1.23].includes(this.props.chartId)) {
+                      // simple map & pie chart map
+                      this.props.viewer.setState({
+                        center: mapSettings[this.props.moreSettings.map].center,
+                        zoom: Math.min(
+                          this.props.width / 980,
+                          this.props.height / 551
+                        )
+                      })
+                    } else if (this.props.chartId === 1.13) {
+                      // choropleth map
+                      this.props.viewer.setState({
+                        center:
+                          map2Settings[this.props.moreSettings.map2].center,
+                        zoom: Math.min(
+                          this.props.width / 980,
+                          this.props.height / 551
+                        )
+                      })
+                    } else if (this.props.chartId === 1.11) {
+                      // cartogram map
+                      d3
+                        .select('.cartogram')
+                        .selectAll('path')
+                        .attr('transform', 'translate(0) scale(1)')
+                    } else {
+                      this.props.viewer.reset()
+                    }
+                  }}
+                  className="clickable-icon toolbar-icon pull-right"
+                />
+              </OverlayTrigger>
+            )}
           </div>
         )}
 
