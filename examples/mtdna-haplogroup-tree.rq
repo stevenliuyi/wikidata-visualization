@@ -1,6 +1,7 @@
-# Phylogenetic tree of human mtDNA haplogroups
+# Phylogeny of human mtDNA haplogroups
 
-SELECT ?haplogroupItem ?haplogroup ?descendantItem ?descendant ?timeOfOrigin ?placeOfOrigin
+SELECT
+?haplogroupItem ?haplogroup ?descendantItem ?descendant ?timeOfOrigin ?placeOfOrigin
 WHERE
 {
   SERVICE gas:service {

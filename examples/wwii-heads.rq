@@ -1,6 +1,8 @@
 # Heads of state and government during the World War II
 
-SELECT DISTINCT ?personItem ?person ?countryItem ?country ?startTime ?endTime ?dateOfBirth ?dateOfDeath WHERE {
+SELECT DISTINCT
+?personItem ?person ?countryItem ?country ?startTime ?endTime ?dateOfBirth ?dateOfDeath
+WHERE {
   ?countryItem wdt:P31/wdt:P279? wd:Q6256 ; # country
                p:P35|p:P6 [ ps:P35|ps:P6 ?personItem ;
                             pq:P580 ?startTime ;

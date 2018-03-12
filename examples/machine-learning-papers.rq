@@ -14,7 +14,7 @@ WHERE {
                                   pq:P1545 "1" ] . }
   OPTIONAL { ?paperItem p:P50 [ ps:P50 [ rdfs:label ?firstAuthorLabel ] ;
                                 pq:P1545 "1" ] .
-             FILTER (LANG(?firstAuthorLabel) = 'en') . }
+             FILTER (LANG(?firstAuthorLabel) = "en") . }
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
                            ?firstAuthorItem rdfs:label ?firstAuthorLabel . }
   BIND (IF(BOUND(?firstAuthorString), ?firstAuthorString, ?firstAuthorLabel) AS ?firstAuthor) .

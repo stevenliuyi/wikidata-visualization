@@ -1,13 +1,28 @@
-# Number of National Historical and Cultural Sites in each province of China
+# National Historical and Cultural Sites by province of China
 
-SELECT ?provinceItem ?province (COUNT(*) AS ?numOfSites) ?provinceCoord WHERE {
+SELECT
+?provinceItem ?englishName ?chineseName ?numOfSites ?provinceCoord
+?sampleSiteItem ?sampleSite
+WHERE
+{
   hint:Query hint:optimizer "None" .
-  ?siteItem wdt:P1435 wd:Q1188574 ; # Chinese National Historical and Cultural Site
-                wdt:P131+ ?provinceItem .
-  ?provinceItem wdt:P31/wdt:P279 wd:Q13396669 . # province-level division in China
-  OPTIONAL { ?provinceItem wdt:P625 ?provinceCoord . }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "zh" .
-                           ?provinceItem rdfs:label ?province . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "zh" . 
+                           ?sampleSiteItem rdfs:label ?sampleSite . }
+  {
+    SELECT
+    ?provinceItem ?englishName ?chineseName (COUNT(*) AS ?numOfSites) ?provinceCoord
+    (SAMPLE(?siteItem) AS ?sampleSiteItem)
+    WHERE {
+      ?siteItem wdt:P1435 wd:Q1188574 ; # Chinese National Historical and Cultural Site
+                    wdt:P131+ ?provinceItem .
+      ?provinceItem wdt:P31/wdt:P279 wd:Q13396669 . # province-level division in China
+      OPTIONAL { ?provinceItem wdt:P625 ?provinceCoord . }
+      OPTIONAL { ?provinceItem rdfs:label ?englishName .
+                 FILTER( LANG(?englishName) = "en" ) . }
+      OPTIONAL { ?provinceItem rdfs:label ?chineseName .
+                 FILTER( LANG(?chineseName) = "zh" ) . }
+    }
+    GROUP BY ?provinceItem ?englishName ?chineseName ?provinceCoord
+  }
 }
-GROUP BY ?provinceItem ?province ?provinceCoord
 ORDER BY DESC(?numOfSites)

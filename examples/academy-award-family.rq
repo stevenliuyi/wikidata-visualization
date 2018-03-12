@@ -1,7 +1,8 @@
 # Academy Award-winning families
 
-SELECT DISTINCT ?personItem ?personName ?personGender ?relativeType ?relativeItem
-       ?relativeName ?relativeGender
+SELECT DISTINCT
+?personItem ?personName ?personGender ?relativeType
+?relativeItem ?relativeName ?relativeGender
 WHERE {
   VALUES ?relativeProp { wdt:P22 wdt:P25 wdt:P26 wdt:P40 wdt:P3373 } # direct relatives
   hint:Query hint:optimizer "None" .

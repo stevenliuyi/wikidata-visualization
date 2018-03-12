@@ -1,6 +1,8 @@
 # Stars with Bayer designations
 
-SELECT ?star ?bayerDesignation ?constellation ?absMagnitude ?appMagnitude ?mass ?radius
+SELECT
+?starItem ?star ?bayerDesignation ?constellation
+?absMagnitude ?appMagnitude ?mass ?radius
 WHERE
 {
   ?starItem wdt:P31 wd:Q523 . # star

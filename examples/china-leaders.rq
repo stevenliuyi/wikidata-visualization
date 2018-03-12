@@ -20,10 +20,10 @@ WHERE {
   OPTIONAL { ?personItem wdt:P19 ?placeOfBirthItem . }
   OPTIONAL { ?personItem wdt:P66 ?ancestralHomeItem . }
   OPTIONAL { ?personItem rdfs:label ?personName .
-             FILTER (LANG(?personName) = 'zh') . }
+             FILTER (LANG(?personName) = "zh") . }
   OPTIONAL { ?personItem rdfs:label ?englishName .
-             FILTER (LANG(?englishName) = 'en') . }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language 'zh' .
+             FILTER (LANG(?englishName) = "en") . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "zh" .
                            ?placeOfBirthItem rdfs:label ?placeOfBirth .
                            ?ancestralHomeItem rdfs:label ?ancestralHome .
                            ?positionItem rdfs:label ?position .

@@ -13,11 +13,11 @@ WHERE {
   OPTIONAL { ?spouseItem wdt:P569 ?dateOfBirth . }
   OPTIONAL { ?spouseItem wdt:P569 ?dateOfDeath . }
   OPTIONAL { ?spouseItem rdfs:label ?englishName .
-             FILTER( LANG(?englishName) = 'en' ) . }
+             FILTER( LANG(?englishName) = "en" ) . }
   OPTIONAL { ?spouseItem rdfs:label ?koreanName .
-             FILTER( LANG(?koreanName) = 'ko' ) . }
+             FILTER( LANG(?koreanName) = "ko" ) . }
   OPTIONAL { ?kingItem rdfs:label ?kingEnglishName .
-             FILTER( LANG(?kingEnglishName) = 'en' ) . }
+             FILTER( LANG(?kingEnglishName) = "en" ) . }
   OPTIONAL { ?kingItem rdfs:label ?kingKoreanName .
-             FILTER( LANG(?kingKoreanName) = 'ko' ) . }
+             FILTER( LANG(?kingKoreanName) = "ko" ) . }
 }

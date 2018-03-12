@@ -1,6 +1,7 @@
 # Dimensionless quantities in fluid mechanics that involving viscosity
 
-SELECT ?quantityItem ?quantity ?formula ?namedAfter
+SELECT
+?quantityItem ?quantity ?formula ?namedAfter
 WHERE {
   ?quantityItem (wdt:P31|wdt:P279)* wd:Q9051300 ; # dimensionless number
               wdt:P527 [ wdt:P279* wd:Q128709 ] . # viscosity

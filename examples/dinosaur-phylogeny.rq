@@ -1,6 +1,7 @@
 # Phylogeny of dinosaurs
 
-SELECT ?taxonItem ?taxon ?taxonRank ?childTaxonItem ?childTaxon
+SELECT
+?taxonItem ?taxon ?taxonRank ?childTaxonItem ?childTaxon
 WHERE
 {
   VALUES ?undefined { UNDEF } .
