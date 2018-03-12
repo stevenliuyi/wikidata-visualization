@@ -112,6 +112,10 @@ export const examples = [
   {
     title: 'Women married to both father and son',
     filename: 'father-son-marriages.rq'
+  },
+  {
+    title: 'NBA teams with the most championships',
+    filename: 'nba-champions.rq'
   }
 ]
 
