@@ -1,6 +1,6 @@
 ## Wikidata Visualization
 
-[![Build Status](https://travis-ci.com/stevenliuyi/wikidata-visualization.svg?token=JATaX6og6wNxyWLFdMeq&branch=master)](https://travis-ci.com/stevenliuyi/wikidata-visualization)
+[![Build Status](https://travis-ci.org/stevenliuyi/wikidata-visualization.svg?branch=master)](https://travis-ci.org/stevenliuyi/wikidata-visualization)
 
 This web app provides various easy-to-configure tools for visualizing Wikidata SPARQL query results. The app is created with React, and the visualization tools are mainly build on top of D3.js, but a few other JavaScript libraries (e.g. Leaflet) are also used.
 
