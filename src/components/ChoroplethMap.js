@@ -86,8 +86,6 @@ class ChoroplethMap extends Component {
   }
 
   render() {
-    if (!this.props.dataTypes.includes('coordinate'))
-      return <Info info="no-coordinate" text="choropleth map" />
     if (!existRegionItems(this.props))
       return (
         <Info
