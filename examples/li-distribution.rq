@@ -1,0 +1,27 @@
+# Distribution of the surname Li in China
+
+SELECT
+?provinceItem ?province
+(COUNT(?personItem)/?sampleSize AS ?proportion)
+?sampleSize
+WHERE {
+  ?personItem wdt:P31 wd:Q5 ;
+              wdt:P734 wd:Q686223 ; # surname Li
+              wdt:P19 [ wdt:P131* ?provinceItem ] .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                           ?provinceItem rdfs:label ?province . }
+  {
+    SELECT
+    (COUNT(?surnameItem) AS ?sampleSize)
+    ?provinceItem
+    WHERE {
+      ?personItem wdt:P31 wd:Q5 ;
+                  wdt:P734 ?surnameItem ;
+                  wdt:P19 [ wdt:P131* ?provinceItem ] .
+      ?provinceItem wdt:P31/wdt:P279 wd:Q13396669 . # province-level division
+    }
+    GROUP BY ?provinceItem
+  }
+}
+GROUP BY ?provinceItem ?province ?sampleSize
+ORDER BY DESC(?proportion)
