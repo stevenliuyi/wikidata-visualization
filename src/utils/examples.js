@@ -120,6 +120,10 @@ export const examples = [
   {
     title: 'German people honored by Google Doodle',
     filename: 'google-doodle-germany.rq'
+  },
+  {
+    title: 'Distribution of the surname Li in China',
+    filename: 'li-distribution.rq'
   }
 ]
 
