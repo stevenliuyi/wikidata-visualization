@@ -4,7 +4,7 @@
 
 This web app provides various easy-to-configure tools for visualizing Wikidata SPARQL query results. The app is created with React, and the visualization tools are mainly build on top of D3.js, but a few other JavaScript libraries (e.g. Leaflet) are also used.
 
-The app is running at <https://tools.wmflabs.org/dataviz> (hosted on Wikimedia Toolforge) and <https://stevenliuyi.github.io/wikidata-visualization>  (hosted on Github).
+The app is running at <https://dataviz.toolforge.org> (hosted on Wikimedia Toolforge) and <https://stevenliuyi.github.io/wikidata-visualization>  (hosted on Github).
 
 SPARQL is a SQL-like query language for the Semantic Web, which is used by the [Wikidata Query Service](https://query.wikidata.org/) (WDQS) to formulate queries for Wikidata. [Here](https://www.wikidata.org/wiki/Wikidata:SPARQL_tutorial) provides a SPARQL tutorial for WDQS if you are not familiar with it.
 
