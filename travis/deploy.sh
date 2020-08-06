@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ssh -tt -i ~/.ssh/id_rsa stevenliuyi@login.tools.wmflabs.org << EOF
+ssh -tt -i ~/.ssh/id_rsa stevenliuyi@login.toolforge.org << EOF
   become dataviz
   webservice stop
   rm -rf ./wikidata-visualization
