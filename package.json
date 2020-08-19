@@ -71,7 +71,7 @@
         "deploy-wmflabs": "./node_modules/.bin/gh-pages -d build -b wmflabs -r https://$GITHUB_TOKEN@github.com/stevenliuyi/wikidata-visualization.git -s '{**/*,.travis.yml}'"
     },
     "devDependencies": {
-        "eslint": "^4.14.0",
+        "eslint": "^4.18.2",
         "eslint-config-prettier": "^2.9.0",
         "eslint-config-react-app": "^2.0.1",
         "eslint-plugin-flowtype": "^2.40.1",
