@@ -100,7 +100,7 @@ class DataTable extends Component {
                 <Label>
                   <a
                     target="_blank"
-                    href={`https://tools.wmflabs.org/reasonator/test/?q=${
+                    href={`https://reasonator.toolforge.org/test/?q=${
                       row.value
                     }`}
                   >
@@ -115,7 +115,7 @@ class DataTable extends Component {
                 <Label>
                   <a
                     target="_blank"
-                    href={`https://tools.wmflabs.org/sqid#view?id=${row.value}`}
+                    href={`https://sqid.toolforge.org/#view?id=${row.value}`}
                   >
                     S
                   </a>
